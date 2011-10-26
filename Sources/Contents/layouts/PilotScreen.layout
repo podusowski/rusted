@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<GUILayout>
+    <Window Type="TaharezLook/FrameWindow" Name="Navigation" >
+        <Property Name="Text" Value="Navigation" />
+        <Property Name="CloseButtonEnabled" Value="False" />
+		<Property Name="SizingEnabled" Value="False" />
+        <Property Name="UnifiedAreaRect" Value="{{0.01,0},{0.01,0},{0.5,0},{0.2,0}}" />
+    </Window>
+</GUILayout>

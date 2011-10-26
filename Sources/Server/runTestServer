@@ -1,0 +1,6 @@
+#!/bin/bash
+
+EXEC_DIRECTORY=`dirname $0`
+pushd $EXEC_DIRECTORY
+./Server --cfg Server.cfg $@
+popd
