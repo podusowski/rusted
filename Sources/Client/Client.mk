@@ -37,7 +37,7 @@ LDFLAGS= \
 
 CFLAGS+=-I../ -I. -I../Common -I/usr/include/libxml2 -I/usr/include/OGRE -I../External/CEGUI-0.7.5/cegui/include/RendererModules/Ogre -I../External/CEGUI-0.7.5/cegui/include/
 
-DEPENDENCIES+=libCommon.a
+DEPENDENCIES+=libCommon.a CEGUI
 
 $(APPNAME): $(BUILD)/runClient $(BUILD)/runTestClient
 
