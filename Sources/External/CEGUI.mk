@@ -1,10 +1,14 @@
-.PHONY: CEGUI
-CEGUI: Deploy
-Deploy: CEGUI-0.7.5/cegui/src/.libs/libCEGUIBase.so
+CEGUI_DIR=$(BUILD)/CEGUI-0.7.5
+CEGUI_LIB=$(CEGUI_DIR)/cegui/src/.libs/libCEGUIBase.so
+CEGUI_CONFIGURE=$(CEGUI_DIR)/configure
+CEGUI_PACKAGE=CEGUI-0.7.5.tar.gz
 
-CEGUI-0.7.5/cegui/src/.libs/libCEGUIBase.so:
-	cd CEGUI-0.7.5 &&\
-	test -e config.status || ./configure \
+.PHONY: CEGUI
+CEGUI: $(CEGUI_LIB) 
+
+$(CEGUI_DIR)/config.status: $(CEGUI_CONFIGURE)
+	cd $(CEGUI_DIR) &&\
+	./configure \
 		--disable-samples \
 		--disable-irrlicht-renderer \
 		--disable-opengl-renderer \
@@ -12,9 +16,14 @@ CEGUI-0.7.5/cegui/src/.libs/libCEGUIBase.so:
 		--disable-null-renderer \
 		--disable-tga \
 		--disable-stb \
-		--disable-libxml \
-		&&\
-	make -j2 -s
+		--disable-libxml
+
+$(CEGUI_LIB): $(CEGUI_DIR)/config.status
+	cd $(CEGUI_DIR) && make -j2 -s
+
+$(CEGUI_CONFIGURE): CEGUI-0.7.5.tar.gz
+	cp $(CEGUI_PACKAGE) $(BUILD)
+	cd $(BUILD) && tar xvf $(CEGUI_PACKAGE) 
 
 .PHONY: Deploy
 Deploy:
