@@ -35,7 +35,11 @@ LDFLAGS= \
 	-lboost_system \
 	-lxml2
 
-CFLAGS+=-I../ -I. -I../Common -I/usr/include/libxml2 -I/usr/include/OGRE -I../External/CEGUI-0.7.5/cegui/include/RendererModules/Ogre -I../External/CEGUI-0.7.5/cegui/include/
+CFLAGS+=-I../ -I. -I../Common 
+CFLAGS+=-I/usr/include/libxml2
+CFLAGS+=-I/usr/include/OGRE
+CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/RendererModules/Ogre
+CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/
 
 DEPENDENCIES+=libCommon.a CEGUI
 
