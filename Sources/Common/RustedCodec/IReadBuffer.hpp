@@ -11,6 +11,8 @@ class IReadBuffer
 {
 public:
 	virtual void read(void * destinationBuffer, size_t size) = 0;
+
+	virtual ~IReadBuffer() {}
 };
 
 }
