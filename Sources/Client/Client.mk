@@ -27,6 +27,7 @@ LDFLAGS= \
 	-L$(BUILD) \
 	-L../External/CEGUI-0.7.5/cegui/src/.libs/ \
 	-L../External/CEGUI-0.7.5/cegui/src/RendererModules/Ogre/.libs/ \
+	-lOgreMain \
 	-lCEGUIBase \
 	-lCEGUIOgreRenderer \
 	-lOIS \

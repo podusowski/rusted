@@ -11,11 +11,13 @@ CEGUI: $(CEGUI_LIB) CopyLibraries
 CopyLibraries: $(CEGUI_LIB)
 	@find $(CEGUI_DIR) -name "*.so" -exec cp -lf {} $(BUILD)/ \;
 
-$(CEGUI_LIB): $(CEGUI_DIR)/config.status
-	cd $(CEGUI_DIR) && make -j2 -s
-
-$(CEGUI_DIR)/config.status: $(CEGUI_CONFIGURE)
-	cd $(CEGUI_DIR) &&\
+$(CEGUI_LIB): $(CEGUI_PACKAGE)
+	mkdir -p $(CEGUI_DIR)
+	cp $(CEGUI_PACKAGE) $(CEGUI_PACKAGE_BUILD)
+	cp *.patch $(CEGUI_DIR)
+	cd $(BUILD) && tar -xf $(CEGUI_PACKAGE_BUILD) 
+	cd $(CEGUI_DIR) && \
+	cat *.patch | patch -p0 && \
 	./configure \
 		--disable-samples \
 		--disable-irrlicht-renderer \
@@ -24,14 +26,6 @@ $(CEGUI_DIR)/config.status: $(CEGUI_CONFIGURE)
 		--disable-null-renderer \
 		--disable-tga \
 		--disable-stb \
-		--disable-libxml
-
-$(CEGUI_CONFIGURE): $(CEGUI_PACKAGE_BUILD)
-	cd $(BUILD) && tar --touch -xf $(CEGUI_PACKAGE_BUILD) 
-
-$(CEGUI_PACKAGE_BUILD): $(CEGUI_PACKAGE)
-	mkdir -p $(BUILD)
-	@echo cp $(CEGUI_PACKAGE) $(CEGUI_PACKAGE_BUILD)
-	cp $(CEGUI_PACKAGE) $(CEGUI_PACKAGE_BUILD)
-
+		--disable-libxml \
+	&& make -j2 -s
 

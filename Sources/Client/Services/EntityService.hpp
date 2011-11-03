@@ -2,6 +2,7 @@
 
 #include <set>
 #include <boost/optional.hpp>
+#include <boost/function.hpp>
 
 #include "Common/Game/IRustedTime.hpp"
 

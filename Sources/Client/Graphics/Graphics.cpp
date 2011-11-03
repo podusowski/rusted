@@ -51,17 +51,17 @@ void Graphics::initOgre()
     //TODO: This application uses hardcoded OGRE library: /usr/lib/OGRE/RenderSystem_GL.so
     m_ogreRoot->loadPlugin("/usr/lib/OGRE/RenderSystem_GL.so");
 
-    if (m_ogreRoot->getAvailableRenderers()->begin() == m_ogreRoot->getAvailableRenderers()->end())
+    if (m_ogreRoot->getAvailableRenderers().begin() == m_ogreRoot->getAvailableRenderers().end())
     {
         LOG_ERR << "No OGRE renderers available\n";
     }
 
-    m_ogreRoot->setRenderSystem(*m_ogreRoot->getAvailableRenderers()->begin());
+    m_ogreRoot->setRenderSystem(*m_ogreRoot->getAvailableRenderers().begin());
     m_ogreRoot->initialise(false);
 
     initResources();
 
-    std::map<std::string, std::string> videoOptions;
+    Ogre::NameValuePairList videoOptions;
     m_ogreRenderWindow = m_ogreRoot->createRenderWindow("Rusted", 800, 600, false, &videoOptions);
 
     Ogre::SceneManager * sm = m_ogreRoot->createSceneManager(Ogre::ST_GENERIC, "SceneMgr");
