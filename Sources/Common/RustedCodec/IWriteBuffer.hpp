@@ -1,6 +1,8 @@
 #ifndef COMMON_RUSTEDCODEC_IWRITEBUFFER
 #define COMMON_RUSTEDCODEC_IWRITEBUFFER
 
+#include <iostream>
+
 namespace Common
 {
 
