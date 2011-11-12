@@ -13,8 +13,10 @@ void StaticObjectService::setStaticObjectAddedCallback(StaticObjectService::Stat
     m_staticObjectAddedCallback = callback;
 }
 
-void StaticObjectService::fetchStaticObjects()
+void StaticObjectService::asyncFetchStaticObjects(StaticObjectService::StaticObjectAddedCallback callback)
 {
+    m_staticObjectAddedCallback = callback;
+
     Common::Messages::StaticObjectStatusReq req;
     m_connection.send(req);
 }

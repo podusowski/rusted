@@ -19,7 +19,7 @@ public:
     StaticObjectService(Network::Connection &);
 
     void setStaticObjectAddedCallback(StaticObjectAddedCallback);
-    void fetchStaticObjects();
+    void asyncFetchStaticObjects(StaticObjectService::StaticObjectAddedCallback callback);
 
     void handle(const Common::Messages::StaticObjectStatusResp &);
     void handle(const Common::Messages::StaticObjectInfoResp &);

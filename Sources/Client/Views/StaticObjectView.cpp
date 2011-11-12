@@ -16,8 +16,7 @@ StaticObjectView::StaticObjectView(Services::StaticObjectService & staticObjectS
 
 void StaticObjectView::activate()
 {
-    m_staticObjectService.setStaticObjectAddedCallback(boost::bind(&StaticObjectView::staticObjectAdded, this, _1));
-    m_staticObjectService.fetchStaticObjects();
+    m_staticObjectService.asyncFetchStaticObjects(boost::bind(&StaticObjectView::staticObjectAdded, this, _1));
 }
 
 void StaticObjectView::deactivate()
