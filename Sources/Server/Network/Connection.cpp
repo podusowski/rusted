@@ -11,10 +11,11 @@
 
 using namespace Server::Network;
 
-Connection::Connection(int id, tcp::socket & socket) :
+Connection::Connection(int id, tcp::socket & socket, Services::IServiceDeployment & serviceDeployment) :
         m_id(id),
         m_socket(socket)
 {
+    serviceDeployment.deployNewConnection(*this);
 }
 
 void Connection::addListener(IConnectionListener & listener)

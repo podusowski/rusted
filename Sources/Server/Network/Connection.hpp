@@ -4,6 +4,7 @@
 #include <Common/IRunnable.hpp>
 #include <Network/IConnectionListener.hpp>
 #include <Network/IConnection.hpp>
+#include "Services/IServiceDeployment.hpp"
 
 using boost::asio::ip::tcp;
 
@@ -15,7 +16,7 @@ namespace Network
 class Connection : public ::Common::IRunnable, public Server::Network::IConnection
 {
 public:
-	Connection(int id, tcp::socket & socket);
+	Connection(int id, tcp::socket & socket, Services::IServiceDeployment & serviceDeployment);
 	void run();
 	void addListener(IConnectionListener & listener);
 	void send(::Common::Messages::AbstractMessage & message);

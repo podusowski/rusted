@@ -44,9 +44,8 @@ int ServerController::start()
 
 		LOG_INFO << "New connection (remote endpoint: " << socket->remote_endpoint() << ")\n";
 
-		Server::Network::Connection * connection = new Server::Network::Connection(m_lastConnectionId++, *socket);
+		Server::Network::Connection * connection = new Server::Network::Connection(m_lastConnectionId++, *socket, m_serviceDeployment);
 
-        m_serviceDeployment.deployNewConnection(*connection);
 
 		::Common::Thread * thread = new ::Common::Thread(*connection);
 		thread->start();
