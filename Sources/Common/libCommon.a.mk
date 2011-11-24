@@ -16,7 +16,8 @@ SOURCES=Thread.cpp \
 	    Game/Entity.cpp \
 	    Game/EntityContainer.cpp \
 	    Game/Utilities/PasswordHash.cpp \
-	    Game/StaticObject.cpp \
+	    Game/StaticObject.cpp
+SOURCES+=Game/Universe.cpp
 
 CFLAGS=-Wall -pedantic -g -I. -I.. -I/usr/include/libxml2
 

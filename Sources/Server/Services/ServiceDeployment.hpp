@@ -15,6 +15,8 @@
 #include "Server/Services/EntityService.hpp"
 #include "Server/Services/StaticObjectsService.hpp"
 
+#include "Common/Game/Universe.hpp"
+
 namespace Server
 {
 namespace Services
@@ -31,6 +33,7 @@ private:
     Common::Game::RustedTime m_time;
     Common::DataBase::DataBaseFactory m_dbFactory;
     Common::DataBase::DataBase & m_db;
+    Common::Game::Universe m_universe;
     Common::Game::EntityContainer m_entities;
     Game::PlayerContainer m_players;
     Game::StaticObjectContainer m_staticObjectContainer;

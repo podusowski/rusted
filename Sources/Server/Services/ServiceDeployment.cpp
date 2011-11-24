@@ -7,6 +7,7 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
     m_dbFactory(cfg),
     m_db(m_dbFactory.create()),
 
+    m_universe(m_db),
     m_entities(m_db, m_time),
     m_players(m_db),
     m_staticObjectContainer(m_db),
