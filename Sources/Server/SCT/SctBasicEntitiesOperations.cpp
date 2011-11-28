@@ -1,5 +1,4 @@
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include <gtest/gtest.h>
 
 #include <fstream>
 #include <iostream>
@@ -12,15 +11,9 @@
 #include <SCT/DataBaseUtils.hpp>
 #include "Server/SCT/Preconditions.hpp"
 
-class SctBasicEntitiesOperations : public CPPUNIT_NS::TestFixture
+class SctBasicEntitiesOperations : public testing::Test 
 {
-    CPPUNIT_TEST_SUITE (SctBasicEntitiesOperations);
-    CPPUNIT_TEST(testPlayerEntitiesStatusReq);
-    CPPUNIT_TEST(testEntityChangeCourseReq);
-    CPPUNIT_TEST_SUITE_END ();
-
 public:
-    void setUp();
     void testPlayerEntitiesStatusReq();
     void testEntityChangeCourseReq();
 
@@ -28,13 +21,7 @@ public:
     void procedureEntityChangeCourse(SCT::Connection & connection, int entityId, int x, int y, int z);
 };
 
-CPPUNIT_TEST_SUITE_REGISTRATION (SctBasicEntitiesOperations);
-
-void SctBasicEntitiesOperations::setUp()
-{
-}
-
-void SctBasicEntitiesOperations::testPlayerEntitiesStatusReq()
+TEST_F(SctBasicEntitiesOperations, testPlayerEntitiesStatusReq)
 {
     using namespace ::Common::Messages;
 
@@ -45,23 +32,23 @@ void SctBasicEntitiesOperations::testPlayerEntitiesStatusReq()
     connection.send(msg);
 
     std::auto_ptr<AbstractMessage> resp = connection.receive();
-    CPPUNIT_ASSERT_EQUAL(Common::Messages::Id::PlayerEntitiesStatusResp, resp->getId());
+    EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
     Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), playerEntitiesStatusResp.entities.size()); 
-    CPPUNIT_ASSERT_EQUAL(1, playerEntitiesStatusResp.entities[0].get<0>());
+    EXPECT_TRUE(size_t(1) == playerEntitiesStatusResp.entities.size()); 
+    EXPECT_TRUE(1 == playerEntitiesStatusResp.entities[0].get<0>());
 }
 
-void SctBasicEntitiesOperations::testEntityChangeCourseReq()
+TEST_F(SctBasicEntitiesOperations, testEntityChangeCourseReq)
 {
     SCT::PreconditionPlayerLoggedIn precondition;
     SCT::Connection & connection = precondition.getConnection();
 
     std::auto_ptr<Common::Messages::AbstractMessage> entityGetInfoRespA = procedureEntityGetInfo(connection, 1);
     Common::Messages::EntityGetInfoResp & entitiesGetInfoResp = dynamic_cast<Common::Messages::EntityGetInfoResp&>(*entityGetInfoRespA);
-    CPPUNIT_ASSERT_EQUAL(1, entitiesGetInfoResp.player_id);
-    CPPUNIT_ASSERT_EQUAL(1, entitiesGetInfoResp.x);
-    CPPUNIT_ASSERT_EQUAL(1, entitiesGetInfoResp.y);
-    CPPUNIT_ASSERT_EQUAL(1, entitiesGetInfoResp.z);
+    EXPECT_TRUE(1 == entitiesGetInfoResp.player_id);
+    EXPECT_TRUE(1 == entitiesGetInfoResp.x);
+    EXPECT_TRUE(1 == entitiesGetInfoResp.y);
+    EXPECT_TRUE(1 == entitiesGetInfoResp.z);
 
     procedureEntityChangeCourse(connection, 1, 2, 1, 1);
 
@@ -69,10 +56,10 @@ void SctBasicEntitiesOperations::testEntityChangeCourseReq()
 
     std::auto_ptr<Common::Messages::AbstractMessage> entityGetInfoRespA2 = procedureEntityGetInfo(connection, 1);
     Common::Messages::EntityGetInfoResp & entitiesGetInfoResp2 = dynamic_cast<Common::Messages::EntityGetInfoResp&>(*entityGetInfoRespA2);
-    CPPUNIT_ASSERT_EQUAL(1, entitiesGetInfoResp2.player_id);
-    CPPUNIT_ASSERT_EQUAL(2, entitiesGetInfoResp2.x);
-    CPPUNIT_ASSERT_EQUAL(1, entitiesGetInfoResp2.y);
-    CPPUNIT_ASSERT_EQUAL(1, entitiesGetInfoResp2.z);
+    EXPECT_TRUE(1 == entitiesGetInfoResp2.player_id);
+    EXPECT_TRUE(2 == entitiesGetInfoResp2.x);
+    EXPECT_TRUE(1 == entitiesGetInfoResp2.y);
+    EXPECT_TRUE(1 == entitiesGetInfoResp2.z);
 }
 
 std::auto_ptr<Common::Messages::AbstractMessage> SctBasicEntitiesOperations::procedureEntityGetInfo(
@@ -85,7 +72,7 @@ std::auto_ptr<Common::Messages::AbstractMessage> SctBasicEntitiesOperations::pro
     connection.send(entityGetInfoReq);
 
     std::auto_ptr<Common::Messages::AbstractMessage> entityGetInfoResp = connection.receive();
-    CPPUNIT_ASSERT_EQUAL(Common::Messages::Id::EntityGetInfoResp, entityGetInfoResp->getId());
+    EXPECT_TRUE(Common::Messages::Id::EntityGetInfoResp == entityGetInfoResp->getId());
 
     return entityGetInfoResp;
 }
@@ -102,6 +89,4 @@ void SctBasicEntitiesOperations::procedureEntityChangeCourse(
     entityChangeCourseReq.courseZ = z;
     connection.send(entityChangeCourseReq); 
 }
-
-//TODO: FTCs
 

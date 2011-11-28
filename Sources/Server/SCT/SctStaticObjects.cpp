@@ -1,5 +1,4 @@
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include <gtest/gtest.h>
 
 #include <fstream>
 #include <iostream>
@@ -12,26 +11,7 @@
 #include "Server/SCT/DataBaseUtils.hpp"
 #include "Server/SCT/Preconditions.hpp"
 
-class SctStaticObjects : public CPPUNIT_NS::TestFixture
-{
-    CPPUNIT_TEST_SUITE (SctStaticObjects);
-    CPPUNIT_TEST(testStaticObjectsStatusReq);
-    CPPUNIT_TEST(testStaticObjectInfoReq);
-    CPPUNIT_TEST_SUITE_END ();
-
-public:
-    void setUp();
-    void testStaticObjectsStatusReq();
-    void testStaticObjectInfoReq();
-};
-
-CPPUNIT_TEST_SUITE_REGISTRATION (SctStaticObjects);
-
-void SctStaticObjects::setUp()
-{
-}
-
-void SctStaticObjects::testStaticObjectsStatusReq()
+TEST(SctStaticObjects, testStaticObjectsStatusReq)
 {
     SCT::PreconditionPlayerLoggedIn precondition;
     SCT::Connection & connection = precondition.getConnection();
@@ -39,14 +19,14 @@ void SctStaticObjects::testStaticObjectsStatusReq()
     Common::Messages::StaticObjectStatusReq staticObjectStatusReq;
     connection.send(staticObjectStatusReq);
     std::auto_ptr<Common::Messages::AbstractMessage> resp = connection.receive();
-    CPPUNIT_ASSERT_EQUAL(Common::Messages::Id::StaticObjectStatusResp, resp->getId());
+    EXPECT_EQ(Common::Messages::Id::StaticObjectStatusResp, resp->getId());
 
     Common::Messages::StaticObjectStatusResp & staticObjectStatusResp = dynamic_cast<Common::Messages::StaticObjectStatusResp&>(*resp);
-    CPPUNIT_ASSERT_EQUAL(size_t(1), staticObjectStatusResp.objects.size());
-    CPPUNIT_ASSERT_EQUAL(1, staticObjectStatusResp.objects[0].get<0>());
+    EXPECT_EQ(size_t(1), staticObjectStatusResp.objects.size());
+    EXPECT_EQ(1, staticObjectStatusResp.objects[0].get<0>());
 }
 
-void SctStaticObjects::testStaticObjectInfoReq()
+TEST(SctStaticObjects, testStaticObjectInfoReq)
 {
     SCT::PreconditionPlayerLoggedIn precondition;
     SCT::Connection & connection = precondition.getConnection();
@@ -55,12 +35,12 @@ void SctStaticObjects::testStaticObjectInfoReq()
     staticObjectInfoReq.staticObjectId = 1;
     connection.send(staticObjectInfoReq);
     std::auto_ptr<Common::Messages::AbstractMessage> resp = connection.receive();
-    CPPUNIT_ASSERT_EQUAL(Common::Messages::Id::StaticObjectInfoResp, resp->getId());
+    EXPECT_EQ(Common::Messages::Id::StaticObjectInfoResp, resp->getId());
 
     Common::Messages::StaticObjectInfoResp & staticObjectInfoResp = dynamic_cast<Common::Messages::StaticObjectInfoResp&>(*resp);
-    CPPUNIT_ASSERT_EQUAL(1, staticObjectInfoResp.staticObjectId);
-    CPPUNIT_ASSERT_EQUAL(100, staticObjectInfoResp.x);
-    CPPUNIT_ASSERT_EQUAL(100, staticObjectInfoResp.y);
-    CPPUNIT_ASSERT_EQUAL(100, staticObjectInfoResp.z);
+    EXPECT_EQ(1, staticObjectInfoResp.staticObjectId);
+    EXPECT_EQ(100, staticObjectInfoResp.x);
+    EXPECT_EQ(100, staticObjectInfoResp.y);
+    EXPECT_EQ(100, staticObjectInfoResp.z);
 }
 

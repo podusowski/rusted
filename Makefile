@@ -14,16 +14,18 @@ endif
 MFLAGS += -s
 
 .DEFAULT:
+	@( test `find $(SOURCE_DIR) -name $@.mk | wc -l` -eq 1 || echo "there two $@.mk files" ; exit 1 ) && \
 	@$(MAKE) -f $@.mk \
 		--directory `dirname \`find $(SOURCE_DIR) -name $@.mk\`` \
 		$(MFLAGS) \
 		BUILD=$(BUILD) \
 		TOP_DIR=$(PWD) \
-		$@ || ( echo "failed on $@"; exit 1 )
+		$@ \
+	|| ( echo "failed to build $@"; exit 1 )
 
 .PHONY: help
 help:
-	@echo "targets:"
+	@echo "Available targets:"
 	@echo
 	@find $(SOURCE_DIR) -name *.mk -exec basename {} \; | sed s/.mk//
 
