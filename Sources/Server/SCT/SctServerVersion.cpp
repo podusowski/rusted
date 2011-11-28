@@ -3,9 +3,9 @@
 #include <iostream>
 #include <boost/foreach.hpp>
 
-#include <SCT/Component.hpp>
-#include <SCT/Connection.hpp>
-#include <SCT/DataBaseUtils.hpp>
+#include <Core/Component.hpp>
+#include <Core/Connection.hpp>
+#include <Core/DataBaseUtils.hpp>
 
 TEST(SctServerVersion, testServerVersion)
 {

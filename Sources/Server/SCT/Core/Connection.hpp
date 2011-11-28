@@ -1,10 +1,9 @@
-#ifndef SCT_CONNECTION_HPP
-#define SCT_CONNECTION_HPP
+#pragma once
 
 #include <string>
 #include <boost/asio.hpp>
 
-#include <Messages/Messages.hpp>
+#include "Common/Messages/Messages.hpp"
 
 using ::Common::Messages::AbstractMessage;
 
@@ -26,4 +25,3 @@ private:
 
 }
 
-#endif

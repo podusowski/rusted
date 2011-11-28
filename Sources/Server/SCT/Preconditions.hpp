@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Server/SCT/Component.hpp"
-#include "Server/SCT/Connection.hpp"
+#include "Core/Component.hpp"
+#include "Core/Connection.hpp"
 
 namespace SCT
 {

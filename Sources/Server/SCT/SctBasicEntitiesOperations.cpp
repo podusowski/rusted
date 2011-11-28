@@ -6,10 +6,10 @@
 
 #include <Common/Thread.hpp>
 
-#include <SCT/Component.hpp>
-#include <SCT/Connection.hpp>
-#include <SCT/DataBaseUtils.hpp>
-#include "Server/SCT/Preconditions.hpp"
+#include "Core/Component.hpp"
+#include "Core/Connection.hpp"
+#include "Core/DataBaseUtils.hpp"
+#include "Preconditions.hpp"
 
 class SctBasicEntitiesOperations : public testing::Test 
 {

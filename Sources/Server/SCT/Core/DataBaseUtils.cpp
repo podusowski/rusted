@@ -1,7 +1,7 @@
 #include <fstream>
 
 #include "Common/Game/Utilities/PasswordHash.hpp"
-#include "SCT/DataBaseUtils.hpp"
+#include "DataBaseUtils.hpp"
 
 using namespace SCT;
 

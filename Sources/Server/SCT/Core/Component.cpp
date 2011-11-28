@@ -7,8 +7,8 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/foreach.hpp>
 
-#include <Common/Thread.hpp>
-#include <SCT/Component.hpp>
+#include "Common/Thread.hpp"
+#include "Component.hpp"
 #include "Common/Logger/Logger.hpp"
 
 using namespace ::SCT;

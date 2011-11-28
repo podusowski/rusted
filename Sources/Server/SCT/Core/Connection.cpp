@@ -2,7 +2,7 @@
 #include <Common/RustedCodec/AsioReadBuffer.hpp>
 #include "Common/Logger/Logger.hpp"
 
-#include <SCT/Connection.hpp>
+#include "Connection.hpp"
 
 using namespace ::SCT;
 using namespace ::boost::asio;

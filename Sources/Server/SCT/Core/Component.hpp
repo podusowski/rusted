@@ -1,12 +1,11 @@
-#ifndef SCT_COMPONENT_HPP
-#define SCT_COMPONENT_HPP
+#pragma once
 
 #include <unistd.h>
 
 #include <string>
 #include <vector>
 
-#include <SCT/Connection.hpp>
+#include "Connection.hpp"
 
 namespace SCT
 {
@@ -31,4 +30,3 @@ private:
 
 }
 
-#endif
