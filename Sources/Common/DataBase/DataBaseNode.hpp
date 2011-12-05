@@ -1,5 +1,4 @@
-#ifndef DATABASE_NODE_HPP
-#define DATABASE_NODE_HPP
+#pragma once
 
 #include <string>
 #include <map>
@@ -60,6 +59,4 @@ private:
 
 }
 }
-
-#endif
 

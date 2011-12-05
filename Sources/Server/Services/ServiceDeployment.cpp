@@ -7,7 +7,7 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
     m_dbFactory(cfg),
     m_db(m_dbFactory.create()),
 
-    m_universe(m_db),
+    //m_universe(m_db),
     m_entities(m_db, m_time),
     m_players(m_db),
     m_staticObjectContainer(m_db),
@@ -18,6 +18,7 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
     m_entityService(m_entities),
     m_staticObjectsService(m_staticObjectContainer)
 {
+    m_universe.loadFromDataBase(m_db);
 }
 
 void ServiceDeployment::deployNewConnection(Server::Network::IConnection & connection)

@@ -15,6 +15,11 @@ SOURCES= \
         Game/PlayerContainer.cpp \
         Game/StaticObjectContainer.cpp \
 
-CFLAGS=-Wall -pedantic -g -I../ -I. -I../Common -I/usr/include/libxml2
+CFLAGS+=-Wall -pedantic -g 
+CFLAGS+=-I../
+CFLAGS+=-I. 
+CFLAGS+=-I../Common
+CFLAGS+=-I../External
+CFLAGS+=-I/usr/include/libxml2
 
 include Makefile.leaf

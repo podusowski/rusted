@@ -1,7 +1,9 @@
 #pragma once
 
 #include <boost/shared_ptr.hpp>
-#include "Object/IObject.hpp"
+
+#include "IObject.hpp"
+#include "DataBase/DataBaseNode.hpp"
 
 namespace Common
 {

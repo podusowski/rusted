@@ -18,8 +18,13 @@ SOURCES=Thread.cpp \
 	    Game/Utilities/PasswordHash.cpp \
 	    Game/StaticObject.cpp
 SOURCES+=Game/Universe.cpp
+SOURCES+=Game/Object/ObjectFactory.cpp
 
-CFLAGS=-Wall -pedantic -g -I. -I.. -I/usr/include/libxml2
+CFLAGS+=-Wall -pedantic -g 
+CFLAGS+=-I. 
+CFLAGS+=-I.. 
+CFLAGS+=-I/usr/include/libxml2
+CFLAGS+=-I../External/
 
 $(LIBNAME): Messages/Messages.hpp
 
