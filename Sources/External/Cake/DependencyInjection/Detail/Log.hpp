@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <cstdlib>
 
 #ifdef __GNUG__
     #include <cxxabi.h>
