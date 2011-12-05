@@ -14,7 +14,7 @@ endif
 MFLAGS += -s
 
 .DEFAULT:
-	@( test `find $(SOURCE_DIR) -name $@.mk | wc -l` -eq 1 || ( echo "there two $@.mk files" ; exit 1 ) ) && \
+	@( test `find $(SOURCE_DIR) -name $@.mk | wc -l` -eq 1 || ( echo "there must be single $@.mk file" ; exit 1 ) ) && \
 	$(MAKE) -f $@.mk \
 		--directory `dirname \`find $(SOURCE_DIR) -name $@.mk\`` \
 		$(MFLAGS) \
