@@ -21,6 +21,9 @@ std::string DataBaseUtils::createOnePlayerWithOneEntity()
     "   <staticObjects>"
     "       <staticObject id=\"1\" x=\"100\" y=\"100\" z=\"100\" />"
     "   </staticObjects>"
+    "   <objects>"
+    "       <object id=\"1\" type=\"Ship\" x=\"1\" y=\"1\" z=\"1\" owner=\"1\" />"
+    "   </objects>"
     "</root>";
 
    return filename; 
