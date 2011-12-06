@@ -1,0 +1,34 @@
+LIBNAME=libCommon.a
+
+SOURCES=Thread.cpp \
+		RustedCodec/RustedAbstractCoder.cpp \
+		RustedCodec/RustedAbstractDecoder.cpp \
+		RustedCodec/SimpleWriteBuffer.cpp \
+		RustedCodec/SimpleReadBuffer.cpp \
+		RustedCodec/AsioReadBuffer.cpp \
+		RustedCodec/AsioWriteBuffer.cpp \
+		Configuration/Configuration.cpp \
+        DataBase/DataBase.cpp \
+        DataBase/DataBaseNode.cpp \
+        DataBase/XmlDataProvider.cpp \
+        DataBase/DataBaseFactory.cpp \
+        Game/RustedTime.cpp \
+	    Game/Entity.cpp \
+	    Game/EntityContainer.cpp \
+	    Game/Utilities/PasswordHash.cpp \
+	    Game/StaticObject.cpp
+SOURCES+=Game/Universe.cpp
+SOURCES+=Game/Object/ObjectFactory.cpp
+
+CFLAGS+=-Wall -pedantic -g 
+CFLAGS+=-I. 
+CFLAGS+=-I.. 
+CFLAGS+=-I/usr/include/libxml2
+CFLAGS+=-I../External/
+
+$(LIBNAME): Messages/Messages.hpp
+
+Messages/Messages.hpp: Messages/Messages.xml genMessages.py
+	./genMessages.py
+
+include Makefile.leaf

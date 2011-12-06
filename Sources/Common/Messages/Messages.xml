@@ -1,0 +1,92 @@
+<messages>
+
+<!--
+common signalling
+-->
+
+<message id="ServerVersionReq"></message>
+<message id="ServerVersionResp">
+	<param type="string" name="version" />
+</message>
+
+<!--
+player specific
+-->
+<message id="UserAuthorizationReq">
+	<param type="string" name="login" />
+	<param type="string" name="password" description="user password, type of this param should be reconsidered" />
+</message>
+
+<message id="UserAuthorizationResp">
+	<param type="boolean" name="success" />
+	<param type="int32" name="player_id" />
+</message>
+
+<message id="PlayerResourcesStatusReq" />
+
+<message id="PlayerResourcesStatusResp">
+	<param type="int32" name="carbon" />
+	<param type="int32" name="uranium" />
+	<param type="int32" name="credits" />
+</message>
+
+<message id="RustedTimeEpochReq" />
+
+<message id="RustedTimeEpochResp">
+    <param type="int32" name="time" />
+</message>
+
+<!--
+entity
+-->
+
+<message id="PlayerEntitiesStatusReq" />
+<message id="PlayerEntitiesStatusResp">
+	<list name="entities">
+		<listparam type="int32" name="id" description="id of the entity" />
+	</list>
+</message>
+
+<message id="EntityGetInfoReq">
+	<param type="int32" name="id" />
+</message>
+
+<message id="EntityGetInfoResp">
+	<param type="int32" name="id" />
+	<param type="int32" name="player_id" description="id of the player owning this entity" />
+	<param type="int32" name="x" />
+	<param type="int32" name="y" />
+	<param type="int32" name="z" />
+</message>
+
+<message id="EntityChangeCourseReq">
+	<param type="int32" name="entityId" description="identifier of the entity" />
+	<param type="int32" name="courseX" />
+	<param type="int32" name="courseY" />
+	<param type="int32" name="courseZ" />
+</message>
+
+<!--
+static objects
+-->
+
+<message id="StaticObjectStatusReq" />
+
+<message id="StaticObjectStatusResp">
+    <list name="objects">
+        <listparam type="int32" name="id" />
+    </list>
+</message>
+
+<message id="StaticObjectInfoReq">
+    <param type="int32" name="staticObjectId" />
+</message>
+
+<message id="StaticObjectInfoResp">
+    <param type="int32" name="staticObjectId" />
+	<param type="int32" name="x" />
+	<param type="int32" name="y" />
+	<param type="int32" name="z" />
+</message>
+
+</messages>

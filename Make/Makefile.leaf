@@ -1,0 +1,40 @@
+include version.inc.mk
+
+ifneq ($(APPNAME),)
+  TARGETNAME := $(APPNAME)
+endif
+ifneq ($(LIBNAME),)
+  TARGETNAME := $(LIBNAME)
+endif
+ifneq ($(META),)
+  TARGETNAME := $(META)
+endif
+
+ifeq ($(VERSION), release)
+  BUILDPREFIX := release.$(TARGETNAME)
+  CFLAGS += -O3
+else
+  BUILDPREFIX := debug.$(TARGETNAME)
+  CFLAGS += -g -O0
+endif
+
+OBJS := $(addprefix $(BUILD)/$(BUILDPREFIX)/, $(SOURCES:.cpp=.o))
+
+include deps.inc.mk
+
+ifneq ($(APPNAME),)
+  include application.inc.mk
+  include c++.inc.mk
+endif
+ifneq ($(LIBNAME),)
+  include library.inc.mk
+  include c++.inc.mk
+endif
+ifneq ($(META),)
+  include meta.inc.mk
+endif
+
+.PHONY: $(DEPENDENCIES)
+$(DEPENDENCIES):
+	@$(MAKE) --directory $(TOP_DIR) --no-print-directory $@
+

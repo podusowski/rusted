@@ -1,0 +1,18 @@
+<root>
+   <users>
+       <user id="1" login="user1" password="passwordhash" /> <!-- note that password for this hash is "password" :) -->
+   </users>
+   <entities>
+       <entity id="1" player_id="1" x="1" y="1" z="1" />
+       <entity id="2" player_id="1" x="1" y="1" z="1" />
+       <entity id="3" player_id="1" x="1" y="1" z="1" />
+   </entities>
+   <staticObjects>
+        <staticObject id="1" x="50" y="50" z="500" />
+   </staticObjects>
+   <objects>
+        <object id="1" type="Ship" x="1" y="1" z="1" owner="1" />
+        <object id="2" type="Ship" x="100" y="1" z="1" owner="1" />
+        <object id="3" type="Ship" x="200" y="1" z="1" owner="1" />
+   </objects>
+</root>

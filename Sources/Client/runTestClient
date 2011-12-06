@@ -1,0 +1,15 @@
+#!/bin/bash
+
+EXEC_DIRECTORY=`dirname $0`
+pushd $EXEC_DIRECTORY
+
+if [ -n "$DEBUG" ]; then
+    LD_LIBRARY_PATH=. gdb --args Client --network.port 1234 --network.address localhost $@
+else
+    LD_LIBRARY_PATH=. ./Client --network.port 1234 --network.address localhost $@
+fi
+
+xset r on
+
+popd
+
