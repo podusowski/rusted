@@ -14,6 +14,8 @@ namespace Object
 class Ship : public IObject, public IMovableObject, public IOwnedObject
 {
 public:
+    Position getPosition();
+    void setCourse(Position course);
 };
 
 }

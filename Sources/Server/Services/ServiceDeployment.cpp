@@ -18,7 +18,6 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
     m_entityService(m_entities),
     m_staticObjectsService(m_staticObjectContainer)
 {
-    m_universe.loadFromDataBase(m_db);
 }
 
 void ServiceDeployment::deployNewConnection(Server::Network::IConnection & connection)

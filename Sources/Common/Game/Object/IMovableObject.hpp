@@ -10,7 +10,7 @@ namespace Object
 class IMovableObject
 {
 public:
-    void setCourse(Position course) = 0;
+    virtual void setCourse(Position course) = 0;
 
     virtual ~IMovableObject() {}
 };
