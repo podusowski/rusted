@@ -13,6 +13,6 @@ $(BUILD)/TestDataBase.xml: TestDataBase.xml
 $(BUILD)/runTestServer: runTestServer
 	cp $< $@
 
-DEPENDENCIES+=libServer.a
+DEPENDENCIES+=libServer.a libCommon.a
 
 include Makefile.leaf
