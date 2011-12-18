@@ -19,6 +19,7 @@ SOURCES=Thread.cpp \
 	    Game/StaticObject.cpp
 SOURCES+=Game/Universe.cpp
 SOURCES+=Game/Object/ObjectFactory.cpp
+SOURCES+=Game/Object/Ship.cpp
 
 CFLAGS+=-Wall -pedantic -g 
 CFLAGS+=-I. 

@@ -7,10 +7,11 @@ namespace Game
 namespace Object
 {
 
+// TODO: should object have responsibility to track ownership?
 class IOwnedObject
 {
 public:
-    virtual unsigned getPlayerId() = 0;
+    virtual unsigned getOwnerId() = 0;
 
     ~IOwnedObject() {}
 };
