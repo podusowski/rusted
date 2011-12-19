@@ -1,3 +1,5 @@
+#!/bin/bash
+
 if [ ! -d _build ]; then 
     echo "no _build directory, project was not built or you are not in working directory"
     exit 1
