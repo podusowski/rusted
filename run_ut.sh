@@ -11,14 +11,19 @@ result=0
 
 for i in *UT; do
    if [ -f $i ]; then
-       ./$i > /dev/null 2> /dev/null
+       stdout=`tempfile`
+       stderr=`tempfile`
+       ./$i > $stdout 2> $stderr
        if [ "$?" = "0" ]; then
            echo -n "pass "
        else
            echo -n "fail "
+           cat $stdout $stderr
            result=1
        fi
        echo $i
+
+       rm $stdout $stderr
    fi
 done
 
