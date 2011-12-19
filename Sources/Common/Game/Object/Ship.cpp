@@ -8,6 +8,10 @@ Position Ship::getPosition()
     return Position();
 }
 
+void Ship::setPosition(const Position &)
+{
+}
+
 void Ship::setCourse(Position)
 {
 }

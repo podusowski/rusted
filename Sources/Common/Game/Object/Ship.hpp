@@ -15,6 +15,7 @@ class Ship : public IObject, public IMovableObject, public IOwnedObject
 {
 public:
     Position getPosition();
+    void setPosition(const Position &);
     void setCourse(Position course);
     unsigned getOwnerId();
 };
