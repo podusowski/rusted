@@ -5,6 +5,8 @@ fi
 
 pushd _build > /dev/null
 
+result=0
+
 for i in *UT; do
    if [ -f $i ]; then
        ./$i > /dev/null 2> /dev/null
@@ -12,9 +14,12 @@ for i in *UT; do
            echo -n "pass "
        else
            echo -n "fail "
+           result=1
        fi
        echo $i
    fi
 done
 
 popd > /dev/null
+
+exit $result
