@@ -18,7 +18,15 @@ SOURCES=UnitTests/mainUT.cpp \
 		Game/Utilities/UnitTests/PasswordHashTest.cpp \
 
 CFLAGS=-Wall -pedantic -g -I. -I.. -I/usr/include/libxml2
-LDFLAGS=-L. -L$(BUILD) -lCommon -lpthread -lboost_system -lxml2 -lcppunit
+
+LDFLAGS=-L. -L$(BUILD) 
+LDFLAGS+=-lCommon 
+LDFLAGS+=-lpthread 
+LDFLAGS+=-lboost_system 
+LDFLAGS+=-lxml2 
+LDFLAGS+=-lcppunit
+LDFLAGS+=-lgtest
+LDFLAGS+=-lgmock
 
 Messages/UnitTests/MessagesTest.cpp: Messages/Messages.xml genMessages.py genMessagesUT.py
 	@mkdir -p Messages/UnitTests

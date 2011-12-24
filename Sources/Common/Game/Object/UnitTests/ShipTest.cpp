@@ -9,4 +9,5 @@ TEST(ShipTest, TestMoveByVector)
     Common::Game::Object::Ship ship;
 
     ship.setPosition(Common::Game::Position(0, 0, 0));
+    ship.setCourse(Common::Game::Position(100, 0, 0));
 }

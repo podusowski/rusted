@@ -8,7 +8,7 @@ SOURCES=UnitTests/mainUT.cpp \
         Services/UnitTests/EntityServiceTest.cpp \
 
 CFLAGS=-Wall -pedantic -g -I../ -I. -I../Common -I/usr/include/libxml2
-LDFLAGS=-L. -L$(BUILD) -lpthread -lboost_system -lxml2 -lcppunit -lServer -lCommon
+LDFLAGS=-L. -L$(BUILD) -lpthread -lboost_system -lxml2 -lcppunit -lServer -lCommon -lgtest -lgmock
 
 DEPENDENCIES+=libServer.a
 DEPENDENCIES+=libCommon.a

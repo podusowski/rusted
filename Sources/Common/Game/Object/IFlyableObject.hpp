@@ -7,12 +7,12 @@ namespace Game
 namespace Object
 {
 
-class IMovableObject
+class IFlyableObject
 {
 public:
     virtual void setCourse(Position course) = 0;
 
-    virtual ~IMovableObject() {}
+    virtual ~IFlyableObject() {}
 };
 
 }
