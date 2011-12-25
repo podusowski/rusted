@@ -32,7 +32,7 @@ help:
 
 .PHONY: all
 all:
-	@find $(SOURCE_DIR) -name *.mk -exec basename {} \; | sed s/.mk// | xargs make
+	@find $(SOURCE_DIR) -name *.mk -exec basename {} \; | sed s/.mk// | xargs make $(MFLAGS)
 
 .PHONY: clean
 clean:
