@@ -11,11 +11,18 @@ Position Ship::getPosition()
     unsigned totalTripTime = distance / speed;
     unsigned timeTakenSoFar = m_time->getSeconds() - m_course.startTime;
 
-    float tripProfress = timeTakenSoFar / totalTripTime;
+    float tripProgress = timeTakenSoFar / totalTripTime;
 
-    Position tripVector = m_course.course - m_position;
-
-    return tripVector * tripProfress;
+    if (tripProgress >= 1.0)
+    {
+        m_position = m_course.course;
+        return m_position;
+    }
+    else
+    {
+        Position tripVector = m_course.course - m_position;
+        return tripVector * tripProgress;
+    }
 }
 
 void Ship::setPosition(const Position &)

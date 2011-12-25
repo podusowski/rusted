@@ -34,7 +34,18 @@ TEST_F(ShipTest, TestMoveByVector)
     ship.setPosition(Common::Game::Position(0, 0, 0));
     ship.setCourse(Common::Game::Position(100, 0, 0));
 
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
+    // one call goes for position calculation, 
+    // second for setCourse calculation 
+    // and another one again for position calculation
+    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(3)
+        .WillOnce(Return(100))
+        .WillOnce(Return(100))
+        .WillOnce(Return(200));
 
     ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
+
+    ship.setCourse(Common::Game::Position(100, 100, 0));
+
+    ASSERT_EQ(Common::Game::Position(100, 100, 0), ship.getPosition());
 }
+
