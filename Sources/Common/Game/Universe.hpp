@@ -15,15 +15,15 @@ namespace Game
 class Universe
 {
 public:
-    void add(unsigned id, boost::shared_ptr<Object::ObjectBase> object);
-    //std::vector<boost::shared_ptr<Object::IObject> > getPlayerObjects(unsigned playerId);
+    void add(boost::shared_ptr<Object::ObjectBase> object);
 
     template<class ObjectType> ObjectType & getById(unsigned id)
     {
+        return dynamic_cast<ObjectType&>(*m_objects[id]);
     }
 
 private:
-    std::vector<boost::shared_ptr<Object::ObjectBase> > m_objects;
+    std::map<unsigned, boost::shared_ptr<Object::ObjectBase> > m_objects;
 };
 
 }

@@ -12,8 +12,9 @@ class ShipTest : public Test
 public:
     void SetUp()
     {
-         m_time.reset(new RustedTimeStub);
-         Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_time);
+        Cake::DependencyInjection::clear();
+        m_time.reset(new RustedTimeStub);
+        Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_time);
     }
 
     RustedTimeStub & getRustedTimeStub()
