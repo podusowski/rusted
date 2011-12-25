@@ -28,6 +28,8 @@ LDFLAGS+=-lcppunit
 LDFLAGS+=-lgtest
 LDFLAGS+=-lgmock
 
+DEPENDENCIES+=libCommon.a
+
 Messages/UnitTests/MessagesTest.cpp: Messages/Messages.xml genMessages.py genMessagesUT.py
 	@mkdir -p Messages/UnitTests
 	./genMessagesUT.py
