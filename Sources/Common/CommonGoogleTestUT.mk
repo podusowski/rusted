@@ -9,5 +9,7 @@ CFLAGS+=-I../External
 
 LDFLAGS=-L. -L$(BUILD) -lCommon -lpthread -lboost_system -lxml2 -lgtest -lgmock
 
+DEPENDENCIES+=libCommon.a
+
 include Makefile.leaf
 
