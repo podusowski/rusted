@@ -53,7 +53,7 @@ public:
 		return *this;
 	}
 
-	bool operator==(const Point3<T> &p)
+	bool operator==(const Point3<T> &p) const
 	{
 		return x == p.x && y == p.y && z == p.z;
 	}
