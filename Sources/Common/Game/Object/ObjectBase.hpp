@@ -9,13 +9,19 @@ namespace Game
 namespace Object
 {
 
-class IObject
+class ObjectBase
 {
 public:
+    unsigned getId() { return m_id; }
+    void setId(unsigned id) { m_id = id; }
+
     virtual Position getPosition() = 0;
     virtual void setPosition(const Position &) = 0;
 
-    virtual ~IObject() {}
+    virtual ~ObjectBase() {}
+
+private:
+    unsigned m_id;
 };
 
 }

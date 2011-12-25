@@ -3,12 +3,12 @@
 
 using namespace Common::Game::Object;
 
-boost::shared_ptr<IObject> ObjectFactory::create(Common::DataBase::DataBaseNode & data)
+boost::shared_ptr<ObjectBase> ObjectFactory::create(Common::DataBase::DataBaseNode & data)
 {
     if (data.getValue<std::string>("type") == "Ship")
     {
-        boost::shared_ptr<IObject> object(new Ship);
+        boost::shared_ptr<ObjectBase> object(new Ship);
         return object;
     }
-    return boost::shared_ptr<IObject>();
+    return boost::shared_ptr<ObjectBase>();
 }

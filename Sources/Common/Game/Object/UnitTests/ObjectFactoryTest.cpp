@@ -10,7 +10,7 @@ TEST(ObjectFactoryTest, TestLoadShip)
     node.setValue("type", "Ship");
     Common::Game::Object::ObjectFactory factory;
 
-    boost::shared_ptr<Common::Game::Object::IObject> object = factory.create(node);
+    boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
 
     ASSERT_EQ(typeid(*object), typeid(Common::Game::Object::Ship));
 }

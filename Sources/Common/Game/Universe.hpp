@@ -4,7 +4,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "Object/ObjectFactory.hpp"
-#include "Game/Object/IObject.hpp"
+#include "Game/Object/ObjectBase.hpp"
 #include "DataBase/DataBase.hpp"
 
 namespace Common
@@ -12,19 +12,10 @@ namespace Common
 namespace Game
 {
 
-namespace Detail
-{
-    class ObjectHolder
-    {
-        unsigned id;
-        boost::shared_ptr<Object::IObject> object;
-    };
-}
-
 class Universe
 {
 public:
-    void add(unsigned id, boost::shared_ptr<Object::IObject> object);
+    void add(unsigned id, boost::shared_ptr<Object::ObjectBase> object);
     //std::vector<boost::shared_ptr<Object::IObject> > getPlayerObjects(unsigned playerId);
 
     template<class ObjectType> ObjectType & getById(unsigned id)
@@ -32,7 +23,7 @@ public:
     }
 
 private:
-    std::vector<boost::shared_ptr<Object::IObject> > m_objects;
+    std::vector<boost::shared_ptr<Object::ObjectBase> > m_objects;
 };
 
 }

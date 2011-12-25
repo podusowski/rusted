@@ -2,7 +2,7 @@
 
 #include "Cake/DependencyInjection/Inject.hpp"
 
-#include "Common/Game/Object/IObject.hpp"
+#include "Common/Game/Object/ObjectBase.hpp"
 #include "Common/Game/Object/IFlyableObject.hpp"
 #include "Common/Game/Object/IOwnedObject.hpp"
 #include "Common/Game/IRustedTime.hpp"
@@ -20,7 +20,7 @@ struct Course
     unsigned startTime;
 };
 
-class Ship : public IObject, public IFlyableObject, public IOwnedObject
+class Ship : public ObjectBase, public IFlyableObject, public IOwnedObject
 {
 public:
     Position getPosition();

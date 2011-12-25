@@ -9,7 +9,7 @@ TEST(UniverseTest, AddOneShipAndGetIt)
 {
     #if 0
     Common::Game::Universe universe;
-    boost::shared_ptr<Common::Game::Object::IObject> ship(new Common::Game::Object::Ship());
+    boost::shared_ptr<Common::Game::Object::ObjectBase> ship(new Common::Game::Object::Ship());
 
     universe.add(1, ship);
     #endif
