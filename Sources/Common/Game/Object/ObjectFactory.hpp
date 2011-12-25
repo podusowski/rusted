@@ -15,7 +15,7 @@ namespace Object
 class ObjectFactory
 {
 public:
-	boost::shared_ptr<IObject> createObject(DataBase::DataBaseNode & data);
+	boost::shared_ptr<IObject> create(DataBase::DataBaseNode & data);
 };
 
 }

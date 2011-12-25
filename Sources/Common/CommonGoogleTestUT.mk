@@ -3,6 +3,7 @@ APPNAME=CommonGoogleTestUT
 SOURCES+=UnitTests/mainGoogleTestUT.cpp
 SOURCES+=Game/UnitTests/UniverseTest.cpp
 SOURCES+=Game/Object/UnitTests/ShipTest.cpp
+SOURCES+=Game/Object/UnitTests/ObjectFactoryTest.cpp
 
 CFLAGS=-Wall -pedantic -g -I. -I.. -I/usr/include/libxml2
 CFLAGS+=-I../External
