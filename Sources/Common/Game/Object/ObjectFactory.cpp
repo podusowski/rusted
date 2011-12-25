@@ -8,6 +8,7 @@ boost::shared_ptr<ObjectBase> ObjectFactory::create(Common::DataBase::DataBaseNo
     if (data.getValue<std::string>("type") == "Ship")
     {
         boost::shared_ptr<ObjectBase> object(new Ship);
+        object->setId(data.getValue<unsigned>("id"));
         return object;
     }
     return boost::shared_ptr<ObjectBase>();
