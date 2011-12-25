@@ -37,7 +37,7 @@ public:
         interface_map::iterator it = m_interfaces.find(&typeid(InterfaceType)); 
         if (it == m_interfaces.end())
         {
-            CAKE_DEPENDENCY_INJECTION_EXCEPTION(what << "don't know how to create " << CAKE_DEPENDENCY_INJECTION_TYPENAME(InterfaceType));
+            CAKE_DEPENDENCY_INJECTION_EXCEPTION(what << "can't inject " << CAKE_DEPENDENCY_INJECTION_TYPENAME(InterfaceType) << " because no such object is registered");
         }
         return dynamic_cast<Interface<InterfaceType>&>(*it->second);
     }
