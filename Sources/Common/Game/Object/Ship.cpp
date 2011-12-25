@@ -35,6 +35,3 @@ void Ship::setCourse(Position course)
     m_course.startTime = m_time->getSeconds();
 }
 
-unsigned Ship::getOwnerId()
-{
-}

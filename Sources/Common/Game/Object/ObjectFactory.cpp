@@ -9,6 +9,7 @@ boost::shared_ptr<ObjectBase> ObjectFactory::create(Common::DataBase::DataBaseNo
     {
         boost::shared_ptr<ObjectBase> object(new Ship);
         object->setId(data.getValue<unsigned>("id"));
+        dynamic_cast<Ship&>(*object).setOwnerId(data.getValue<unsigned>("owner"));
         return object;
     }
     return boost::shared_ptr<ObjectBase>();

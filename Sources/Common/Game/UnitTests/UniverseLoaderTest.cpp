@@ -15,6 +15,7 @@ TEST(UniverseLoaderTest, LoadShip)
     Common::DataBase::DataBaseNode & ship1 = objects.createChild("object");
     ship1.setValue("id", 1);
     ship1.setValue("type", "Ship");
+    ship1.setValue("owner", 2);
 
     Common::Game::Universe universe;
 

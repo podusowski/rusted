@@ -4,7 +4,7 @@
 
 #include "Common/Game/Object/ObjectBase.hpp"
 #include "Common/Game/Object/IFlyableObject.hpp"
-#include "Common/Game/Object/IOwnedObject.hpp"
+#include "Common/Game/Object/OwnedObjectBase.hpp"
 #include "Common/Game/IRustedTime.hpp"
 
 namespace Common
@@ -20,13 +20,12 @@ struct Course
     unsigned startTime;
 };
 
-class Ship : public ObjectBase, public IFlyableObject, public IOwnedObject
+class Ship : public ObjectBase, public IFlyableObject, public OwnedObjectBase
 {
 public:
     Position getPosition();
     void setPosition(const Position &);
     void setCourse(Position course);
-    unsigned getOwnerId();
 
 private:
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
