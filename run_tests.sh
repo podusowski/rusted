@@ -17,7 +17,8 @@ function run_test()
     else
         echo -n "fail "
         cat $stdout $stderr
-        result=1
+        #result=1
+        exit 1
     fi
     echo $test_name
 
