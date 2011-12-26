@@ -38,3 +38,9 @@ endif
 $(DEPENDENCIES):
 	@$(MAKE) --directory $(TOP_DIR) --no-print-directory $@
 
+$(TARGETNAME): _resources
+.PHONY: _resources
+
+_resources: $(RESOURCES)
+	test -n "$(RESOURCES)" && ( echo "cp $(RESOURCES)"; cp -t $(BUILD) $(RESOURCES) ); true
+
