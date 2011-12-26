@@ -14,7 +14,6 @@ SOURCES=UnitTests/mainUT.cpp \
         DataBase/UnitTests/DataBaseModuleTest.cpp \
         Game/UnitTests/RustedTimeTest.cpp \
         Game/UnitTests/EntityTest.cpp \
-		Game/UnitTests/EntityContainerTest.cpp \
 		Game/Utilities/UnitTests/PasswordHashTest.cpp \
 
 CFLAGS=-Wall -pedantic -g -I. -I.. -I/usr/include/libxml2
