@@ -44,12 +44,8 @@ CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/
 
 DEPENDENCIES+=libCommon.a CEGUI
 
-$(APPNAME): $(BUILD)/runClient $(BUILD)/runTestClient
+RESOURCES+=runClient
+RESOURCES+=runTestClient
 
 include Makefile.leaf
 
-$(BUILD)/runClient: runClient 
-	cp $< $@
-
-$(BUILD)/runTestClient: runTestClient
-	cp $< $@
