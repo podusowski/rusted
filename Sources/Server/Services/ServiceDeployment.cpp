@@ -8,14 +8,13 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
     m_dbFactory(cfg),
     m_db(m_dbFactory.create()),
 
-    m_entities(m_db, m_time),
     m_players(m_db),
     m_staticObjectContainer(m_db),
 
-    m_rustedTimeService(m_time),
+    m_rustedTimeService(*m_time),
     m_authorizationService(m_players, *this),
-    m_playerService(m_entities),
-    m_entityService(m_entities),
+    m_playerService(m_universe),
+    m_entityService(m_universe),
     m_staticObjectsService(m_staticObjectContainer)
 {
     Common::Game::UniverseLoader loader;

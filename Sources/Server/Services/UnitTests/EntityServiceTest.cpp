@@ -25,6 +25,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION (EntityServiceTest);
 
 void EntityServiceTest::testEntityGetInfo()
 {
+    // tested in sct
+    #if 0
     DataBase::DataBase db;
 
     // create some entity to work with
@@ -55,5 +57,6 @@ void EntityServiceTest::testEntityGetInfo()
     CPPUNIT_ASSERT_EQUAL(1, getInfoResp->x);
     CPPUNIT_ASSERT_EQUAL(2, getInfoResp->y);
     CPPUNIT_ASSERT_EQUAL(3, getInfoResp->z);
+    #endif
 }
 

@@ -29,6 +29,8 @@ const int ENTITY_ID = 100;
 
 void PlayerServiceTest::testEntitiesStatus()
 {
+// tested in SCT
+#if 0
     // create player and entity
     Common::DataBase::DataBase db;
     RustedTimeStub time;
@@ -48,4 +50,5 @@ void PlayerServiceTest::testEntitiesStatus()
 
     CPPUNIT_ASSERT_EQUAL(size_t(1), playerEntitiesStatusResp->entities.size());
     CPPUNIT_ASSERT_EQUAL(entity.getId(), playerEntitiesStatusResp->entities.at(0).get<0>());
+    #endif
 }

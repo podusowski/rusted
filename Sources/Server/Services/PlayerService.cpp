@@ -1,12 +1,13 @@
 #include "Common/Logger/Logger.hpp"
 #include "Common/Game/Entity.hpp"
+#include "Common/Game/Object/Ship.hpp"
 
 #include "Server/Services/PlayerService.hpp"
 
 using namespace Server::Services;
 
-PlayerService::PlayerService(Common::Game::EntityContainer & entityContainer) :
-        m_entityContainer(entityContainer)
+PlayerService::PlayerService(Common::Game::Universe & universe) :
+        m_universe(universe)
 {
 }
 
@@ -24,8 +25,12 @@ void PlayerService::handle(const Common::Messages::PlayerEntitiesStatusReq &, Ne
     Common::Messages::PlayerEntitiesStatusResp resp;
 #warning get proper player id when playerContainer is implemented
 //TODO: get proper player id when playerContainer is implemented
-    std::auto_ptr<Common::Game::EntityContainer::Container> playerEntities = m_entityContainer.getByPlayerId(1);
-    for (Common::Game::EntityContainer::Container::iterator it = playerEntities->begin(); it != playerEntities->end(); it++)
+//
+    std::vector<boost::shared_ptr<Common::Game::Object::ObjectBase> > playerEntities
+        = m_universe.getByOwnerId<Common::Game::Object::Ship>(1);
+
+    for (std::vector<boost::shared_ptr<Common::Game::Object::ObjectBase> >::iterator it = playerEntities.begin(); 
+         it != playerEntities.end(); it++)
     {
         resp.entities.push_back(boost::make_tuple<int>((*it)->getId()));
     }

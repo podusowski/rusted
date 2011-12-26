@@ -7,6 +7,9 @@ Position Ship::getPosition()
 {
     const unsigned speed = 1;
 
+    if (m_course.course == m_position)
+        return m_position;
+
     unsigned distance = Position::distance(m_course.course, m_position);
     unsigned totalTripTime = distance / speed;
     unsigned timeTakenSoFar = m_time->getSeconds() - m_course.startTime;
@@ -25,8 +28,10 @@ Position Ship::getPosition()
     }
 }
 
-void Ship::setPosition(const Position &)
+void Ship::setPosition(const Position & position)
 {
+    m_course.course = position;
+    m_position = position;
 }
 
 void Ship::setCourse(Position course)

@@ -16,6 +16,9 @@ TEST(UniverseLoaderTest, LoadShip)
     ship1.setValue("id", 1);
     ship1.setValue("type", "Ship");
     ship1.setValue("owner", 2);
+    ship1.setValue("x", 1);
+    ship1.setValue("y", 1);
+    ship1.setValue("z", 1);
 
     Common::Game::Universe universe;
 

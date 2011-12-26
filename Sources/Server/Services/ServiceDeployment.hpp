@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Cake/DependencyInjection/Inject.hpp"
+
 #include "Common/Configuration/Configuration.hpp"
 #include "Common/Game/RustedTime.hpp"
 #include "Common/DataBase/DataBaseFactory.hpp"
@@ -30,11 +32,10 @@ public:
     void deployAuthorizedConnection(Server::Network::IConnection &);
 
 private:
-    Common::Game::RustedTime m_time;
+    Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     Common::DataBase::DataBaseFactory m_dbFactory;
     Common::DataBase::DataBase & m_db;
     Common::Game::Universe m_universe;
-    Common::Game::EntityContainer m_entities;
     Game::PlayerContainer m_players;
     Game::StaticObjectContainer m_staticObjectContainer;
 
