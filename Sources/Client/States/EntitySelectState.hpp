@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Common/Game/Universe.hpp"
 #include "Client/States/IState.hpp"
 #include "Client/Gui/Gui.hpp"
 #include "Client/Network/Connection.hpp"
@@ -29,7 +30,9 @@ public:
                       Gui::Gui &, 
                       Network::Connection &,
                       Services::EntityService &,
-                      States::PilotState &);
+                      States::PilotState &,
+                      Common::Game::Universe &,
+                      Client::Game::PlayerInfo &);
     void activate();
     void deactivate();
     void frameStarted();
@@ -43,6 +46,8 @@ private:
     Services::EntityService & m_entityService;
     CEGUI::Window * m_layout;
     States::PilotState & m_pilotState;
+    Common::Game::Universe & m_universe;
+    Client::Game::PlayerInfo & m_playerInfo;
 };
 
 }

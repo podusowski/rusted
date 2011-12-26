@@ -1,4 +1,5 @@
 #include "Common/Logger/Logger.hpp"
+#include "Common/Game/Object/Ship.hpp"
 #include "Client/Services/EntityService.hpp"
 
 using namespace Client::Services;
@@ -69,6 +70,14 @@ void EntityService::handle(const Common::Messages::PlayerEntitiesStatusResp & en
 void EntityService::handle(const Common::Messages::EntityGetInfoResp & entityGetInfoResp)
 {
     LOG_INFO << "Got entity info (id: " << entityGetInfoResp.id << ")\n";
+
+    boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
+    Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
+    ship.setId(entityGetInfoResp.id);
+    ship.setOwnerId(entityGetInfoResp.player_id);
+    ship.setPosition(Common::Game::Position(entityGetInfoResp.x, entityGetInfoResp.y, entityGetInfoResp.z));
+
+    m_universe.add(object);
 
     m_entityContainer.create(entityGetInfoResp.id, 
                              entityGetInfoResp.player_id, 

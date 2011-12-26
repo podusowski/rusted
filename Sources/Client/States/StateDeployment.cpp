@@ -20,7 +20,7 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
     m_pilotView(graphics, input, m_entityService),
 
     m_pilotState(m_stateManager, graphics, gui, m_entityService, m_staticObjectView, m_pilotView),
-    m_entitySelect(m_stateManager, gui, connection, m_entityService, m_pilotState),
+    m_entitySelect(m_stateManager, gui, connection, m_entityService, m_pilotState, m_universe, m_playerInfo),
     m_loginState(m_stateManager, gui, m_entitySelect, m_authorizationService, m_rustedTimeService, *this)
 {
     m_stateManager.pushState(m_loginState);

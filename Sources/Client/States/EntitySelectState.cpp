@@ -2,6 +2,7 @@
 #include <boost/bind.hpp>
 
 #include "Common/Logger/Logger.hpp"
+#include "Common/Game/Object/Ship.hpp"
 #include "Client/States/EntitySelectState.hpp"
 
 using namespace Client::States;
@@ -10,11 +11,15 @@ EntitySelectState::EntitySelectState(IStateManagerStack & stateManagerStack,
                                      Gui::Gui & gui, 
                                      Network::Connection & connection,
                                      Services::EntityService & entityService,
-                                     States::PilotState & pilotState) :
+                                     States::PilotState & pilotState,
+                                     Common::Game::Universe & universe,
+                                     Client::Game::PlayerInfo & playerInfo) :
     m_stateManagerStack(stateManagerStack),
     m_gui(gui),
     m_entityService(entityService),
-    m_pilotState(pilotState)
+    m_pilotState(pilotState),
+    m_universe(universe),
+    m_playerInfo(playerInfo)
 {
 }
 
@@ -37,15 +42,16 @@ void EntitySelectState::frameStarted()
 
 void EntitySelectState::myEntitiesFetched()
 {
-    Client::Game::EntityContainer & container = m_entityService.getEntityContainer();
     CEGUI::Listbox * entitiesListbox = dynamic_cast<CEGUI::Listbox*>(m_layout->getChildRecursive("EntitiesListbox"));
-    std::vector<Common::Game::Entity *> myEntities = container.getMyEntities();
 
-    BOOST_FOREACH(Common::Game::Entity * entity, myEntities)
+    std::vector<boost::shared_ptr<Common::Game::Object::ObjectBase> > myEntities
+        = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_playerInfo.getId());
+
+    BOOST_FOREACH(boost::shared_ptr<Common::Game::Object::ObjectBase> ship, myEntities)
     {
         std::stringstream ss;
-        ss << "My entity " << entity->getId() << "\n";
-        entitiesListbox->addItem(new MyListItem(ss.str(), entity->getId()));
+        ss << "My ship " << ship->getId() << "\n";
+        entitiesListbox->addItem(new MyListItem(ss.str(), ship->getId()));
         
         LOG_INFO << ss.str();
     }

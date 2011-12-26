@@ -36,7 +36,9 @@ LDFLAGS= \
 	-lboost_system \
 	-lxml2
 
-CFLAGS+=-I../ -I. -I../Common 
+CFLAGS+=-I../ -I. 
+CFLAGS+=-I../Common 
+CFLAGS+=-I../External
 CFLAGS+=-I/usr/include/libxml2
 CFLAGS+=-I/usr/include/OGRE
 CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/RendererModules/Ogre
