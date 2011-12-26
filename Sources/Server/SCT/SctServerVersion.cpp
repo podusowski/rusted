@@ -11,7 +11,11 @@ TEST(SctServerVersion, testServerVersion)
 {
 	using namespace ::Common::Messages;
 
+    std::string dbFile = "SampleDataBase.xml";
+
 	SCT::Component component;
+    component.setConfigValue("--database.provider", "xml");
+    component.setConfigValue("--database.xml.filename", dbFile);
     component.start();
 	SCT::Connection & connection = component.createConnection();
 

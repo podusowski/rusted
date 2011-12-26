@@ -1,0 +1,14 @@
+<root>
+    <users>
+        <user id="1" login="user1" password="passwordhash" />
+    </users>
+    <objects>
+    </objects>
+
+    <staticObjects>
+        <staticObject id="1" x="100" y="100" z="100" />
+    </staticObjects>
+    <entities>
+        <entity id="1" player_id="1" x="1" y="1" z="1" />
+    </entities>
+</root>

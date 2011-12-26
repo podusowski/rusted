@@ -7,6 +7,9 @@ void initDependencies()
 {
     boost::shared_ptr<Common::Game::Object::ObjectFactory> objectFactory(new Common::Game::Object::ObjectFactory());
     Cake::DependencyInjection::forInterface<Common::Game::Object::ObjectFactory>().use(objectFactory);
+
+    boost::shared_ptr<Common::Game::IRustedTime> rustedTime(new Common::Game::RustedTime);
+    Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(rustedTime);
 }
 
 int main(int argc, const char * argv[])

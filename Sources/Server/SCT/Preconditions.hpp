@@ -13,8 +13,7 @@ public:
     {
         using namespace Common::Messages;
 
-        SCT::DataBaseUtils dbUtils;
-        std::string dbFile = dbUtils.createOnePlayerWithOneEntity();
+        std::string dbFile = "SampleDataBase.xml";
 
         m_component.reset(new Component()); 
         SCT::Component & component = *m_component;

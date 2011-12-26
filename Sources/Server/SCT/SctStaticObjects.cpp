@@ -22,8 +22,8 @@ TEST(SctStaticObjects, testStaticObjectsStatusReq)
     EXPECT_EQ(Common::Messages::Id::StaticObjectStatusResp, resp->getId());
 
     Common::Messages::StaticObjectStatusResp & staticObjectStatusResp = dynamic_cast<Common::Messages::StaticObjectStatusResp&>(*resp);
-    EXPECT_EQ(size_t(1), staticObjectStatusResp.objects.size());
-    EXPECT_EQ(1, staticObjectStatusResp.objects[0].get<0>());
+    ASSERT_EQ(size_t(1), staticObjectStatusResp.objects.size());
+    ASSERT_EQ(1, staticObjectStatusResp.objects[0].get<0>());
 }
 
 TEST(SctStaticObjects, testStaticObjectInfoReq)

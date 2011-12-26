@@ -1,5 +1,6 @@
 #include "Common/Logger/Logger.hpp"
 #include "Server/Services/ServiceDeployment.hpp"
+#include "Common/Game/UniverseLoader.hpp"
 
 using namespace Server::Services;
 
@@ -7,7 +8,6 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
     m_dbFactory(cfg),
     m_db(m_dbFactory.create()),
 
-    //m_universe(m_db),
     m_entities(m_db, m_time),
     m_players(m_db),
     m_staticObjectContainer(m_db),
@@ -18,6 +18,8 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
     m_entityService(m_entities),
     m_staticObjectsService(m_staticObjectContainer)
 {
+    Common::Game::UniverseLoader loader;
+    loader.load(m_universe, m_db);
 }
 
 void ServiceDeployment::deployNewConnection(Server::Network::IConnection & connection)

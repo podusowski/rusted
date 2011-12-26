@@ -19,10 +19,7 @@ CFLAGS+=-I/usr/include/libxml2
 LDFLAGS=-L. -L$(BUILD) -lCommon -lpthread -lboost_system -lxml2 -lcppunit
 LDFLAGS+=-lgtest
 
-$(APPNAME): $(BUILD)/runServerSCT 
-
-$(BUILD)/runServerSCT: runServerSCT
-	$(COPY)
+RESOURCES+=SampleDataBase.xml
 
 DEPENDENCIES+=Server
 DEPENDENCIES+=libCommon.a
