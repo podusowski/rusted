@@ -34,7 +34,7 @@ TEST_F(SctBasicEntitiesOperations, testPlayerEntitiesStatusReq)
     EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
     Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
     ASSERT_EQ(1, playerEntitiesStatusResp.entities.size()); 
-    EXPECT_TRUE(1 == playerEntitiesStatusResp.entities[0].get<0>());
+    ASSERT_EQ(1, playerEntitiesStatusResp.entities[0].get<0>());
 }
 
 TEST_F(SctBasicEntitiesOperations, testEntityChangeCourseReq)
