@@ -13,7 +13,7 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
 
     m_authorizationService(connection, m_playerInfo),
     m_rustedTimeService(connection, m_time),
-    m_entityService(connection, m_time, m_playerInfo),
+    m_entityService(connection, m_time, m_playerInfo, m_universe),
     m_staticObjectService(connection),
 
     m_staticObjectView(m_staticObjectService, graphics),

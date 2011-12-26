@@ -39,6 +39,7 @@ private:
     Game::PlayerInfo m_playerInfo;
     Network::Connection & m_connection;
     Common::Thread & m_connectionThread;
+    Common::Game::Universe m_universe;
 
     Services::AuthorizationService m_authorizationService;
     Services::RustedTimeService m_rustedTimeService;

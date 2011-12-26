@@ -5,11 +5,13 @@ using namespace Client::Services;
 
 EntityService::EntityService(Network::Connection & connection, 
                              Common::Game::IRustedTime & time,
-                             Game::PlayerInfo & playerInfo) :
+                             Game::PlayerInfo & playerInfo,
+                             Common::Game::Universe & universe) :
     m_playerInfo(playerInfo),
     m_entityContainer(time, m_playerInfo),
     m_connection(connection),
-    m_time(time)
+    m_time(time),
+    m_universe(universe)
 {
 }
 

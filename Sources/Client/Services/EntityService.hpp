@@ -5,6 +5,7 @@
 #include <boost/function.hpp>
 
 #include "Common/Game/IRustedTime.hpp"
+#include "Common/Game/Universe.hpp"
 
 #include "Client/Network/IConnectionListener.hpp"
 #include "Client/Network/Connection.hpp"
@@ -22,7 +23,7 @@ class EntityService : public AbstractService<EntityService>
 public:
     typedef boost::function<void()> MyEntitiesFetchedCallback;
 
-    EntityService(Network::Connection &, Common::Game::IRustedTime &, Game::PlayerInfo &);
+    EntityService(Network::Connection &, Common::Game::IRustedTime &, Game::PlayerInfo &, Common::Game::Universe &);
 
     void fetchMyEntitiesInfo(MyEntitiesFetchedCallback);
     void setCurrentEntity(Common::Game::Entity &);
@@ -40,6 +41,7 @@ private:
     Client::Game::EntityContainer m_entityContainer;
     Client::Network::Connection & m_connection;
     Common::Game::IRustedTime & m_time;
+    Common::Game::Universe & m_universe;
 
     std::set<int> m_myEntities;
     boost::optional<Common::Game::Entity *> m_currentEntity;
