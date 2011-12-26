@@ -5,7 +5,6 @@
 
 #include <Core/Component.hpp>
 #include <Core/Connection.hpp>
-#include <Core/DataBaseUtils.hpp>
 
 TEST(SctServerVersion, testServerVersion)
 {

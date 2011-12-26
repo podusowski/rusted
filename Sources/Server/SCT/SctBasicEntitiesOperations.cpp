@@ -8,7 +8,6 @@
 
 #include "Core/Component.hpp"
 #include "Core/Connection.hpp"
-#include "Core/DataBaseUtils.hpp"
 #include "Preconditions.hpp"
 
 class SctBasicEntitiesOperations : public testing::Test 

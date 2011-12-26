@@ -3,7 +3,6 @@ APPNAME=ServerSCT
 SOURCES=mainSCT.cpp \
 		Core/Component.cpp \
 		Core/Connection.cpp \
-        Core/DataBaseUtils.cpp \
 		SctServerVersion.cpp \
 		SctUserAuthorization.cpp \
 		SctBasicEntitiesOperations.cpp \

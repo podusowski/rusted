@@ -5,14 +5,12 @@
 
 #include <Core/Component.hpp>
 #include <Core/Connection.hpp>
-#include <Core/DataBaseUtils.hpp>
 
 TEST(SctUserAuthorization, testAuthorizeUser)
 {
 	using namespace ::Common::Messages;
 
-    SCT::DataBaseUtils dbUtils;
-    std::string dbFile = dbUtils.createOnePlayerWithOneEntity();
+    std::string dbFile = "SampleDataBase.xml";
 
 	::SCT::Component component;
     component.setConfigValue("--database.provider", "xml");
