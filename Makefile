@@ -3,7 +3,6 @@ SOURCE_DIR=$(PWD)/Sources
 
 CPUS := `grep processor /proc/cpuinfo | wc -l`
 
-
 MFLAGS := --no-builtin-rules
 MFLAGS += --no-print-directory
 MFLAGS += --include-dir $(PWD)/Make

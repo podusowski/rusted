@@ -4,6 +4,6 @@ AR=ar rcs
 $(LIBNAME): ;
 $(LIBNAME): $(BUILD)/$(LIBNAME)
 $(BUILD)/$(LIBNAME): $(OBJS)
-	@/bin/echo -e "\033[1;32m$(AR) \033[00m`basename $@` ($(OBJS))"
+	@/bin/echo -e "$(FONT_BOLD)$(AR) `basename $@` $(FONT_RESET)($(OBJS))"
 	@echo ""
 	@$(AR) $@ $(OBJS)

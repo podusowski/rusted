@@ -1,3 +1,6 @@
+CC=g++
+CFLAGS+=-Wall
+
 DEPS := $(addprefix $(BUILD)/$(BUILDPREFIX)/, $(SOURCES:.cpp=.d))
 
 MAKEDEP=$(CC) -MM $(CFLAGS) $< | \
@@ -8,3 +11,9 @@ MAKEDEP=$(CC) -MM $(CFLAGS) $< | \
 -include $(DEPS)
 
 %.hpp: ;
+
+$(BUILD)/$(BUILDPREFIX)/%.o: %.cpp
+	@mkdir -p `dirname $@`
+	@$(MAKEDEP)
+	@/bin/echo -e "$(FONT_BOLD)$(CC)$(FONT_RESET) $<" 
+	@$(CC) $(CFLAGS) -c $< -o $@

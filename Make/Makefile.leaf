@@ -1,4 +1,5 @@
 include version.inc.mk
+include util.colors.mk
 
 ifneq ($(APPNAME),)
   TARGETNAME := $(APPNAME)
@@ -20,18 +21,16 @@ endif
 
 OBJS := $(addprefix $(BUILD)/$(BUILDPREFIX)/, $(SOURCES:.cpp=.o))
 
-include deps.inc.mk
-
 ifneq ($(APPNAME),)
-  include application.inc.mk
-  include c++.inc.mk
+  include target.application.mk
+  include recipe.c++.mk
 endif
 ifneq ($(LIBNAME),)
-  include library.inc.mk
-  include c++.inc.mk
+  include target.library.mk
+  include recipe.c++.mk
 endif
 ifneq ($(META),)
-  include meta.inc.mk
+  include target.meta.mk
 endif
 
 .PHONY: $(DEPENDENCIES)
@@ -42,5 +41,5 @@ $(TARGETNAME): _resources
 .PHONY: _resources
 
 _resources: $(RESOURCES)
-	test -n "$(RESOURCES)" && ( echo "cp $(RESOURCES)"; cp -t $(BUILD) $(RESOURCES) ); true
+	test -n "$(RESOURCES)" && ( echo "$(FONT_BOLD)cp$(FONT_RESET) $(RESOURCES)"; cp -t $(BUILD) $(RESOURCES) ); true
 

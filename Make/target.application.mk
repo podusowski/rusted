@@ -3,7 +3,7 @@ $(APPNAME): ;
 $(APPNAME): $(BUILD)/$(APPNAME) 
 $(BUILD)/$(APPNAME): $(DEPENDENCIES) $(OBJS)	
 	@mkdir -p $(BUILD)
-	@/bin/echo -e "\033[1;32mld \033[0m`basename $@` ($(LDFLAGS))"
+	@/bin/echo -e "$(FONT_BOLD)link `basename $@`$(FONT_RESET) ($(LDFLAGS))"
 	@echo ""
 	@$(CC) $(OBJS) $(LDFLAGS) -o $@
 
