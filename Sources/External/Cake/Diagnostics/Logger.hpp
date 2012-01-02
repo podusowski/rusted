@@ -25,8 +25,8 @@ public:
 }
 }
 
-#define CAKE_LOG_STREAM std::cout
-
-#define CAKE_LOG_INFO std::cout << "INF/" << __FILE__ << ":" << __LINE__ << ": "
-#define CAKE_LOG_ERR  std::cout << "ERR/" << __FILE__ << ":" << __LINE__ << ": "
-#define CAKE_LOG_WARN std::cout << "WRN/" << __FILE__ << ":" << __LINE__ << ": "
+#ifndef LOF_INFO
+#define LOG_INFO std::cout << "INF/" << __FILE__ << ":" << __LINE__ << ": "
+#define LOG_ERR  std::cout << "ERR/" << __FILE__ << ":" << __LINE__ << ": "
+#define LOG_WARN std::cout << "WRN/" << __FILE__ << ":" << __LINE__ << ": "
+#endif

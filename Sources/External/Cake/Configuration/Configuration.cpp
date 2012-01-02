@@ -20,18 +20,18 @@ Configuration::Configuration(int argc, const char * argv[])
 
 Configuration::Configuration()
 {
-    CAKE_LOG_INFO << "Initializing empty configuration\n";
+    LOG_INFO << "Initializing empty configuration\n";
 }
 
 void Configuration::parse(const std::string & filename)
 {
-    CAKE_LOG_INFO << "Parsing configuration file \"" << filename << "\"\n";
+    LOG_INFO << "Parsing configuration file \"" << filename << "\"\n";
 
     std::ifstream file(filename.c_str());
 
     if (!file.good())
     {
-        CAKE_LOG_ERR << "There was error while opening configuration file, syntax might be wrong or file missing?\n";
+        LOG_ERR << "There was error while opening configuration file, syntax might be wrong or file missing?\n";
         return;
     }
 
@@ -83,7 +83,7 @@ void Configuration::parse(const std::string & filename)
             {
             case '\n':
             case '#':
-                CAKE_LOG_INFO << "  option: " << name
+                LOG_INFO << "  option: " << name
                          << ", value: " << value << "\n";
  
                 m_properties[name] = value; 
@@ -98,12 +98,12 @@ void Configuration::parse(const std::string & filename)
             break;
         }    
     }
-    CAKE_LOG_INFO << "Configuration file parsed\n";
+    LOG_INFO << "Configuration file parsed\n";
 }
 
 void Configuration::parse(int argc, const char * argv[])
 {
-    CAKE_LOG_INFO << "Parsing program's cmd line\n";
+    LOG_INFO << "Parsing program's cmd line\n";
     std::map<std::string, std::string> cmdLineOptions;
 
     m_appName = argv[0];
@@ -112,7 +112,7 @@ void Configuration::parse(int argc, const char * argv[])
     {
         if (argv[i][0] == '-' && i+1 < argc)
         {
-            CAKE_LOG_INFO << "  option: " << argv[i] <<
+            LOG_INFO << "  option: " << argv[i] <<
                     ", value: " << argv[i+1] << "\n";
             
             std::string name = argv[i];
