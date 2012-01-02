@@ -16,7 +16,7 @@ Position Ship::getPosition()
     unsigned totalTripTime = distance / speed;
     unsigned timeTakenSoFar = m_time->getSeconds() - m_course.startTime;
 
-    float tripProgress = timeTakenSoFar / totalTripTime;
+    float tripProgress = float(timeTakenSoFar) / float(totalTripTime);
 
     if (tripProgress >= 1.0)
     {
@@ -41,7 +41,7 @@ void Ship::setPosition(const Position & position)
 
 void Ship::setCourse(Position position)
 {
-    LOG_INFO << "Setting course to " << position << "\n";
+    LOG_DEBUG << "Setting course to " << position << "\n";
 
     m_course.course = position;
     m_course.startTime = m_time->getSeconds();
