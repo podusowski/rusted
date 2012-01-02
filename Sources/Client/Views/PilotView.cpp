@@ -15,10 +15,6 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
 void PilotView::activate()
 {
     m_entityObject.reset(new Graphics::OgreObject(m_graphics.getSceneManager(), "Cube.mesh"));
-    m_entityObject->getSceneNode().scale(20, 20, 20);
-
-    m_navigatorPlaneObject.reset(new Graphics::OgreObject(m_graphics.getSceneManager(), "Cylinder.001.mesh"));
-    //m_navigatorPlaneObject->getSceneNode().scale(200, .5, 200);
 
     m_input.addMouseListener(*this);
 }
@@ -37,21 +33,20 @@ void PilotView::updateShipPosition()
 {
     Common::Game::Entity::Position position = m_entityService.getCurrentEntity().getPosition();
     m_entityObject->getSceneNode().setPosition(position.getX(), position.getY(), position.getZ());
-    m_navigatorPlaneObject->getSceneNode().setPosition(position.getX(), position.getY(), position.getZ());
 }
 
 void PilotView::updateCameraPosition()
 {
     // camera motion
     Common::Game::Position position = m_entityService.getCurrentEntity().getPosition();
-    Common::Game::Position camPosition = position;
+    Common::Game::Position camPosition = position + Common::Game::Position(0, 0, 150);
 
     // some nasty dbg 
     static int counter = 0;
     if (counter++ % 100 == 0)
     {
-        LOG_INFO << "entity (" << position << "), "
-                 << "cam pos (" << camPosition << ")\n";
+        LOG_INFO << "ship position(" << position << "), "
+                 << "camera posistion(" << camPosition << ")\n";
     }
 
     Ogre::Camera & camera = m_graphics.getCamera();
@@ -61,10 +56,6 @@ void PilotView::updateCameraPosition()
 
 void PilotView::mouseMoved(const OIS::MouseState & state)
 {
-    if (state.buttonDown(OIS::MB_Right))
-    {
-        m_navigatorPlaneObject->getSceneNode().pitch(Ogre::Degree(state.Y.rel / 2.0));
-    }
 }
 
 void PilotView::mousePressed(const OIS::MouseButtonID &, unsigned x, unsigned y)
@@ -78,12 +69,11 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
     if (button == OIS::MB_Left)
     {
         Entity::Position position = m_entityService.getCurrentEntity().getPosition();
-        // TODO: add navigatorplane's pitch to the vector
 
-        int forward = y - (m_graphics.getHeight() / 2);
+        int top = y - (m_graphics.getHeight() / 2);
         int left = x - (m_graphics.getWidth() / 2);
 
-        Entity::Position delta(left, 0, -forward); 
+        Entity::Position delta(left, top, 0); 
         position += delta;
         m_entityService.setCourse(position);
     }
