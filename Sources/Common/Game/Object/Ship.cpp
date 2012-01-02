@@ -1,3 +1,5 @@
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Ship.hpp"
 
 using namespace Common::Game::Object;
@@ -19,6 +21,9 @@ Position Ship::getPosition()
     if (tripProgress >= 1.0)
     {
         m_position = m_course.course;
+
+        LOG_DEBUG << "Ship arrived at " << m_position << "\n";
+
         return m_position;
     }
     else
@@ -34,9 +39,11 @@ void Ship::setPosition(const Position & position)
     m_position = position;
 }
 
-void Ship::setCourse(Position course)
+void Ship::setCourse(Position position)
 {
-    m_course.course = course;
+    LOG_INFO << "Setting course to " << position << "\n";
+
+    m_course.course = position;
     m_course.startTime = m_time->getSeconds();
 }
 
