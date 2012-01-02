@@ -1,5 +1,4 @@
-#include "Common/Logger/Logger.hpp"
-#include "Common/Game/Entity.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Common/Game/Object/Ship.hpp"
 
 #include "Server/Services/PlayerService.hpp"

@@ -13,7 +13,6 @@ SOURCES=Thread.cpp \
         DataBase/XmlDataProvider.cpp \
         DataBase/DataBaseFactory.cpp \
         Game/RustedTime.cpp \
-	    Game/Entity.cpp \
 	    Game/Utilities/PasswordHash.cpp \
 	    Game/StaticObject.cpp
 SOURCES+=Game/Universe.cpp
