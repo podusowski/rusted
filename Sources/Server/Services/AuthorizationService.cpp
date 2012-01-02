@@ -1,4 +1,4 @@
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Common/Messages/Messages.hpp"
 #include "Services/AuthorizationService.hpp"
 
