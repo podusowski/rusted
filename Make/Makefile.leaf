@@ -41,6 +41,6 @@ $(TARGETNAME): _resources
 .PHONY: _resources
 
 _resources: $(RESOURCES)
-	mkdir $(BUILD)
+	mkdir -p $(BUILD)
 	test -n "$(RESOURCES)" && ( echo "$(FONT_BOLD)cp$(FONT_RESET) $(RESOURCES)"; cp -t $(BUILD) $(RESOURCES) ); true
 
