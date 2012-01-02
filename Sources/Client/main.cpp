@@ -1,6 +1,6 @@
 #include "Cake/DependencyInjection/Registry.hpp"
 
-#include "Common/Game/IRustedTime.hpp"
+#include "Common/Game/RustedTime.hpp"
 #include "Common/Logger/Logger.hpp"
 #include "Engine/Application.hpp"
 

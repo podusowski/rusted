@@ -3,10 +3,8 @@
 
 using namespace Client::Services;
 
-RustedTimeService::RustedTimeService(Network::Connection & connection,
-                                     Common::Game::IRustedTime & time) : 
-    m_connection(connection),
-    m_time(time)
+RustedTimeService::RustedTimeService(Network::Connection & connection) : 
+    m_connection(connection)
 {
 }
 
@@ -20,5 +18,5 @@ void RustedTimeService::synchronize()
 void RustedTimeService::handle(const Common::Messages::RustedTimeEpochResp & resp)
 {
     LOG_INFO << "Current time on server: " << resp.time << "\n";
-    m_time.setReferenceTime(resp.time);
+    m_time->setReferenceTime(resp.time);
 }

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Cake/DependencyInjection/Inject.hpp"
+
 #include "Common/Game/IRustedTime.hpp"
 #include "Client/Services/AbstractService.hpp"
 #include "Client/Network/Connection.hpp"
@@ -12,8 +14,7 @@ namespace Services
 class RustedTimeService : public AbstractService<RustedTimeService>
 {
 public:
-    RustedTimeService(Network::Connection &, 
-                      Common::Game::IRustedTime &);
+    RustedTimeService(Network::Connection &);
 
     void synchronize();
 
@@ -22,7 +23,7 @@ public:
 
 private:
     Network::Connection & m_connection;
-    Common::Game::IRustedTime & m_time;    
+    Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
 };
 
 }

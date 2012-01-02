@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Common/Game/RustedTime.hpp"
 #include "Client/Graphics/IGraphics.hpp"
 #include "Client/Input/Input.hpp"
 #include "Client/States/StateManager.hpp"
@@ -35,7 +34,6 @@ public:
 
 private:
     StateManager m_stateManager;
-    Common::Game::RustedTime m_time;
     Game::PlayerInfo m_playerInfo;
     Network::Connection & m_connection;
     Common::Thread & m_connectionThread;

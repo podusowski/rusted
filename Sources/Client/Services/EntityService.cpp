@@ -5,13 +5,10 @@
 using namespace Client::Services;
 
 EntityService::EntityService(Network::Connection & connection, 
-                             Common::Game::IRustedTime & time,
                              Game::PlayerInfo & playerInfo,
                              Common::Game::Universe & universe) :
     m_playerInfo(playerInfo),
-    m_entityContainer(time, m_playerInfo),
     m_connection(connection),
-    m_time(time),
     m_universe(universe)
 {
 }
@@ -73,10 +70,6 @@ void EntityService::handle(const Common::Messages::EntityGetInfoResp & entityGet
     ship.setPosition(Common::Game::Position(entityGetInfoResp.x, entityGetInfoResp.y, entityGetInfoResp.z));
 
     m_universe.add(object);
-
-    m_entityContainer.create(entityGetInfoResp.id, 
-                             entityGetInfoResp.player_id, 
-                             Common::Game::Entity::Position(entityGetInfoResp.x, entityGetInfoResp.y, entityGetInfoResp.z));
 
     // are we waiting for this entity info?
     std::set<int>::iterator it = m_myEntities.find(entityGetInfoResp.id);

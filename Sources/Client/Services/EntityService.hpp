@@ -4,6 +4,8 @@
 #include <boost/optional.hpp>
 #include <boost/function.hpp>
 
+#include "Cake/DependencyInjection/Inject.hpp"
+
 #include "Common/Game/IRustedTime.hpp"
 #include "Common/Game/Universe.hpp"
 #include "Common/Game/Object/Ship.hpp"
@@ -24,7 +26,7 @@ class EntityService : public AbstractService<EntityService>
 public:
     typedef boost::function<void()> MyEntitiesFetchedCallback;
 
-    EntityService(Network::Connection &, Common::Game::IRustedTime &, Game::PlayerInfo &, Common::Game::Universe &);
+    EntityService(Network::Connection &, Game::PlayerInfo &, Common::Game::Universe &);
 
     void fetchMyEntitiesInfo(MyEntitiesFetchedCallback);
     void setCurrentEntity(Common::Game::Object::Ship &);
@@ -37,9 +39,8 @@ public:
 
 private:
     Client::Game::PlayerInfo & m_playerInfo;
-    Client::Game::EntityContainer m_entityContainer;
     Client::Network::Connection & m_connection;
-    Common::Game::IRustedTime & m_time;
+    Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     Common::Game::Universe & m_universe;
 
     std::set<int> m_myEntities;
