@@ -8,7 +8,6 @@ SOURCES= \
 	Gui/Gui.cpp \
 	Input/Input.cpp \
 	Network/Connection.cpp \
-	Game/EntityContainer.cpp \
 	Game/PlayerInfo.cpp \
 	States/StateManager.cpp \
 	States/StateDeployment.cpp \

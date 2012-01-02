@@ -12,7 +12,6 @@
 
 #include "Client/Network/IConnectionListener.hpp"
 #include "Client/Network/Connection.hpp"
-#include "Client/Game/EntityContainer.hpp"
 #include "Client/Game/PlayerInfo.hpp"
 #include "Client/Services/AbstractService.hpp"
 
@@ -31,7 +30,7 @@ public:
     void fetchMyEntitiesInfo(MyEntitiesFetchedCallback);
     void setCurrentEntity(Common::Game::Object::Ship &);
     Common::Game::Object::Ship & getCurrentEntity();
-    void setCourse(Common::Game::Entity::Position);
+    void setCourse(Common::Game::Position);
 
     void handle(const Common::Messages::PlayerEntitiesStatusResp &);
     void handle(const Common::Messages::EntityGetInfoResp &);

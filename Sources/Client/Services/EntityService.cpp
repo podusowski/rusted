@@ -31,7 +31,7 @@ Common::Game::Object::Ship & EntityService::getCurrentEntity()
     return **m_currentShip;
 }
 
-void EntityService::setCourse(Common::Game::Entity::Position course)
+void EntityService::setCourse(Common::Game::Position course)
 {
     assert(m_currentShip);
 

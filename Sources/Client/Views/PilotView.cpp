@@ -31,7 +31,7 @@ void PilotView::frameStarted()
 
 void PilotView::updateShipPosition()
 {
-    Common::Game::Entity::Position position = m_entityService.getCurrentEntity().getPosition();
+    Common::Game::Position position = m_entityService.getCurrentEntity().getPosition();
     m_entityObject->getSceneNode().setPosition(position.getX(), position.getY(), position.getZ());
 }
 
@@ -68,12 +68,12 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
 
     if (button == OIS::MB_Left)
     {
-        Entity::Position position = m_entityService.getCurrentEntity().getPosition();
+        Position position = m_entityService.getCurrentEntity().getPosition();
 
         int top = y - (m_graphics.getHeight() / 2);
         int left = x - (m_graphics.getWidth() / 2);
 
-        Entity::Position delta(left, top, 0); 
+        Position delta(left, top, 0); 
         position += delta;
         m_entityService.setCourse(position);
     }
