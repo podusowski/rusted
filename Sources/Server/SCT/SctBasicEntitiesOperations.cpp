@@ -51,7 +51,7 @@ TEST_F(SctBasicEntitiesOperations, testEntityChangeCourseReq)
 
     procedureEntityChangeCourse(connection, 1, 2, 1, 1);
 
-    Common::Thread::wait(1.5);
+    Common::Thread::wait(2.0);
 
     std::auto_ptr<Common::Messages::AbstractMessage> entityGetInfoRespA2 = procedureEntityGetInfo(connection, 1);
     Common::Messages::EntityGetInfoResp & entitiesGetInfoResp2 = dynamic_cast<Common::Messages::EntityGetInfoResp&>(*entityGetInfoRespA2);
