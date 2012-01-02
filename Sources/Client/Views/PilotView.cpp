@@ -42,21 +42,16 @@ void PilotView::updateShipPosition()
 
 void PilotView::updateCameraPosition()
 {
-    using Common::Game::Entity;
-
     // camera motion
-    Entity::Position position = m_entityService.getCurrentEntity().getPosition();
-    Common::Point3<float> direction(m_entityService.getCurrentEntity().getDirection());
-    direction = direction.normalize();
-    Entity::Position camPosition = position - Entity::Position( direction * 800);
+    Common::Game::Position position = m_entityService.getCurrentEntity().getPosition();
+    Common::Game::Position camPosition = position;
 
     // some nasty dbg 
     static int counter = 0;
     if (counter++ % 100 == 0)
     {
         LOG_INFO << "entity (" << position << "), "
-                 << "cam pos (" << camPosition << "), "
-                 << "direction ( " << direction << ")\n";
+                 << "cam pos (" << camPosition << ")\n";
     }
 
     Ogre::Camera & camera = m_graphics.getCamera();

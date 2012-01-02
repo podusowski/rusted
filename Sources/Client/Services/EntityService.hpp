@@ -6,6 +6,7 @@
 
 #include "Common/Game/IRustedTime.hpp"
 #include "Common/Game/Universe.hpp"
+#include "Common/Game/Object/Ship.hpp"
 
 #include "Client/Network/IConnectionListener.hpp"
 #include "Client/Network/Connection.hpp"
@@ -26,11 +27,9 @@ public:
     EntityService(Network::Connection &, Common::Game::IRustedTime &, Game::PlayerInfo &, Common::Game::Universe &);
 
     void fetchMyEntitiesInfo(MyEntitiesFetchedCallback);
-    void setCurrentEntity(Common::Game::Entity &);
-    Common::Game::Entity & getCurrentEntity();
+    void setCurrentEntity(Common::Game::Object::Ship &);
+    Common::Game::Object::Ship & getCurrentEntity();
     void setCourse(Common::Game::Entity::Position);
-
-    Client::Game::EntityContainer & getEntityContainer();
 
     void handle(const Common::Messages::PlayerEntitiesStatusResp &);
     void handle(const Common::Messages::EntityGetInfoResp &);
@@ -44,7 +43,7 @@ private:
     Common::Game::Universe & m_universe;
 
     std::set<int> m_myEntities;
-    boost::optional<Common::Game::Entity *> m_currentEntity;
+    boost::optional<Common::Game::Object::Ship *> m_currentShip;
 
     MyEntitiesFetchedCallback m_myEntitiesFetchedCallback;
 };

@@ -64,11 +64,12 @@ void EntitySelectState::myEntitiesFetched()
 bool EntitySelectState::flyButtonClicked(const CEGUI::EventArgs &)
 {
     CEGUI::Listbox * entitiesListbox = dynamic_cast<CEGUI::Listbox*>(m_layout->getChildRecursive("EntitiesListbox"));
-    Common::Game::Entity & entity = m_entityService.getEntityContainer().getEntity(entitiesListbox->getFirstSelectedItem()->getID());
+   // Common::Game::Entity & entity = m_entityService.getEntityContainer().getEntity(entitiesListbox->getFirstSelectedItem()->getID());
+    Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(entitiesListbox->getFirstSelectedItem()->getID());
 
-    LOG_INFO << "Let's fly (entityId: " << entity.getId() << ")\n";
+    LOG_INFO << "Ship selected (id: " << ship.getId() << ")\n";
 
-    m_entityService.setCurrentEntity(entity);
+    m_entityService.setCurrentEntity(ship);
     m_stateManagerStack.pushState(m_pilotState);
     return true;
 }

@@ -23,33 +23,28 @@ void EntityService::fetchMyEntitiesInfo(MyEntitiesFetchedCallback callback)
     m_connection.send(entitiesStatusReq);
 }
 
-void EntityService::setCurrentEntity(Common::Game::Entity & entity)
+void EntityService::setCurrentEntity(Common::Game::Object::Ship & ship)
 {
-    m_currentEntity = &entity;
+    m_currentShip = &ship;
 }
 
-Common::Game::Entity & EntityService::getCurrentEntity()
+Common::Game::Object::Ship & EntityService::getCurrentEntity()
 {
-    assert(m_currentEntity);
-    return **m_currentEntity;
+    assert(m_currentShip);
+    return **m_currentShip;
 }
 
 void EntityService::setCourse(Common::Game::Entity::Position course)
 {
-    assert(m_currentEntity);
+    assert(m_currentShip);
 
-    (*m_currentEntity)->setCourse(course);
+    (*m_currentShip)->setCourse(course);
     Common::Messages::EntityChangeCourseReq req;
-    req.entityId = (*m_currentEntity)->getId();
+    req.entityId = (*m_currentShip)->getId();
     req.courseX = course.getX();
     req.courseY = course.getY();
     req.courseZ = course.getZ();
     m_connection.send(req);
-}
-
-Client::Game::EntityContainer & EntityService::getEntityContainer()
-{
-    return m_entityContainer;
 }
 
 void EntityService::handle(const Common::Messages::PlayerEntitiesStatusResp & entitiesStatusResp)
