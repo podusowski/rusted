@@ -16,6 +16,9 @@ class ObjectFactory
 {
 public:
 	boost::shared_ptr<ObjectBase> create(DataBase::DataBaseNode & data);
+
+private:
+    Common::Game::Position extractPosition(DataBase::DataBaseNode & data);
 };
 
 }
