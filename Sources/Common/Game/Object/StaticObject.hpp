@@ -12,6 +12,7 @@ namespace Object
 
 class StaticObject : public ObjectBase
 {
+public:
     void setPosition(const Position &);
     Position getPosition();
 

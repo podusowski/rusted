@@ -1,5 +1,5 @@
 CC=g++
-CFLAGS+=-Wall
+CFLAGS+=-Wall -O0
 
 DEPS := $(addprefix $(BUILD)/$(BUILDPREFIX)/, $(SOURCES:.cpp=.d))
 

@@ -36,6 +36,3 @@ void PilotState::frameStarted()
     m_pilotView.frameStarted();
 }
 
-void PilotState::staticObjectAdded(Common::Game::StaticObject & object)
-{
-}

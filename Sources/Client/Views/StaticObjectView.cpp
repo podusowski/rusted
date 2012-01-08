@@ -27,7 +27,7 @@ void StaticObjectView::frameStarted()
 {
 }
 
-void StaticObjectView::staticObjectAdded(Common::Game::StaticObject & object)
+void StaticObjectView::staticObjectAdded(Common::Game::Object::StaticObject & object)
 {
     LOG_INFO << "New static object (id:" << object.getId() << ")\n";
 
@@ -37,6 +37,6 @@ void StaticObjectView::staticObjectAdded(Common::Game::StaticObject & object)
     Ogre::SceneNode * staticObjectNode = scene.getRootSceneNode()->createChildSceneNode();
     staticObjectNode->scale(10, 10, 10);
     staticObjectNode->attachObject(staticObjectMesh);
-    Common::Game::StaticObject::Position position = object.getPosition();
+    Common::Game::Position position = object.getPosition();
     staticObjectNode->setPosition(position.getX(), position.getY(), position.getZ());
 }

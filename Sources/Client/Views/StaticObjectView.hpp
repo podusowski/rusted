@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Game/StaticObject.hpp"
+#include "Common/Game/Object/StaticObject.hpp"
 #include "Client/Views/IView.hpp"
 #include "Client/Services/StaticObjectService.hpp"
 #include "Client/Graphics/IGraphics.hpp"
@@ -20,7 +20,7 @@ public:
     void deactivate();
     void frameStarted();
 
-    void staticObjectAdded(Common::Game::StaticObject &);
+    void staticObjectAdded(Common::Game::Object::StaticObject &);
 
 private:
     Services::StaticObjectService & m_staticObjectService;

@@ -2,7 +2,7 @@
 
 #include <boost/function.hpp>
 
-#include "Common/Game/StaticObject.hpp"
+#include "Common/Game/Object/StaticObject.hpp"
 #include "Client/Services/AbstractService.hpp"
 #include "Client/Network/Connection.hpp"
 
@@ -14,7 +14,7 @@ namespace Services
 class StaticObjectService : public AbstractService<StaticObjectService>
 {
 public:
-    typedef boost::function<void(Common::Game::StaticObject &)> StaticObjectAddedCallback;
+    typedef boost::function<void(Common::Game::Object::StaticObject &)> StaticObjectAddedCallback;
 
     StaticObjectService(Network::Connection &);
 

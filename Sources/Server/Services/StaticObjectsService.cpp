@@ -5,8 +5,9 @@
 
 using namespace Server::Services;
 
-StaticObjectsService::StaticObjectsService(Game::StaticObjectContainer & staticObjectContainer) :
-    m_staticObjectContainer(staticObjectContainer)
+StaticObjectsService::StaticObjectsService(Common::Game::Universe & universe, Game::StaticObjectContainer & staticObjectContainer) :
+    m_staticObjectContainer(staticObjectContainer),
+    m_universe(universe)
 {
 }
 

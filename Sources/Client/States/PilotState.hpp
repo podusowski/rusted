@@ -26,8 +26,6 @@ public:
     void deactivate();
     void frameStarted();
 
-    void staticObjectAdded(Common::Game::StaticObject &);
-
 private:
     Graphics::IGraphics & m_graphics;
     Client::Gui::Gui & m_gui;
