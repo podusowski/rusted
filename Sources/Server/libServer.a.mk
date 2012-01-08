@@ -13,7 +13,6 @@ SOURCES= \
 	    Services/ServiceDeployment.cpp \
         Game/Player.cpp \
         Game/PlayerContainer.cpp \
-        Game/StaticObjectContainer.cpp \
 
 CFLAGS+=-Wall -pedantic -g 
 CFLAGS+=-I../
