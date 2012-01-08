@@ -37,7 +37,7 @@ Component::~Component()
  */
     LOG_SCT << "killing application, pid: " << m_pid << "\n";
     ::kill(m_pid, 15);
-    ::Common::Thread::wait(1);
+    //::Common::Thread::wait(1);
 }
 
 void Component::setConfigValue(const std::string & name, const std::string & value)
