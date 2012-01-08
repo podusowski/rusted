@@ -36,7 +36,7 @@ void StaticObjectService::handle(const Common::Messages::StaticObjectStatusResp 
 void StaticObjectService::handle(const Common::Messages::StaticObjectInfoResp & message)
 {
     Common::Game::Object::StaticObject object;
-//(message.staticObjectId, Common::Game::StaticObject::Position(message.x, message.y, message.z));
+    object.setPosition(Common::Game::Position(message.x, message.y, message.z));
     LOG_DEBUG << "New static object: " << object << "\n";
     m_staticObjectAddedCallback(object);
 }
