@@ -39,7 +39,8 @@ endif
 $(DEPENDENCIES):
 	@$(MAKE) --directory $(TOP_DIR) --no-print-directory $@
 
+.PHONY: $(RESOURCES)
 $(RESOURCES):
 	mkdir -p $(BUILD)
-	test -n "$(RESOURCES)" && ( echo "$(FONT_BOLD)cp$(FONT_RESET) $(RESOURCES)"; cp -t $(BUILD) $(RESOURCES) ); true
+	test -n "$@" && ( echo "$(FONT_BOLD)cp$(FONT_RESET) $@"; cp -t $(BUILD) $(RESOURCES) ); true
 
