@@ -7,8 +7,6 @@
 #include "Common/DataBase/DataBaseFactory.hpp"
 #include "Server/Network/IConnection.hpp"
 
-#include "Server/Game/StaticObjectContainer.hpp"
-
 #include "Server/Services/IServiceDeployment.hpp"
 #include "Server/Services/ServerInfoService.hpp"
 #include "Server/Services/RustedTimeService.hpp"
@@ -37,7 +35,6 @@ private:
     Common::DataBase::DataBase & m_db;
     Common::Game::Universe m_universe;
     Game::PlayerContainer m_players;
-    Game::StaticObjectContainer m_staticObjectContainer;
 
     Server::Services::ServerInfoService m_serverInfoService;
     Server::Services::RustedTimeService m_rustedTimeService;

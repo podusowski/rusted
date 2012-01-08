@@ -22,7 +22,16 @@ public:
 
     template<class ObjectType> ObjectType & getById(unsigned id)
     {
-        return dynamic_cast<ObjectType&>(*m_objects[id]);
+        std::map<unsigned, boost::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.find(id);
+
+        if (it != m_objects.end())
+        {
+            return dynamic_cast<ObjectType&>(*it->second);
+        }
+        else
+        {
+            throw std::out_of_range("no such object in universe");
+        }
     }
 
     template<class ObjectType> std::vector<boost::shared_ptr<Object::ObjectBase> > getByOwnerId(unsigned id)

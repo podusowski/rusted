@@ -4,6 +4,7 @@
     </users>
     <objects>
         <object type="Ship" id="1" owner="1" x="1" y="1" z="1" />
+        <object type="StaticObject" id="2" x="100" y="100" z="100" />
     </objects>
 
     <staticObjects>

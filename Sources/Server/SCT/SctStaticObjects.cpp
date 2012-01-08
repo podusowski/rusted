@@ -21,8 +21,8 @@ TEST(SctStaticObjects, testStaticObjectsStatusReq)
     EXPECT_EQ(Common::Messages::Id::StaticObjectStatusResp, resp->getId());
 
     Common::Messages::StaticObjectStatusResp & staticObjectStatusResp = dynamic_cast<Common::Messages::StaticObjectStatusResp&>(*resp);
-    ASSERT_EQ(size_t(1), staticObjectStatusResp.objects.size());
-    ASSERT_EQ(1, staticObjectStatusResp.objects[0].get<0>());
+    ASSERT_EQ(1, staticObjectStatusResp.objects.size());
+    ASSERT_EQ(2, staticObjectStatusResp.objects[0].get<0>());
 }
 
 TEST(SctStaticObjects, testStaticObjectInfoReq)
@@ -31,13 +31,13 @@ TEST(SctStaticObjects, testStaticObjectInfoReq)
     SCT::Connection & connection = precondition.getConnection();
 
     Common::Messages::StaticObjectInfoReq staticObjectInfoReq;
-    staticObjectInfoReq.staticObjectId = 1;
+    staticObjectInfoReq.staticObjectId = 2;
     connection.send(staticObjectInfoReq);
     std::auto_ptr<Common::Messages::AbstractMessage> resp = connection.receive();
     EXPECT_EQ(Common::Messages::Id::StaticObjectInfoResp, resp->getId());
 
     Common::Messages::StaticObjectInfoResp & staticObjectInfoResp = dynamic_cast<Common::Messages::StaticObjectInfoResp&>(*resp);
-    EXPECT_EQ(1, staticObjectInfoResp.staticObjectId);
+    EXPECT_EQ(2, staticObjectInfoResp.staticObjectId);
     EXPECT_EQ(100, staticObjectInfoResp.x);
     EXPECT_EQ(100, staticObjectInfoResp.y);
     EXPECT_EQ(100, staticObjectInfoResp.z);

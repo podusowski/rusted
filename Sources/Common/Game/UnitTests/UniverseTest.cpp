@@ -52,6 +52,24 @@ TEST_F(UniverseTest, AddOneShipAndGetIt)
     ASSERT_EQ(ship.get(), &(universe.getById<Common::Game::Object::Ship>(1)));
 }
 
+TEST_F(UniverseTest, GetByNonexistingId)
+{
+    Common::Game::Universe universe;
+
+    ASSERT_THROW(universe.getById<Common::Game::Object::Ship>(1234), std::out_of_range);
+}
+
+TEST_F(UniverseTest, GetWrongType)
+{
+    Common::Game::Universe universe;
+    boost::shared_ptr<Common::Game::Object::ObjectBase> ship(new Common::Game::Object::Ship());
+    ship->setId(1);
+
+    universe.add(ship);
+
+    ASSERT_THROW(universe.getById<Common::Game::Object::StaticObject>(1), std::bad_cast);
+}
+
 TEST_F(UniverseTest, AddSomeShipsAndGetByOwner)
 {
     const unsigned OWNER_ID = 5;
