@@ -2,7 +2,8 @@
 
 #include <OgreEntity.h>
 
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Client/Views/StaticObjectView.hpp"
 
 using namespace Client::Views;
@@ -29,13 +30,13 @@ void StaticObjectView::frameStarted()
 
 void StaticObjectView::staticObjectAdded(Common::Game::Object::StaticObject & object)
 {
-    LOG_INFO << "New static object (id:" << object.getId() << ")\n";
+    LOG_INFO << "New static object:" << object << "\n";
 
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
 
-    Ogre::Entity * staticObjectMesh = scene.createEntity("staticObject", "Cube.mesh");
+    Ogre::Entity * staticObjectMesh = scene.createEntity("Cube.mesh");
     Ogre::SceneNode * staticObjectNode = scene.getRootSceneNode()->createChildSceneNode();
-    staticObjectNode->scale(10, 10, 10);
+//    staticObjectNode->scale(10, 10, 10);
     staticObjectNode->attachObject(staticObjectMesh);
     Common::Game::Position position = object.getPosition();
     staticObjectNode->setPosition(position.getX(), position.getY(), position.getZ());

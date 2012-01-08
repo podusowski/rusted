@@ -23,10 +23,12 @@ void StaticObjectService::asyncFetchStaticObjects(StaticObjectService::StaticObj
 
 void StaticObjectService::handle(const Common::Messages::StaticObjectStatusResp & message)
 {
-    LOG_INFO << "Static objects received\n";
+    LOG_DEBUG << "Static objects received\n";
+
     BOOST_FOREACH(boost::tuple<int> staticObject, message.objects)
     {
-        LOG_INFO << "  Static object, id: " << staticObject.get<0>() << "\n";
+        LOG_DEBUG << "  Static object, id: " << staticObject.get<0>() << "\n";
+
         Common::Messages::StaticObjectInfoReq req;
         req.staticObjectId = staticObject.get<0>();
         m_connection.send(req);
@@ -36,7 +38,10 @@ void StaticObjectService::handle(const Common::Messages::StaticObjectStatusResp 
 void StaticObjectService::handle(const Common::Messages::StaticObjectInfoResp & message)
 {
     Common::Game::Object::StaticObject object;
+    object.setId(message.staticObjectId);
     object.setPosition(Common::Game::Position(message.x, message.y, message.z));
+
     LOG_DEBUG << "New static object: " << object << "\n";
+
     m_staticObjectAddedCallback(object);
 }

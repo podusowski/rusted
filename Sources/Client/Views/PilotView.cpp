@@ -5,16 +5,21 @@ using namespace Client::Views;
 
 PilotView::PilotView(Graphics::IGraphics & graphics, 
                      Input::Input & input, 
-                     Services::EntityService & entityService) :
+                     Services::EntityService & entityService,
+                     Client::Gui::Gui & gui) :
     m_graphics(graphics),
     m_input(input),
-    m_entityService(entityService)
+    m_entityService(entityService),
+    m_gui(gui)
 {
 }
 
 void PilotView::activate()
 {
     m_entityObject.reset(new Graphics::OgreObject(m_graphics.getSceneManager(), "Cube.mesh"));
+    m_entityObject->getSceneNode().yaw(Ogre::Radian(0.8));
+    m_entityObject->getSceneNode().pitch(Ogre::Radian(0.8));
+    m_entityObject->getSceneNode().roll(Ogre::Radian(0.8));
 
     m_input.addMouseListener(*this);
 }
@@ -33,6 +38,11 @@ void PilotView::updateShipPosition()
 {
     Common::Game::Position position = m_entityService.getCurrentEntity().getPosition();
     m_entityObject->getSceneNode().setPosition(position.getX(), position.getY(), position.getZ());
+
+    CEGUI::Window * shipPosition = m_gui.getLayoutWindow().getChildRecursive("ShipPosition");
+    std::stringstream ss;
+    ss << m_entityService.getCurrentEntity().getPosition();
+    shipPosition->setText(ss.str());
 }
 
 void PilotView::updateCameraPosition()
@@ -45,8 +55,7 @@ void PilotView::updateCameraPosition()
     static int counter = 0;
     if (counter++ % 100 == 0)
     {
-        LOG_INFO << "ship position(" << position << "), "
-                 << "camera posistion(" << camPosition << ")\n";
+        LOG_INFO << "camera posistion(" << camPosition << ")\n";
     }
 
     Ogre::Camera & camera = m_graphics.getCamera();
@@ -68,13 +77,14 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
 
     if (button == OIS::MB_Left)
     {
-        Position position = m_entityService.getCurrentEntity().getPosition();
+        Ogre::Camera & camera = m_graphics.getCamera();
+        const Ogre::Vector3 ogreCameraPosition = camera.getPosition();
+        Position cameraPosition(ogreCameraPosition.x, ogreCameraPosition.y, 0);
 
         int top = y - (m_graphics.getHeight() / 2);
         int left = x - (m_graphics.getWidth() / 2);
 
-        Position delta(left, top, 0); 
-        position += delta;
-        m_entityService.setCourse(position);
+        Position delta(left, -top, 0); 
+        m_entityService.setCourse(cameraPosition + delta);
     }
 }

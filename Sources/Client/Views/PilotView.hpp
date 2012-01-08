@@ -19,7 +19,8 @@ class PilotView : public IView,
 public:
     PilotView(Graphics::IGraphics &, 
               Input::Input &, 
-              Services::EntityService &);
+              Services::EntityService &,
+              Gui::Gui &);
 
     void activate();
     void deactivate();
@@ -36,6 +37,7 @@ private:
     Graphics::IGraphics & m_graphics;
     Input::Input & m_input;
     Services::EntityService & m_entityService;
+    Gui::Gui & m_gui;
     boost::scoped_ptr<Graphics::OgreObject> m_entityObject;
     boost::scoped_ptr<Graphics::OgreObject> m_navigatorPlaneObject;
 };
