@@ -7,6 +7,28 @@ using namespace Common::Game;
 
 Position Ship::getPosition()
 {
+    return calculatePosition(m_time->getSeconds());
+}
+
+void Ship::setPosition(const Position & position)
+{
+    m_course.course = position;
+    m_position = position;
+}
+
+void Ship::setCourse(Position position)
+{
+    unsigned time = m_time->getSeconds();
+
+    m_position = calculatePosition(time);
+    m_course.course = position;
+    m_course.startTime = time;
+
+    LOG_DEBUG << "Setting course from " << m_position << " to " << position << ", start time: " << time << "\n";
+}
+
+Position Ship::calculatePosition(unsigned time)
+{
     const unsigned speed = 1;
 
     if (m_course.course == m_position)
@@ -14,7 +36,10 @@ Position Ship::getPosition()
 
     unsigned distance = Position::distance(m_course.course, m_position);
     unsigned totalTripTime = distance / speed;
-    unsigned timeTakenSoFar = m_time->getSeconds() - m_course.startTime;
+    unsigned timeTakenSoFar = time - m_course.startTime;
+
+    if (timeTakenSoFar == 0)
+        return m_position;
 
     float tripProgress = float(timeTakenSoFar) / float(totalTripTime);
 
@@ -29,21 +54,7 @@ Position Ship::getPosition()
     else
     {
         Position tripVector = m_course.course - m_position;
-        return tripVector * tripProgress;
+        return m_position + (tripVector * tripProgress);
     }
-}
-
-void Ship::setPosition(const Position & position)
-{
-    m_course.course = position;
-    m_position = position;
-}
-
-void Ship::setCourse(Position position)
-{
-    LOG_DEBUG << "Setting course to " << position << "\n";
-
-    m_course.course = position;
-    m_course.startTime = m_time->getSeconds();
 }
 

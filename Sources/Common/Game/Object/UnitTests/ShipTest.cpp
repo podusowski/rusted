@@ -30,26 +30,37 @@ TEST_F(ShipTest, TestMoveByVector)
 {
     Common::Game::Object::Ship ship;
 
-    ON_CALL(getRustedTimeStub(), getSeconds()).WillByDefault(Return(0));
-
     ship.setPosition(Common::Game::Position(0, 0, 0));
+
+    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(0));
     ship.setCourse(Common::Game::Position(100, 0, 0));
+    Mock::VerifyAndClear(&getRustedTimeStub());
 
-    // one call goes for position calculation, 
-    // second for setCourse calculation 
-    // and another one again for position calculation
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(4)
-        .WillOnce(Return(50))
-        .WillOnce(Return(100))
-        .WillOnce(Return(100))
-        .WillOnce(Return(200));
-
+    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(50));
     ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
     ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
 
+    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
     ship.setCourse(Common::Game::Position(100, 100, 0));
+    Mock::VerifyAndClear(&getRustedTimeStub());
 
+    // still the same place
+    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
+    ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    // should be half the way
+    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(150));
+    ASSERT_EQ(Common::Game::Position(100, 50, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(200));
     ASSERT_EQ(Common::Game::Position(100, 100, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
 }
 
 TEST_F(ShipTest, MoveToTheSamePosition)
@@ -57,10 +68,13 @@ TEST_F(ShipTest, MoveToTheSamePosition)
     Common::Game::Object::Ship ship;
 
     ship.setPosition(Common::Game::Position(1, 2, 3));
+
+    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
     ship.setCourse(Common::Game::Position(1, 2, 3));
+    Mock::VerifyAndClear(&getRustedTimeStub());
 
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(0);
-
+    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
     ASSERT_EQ(Common::Game::Position(1, 2, 3), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
 }
 

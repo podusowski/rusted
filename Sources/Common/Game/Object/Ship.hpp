@@ -28,6 +28,8 @@ public:
     void setCourse(Position course);
 
 private:
+    Position calculatePosition(unsigned time);
+
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
 
     Position m_position;
