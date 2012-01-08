@@ -1,4 +1,4 @@
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Client/Services/StaticObjectService.hpp"
 
 using namespace Client::Services;
@@ -37,5 +37,6 @@ void StaticObjectService::handle(const Common::Messages::StaticObjectInfoResp & 
 {
     Common::Game::Object::StaticObject object;
 //(message.staticObjectId, Common::Game::StaticObject::Position(message.x, message.y, message.z));
+    LOG_DEBUG << "New static object: " << object << "\n";
     m_staticObjectAddedCallback(object);
 }

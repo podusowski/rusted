@@ -1,5 +1,7 @@
 #pragma once
 
+#include <typeinfo>
+
 #include "Common/Game/Position.hpp"
 
 namespace Common
@@ -27,3 +29,10 @@ private:
 }
 }
 }
+
+inline std::ostream & operator<<(std::ostream & os, Common::Game::Object::ObjectBase & object)
+{
+    os << typeid(object).name() << ", position: " << object.getPosition();
+    return os;
+}
+
