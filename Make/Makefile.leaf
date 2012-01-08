@@ -1,6 +1,8 @@
 include version.inc.mk
 include util.colors.mk
 
+VPATH+=$(BUILD)
+
 ifneq ($(APPNAME),)
   TARGETNAME := $(APPNAME)
 endif
@@ -37,10 +39,7 @@ endif
 $(DEPENDENCIES):
 	@$(MAKE) --directory $(TOP_DIR) --no-print-directory $@
 
-$(TARGETNAME): _resources
-.PHONY: _resources
-
-_resources: $(RESOURCES)
+$(RESOURCES):
 	mkdir -p $(BUILD)
 	test -n "$(RESOURCES)" && ( echo "$(FONT_BOLD)cp$(FONT_RESET) $(RESOURCES)"; cp -t $(BUILD) $(RESOURCES) ); true
 

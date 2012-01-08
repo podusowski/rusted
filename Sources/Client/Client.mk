@@ -1,31 +1,12 @@
 APPNAME=Client
 
-SOURCES= \
-    main.cpp \
-    Engine/Application.cpp \
-    Engine/Engine.cpp \
-    Graphics/Graphics.cpp \
-	Gui/Gui.cpp \
-	Input/Input.cpp \
-	Network/Connection.cpp \
-	Game/PlayerInfo.cpp \
-	States/StateManager.cpp \
-	States/StateDeployment.cpp \
-    States/LoginState.cpp \
-    States/EntitySelectState.cpp \
-    States/PilotState.cpp \
-	Services/RustedTimeService.cpp \
-	Services/AuthorizationService.cpp \
-	Services/EntityService.cpp \
-	Services/StaticObjectService.cpp \
-	Views/StaticObjectView.cpp \
-	Views/PilotView.cpp \
-	Graphics/OgreObject.cpp \
+SOURCES+=main.cpp
 
 LDFLAGS= \
 	-L$(BUILD) \
 	-L../External/CEGUI-0.7.5/cegui/src/.libs/ \
 	-L../External/CEGUI-0.7.5/cegui/src/RendererModules/Ogre/.libs/ \
+	-lClient \
 	-lOgreMain \
 	-lCEGUIBase \
 	-lCEGUIOgreRenderer \
@@ -33,7 +14,7 @@ LDFLAGS= \
 	-lCommon \
 	-lpthread \
 	-lboost_system \
-	-lxml2
+	-lxml2 
 
 CFLAGS+=-I../ -I. 
 CFLAGS+=-I../Common 
@@ -43,7 +24,7 @@ CFLAGS+=-I/usr/include/OGRE
 CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/RendererModules/Ogre
 CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/
 
-DEPENDENCIES+=libCommon.a CEGUI
+DEPENDENCIES+=libClient.a libCommon.a 
 
 RESOURCES+=runClient
 RESOURCES+=runTestClient
