@@ -18,7 +18,7 @@ int main(int argc, const char * argv[])
 
     initDependencies();
 
-    Server::ServerController controller(argc, argv);
+    Server::Network::ServerController controller(argc, argv);
     return controller.start();
 }
 

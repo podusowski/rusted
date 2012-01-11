@@ -6,8 +6,10 @@ SOURCES=Thread.cpp \
 		RustedCodec/SimpleWriteBuffer.cpp \
 		RustedCodec/SimpleReadBuffer.cpp \
 		RustedCodec/AsioReadBuffer.cpp \
-		RustedCodec/AsioWriteBuffer.cpp \
-		Configuration/Configuration.cpp \
+		RustedCodec/AsioWriteBuffer.cpp
+SOURCES+=RustedCodec/CakeWriteBuffer.cpp
+SOURCES+=RustedCodec/CakeReadBuffer.cpp
+SOURCES+=Configuration/Configuration.cpp \
         DataBase/DataBase.cpp \
         DataBase/DataBaseNode.cpp \
         DataBase/XmlDataProvider.cpp \

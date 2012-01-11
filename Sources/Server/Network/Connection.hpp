@@ -1,22 +1,21 @@
 #pragma once
 
-#include <boost/asio.hpp>
-#include <Common/IRunnable.hpp>
-#include <Network/IConnectionListener.hpp>
-#include <Network/IConnection.hpp>
-#include "Services/IServiceDeployment.hpp"
+#include "Cake/Networking/Socket.hpp"
+#include "Cake/Threading/IRunnable.hpp"
 
-using boost::asio::ip::tcp;
+#include "Network/IConnectionListener.hpp"
+#include "Network/IConnection.hpp"
+#include "Services/IServiceDeployment.hpp"
 
 namespace Server
 {
 namespace Network
 {
 
-class Connection : public ::Common::IRunnable, public Server::Network::IConnection
+class Connection : public Cake::Threading::IRunnable, public Server::Network::IConnection
 {
 public:
-	Connection(int id, tcp::socket & socket, Services::IServiceDeployment & serviceDeployment);
+	Connection(int id, Cake::Networking::Socket & socket, Services::IServiceDeployment & serviceDeployment);
 	void run();
 	void addListener(IConnectionListener & listener);
 	void send(::Common::Messages::AbstractMessage & message);
@@ -24,7 +23,7 @@ public:
 
 private:
     int m_id;
-	tcp::socket & m_socket;
+	Cake::Networking::Socket & m_socket;
 	std::vector<IConnectionListener *> m_listeners;
 	std::vector<IConnectionListener *> m_listenersToAdd;
 };
