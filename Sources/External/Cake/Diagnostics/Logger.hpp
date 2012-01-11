@@ -27,9 +27,9 @@ public:
 
 #ifndef LOF_INFO
 
-#define LOG_INFO  std::cout << "\033[1;34mINF\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
-#define LOG_ERR   std::cout << "\033[1;31mERR\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
-#define LOG_WARN  std::cout << "\033[1;33mWRN\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
-#define LOG_DEBUG std::cout << "\033[1;37mDBG\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
+#define LOG_INFO  std::cout << "\n\033[1;34mINF\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
+#define LOG_ERR   std::cout << "\n\033[1;31mERR\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
+#define LOG_WARN  std::cout << "\n\033[1;33mWRN\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
+#define LOG_DEBUG std::cout << "\n\033[1;37mDBG\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
 
 #endif
