@@ -1,4 +1,5 @@
 #include <cxxabi.h>
+#include <iomanip>
 
 #include "Logger.hpp"
 
@@ -33,20 +34,31 @@ std::string Logger::demangle(const std::string & name)
     return result;
 }
 
-std::ostream & Logger::log(LogLevel level, 
-                           const std::string & file, 
-                           unsigned line)
+LogMessage Logger::log(LogLevel level, 
+                       const std::string & file, 
+                       unsigned line)
 {
-    return std::cerr 
-        << "\n" 
-        << m_appName
-        << "/"
-        << m_banners[level]
-        << " "
-        << file
-        << ":"
-        << line
-        << ": ";
+    return LogMessage(generateHeader(level, file, line));
 }
 
+std::string Logger::generateHeader(LogLevel level, const std::string & file, unsigned line)
+{
+    std::string file2 = file;
+    const unsigned max_file_length = 30;
+
+    if (file.length() > max_file_length)
+    {
+        file2 = ".." + file.substr(file.length() - max_file_length + 2, max_file_length - 2);
+    }
+
+    std::stringstream ss;
+    ss  
+        << std::setw(10) << std::setiosflags(std::ios::right) << m_appName << " "
+        << m_banners[level] << " "
+        << std::setw(max_file_length) << std::setiosflags(std::ios::right) << file2
+        << ":"
+        << std::setiosflags(std::ios::left) << line
+        << ": ";
+    return ss.str();
+}
 
