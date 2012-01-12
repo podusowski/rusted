@@ -12,21 +12,21 @@ AuthorizationService::AuthorizationService(Game::PlayerContainer & players, Serv
 
 void AuthorizationService::handle(const Common::Messages::UserAuthorizationReq & message, Network::IConnection & connection)
 {
-    LOG_INFO << "New player connected (login: " << message.login << ")\n";
+    LOG_DEBUG << "New player connected (login: " << message.login << ")";
 
     Common::Messages::UserAuthorizationResp resp;
 
     try
     {
         Game::Player & player = m_players.create(message.login, message.password, connection);
-        LOG_INFO << "Player authorized (id: " << player.getId() << "), registering services\n";
+        LOG_DEBUG << "Player authorized (id: " << player.getId() << "), registering services";
         m_serviceDeployment.deployAuthorizedConnection(connection);
         resp.success = true;
         resp.player_id = player.getId();
     }
     catch (std::exception & ex)
     {
-        LOG_WARN << "Couldn't create player, reason: " << ex.what() << "\n";
+        LOG_WARN << "Couldn't create player, reason: " << ex.what();
         resp.success = false;
         resp.player_id = 0;
     }

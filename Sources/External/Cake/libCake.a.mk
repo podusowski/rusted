@@ -1,8 +1,10 @@
 LIBNAME=libCake.a
 
-CFLAGS+=-I.
+CFLAGS+=-I. -I..
 
 SOURCES+=Configuration/Configuration.cpp
+
+SOURCES+=Diagnostics/Logger.cpp
 
 SOURCES+=Threading/Mutex.cpp
 SOURCES+=Threading/ConditionVariable.cpp

@@ -21,7 +21,7 @@ Connection::Connection(int id, Cake::Networking::Socket & socket, Services::ISer
 
 void Connection::addListener(IConnectionListener & listener)
 {
-    LOG_INFO << "Adding " << TYPENAME(listener) << " as message handler for connection: " << m_id;
+    LOG_DEBUG << "Adding " << TYPENAME(listener) << " as message handler for connection: " << m_id;
 
     // TODO: this method can be called from different thread
     m_listenersToAdd.push_back(&listener);
@@ -64,12 +64,12 @@ void Connection::run()
         }
         catch (std::exception & ex)
         {
-            LOG_WARN << "Client broke connection (id: " << m_id << ", exception: " << TYPENAME(ex) << ")\n";
+            LOG_DEBUG << "Connection dropped (id: " << m_id << ", reason: " << ex.what() << ")";
             break;
         }
         catch (...)
         {
-            LOG_ERR << "Unknown exception was thrown\n";
+            LOG_ERR << "Unknown exception was thrown";
         }
     }
 }

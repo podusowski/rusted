@@ -1,8 +1,9 @@
 #pragma once
 
 #include <iostream>
-#include <cxxabi.h>
 #include <cstdlib>
+
+#include "Cake/DependencyInjection/Inject.hpp"
 
 namespace Cake
 {
@@ -10,29 +11,26 @@ namespace Diagnostics
 {
 namespace Logger
 {
-namespace Detail
-{
 
-class NullStream
+enum LogType
 {
-public:
-    template <class T> NullStream & operator << (const T &)
-    {
-        return *this;
-    }
+    DEBUG,
+    INFO,
+    WARNING,
+    ERROR
 };
 
-inline std::string demangle(const std::string & name)
+class Logger
 {
-    int status;
-    char * realname = abi::__cxa_demangle(name.c_str(), 0, 0, &status);
-    std::string result(realname);
-    free(realname);
+public:
+    static Logger & getSingleton();
+    std::string demangle(const std::string & name);
 
-    return result;
-}
+private:
+    Logger();
+    Logger(const Logger &) {}
+};
 
-}
 }
 }
 }
@@ -44,6 +42,6 @@ inline std::string demangle(const std::string & name)
 #define LOG_WARN  std::cout << "\n\033[1;33mWRN\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
 #define LOG_DEBUG std::cout << "\n\033[1;37mDBG\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
 
-#define TYPENAME(t) Cake::Diagnostics::Logger::Detail::demangle(typeid(t).name())
+#define TYPENAME(t) Cake::Diagnostics::Logger::Logger::getSingleton().demangle(typeid(t).name())
 
 #endif

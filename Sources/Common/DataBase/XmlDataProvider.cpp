@@ -1,14 +1,15 @@
 #include <iostream>
 #include <cstring>
 
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "DataBase/XmlDataProvider.hpp"
 
 using namespace Common::DataBase;
 
 XmlDataProvider::XmlDataProvider(DataBase & db, const std::string & xmlFile) : m_db(db)
 {
-    LOG_INFO << "Loading db from " << xmlFile << "\n";
+    LOG_INFO << "Loading db from " << xmlFile;
 
     m_stack.push(&db.getRoot());
 
@@ -34,12 +35,12 @@ void XmlDataProvider::startElement(void * ctx, const xmlChar * name, const xmlCh
     {
         logPrefix += " |";
     }
-    LOG_INFO << logPrefix << "-" << reinterpret_cast<const char *>(name) << "\n";
+    LOG_DEBUG << logPrefix << "-" << reinterpret_cast<const char *>(name);
 
     while (atts != 0 && *atts != 0)
     {
-        LOG_INFO << logPrefix << "    " << reinterpret_cast<const char *>(atts[0]) 
-                 << ": " << reinterpret_cast<const char *>(atts[1]) << "\n";
+        LOG_DEBUG << logPrefix << "    " << reinterpret_cast<const char *>(atts[0]) 
+                 << ": " << reinterpret_cast<const char *>(atts[1]);
 
         node.setValue(reinterpret_cast<const char *>(atts[0]),
                       reinterpret_cast<const char *>(atts[1]));
