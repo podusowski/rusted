@@ -1,8 +1,9 @@
 #include <exception>
 
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Common/RustedCodec/AsioReadBuffer.hpp"
 #include "Common/RustedCodec/AsioWriteBuffer.hpp"
-#include "Common/Logger/Logger.hpp"
 #include "Network/Connection.hpp"
 
 using namespace boost::asio;
@@ -14,12 +15,12 @@ Connection::Connection(Common::Configuration::Configuration & cfg) :
 {
     // better keep getValue on this in constructor, they're serving as asserts
     LOG_INFO << "Server address is " << m_cfg.getValue<std::string>("network.address")
-             << ":" << m_cfg.getValue<unsigned>("network.port") << "\n";
+             << ":" << m_cfg.getValue<unsigned>("network.port");
 }
 
 void Connection::run()
 {
-    LOG_INFO << "Connection service is in loop\n";
+    LOG_INFO << "Connection service is in loop";
     while (true)
     {
         using namespace Common::Messages;
@@ -27,7 +28,7 @@ void Connection::run()
         Common::RustedCodec::AsioReadBuffer buffer(m_socket);
         std::auto_ptr<AbstractMessage> message = MessageFactory::create(buffer);
         
-        LOG_INFO << "Message received, " << TYPENAME(*message) << ", putting it on the queue\n";
+        LOG_INFO << "Message received, " << TYPENAME(*message) << ", putting it on the queue";
         m_messages.push(message.release());
         //FIXME: make a lock here
     }
@@ -43,7 +44,7 @@ void Connection::connect()
     tcp::resolver resolver(io_service);
     tcp::resolver::query query(address, serviceName);
 
-    LOG_INFO << "Resolving " << address << ":" << serviceName << "\n";
+    LOG_INFO << "Resolving " << address << ":" << serviceName;
     tcp::resolver::iterator endpointIterator = resolver.resolve(query);
     tcp::resolver::iterator end;
 
@@ -51,7 +52,7 @@ void Connection::connect()
 
     while (error && endpointIterator != end)
     {
-        LOG_INFO << "Connecting to host\n";
+        LOG_INFO << "Connecting to host";
         m_socket.close();
         m_socket.connect(*endpointIterator, error);
         endpointIterator++;
@@ -59,24 +60,24 @@ void Connection::connect()
 
     if (error)
     {
-        LOG_ERR << "Can't connect to the server\n";
+        LOG_ERR << "Can't connect to the server";
         throw std::exception();
     }
     else
     {
-        LOG_INFO << "Connected\n";
+        LOG_INFO << "Connected";
     }
 }
 
 void Connection::addListener(IConnectionListener & listener)
 {
-    LOG_INFO << "Adding listener (name: " << TYPENAME(listener) << ")\n";
+    LOG_INFO << "Adding listener (name: " << TYPENAME(listener) << ")";
     m_listeners.push_back(&listener);
 }
 
 void Connection::send(Common::Messages::AbstractMessage & message)
 {
-    LOG_INFO << "Sending " << TYPENAME(message) << "\n";
+    LOG_INFO << "Sending " << TYPENAME(message);
     Common::RustedCodec::AsioWriteBuffer buffer(m_socket);
     message.serialize(buffer);
 }
@@ -85,7 +86,7 @@ void Connection::yield()
 {
     if (!m_messages.empty())
     {
-        LOG_INFO << "Yielded while message queue is not empty (messages waiting: " << m_messages.size() << ")\n";
+        LOG_INFO << "Yielded while message queue is not empty (messages waiting: " << m_messages.size() << ")";
 
         Common::Messages::AbstractMessage * message = m_messages.front();
         m_messages.pop();

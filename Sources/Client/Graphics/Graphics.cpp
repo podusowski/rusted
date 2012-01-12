@@ -1,4 +1,4 @@
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Client/Graphics/Graphics.hpp"
 
 using namespace Client::Graphics;
@@ -41,7 +41,7 @@ unsigned Graphics::getHeight()
 
 OgreObject & Graphics::createOgreObject()
 {
-    LOG_ERR << "Not implemented\n";
+    LOG_ERR << "Not implemented";
 }
 
 void Graphics::initOgre()
@@ -53,7 +53,7 @@ void Graphics::initOgre()
 
     if (m_ogreRoot->getAvailableRenderers().begin() == m_ogreRoot->getAvailableRenderers().end())
     {
-        LOG_ERR << "No OGRE renderers available\n";
+        LOG_ERR << "No OGRE renderers available";
     }
 
     m_ogreRoot->setRenderSystem(*m_ogreRoot->getAvailableRenderers().begin());

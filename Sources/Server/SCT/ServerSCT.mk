@@ -13,14 +13,16 @@ CFLAGS+=-I../..
 CFLAGS+=-I.. 
 CFLAGS+=-I.
 CFLAGS+=-I../../Common
+CFLAGS+=-I../../External
 CFLAGS+=-I/usr/include/libxml2
 
-LDFLAGS=-L. -L$(BUILD) -lCommon -lpthread -lboost_system -lxml2 -lcppunit
+LDFLAGS=-L. -L$(BUILD) -lCommon -lCake -lpthread -lboost_system -lxml2 -lcppunit
 LDFLAGS+=-lgtest
 
 RESOURCES+=SampleDataBase.xml
 
 DEPENDENCIES+=Server
 DEPENDENCIES+=libCommon.a
+DEPENDENCIES+=libCake.a
 
 include Makefile.leaf

@@ -1,4 +1,4 @@
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Client/Game/PlayerInfo.hpp"
 
 using namespace Client::Game;
@@ -12,7 +12,7 @@ int PlayerInfo::getId()
 {
     if (!m_id)
     {
-        LOG_ERR << "Player id was never set\n";
+        LOG_ERR << "Player id was never set";
         return 0;
     }
     else

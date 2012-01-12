@@ -1,11 +1,11 @@
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Gui/Gui.hpp"
 
 using namespace Client::Gui;
 
 Gui::Gui(Ogre::RenderWindow & ogreRenderWindow) : m_ogreRenderWindow(ogreRenderWindow)
 {
-    LOG_INFO << "Initializing GUI subsystem\n";
+    LOG_INFO << "Initializing GUI subsystem";
     try
     {
         initRenderer();
@@ -15,7 +15,7 @@ Gui::Gui(Ogre::RenderWindow & ogreRenderWindow) : m_ogreRenderWindow(ogreRenderW
     }
     catch (CEGUI::Exception & ex)
     {
-        LOG_ERR << "CEGUI dropped an exception of type " << TYPENAME(ex) << ", reason: " << ex.getMessage() << "\n";
+        LOG_ERR << "CEGUI dropped an exception of type " << TYPENAME(ex) << ", reason: " << ex.getMessage();
     }
 }
 
@@ -59,6 +59,4 @@ void Gui::initRenderer()
     CEGUI::OgreRenderer::bootstrapSystem(m_ogreRenderWindow);
     CEGUI::Logger::getSingleton().setLoggingLevel(CEGUI::Insane);
 }
-
-
 

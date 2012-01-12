@@ -7,9 +7,10 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/foreach.hpp>
 
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Common/Thread.hpp"
 #include "Component.hpp"
-#include "Common/Logger/Logger.hpp"
 
 using namespace ::SCT;
 
@@ -27,28 +28,22 @@ Component::Component(const std::string & cfg) : m_cfg(cfg)
 
 Component::~Component()
 {
-/*
-    std::cout << "SCT: closing connections (count: " << m_connections.size() << ")\n";
+    LOG_INFO << "Killing application, pid: " << m_pid;
 
-    BOOST_FOREACH(Connection * connection, m_connections)
-    {
-        delete connection;
-    }
- */
-    LOG_SCT << "killing application, pid: " << m_pid << "\n";
     ::kill(m_pid, 15);
-    //::Common::Thread::wait(1);
 }
 
 void Component::setConfigValue(const std::string & name, const std::string & value)
 {
-    LOG_SCT << "passing config parameter to the application, " << name << ": " << value << "\n";
+    LOG_INFO << "Passing config parameter to the application, " << name << ": " << value;
+
     m_cmdLineOptions[name] = value;
 }
 
 Connection & Component::createConnection()
 {
-    LOG_SCT << "creating new connection\n";
+    LOG_INFO << "Creating new connection";
+
     Connection * connection = new Connection("127.0.0.1", m_port);
     m_connections.push_back(connection);
     return *connection;
@@ -86,11 +81,11 @@ void Component::start()
         }
 
         ::execv(filename.c_str(), argv);
-        LOG_SCT << "execv returned with error, errno: " << errno << "\n";
+        LOG_ERR << "execv returned with error, errno: " << errno << "\n";
     }
     else
     {
-        LOG_SCT << "running \"" << filename << "\" with, pid: " << m_pid << "\n";
+        LOG_INFO << "Running \"" << filename << "\", pid: " << m_pid;
     }
 
     ::Common::Thread::wait(1);

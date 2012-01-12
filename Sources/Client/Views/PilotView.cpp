@@ -1,4 +1,6 @@
 #include <OgreEntity.h>
+
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Client/Views/PilotView.hpp"
 
 using namespace Client::Views;
@@ -55,7 +57,7 @@ void PilotView::updateCameraPosition()
     static int counter = 0;
     if (counter++ % 100 == 0)
     {
-        LOG_INFO << "camera posistion(" << camPosition << ")\n";
+        LOG_INFO << "camera posistion(" << camPosition << ")";
     }
 
     Ogre::Camera & camera = m_graphics.getCamera();

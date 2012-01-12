@@ -1,4 +1,5 @@
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Common/Game/Object/Ship.hpp"
 #include "Client/Services/EntityService.hpp"
 
@@ -46,11 +47,11 @@ void EntityService::setCourse(Common::Game::Position course)
 
 void EntityService::handle(const Common::Messages::PlayerEntitiesStatusResp & entitiesStatusResp)
 {
-    LOG_INFO << "Own units info received\n";
+    LOG_INFO << "Own units info received";
 
     BOOST_FOREACH(boost::tuple<int> entity, entitiesStatusResp.entities)
     {
-       LOG_INFO << "  Entity (id: " << entity.get<0>() << ")\n";
+       LOG_INFO << "  Entity (id: " << entity.get<0>() << ")";
 
        Common::Messages::EntityGetInfoReq entityGetInfoReq;
        entityGetInfoReq.id = entity.get<0>();
@@ -61,7 +62,7 @@ void EntityService::handle(const Common::Messages::PlayerEntitiesStatusResp & en
 
 void EntityService::handle(const Common::Messages::EntityGetInfoResp & entityGetInfoResp)
 {
-    LOG_INFO << "Got entity info (id: " << entityGetInfoResp.id << ")\n";
+    LOG_INFO << "Got entity info (id: " << entityGetInfoResp.id << ")";
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
     Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
@@ -75,12 +76,12 @@ void EntityService::handle(const Common::Messages::EntityGetInfoResp & entityGet
     std::set<int>::iterator it = m_myEntities.find(entityGetInfoResp.id);
     if (it != m_myEntities.end())
     {
-       LOG_INFO << "Entity is from player's entities list and we were expected this info\n";
+       LOG_INFO << "Entity is from player's entities list and we were expected this info";
        m_myEntities.erase(it); 
 
        if (m_myEntities.empty())
        {
-          LOG_INFO << "And this was the last one\n";
+          LOG_INFO << "And this was the last one";
           m_myEntitiesFetchedCallback();
        }
     }

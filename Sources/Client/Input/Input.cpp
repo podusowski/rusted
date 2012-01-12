@@ -3,6 +3,8 @@
 #include <boost/foreach.hpp>
 #include <OIS/OIS.h>
 
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Input/Input.hpp"
 
 using namespace Client::Input;
@@ -10,7 +12,7 @@ using namespace Client::Input;
 Input::Input(Ogre::RenderWindow & window, Client::Gui::Gui &) : 
     m_ogreRenderWindow(window)
 {
-    LOG_INFO << "Initializing input subsystem\n";
+    LOG_INFO << "Initializing input subsystem";
 
     size_t windowHandle;
     window.getCustomAttribute("WINDOW", &windowHandle);
@@ -61,7 +63,7 @@ bool Input::mouseMoved( const OIS::MouseEvent &arg )
 
 bool Input::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-    LOG_INFO << "Mouse pressed (x: " << mouseX << ", y: " << mouseY << ")\n"; 
+    LOG_INFO << "Mouse pressed (x: " << mouseX << ", y: " << mouseY << ")"; 
     BOOST_FOREACH(IMouseListener * listener, m_mouseListeners)
     {
         listener->mousePressed(id, mouseX, mouseY);
@@ -73,7 +75,7 @@ bool Input::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 
 bool Input::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-    LOG_INFO << "Mouse released (x: " << mouseX << ", y: " << mouseY << ")\n"; 
+    LOG_INFO << "Mouse released (x: " << mouseX << ", y: " << mouseY << ")"; 
     BOOST_FOREACH(IMouseListener * listener, m_mouseListeners)
     {
         listener->mouseReleased(id, mouseX, mouseY);
@@ -87,7 +89,7 @@ bool Input::keyPressed( const OIS::KeyEvent &arg )
 {
     if (arg.key == OIS::KC_ESCAPE)
     {
-        LOG_WARN << "Emergency abort key - KS_ESCAPE\n";
+        LOG_WARN << "Emergency abort key - KC_ESCAPE";
         ::abort();
     }
     CEGUI::System::getSingleton().injectKeyDown(arg.key);
@@ -126,7 +128,7 @@ CEGUI::MouseButton Input::toCeguiMouseButton(OIS::MouseButtonID oisMouseButton)
         return CEGUI::MiddleButton;
  
     default:
-        LOG_WARN << "Wrong OIS::MouseButtonID, LeftButton assumed.\n";
+        LOG_WARN << "Wrong OIS::MouseButtonID, LeftButton assumed.";
         return CEGUI::LeftButton;
     }
 }

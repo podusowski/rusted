@@ -19,6 +19,7 @@ CFLAGS=-Wall -pedantic -g -I. -I.. -I/usr/include/libxml2
 
 LDFLAGS=-L. -L$(BUILD) 
 LDFLAGS+=-lCommon 
+LDFLAGS+=-lCake
 LDFLAGS+=-lpthread 
 LDFLAGS+=-lboost_system 
 LDFLAGS+=-lxml2 
@@ -27,6 +28,7 @@ LDFLAGS+=-lgtest
 LDFLAGS+=-lgmock
 
 DEPENDENCIES+=libCommon.a
+DEPENDENCIES+=libCake.a
 
 Messages/UnitTests/MessagesTest.cpp: Messages/Messages.xml genMessages.py genMessagesUT.py
 	@mkdir -p Messages/UnitTests

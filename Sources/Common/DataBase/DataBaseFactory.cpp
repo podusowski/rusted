@@ -1,8 +1,9 @@
 #include <iostream>
 
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "DataBase/XmlDataProvider.hpp"
 #include "DataBase/DataBaseFactory.hpp"
-#include "Common/Logger/Logger.hpp"
 
 using namespace Common::DataBase;
 
@@ -18,7 +19,7 @@ DataBase & DataBaseFactory::create()
     {        
         if (m_cfg.getValue<std::string>("database.provider") == "xml")
         {
-            LOG_INFO << "XmlDataProvider will be used as DB storage\n";
+            LOG_INFO << "XmlDataProvider will be used as DB storage";
             XmlDataProvider provider(*m_db, m_cfg.getValue<std::string>("database.xml.filename"));
         }
         else
@@ -28,7 +29,7 @@ DataBase & DataBaseFactory::create()
     }
     catch (...)
     {
-        LOG_WARN << "DataBase provider is not configured, clean DB will be created which won't do much good\n";
+        LOG_WARN << "DataBase provider is not configured, clean DB will be created which won't do much good";
     }
 
     return *m_db;

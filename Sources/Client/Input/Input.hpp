@@ -8,7 +8,6 @@
 #include <OgreRoot.h>
 
 #include "Gui/CEGUIIncludes.hpp"
-#include "Common/Logger/Logger.hpp"
 #include "Gui/Gui.hpp"
 #include "Client/Input/IMouseListener.hpp"
 

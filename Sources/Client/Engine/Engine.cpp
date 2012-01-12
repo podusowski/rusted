@@ -1,6 +1,6 @@
 #include <OgreWindowEventUtilities.h>
 
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Common/Thread.hpp"
 
 #include "Client/Gui/CEGUIIncludes.hpp"
@@ -38,15 +38,15 @@ void Engine::start()
 
             if (!m_graphics->getOgreRoot().renderOneFrame()) break;
         }
-        LOG_INFO << "No further state to execute, application is going to shut down\n";
+        LOG_INFO << "No further state to execute, application is going to shut down";
     }
     catch (CEGUI::Exception & ex)
     {
-        LOG_ERR << "Exception of type " << TYPENAME(ex) << " thrown, reason: " << ex.getMessage() << "\n";
+        LOG_ERR << "Exception of type " << TYPENAME(ex) << " thrown, reason: " << ex.getMessage();
     }
     catch (std::exception & ex)
     {
-        LOG_ERR << "Exception of type " << TYPENAME(ex) << " thrown, reason: " << ex.what() << "\n";
+        LOG_ERR << "Exception of type " << TYPENAME(ex) << " thrown, reason: " << ex.what();
     }
 }
 

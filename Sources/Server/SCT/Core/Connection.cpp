@@ -1,6 +1,7 @@
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include <Common/RustedCodec/AsioWriteBuffer.hpp>
 #include <Common/RustedCodec/AsioReadBuffer.hpp>
-#include "Common/Logger/Logger.hpp"
 
 #include "Connection.hpp"
 
@@ -24,7 +25,7 @@ Connection::~Connection()
 
 void Connection::send(::Common::Messages::AbstractMessage & message)
 {
-    LOG_SCT << "Sending " << message << "\n";
+    LOG_INFO << "Sending " << message;
 
     ::Common::RustedCodec::AsioWriteBuffer buffer(*m_socket);
 
@@ -34,13 +35,13 @@ void Connection::send(::Common::Messages::AbstractMessage & message)
     }
     catch (...)
     {
-        LOG_SCT << "Server droped the connection\n";
+        LOG_WARN << "Server droped the connection";
     }
 }
 
 std::auto_ptr< AbstractMessage > Connection::receive()
 {
-    LOG_SCT << "Waiting for message...\n";
+    LOG_INFO << "Waiting for message...";
 
     Common::RustedCodec::AsioReadBuffer buffer(*m_socket);
     std::auto_ptr< AbstractMessage > message;
@@ -51,11 +52,11 @@ std::auto_ptr< AbstractMessage > Connection::receive()
     }
     catch (...)
     {
-        LOG_SCT << "Server droped the connection\n";
+        LOG_INFO << "Server droped the connection";
         throw;
     }
 
-    LOG_SCT << "Received " << *message << "\n";
+    LOG_INFO << "Received " << *message;
 
     return message;
 }

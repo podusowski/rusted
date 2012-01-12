@@ -1,18 +1,18 @@
 #pragma once
 
+#include <map>
 #include <iostream>
 #include <cstdlib>
 
 #include "Cake/DependencyInjection/Inject.hpp"
+#include "Cake/Configuration/Configuration.hpp"
 
 namespace Cake
 {
 namespace Diagnostics
 {
-namespace Logger
-{
 
-enum LogType
+enum LogLevel
 {
     DEBUG,
     INFO,
@@ -23,25 +23,34 @@ enum LogType
 class Logger
 {
 public:
-    static Logger & getSingleton();
+    static Logger & getInstance();
+    void setAppName(const std::string &);
     std::string demangle(const std::string & name);
+    std::ostream & log(LogLevel level, 
+                       const std::string & file, 
+                       unsigned line);
 
 private:
     Logger();
     Logger(const Logger &) {}
+
+    std::map<LogLevel, std::string> m_banners;
+    std::string m_appName;
 };
 
 }
 }
-}
+
+#define LOG(level) Cake::Diagnostics::Logger::getInstance().log(level, __FILE__, __LINE__)
 
 #ifndef LOF_INFO
 
-#define LOG_INFO  std::cout << "\n\033[1;34mINF\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
-#define LOG_ERR   std::cout << "\n\033[1;31mERR\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
-#define LOG_WARN  std::cout << "\n\033[1;33mWRN\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
-#define LOG_DEBUG std::cout << "\n\033[1;37mDBG\033[0m/" << __FILE__ << ":" << __LINE__ << ": "
-
-#define TYPENAME(t) Cake::Diagnostics::Logger::Logger::getSingleton().demangle(typeid(t).name())
+#define LOG_DEBUG LOG(Cake::Diagnostics::DEBUG)
+#define LOG_INFO LOG(Cake::Diagnostics::INFO)
+#define LOG_WARN LOG(Cake::Diagnostics::WARNING)
+#define LOG_ERR LOG(Cake::Diagnostics::ERROR)
 
 #endif
+
+#define TYPENAME(t) Cake::Diagnostics::Logger::Logger::getInstance().demangle(typeid(t).name())
+
