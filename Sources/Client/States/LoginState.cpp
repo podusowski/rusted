@@ -1,7 +1,8 @@
 #include <boost/bind.hpp>
 #include <boost/lexical_cast.hpp>
 
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Client/States/IState.hpp"
 #include "Client/States/LoginState.hpp"
 
@@ -41,7 +42,7 @@ void LoginState::frameStarted()
 
 bool LoginState::loginButtonClicked(const CEGUI::EventArgs &)
 {
-    LOG_INFO << "Login button clicked, let's make the connection!\n";
+    LOG_INFO << "Login button clicked, let's make the connection!";
     try
     {
         m_stateDeployment.deployNewConnection();
@@ -58,7 +59,7 @@ bool LoginState::loginButtonClicked(const CEGUI::EventArgs &)
     }
     catch (...)
     {
-        LOG_ERR << "Can't connect\n";
+        LOG_ERR << "Can't connect";
     }
     return true;
 }
@@ -67,14 +68,14 @@ void LoginState::loggedIn(bool success)
 {
     if (success)
     {
-        LOG_INFO << "Logged in!\n";
+        LOG_INFO << "Logged in";
         m_stateDeployment.deployAuthorizedConnection();
         m_rustedTimeService.synchronize();
         m_stateManagerStack.pushState(m_entitySelectState);
     }
     else
     {
-        LOG_WARN << "Server refused authorization, sorry.\n";
+        LOG_WARN << "Server refused authorization, sorry.";
     }
 }
 

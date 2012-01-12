@@ -8,6 +8,8 @@ MAKEDEP=$(CC) -MM $(CFLAGS) $< | \
 		sed "s!$*\.o!$(BUILD)/$(BUILDPREFIX)/$*.o!" \
 		> $(BUILD)/$(BUILDPREFIX)/$*.d
 
+		#&& mv $(BUILD)/$(BUILDPREFIX)/$*.d.candidate $(BUILD)/$(BUILDPREFIX)/$*.d
+
 -include $(DEPS)
 
 %.hpp: ;

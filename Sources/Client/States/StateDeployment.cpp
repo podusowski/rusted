@@ -1,4 +1,5 @@
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Client/States/StateDeployment.hpp"
 
 using namespace Client::States;
@@ -33,7 +34,7 @@ void StateDeployment::frameStarted()
 
 void StateDeployment::deployNewConnection()
 {
-    LOG_INFO << "Deploying new connection\n";
+    LOG_DEBUG << "Deploying new connection";
 
     m_connection.connect();
     m_connectionThread.start();
@@ -42,7 +43,7 @@ void StateDeployment::deployNewConnection()
 
 void StateDeployment::deployAuthorizedConnection()
 {
-    LOG_INFO << "Deploying authorized connection\n";
+    LOG_DEBUG << "Deploying authorized connection";
 
     m_connection.addListener(m_rustedTimeService);
     m_connection.addListener(m_entityService);

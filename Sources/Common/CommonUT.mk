@@ -15,7 +15,7 @@ SOURCES=UnitTests/mainUT.cpp \
         Game/UnitTests/RustedTimeTest.cpp \
 		Game/Utilities/UnitTests/PasswordHashTest.cpp \
 
-CFLAGS=-Wall -pedantic -g -I. -I.. -I/usr/include/libxml2
+CFLAGS=-Wall -pedantic -g -I. -I.. -I../External -I/usr/include/libxml2
 
 LDFLAGS=-L. -L$(BUILD) 
 LDFLAGS+=-lCommon 

@@ -5,7 +5,7 @@
 
 #include <iostream>
 
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
 #include <RustedCodec/SimpleWriteBuffer.hpp>
 #include <RustedCodec/SimpleReadBuffer.hpp>
 

@@ -12,7 +12,7 @@ def genHeader():
 		"#include <cppunit/TestFixture.h>\n"
 		"#include <cppunit/extensions/HelperMacros.h>\n\n"
 		"#include <iostream>\n\n"
-        "#include \"Common/Logger/Logger.hpp\"\n"
+        "#include \"Cake/Diagnostics/Logger.hpp\"\n"
 		"#include <RustedCodec/SimpleWriteBuffer.hpp>\n"
 		"#include <RustedCodec/SimpleReadBuffer.hpp>\n\n"
 		"#include <Messages/Messages.hpp>\n\n"

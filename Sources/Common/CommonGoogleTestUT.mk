@@ -9,9 +9,10 @@ SOURCES+=Game/UnitTests/UniverseLoaderTest.cpp
 CFLAGS=-Wall -pedantic -g -I. -I.. -I/usr/include/libxml2
 CFLAGS+=-I../External
 
-LDFLAGS=-L. -L$(BUILD) -lCommon -lpthread -lboost_system -lxml2 -lgtest -lgmock
+LDFLAGS=-L. -L$(BUILD) -lCommon -lCake -lpthread -lboost_system -lxml2 -lgtest -lgmock
 
 DEPENDENCIES+=libCommon.a
+DEPENDENCIES+=libCake.a
 
 include Makefile.leaf
 

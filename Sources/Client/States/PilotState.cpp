@@ -1,7 +1,6 @@
 #include <boost/bind.hpp>
 #include <OgreEntity.h>
 
-#include "Common/Logger/Logger.hpp"
 #include "Client/States/PilotState.hpp"
 
 using namespace Client::States;

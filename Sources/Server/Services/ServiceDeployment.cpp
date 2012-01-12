@@ -1,4 +1,5 @@
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Server/Services/ServiceDeployment.hpp"
 #include "Common/Game/UniverseLoader.hpp"
 
@@ -22,7 +23,7 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
 
 void ServiceDeployment::deployNewConnection(Server::Network::IConnection & connection)
 {
-    LOG_INFO << "Registering services for new connection\n";
+    LOG_INFO << "Registering services for new connection";
 
     connection.addListener(m_serverInfoService);
     connection.addListener(m_authorizationService);
@@ -30,7 +31,7 @@ void ServiceDeployment::deployNewConnection(Server::Network::IConnection & conne
 
 void ServiceDeployment::deployAuthorizedConnection(Server::Network::IConnection & connection)
 {
-    LOG_INFO << "Registering services for authorized connection\n";
+    LOG_INFO << "Registering services for authorized connection";
 
     connection.addListener(m_rustedTimeService);
     connection.addListener(m_playerService);

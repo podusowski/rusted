@@ -1,4 +1,5 @@
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Services/AuthorizationService.hpp"
 
 using namespace Client::Services;
@@ -21,7 +22,7 @@ void AuthorizationService::login(std::string login, std::string password, Logged
 
 void AuthorizationService::handle(const Common::Messages::ServerVersionResp & serverVersionResp)
 {
-    LOG_INFO << "Server reported version: " << serverVersionResp.version << "\n";
+    LOG_INFO << "Server reported version: " << serverVersionResp.version;
 
     if (!m_versionChecked)
     {
@@ -35,7 +36,8 @@ void AuthorizationService::handle(const Common::Messages::ServerVersionResp & se
 
 void AuthorizationService::handle(const Common::Messages::UserAuthorizationResp & userAuthorizationResp)
 {
-    LOG_INFO << "Received user authorization response (player id: " << userAuthorizationResp.player_id << "\n";
+    LOG_INFO << "Received user authorization response (player id: " << userAuthorizationResp.player_id;
+
     m_playerInfo.setId(userAuthorizationResp.player_id);
     m_loggedInCallback(userAuthorizationResp.success);
 }

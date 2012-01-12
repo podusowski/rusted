@@ -1,4 +1,5 @@
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Client/States/StateManager.hpp"
 
 using namespace Client::States;
@@ -9,7 +10,7 @@ void StateManager::frameStarted()
 {
     if (!m_currentState)
     {
-        LOG_ERR << "No state to execute, application is pointless\n";
+        LOG_ERR << "No state to execute, application is pointless";
         return;
     }
 
@@ -41,7 +42,7 @@ IState & StateManager::popState()
         }
         else
         {
-            LOG_WARN << "The last state was poped, we should close the application now, shouldn't we?\n";
+            LOG_WARN << "The last state was poped, we should close the application now, shouldn't we?";
         }
         return *state;
     }

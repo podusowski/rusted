@@ -1,6 +1,7 @@
 #include <fstream>
 
-#include "Common/Logger/Logger.hpp"
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Configuration.hpp"
 
 using namespace Common::Configuration;
@@ -20,18 +21,18 @@ Configuration::Configuration(int argc, const char * argv[])
 
 Configuration::Configuration()
 {
-    LOG_INFO << "Initializing empty configuration\n";
+    LOG_INFO << "Initializing empty configuration";
 }
 
 void Configuration::parse(const std::string & filename)
 {
-    LOG_INFO << "Parsing configuration file \"" << filename << "\"\n";
+    LOG_INFO << "Parsing configuration file \"" << filename << "\"";
 
     std::ifstream file(filename.c_str());
 
     if (!file.good())
     {
-        LOG_ERR << "There was error while opening configuration file, syntax might be wrong or file missing?\n";
+        LOG_ERR << "There was error while opening configuration file, syntax might be wrong or file missing?";
         return;
     }
 
@@ -96,12 +97,12 @@ void Configuration::parse(const std::string & filename)
             break;
         }    
     }
-    LOG_INFO << "Configuration file parsed\n";
+    LOG_INFO << "Configuration file parsed";
 }
 
 void Configuration::parse(int argc, const char * argv[])
 {
-    LOG_INFO << "Parsing program's cmd line\n";
+    LOG_INFO << "Parsing program's cmd line";
     std::map<std::string, std::string> cmdLineOptions;
 
     for (int i = 0; i < argc; i++)
@@ -109,7 +110,7 @@ void Configuration::parse(int argc, const char * argv[])
         if (argv[i][0] == '-' && i+1 < argc)
         {
             LOG_INFO << "  option: " << argv[i] <<
-                    ", value: " << argv[i+1] << "\n";
+                    ", value: " << argv[i+1];
             
             std::string name = argv[i];
             if (name == "--cfg")
