@@ -30,7 +30,7 @@ void StaticObjectView::frameStarted()
 
 void StaticObjectView::staticObjectAdded(Common::Game::Object::StaticObject & object)
 {
-    LOG_INFO << "New static object:" << object << "\n";
+    LOG_DEBUG << "New static object:" << object;
 
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
 
