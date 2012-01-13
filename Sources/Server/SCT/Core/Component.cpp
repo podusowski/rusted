@@ -40,13 +40,11 @@ void Component::setConfigValue(const std::string & name, const std::string & val
     m_cmdLineOptions[name] = value;
 }
 
-Connection & Component::createConnection()
+boost::shared_ptr<Connection> Component::createConnection()
 {
     LOG_INFO << "Creating new connection";
 
-    Connection * connection = new Connection("127.0.0.1", m_port);
-    m_connections.push_back(connection);
-    return *connection;
+    return boost::shared_ptr<Connection>(new Connection("127.0.0.1", m_port));
 }
 
 void Component::start()

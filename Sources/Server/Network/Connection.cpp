@@ -29,7 +29,8 @@ void Connection::addListener(IConnectionListener & listener)
 
 void Connection::send(::Common::Messages::AbstractMessage & message)
 {
-    LOG_DEBUG << "CON#" << m_id << " Sending: " << message;
+    LOG_DEBUG << "<connection:" << m_id << "> Sending: " << message;
+
     Common::RustedCodec::CakeWriteBuffer buffer(m_socket);
     message.serialize(buffer);
 }
@@ -40,9 +41,9 @@ void Connection::run()
 
     Common::RustedCodec::IReadBuffer * buffer = new Common::RustedCodec::CakeReadBuffer(m_socket);
 
-    while (true)
+    try
     {
-        try
+        while (true)
         {
             // FIXME: this is not thread safe!!
             // handle listeners operations
@@ -62,15 +63,14 @@ void Connection::run()
                 (*it)->messageReceived(*this, *message);
             }
         }
-        catch (std::exception & ex)
-        {
-            LOG_DEBUG << "Connection dropped (id: " << m_id << ", reason: " << ex.what() << ")";
-            break;
-        }
-        catch (...)
-        {
-            LOG_ERR << "Unknown exception was thrown";
-        }
+    }
+    catch (std::exception & ex)
+    {
+        LOG_DEBUG << "Connection dropped (id: " << m_id << ", reason: " << ex.what() << ")";
+    }
+    catch (...)
+    {
+        LOG_ERR << "Unknown exception was thrown";
     }
 }
 

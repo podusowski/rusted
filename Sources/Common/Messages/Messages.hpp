@@ -3,7 +3,7 @@
 #ifndef COMMON_MESSAGES_HPP
 #define COMMON_MESSAGES_HPP
 
-#include <exception>
+#include <stdexcept>
 #include <vector>
 #include <string>
 #include <ostream>
@@ -613,7 +613,7 @@ public:
 					>> static_cast<StaticObjectInfoResp *>(message.get())->z
 				;
 				break;
-			default: throw std::exception();
+			default: throw std::runtime_error("unknown message id");
 		}
 		return message;
 	}

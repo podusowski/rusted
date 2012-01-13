@@ -23,7 +23,7 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
 
 void ServiceDeployment::deployNewConnection(Server::Network::IConnection & connection)
 {
-    LOG_INFO << "Registering services for new connection";
+    LOG_DEBUG << "Registering services for new connection";
 
     connection.addListener(m_serverInfoService);
     connection.addListener(m_authorizationService);
@@ -31,7 +31,7 @@ void ServiceDeployment::deployNewConnection(Server::Network::IConnection & conne
 
 void ServiceDeployment::deployAuthorizedConnection(Server::Network::IConnection & connection)
 {
-    LOG_INFO << "Registering services for authorized connection";
+    LOG_DEBUG << "Registering services for authorized connection";
 
     connection.addListener(m_rustedTimeService);
     connection.addListener(m_playerService);

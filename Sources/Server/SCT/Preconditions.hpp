@@ -20,15 +20,14 @@ public:
         component.setConfigValue("--database.provider", "xml");
         component.setConfigValue("--database.xml.filename", dbFile);
         component.start();
-        SCT::Connection & connection = component.createConnection();
-        m_connection = &connection;
+        m_connection = component.createConnection();
 
         UserAuthorizationReq userAuthorizationReq;
         userAuthorizationReq.login = "user1";
         userAuthorizationReq.password = "password";
-        connection.send(userAuthorizationReq);
+        m_connection->send(userAuthorizationReq);
 
-        std::auto_ptr<AbstractMessage> userAuthorizationResp = connection.receive();
+        std::auto_ptr<AbstractMessage> userAuthorizationResp = m_connection->receive();
         assert(Id::UserAuthorizationResp == userAuthorizationResp->getId());
     }
 
@@ -37,7 +36,7 @@ public:
 
 private:
     std::auto_ptr<SCT::Component> m_component;
-    SCT::Connection * m_connection;
+    boost::shared_ptr<SCT::Connection> m_connection;
 };
 
 }

@@ -1,6 +1,4 @@
 #include <stdexcept>
-#include <boost/asio.hpp>
-#include <boost/foreach.hpp>
 #include <boost/lexical_cast.hpp>
 
 #include <signal.h>
@@ -15,6 +13,7 @@ using namespace Server::Network;
 ConnectionDeployment::ConnectionDeployment(unsigned id, 
                                            boost::shared_ptr<Cake::Networking::Socket> socket, 
                                            Services::IServiceDeployment & serviceDeployment) :
+    m_id(id),
     m_socket(socket),
     m_connection(id, *socket, serviceDeployment),
     m_thread(m_connection)
@@ -42,13 +41,14 @@ int ServerController::start()
 {
     int tcpPort = m_cfg.getValue<int>("network.port");
 
-    LOG_INFO << "I will listen on TCP/" << tcpPort << "\n";
+    LOG_INFO << "I will listen on TCP/" << tcpPort;
 
     boost::shared_ptr<Cake::Networking::ServerSocket> server =
         Cake::Networking::ServerSocket::createTcpServer(tcpPort);
 
     while (true)
     {
+        gc();
         boost::shared_ptr<Cake::Networking::Socket> socket = server->accept();
 
         LOG_DEBUG << "New connection established";
@@ -58,16 +58,30 @@ int ServerController::start()
         connection->getThread().start();
     }
 
-    LOG_INFO << "Server is done.\n";
+    LOG_INFO << "Server is done";
 
 	return 0;
+}
+
+void ServerController::gc()
+{
+    for (std::vector<boost::shared_ptr<ConnectionDeployment> >::iterator it = m_connections.begin(); 
+         it != m_connections.end(); it++)
+    {
+        if (not (*it)->getThread().isRunning())
+        {
+            LOG_DEBUG << "Collecting innactive connection: " << (*it)->getId();
+
+            it = m_connections.erase(it);
+        }
+    }
 }
 
 void ServerController::handleSignal(int signum)
 {
 	if (signum == 15)
 	{
-		LOG_WARN << "SIGINT catched\n";
+		LOG_WARN << "SIGINT catched";
 	}
 }
 

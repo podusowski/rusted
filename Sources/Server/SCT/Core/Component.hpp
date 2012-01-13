@@ -1,9 +1,9 @@
 #pragma once
 
 #include <unistd.h>
-
 #include <string>
 #include <vector>
+#include <boost/shared_ptr.hpp>
 
 #include "Connection.hpp"
 
@@ -18,10 +18,9 @@ public:
 	~Component();
     void setConfigValue(const std::string & name, const std::string & value);
     void start();
-	Connection & createConnection();
+	boost::shared_ptr<Connection> createConnection();
 
 private:
-	std::vector<Connection *> m_connections;
 	pid_t m_pid;
 	int m_port;
     std::string m_cfg;

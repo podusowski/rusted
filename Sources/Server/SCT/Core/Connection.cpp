@@ -20,6 +20,8 @@ Connection::Connection(const std::string & addr, unsigned port)
 
 Connection::~Connection()
 {
+    LOG_INFO << "Closing connection";
+
     m_socket->close();
 }
 
