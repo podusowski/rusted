@@ -5,6 +5,7 @@ CFLAGS+=-I. -I..
 SOURCES+=Configuration/Configuration.cpp
 
 SOURCES+=Diagnostics/Logger.cpp
+SOURCES+=Diagnostics/LogMessage.cpp
 
 SOURCES+=Threading/Mutex.cpp
 SOURCES+=Threading/ConditionVariable.cpp

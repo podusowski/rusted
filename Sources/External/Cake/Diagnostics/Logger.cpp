@@ -44,20 +44,21 @@ LogMessage Logger::log(LogLevel level,
 std::string Logger::generateHeader(LogLevel level, const std::string & file, unsigned line)
 {
     std::string file2 = file;
-    const unsigned max_file_length = 30;
+    const unsigned max_file_length = 20;
 
     if (file.length() > max_file_length)
     {
         file2 = ".." + file.substr(file.length() - max_file_length + 2, max_file_length - 2);
     }
 
+    std::stringstream fileWithLine;
+    fileWithLine << file2 << ":" << line;
+
     std::stringstream ss;
     ss  
         << std::setw(10) << std::setiosflags(std::ios::right) << m_appName << " "
         << m_banners[level] << " "
-        << std::setw(max_file_length) << std::setiosflags(std::ios::right) << file2
-        << ":"
-        << std::setiosflags(std::ios::left) << line
+        << std::setw(max_file_length + 5) << std::setiosflags(std::ios::right) << fileWithLine.str() 
         << ": ";
     return ss.str();
 }
