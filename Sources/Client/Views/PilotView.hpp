@@ -4,7 +4,8 @@
 
 #include "Client/Views/IView.hpp"
 #include "Client/Graphics/IGraphics.hpp"
-#include "Client/Input/Input.hpp"
+#include "Client/Input/IInput.hpp"
+#include "Gui/Gui.hpp" 
 #include "Client/Graphics/OgreObject.hpp"
 #include "Client/Services/EntityService.hpp"
 
@@ -18,7 +19,7 @@ class PilotView : public IView,
 {
 public:
     PilotView(Graphics::IGraphics &, 
-              Input::Input &, 
+              Input::IInput &, 
               Services::EntityService &,
               Gui::Gui &);
 
@@ -35,7 +36,7 @@ public:
 
 private:
     Graphics::IGraphics & m_graphics;
-    Input::Input & m_input;
+    Input::IInput & m_input;
     Services::EntityService & m_entityService;
     Gui::Gui & m_gui;
     boost::scoped_ptr<Graphics::OgreObject> m_entityObject;

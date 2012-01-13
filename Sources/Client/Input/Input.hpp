@@ -7,16 +7,16 @@
 #include <OgreRenderWindow.h>
 #include <OgreRoot.h>
 
-#include "Gui/CEGUIIncludes.hpp"
 #include "Gui/Gui.hpp"
-#include "Client/Input/IMouseListener.hpp"
+#include "Input/IMouseListener.hpp"
+#include "IInput.hpp"
 
 namespace Client
 {
 namespace Input
 {
 
-class Input : public OIS::MouseListener, public OIS::KeyListener
+class Input : public IInput, public OIS::MouseListener, public OIS::KeyListener
 {
 public:
     Input(Ogre::RenderWindow &, Client::Gui::Gui &);

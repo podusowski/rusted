@@ -6,7 +6,7 @@
 using namespace Client::Views;
 
 PilotView::PilotView(Graphics::IGraphics & graphics, 
-                     Input::Input & input, 
+                     Input::IInput & input, 
                      Services::EntityService & entityService,
                      Client::Gui::Gui & gui) :
     m_graphics(graphics),

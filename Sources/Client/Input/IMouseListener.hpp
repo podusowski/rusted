@@ -1,5 +1,7 @@
 #pragma once
 
+#include <OIS/OISMouse.h>
+
 namespace Client
 {
 namespace Input
