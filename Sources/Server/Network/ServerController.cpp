@@ -46,16 +46,23 @@ int ServerController::start()
     boost::shared_ptr<Cake::Networking::ServerSocket> server =
         Cake::Networking::ServerSocket::createTcpServer(tcpPort);
 
-    while (true)
+    try
     {
-        gc();
-        boost::shared_ptr<Cake::Networking::Socket> socket = server->accept();
+        while (true)
+        {
+            gc();
+            boost::shared_ptr<Cake::Networking::Socket> socket = server->accept();
 
-        LOG_DEBUG << "New connection established";
+            LOG_DEBUG << "New connection established";
 
-        boost::shared_ptr<ConnectionDeployment> connection(new ConnectionDeployment(m_lastConnectionId++, socket, m_serviceDeployment));
-        m_connections.push_back(connection);
-        connection->getThread().start();
+            boost::shared_ptr<ConnectionDeployment> connection(new ConnectionDeployment(m_lastConnectionId++, socket, m_serviceDeployment));
+            m_connections.push_back(connection);
+            connection->getThread().start();
+        }
+    }
+    catch (std::exception & ex)
+    {
+        LOG_WARN << "Server is shutting down, reason: " << ex.what();
     }
 
     LOG_INFO << "Server is done";

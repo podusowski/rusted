@@ -56,7 +56,7 @@ void Connection::run()
             // receive message
             std::auto_ptr< AbstractMessage > message = MessageFactory::create(*buffer);
 
-            LOG_DEBUG << "CON#" << m_id << " Received: " << *message;
+            LOG_DEBUG << "<connection:" << m_id << "> Received: " << *message;
 
             for (std::vector< IConnectionListener * >::iterator it = m_listeners.begin(); it != m_listeners.end(); it++)
             {
