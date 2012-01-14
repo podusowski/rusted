@@ -1,6 +1,4 @@
 #include <stdexcept>
-#include <boost/lexical_cast.hpp>
-
 #include <signal.h>
 
 #include "Cake/Diagnostics/Logger.hpp"

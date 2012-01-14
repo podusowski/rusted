@@ -23,7 +23,8 @@ void Connection::addListener(IConnectionListener & listener)
 {
     LOG_DEBUG << "Adding " << TYPENAME(listener) << " as message handler for connection: " << m_id;
 
-    // TODO: this method can be called from different thread
+    // this method can be called in loop where listeners are notified about message,
+    // and we don't want to modify collection during its iteration
     m_listenersToAdd.push_back(&listener);
 }
 
@@ -45,7 +46,6 @@ void Connection::run()
     {
         while (true)
         {
-            // FIXME: this is not thread safe!!
             // handle listeners operations
             BOOST_FOREACH( IConnectionListener * listener, m_listenersToAdd )
             {
