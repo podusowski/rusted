@@ -1,6 +1,7 @@
 #include <cxxabi.h>
 #include <iomanip>
 
+#include "Cake/Threading/Thread.hpp"
 #include "Logger.hpp"
 
 using namespace Cake::Diagnostics;
@@ -56,10 +57,11 @@ std::string Logger::generateHeader(LogLevel level, const std::string & file, uns
 
     std::stringstream ss;
     ss  
-        << std::setw(10) << std::setiosflags(std::ios::right) << m_appName << " "
-        << m_banners[level] << " "
-        << std::setw(max_file_length + 5) << std::setiosflags(std::ios::right) << fileWithLine.str() 
-        << ": ";
+        << std::setw(10) << std::setiosflags(std::ios::right) << m_appName << "("
+        << "t:" << Cake::Threading::Thread::self() << ") "
+        << std::setw(max_file_length + 4) << std::setiosflags(std::ios::right) << fileWithLine.str() 
+        << " "
+        << m_banners[level] << " ";
     return ss.str();
 }
 
