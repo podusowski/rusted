@@ -2,20 +2,19 @@ APPNAME=Client
 
 SOURCES+=main.cpp
 
-LDFLAGS= \
-	-L$(BUILD) \
-	-L../External/CEGUI-0.7.5/cegui/src/.libs/ \
-	-L../External/CEGUI-0.7.5/cegui/src/RendererModules/Ogre/.libs/ \
-	-lClient \
-	-lOgreMain \
-	-lCEGUIBase \
-	-lCEGUIOgreRenderer \
-	-lOIS \
-	-lCommon \
-	-lCake \
-	-lpthread \
-	-lboost_system \
-	-lxml2 
+LDFLAGS+=-L$(BUILD)
+LDFLAGS+=-L../External/CEGUI-0.7.5/cegui/src/.libs/
+LDFLAGS+=-L../External/CEGUI-0.7.5/cegui/src/RendererModules/Ogre/.libs/
+LDFLAGS+=-lClient
+LDFLAGS+=-lOgreMain
+LDFLAGS+=-lCEGUIBase
+LDFLAGS+=-lCEGUIOgreRenderer
+LDFLAGS+=-lOIS
+LDFLAGS+=-lCommon
+LDFLAGS+=-lCake
+LDFLAGS+=-lpthread
+LDFLAGS+=-lboost_system
+LDFLAGS+=-lxml2 
 
 CFLAGS+=-I../ -I. 
 CFLAGS+=-I../Common 

@@ -11,7 +11,7 @@
 #include "Common/Game/Object/Ship.hpp"
 
 #include "Client/Network/IConnectionListener.hpp"
-#include "Client/Network/Connection.hpp"
+#include "Client/Network/IConnection.hpp"
 #include "Client/Game/PlayerInfo.hpp"
 #include "Client/Services/AbstractService.hpp"
 
@@ -25,7 +25,7 @@ class EntityService : public AbstractService<EntityService>
 public:
     typedef boost::function<void()> MyEntitiesFetchedCallback;
 
-    EntityService(Network::Connection &, Game::PlayerInfo &, Common::Game::Universe &);
+    EntityService(Network::IConnection &, Game::PlayerInfo &, Common::Game::Universe &);
 
     void fetchMyEntitiesInfo(MyEntitiesFetchedCallback);
     void setCurrentEntity(Common::Game::Object::Ship &);
@@ -38,7 +38,7 @@ public:
 
 private:
     Client::Game::PlayerInfo & m_playerInfo;
-    Client::Network::Connection & m_connection;
+    Client::Network::IConnection & m_connection;
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     Common::Game::Universe & m_universe;
 

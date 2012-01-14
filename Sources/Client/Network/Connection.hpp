@@ -5,6 +5,7 @@
 
 #include "Common/IRunnable.hpp"
 #include "Common/Configuration/Configuration.hpp"
+#include "IConnection.hpp"
 #include "IConnectionListener.hpp"
 
 using boost::asio::ip::tcp;
@@ -19,7 +20,7 @@ namespace Network
  *
  * Class is implementing listener pattern to inform about incoming messages.
  */
-class Connection : public Common::IRunnable
+class Connection : public IConnection, public Common::IRunnable
 {
 public:
     Connection(Common::Configuration::Configuration & cfg);

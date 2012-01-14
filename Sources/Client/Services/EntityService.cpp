@@ -5,7 +5,7 @@
 
 using namespace Client::Services;
 
-EntityService::EntityService(Network::Connection & connection, 
+EntityService::EntityService(Network::IConnection & connection, 
                              Game::PlayerInfo & playerInfo,
                              Common::Game::Universe & universe) :
     m_playerInfo(playerInfo),

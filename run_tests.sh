@@ -11,7 +11,7 @@ function run_test()
 
     stdout=`tempfile`
     stderr=`tempfile`
-    ./$test_name > $stdout 2> $stderr
+    LD_LIBRARY_PATH=. ./$test_name > $stdout 2> $stderr
     if [ "$?" = "0" ]; then
         echo -n "pass "
     else
