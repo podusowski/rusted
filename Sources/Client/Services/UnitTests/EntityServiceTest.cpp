@@ -28,7 +28,7 @@ TEST_F(EntityServiceTest, EntityGetInfoResp)
 
     Client::Services::EntityService entityService(connection, playerInfo, universe);
 
-    Common::Messages::EntityGetInfoResp entityGetInfoResp;
+    Common::Messages::ShipInfo entityGetInfoResp;
     entityGetInfoResp.id = 1;
     entityGetInfoResp.player_id = 2;
     entityGetInfoResp.x = 1;

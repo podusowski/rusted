@@ -13,13 +13,13 @@ void EntityService::handle(const Common::Messages::EntityGetInfoReq & getInfoReq
 {
     Common::Game::Object::ObjectBase & ship = m_universe.getById<Common::Game::Object::Ship>(getInfoReq.id);
     Common::Point3<int> position = ship.getPosition();
-    Common::Messages::EntityGetInfoResp getInfoResp;
-    getInfoResp.id = getInfoReq.id;
-    getInfoResp.player_id = dynamic_cast<Common::Game::Object::Ship&>(ship).getOwnerId();
-    getInfoResp.x = position.getX();
-    getInfoResp.y = position.getY();
-    getInfoResp.z = position.getZ();
-    connection.send(getInfoResp);
+    Common::Messages::ShipInfo shipInfo;
+    shipInfo.id = getInfoReq.id;
+    shipInfo.player_id = dynamic_cast<Common::Game::Object::Ship&>(ship).getOwnerId();
+    shipInfo.x = position.getX();
+    shipInfo.y = position.getY();
+    shipInfo.z = position.getZ();
+    connection.send(shipInfo);
 }
 
 void EntityService::handle(const Common::Messages::EntityChangeCourseReq & changeCourseReq, Network::IConnection &)

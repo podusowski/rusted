@@ -51,7 +51,7 @@ entity
 	<param type="int32" name="id" />
 </message>
 
-<message id="EntityGetInfoResp">
+<message id="ShipInfo">
 	<param type="int32" name="id" />
 	<param type="int32" name="player_id" description="id of the player owning this entity" />
 	<param type="int32" name="x" />

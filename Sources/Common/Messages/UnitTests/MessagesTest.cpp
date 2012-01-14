@@ -25,7 +25,7 @@ class MessagesTest : public CPPUNIT_NS::TestFixture
 	CPPUNIT_TEST (testMessage_PlayerEntitiesStatusReq);
 	CPPUNIT_TEST (testMessage_PlayerEntitiesStatusResp);
 	CPPUNIT_TEST (testMessage_EntityGetInfoReq);
-	CPPUNIT_TEST (testMessage_EntityGetInfoResp);
+	CPPUNIT_TEST (testMessage_ShipInfo);
 	CPPUNIT_TEST (testMessage_EntityChangeCourseReq);
 	CPPUNIT_TEST (testMessage_StaticObjectStatusReq);
 	CPPUNIT_TEST (testMessage_StaticObjectStatusResp);
@@ -45,7 +45,7 @@ protected:
 	void testMessage_PlayerEntitiesStatusReq();
 	void testMessage_PlayerEntitiesStatusResp();
 	void testMessage_EntityGetInfoReq();
-	void testMessage_EntityGetInfoResp();
+	void testMessage_ShipInfo();
 	void testMessage_EntityChangeCourseReq();
 	void testMessage_StaticObjectStatusReq();
 	void testMessage_StaticObjectStatusResp();
@@ -305,14 +305,14 @@ void MessagesTest::testMessage_EntityGetInfoReq()
 	CPPUNIT_ASSERT(inMessage.id == dynamic_cast<EntityGetInfoReq *>(outMessage.get())->id);
 }
 
-void MessagesTest::testMessage_EntityGetInfoResp()
+void MessagesTest::testMessage_ShipInfo()
 {
 	using ::Common::RustedCodec::SimpleWriteBuffer;
 	using ::Common::RustedCodec::SimpleReadBuffer;
 	using ::Common::Messages::AbstractMessage;
-	using ::Common::Messages::EntityGetInfoResp;
+	using ::Common::Messages::ShipInfo;
 
-	EntityGetInfoResp inMessage;
+	ShipInfo inMessage;
 	inMessage.id = 0xf00d;
 	inMessage.player_id = 0xf00d;
 	inMessage.x = 0xf00d;
@@ -326,14 +326,14 @@ void MessagesTest::testMessage_EntityGetInfoResp()
 	SimpleReadBuffer read_buf(raw_buf);
 	std::auto_ptr<AbstractMessage> outMessage = ::Common::Messages::MessageFactory::create(read_buf);
 
-	CPPUNIT_ASSERT(0 != dynamic_cast<EntityGetInfoResp *>(outMessage.get()));
-	CPPUNIT_ASSERT_EQUAL(::Common::Messages::Id::EntityGetInfoResp, outMessage->getId());
-	LOG_INFO << *dynamic_cast<EntityGetInfoResp *>(outMessage.get());
-	CPPUNIT_ASSERT(inMessage.id == dynamic_cast<EntityGetInfoResp *>(outMessage.get())->id);
-	CPPUNIT_ASSERT(inMessage.player_id == dynamic_cast<EntityGetInfoResp *>(outMessage.get())->player_id);
-	CPPUNIT_ASSERT(inMessage.x == dynamic_cast<EntityGetInfoResp *>(outMessage.get())->x);
-	CPPUNIT_ASSERT(inMessage.y == dynamic_cast<EntityGetInfoResp *>(outMessage.get())->y);
-	CPPUNIT_ASSERT(inMessage.z == dynamic_cast<EntityGetInfoResp *>(outMessage.get())->z);
+	CPPUNIT_ASSERT(0 != dynamic_cast<ShipInfo *>(outMessage.get()));
+	CPPUNIT_ASSERT_EQUAL(::Common::Messages::Id::ShipInfo, outMessage->getId());
+	LOG_INFO << *dynamic_cast<ShipInfo *>(outMessage.get());
+	CPPUNIT_ASSERT(inMessage.id == dynamic_cast<ShipInfo *>(outMessage.get())->id);
+	CPPUNIT_ASSERT(inMessage.player_id == dynamic_cast<ShipInfo *>(outMessage.get())->player_id);
+	CPPUNIT_ASSERT(inMessage.x == dynamic_cast<ShipInfo *>(outMessage.get())->x);
+	CPPUNIT_ASSERT(inMessage.y == dynamic_cast<ShipInfo *>(outMessage.get())->y);
+	CPPUNIT_ASSERT(inMessage.z == dynamic_cast<ShipInfo *>(outMessage.get())->z);
 }
 
 void MessagesTest::testMessage_EntityChangeCourseReq()

@@ -43,7 +43,7 @@ TEST_F(SctBasicEntitiesOperations, testEntityChangeCourseReq)
     SCT::Connection & connection = precondition.getConnection();
 
     std::auto_ptr<Common::Messages::AbstractMessage> entityGetInfoRespA = procedureEntityGetInfo(connection, 1);
-    Common::Messages::EntityGetInfoResp & entitiesGetInfoResp = dynamic_cast<Common::Messages::EntityGetInfoResp&>(*entityGetInfoRespA);
+    Common::Messages::ShipInfo & entitiesGetInfoResp = dynamic_cast<Common::Messages::ShipInfo&>(*entityGetInfoRespA);
     EXPECT_TRUE(1 == entitiesGetInfoResp.player_id);
     EXPECT_TRUE(1 == entitiesGetInfoResp.x);
     EXPECT_TRUE(1 == entitiesGetInfoResp.y);
@@ -54,7 +54,7 @@ TEST_F(SctBasicEntitiesOperations, testEntityChangeCourseReq)
     Common::Thread::wait(2.0);
 
     std::auto_ptr<Common::Messages::AbstractMessage> entityGetInfoRespA2 = procedureEntityGetInfo(connection, 1);
-    Common::Messages::EntityGetInfoResp & entitiesGetInfoResp2 = dynamic_cast<Common::Messages::EntityGetInfoResp&>(*entityGetInfoRespA2);
+    Common::Messages::ShipInfo & entitiesGetInfoResp2 = dynamic_cast<Common::Messages::ShipInfo&>(*entityGetInfoRespA2);
     EXPECT_TRUE(1 == entitiesGetInfoResp2.player_id);
     EXPECT_TRUE(2 == entitiesGetInfoResp2.x);
     EXPECT_TRUE(1 == entitiesGetInfoResp2.y);
@@ -70,10 +70,10 @@ std::auto_ptr<Common::Messages::AbstractMessage> SctBasicEntitiesOperations::pro
 
     connection.send(entityGetInfoReq);
 
-    std::auto_ptr<Common::Messages::AbstractMessage> entityGetInfoResp = connection.receive();
-    EXPECT_TRUE(Common::Messages::Id::EntityGetInfoResp == entityGetInfoResp->getId());
+    std::auto_ptr<Common::Messages::AbstractMessage> shipInfo = connection.receive();
+    EXPECT_TRUE(Common::Messages::Id::ShipInfo == shipInfo->getId());
 
-    return entityGetInfoResp;
+    return shipInfo;
 }
 
 void SctBasicEntitiesOperations::procedureEntityChangeCourse(

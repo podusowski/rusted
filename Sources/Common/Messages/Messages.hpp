@@ -35,7 +35,7 @@ enum Messages
 	PlayerEntitiesStatusReq,
 	PlayerEntitiesStatusResp,
 	EntityGetInfoReq,
-	EntityGetInfoResp,
+	ShipInfo,
 	EntityChangeCourseReq,
 	StaticObjectStatusReq,
 	StaticObjectStatusResp,
@@ -325,9 +325,9 @@ inline std::ostream & operator<<(std::ostream & os, const EntityGetInfoReq & msg
 	return os;
 }
 
-struct EntityGetInfoResp : public AbstractMessage
+struct ShipInfo : public AbstractMessage
 {
-	Id::Messages getId() const { return Id::EntityGetInfoResp; }
+	Id::Messages getId() const { return Id::ShipInfo; }
 	int id;
 	int player_id;
 	int x;
@@ -338,7 +338,7 @@ struct EntityGetInfoResp : public AbstractMessage
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
-			<< Id::EntityGetInfoResp
+			<< Id::ShipInfo
 			<< id
 			<< player_id
 			<< x
@@ -350,10 +350,10 @@ struct EntityGetInfoResp : public AbstractMessage
 };
 
 
-inline std::ostream & operator<<(std::ostream & os, const EntityGetInfoResp & msg)
+inline std::ostream & operator<<(std::ostream & os, const ShipInfo & msg)
 {
 	os
-		<< "EntityGetInfoResp\n{\n"		<< "  id: " << msg.id << "\n"
+		<< "ShipInfo\n{\n"		<< "  id: " << msg.id << "\n"
 		<< "  player_id: " << msg.player_id << "\n"
 		<< "  x: " << msg.x << "\n"
 		<< "  y: " << msg.y << "\n"
@@ -570,14 +570,14 @@ public:
 					>> static_cast<EntityGetInfoReq *>(message.get())->id
 				;
 				break;
-			case Id::EntityGetInfoResp:
-				message.reset(new EntityGetInfoResp());
+			case Id::ShipInfo:
+				message.reset(new ShipInfo());
 				decoder
-					>> static_cast<EntityGetInfoResp *>(message.get())->id
-					>> static_cast<EntityGetInfoResp *>(message.get())->player_id
-					>> static_cast<EntityGetInfoResp *>(message.get())->x
-					>> static_cast<EntityGetInfoResp *>(message.get())->y
-					>> static_cast<EntityGetInfoResp *>(message.get())->z
+					>> static_cast<ShipInfo *>(message.get())->id
+					>> static_cast<ShipInfo *>(message.get())->player_id
+					>> static_cast<ShipInfo *>(message.get())->x
+					>> static_cast<ShipInfo *>(message.get())->y
+					>> static_cast<ShipInfo *>(message.get())->z
 				;
 				break;
 			case Id::EntityChangeCourseReq:
@@ -639,7 +639,7 @@ public:
 			case Id::PlayerEntitiesStatusReq: m_handler.handle( static_cast<const PlayerEntitiesStatusReq &>(message)); break;
 			case Id::PlayerEntitiesStatusResp: m_handler.handle( static_cast<const PlayerEntitiesStatusResp &>(message)); break;
 			case Id::EntityGetInfoReq: m_handler.handle( static_cast<const EntityGetInfoReq &>(message)); break;
-			case Id::EntityGetInfoResp: m_handler.handle( static_cast<const EntityGetInfoResp &>(message)); break;
+			case Id::ShipInfo: m_handler.handle( static_cast<const ShipInfo &>(message)); break;
 			case Id::EntityChangeCourseReq: m_handler.handle( static_cast<const EntityChangeCourseReq &>(message)); break;
 			case Id::StaticObjectStatusReq: m_handler.handle( static_cast<const StaticObjectStatusReq &>(message)); break;
 			case Id::StaticObjectStatusResp: m_handler.handle( static_cast<const StaticObjectStatusResp &>(message)); break;
@@ -673,7 +673,7 @@ public:
 			case Id::PlayerEntitiesStatusReq: m_handler.handle( static_cast<const PlayerEntitiesStatusReq &>(message), p0); break;
 			case Id::PlayerEntitiesStatusResp: m_handler.handle( static_cast<const PlayerEntitiesStatusResp &>(message), p0); break;
 			case Id::EntityGetInfoReq: m_handler.handle( static_cast<const EntityGetInfoReq &>(message), p0); break;
-			case Id::EntityGetInfoResp: m_handler.handle( static_cast<const EntityGetInfoResp &>(message), p0); break;
+			case Id::ShipInfo: m_handler.handle( static_cast<const ShipInfo &>(message), p0); break;
 			case Id::EntityChangeCourseReq: m_handler.handle( static_cast<const EntityChangeCourseReq &>(message), p0); break;
 			case Id::StaticObjectStatusReq: m_handler.handle( static_cast<const StaticObjectStatusReq &>(message), p0); break;
 			case Id::StaticObjectStatusResp: m_handler.handle( static_cast<const StaticObjectStatusResp &>(message), p0); break;
@@ -707,7 +707,7 @@ public:
 			case Id::PlayerEntitiesStatusReq: m_handler.handle( static_cast<const PlayerEntitiesStatusReq &>(message), p0, p1); break;
 			case Id::PlayerEntitiesStatusResp: m_handler.handle( static_cast<const PlayerEntitiesStatusResp &>(message), p0, p1); break;
 			case Id::EntityGetInfoReq: m_handler.handle( static_cast<const EntityGetInfoReq &>(message), p0, p1); break;
-			case Id::EntityGetInfoResp: m_handler.handle( static_cast<const EntityGetInfoResp &>(message), p0, p1); break;
+			case Id::ShipInfo: m_handler.handle( static_cast<const ShipInfo &>(message), p0, p1); break;
 			case Id::EntityChangeCourseReq: m_handler.handle( static_cast<const EntityChangeCourseReq &>(message), p0, p1); break;
 			case Id::StaticObjectStatusReq: m_handler.handle( static_cast<const StaticObjectStatusReq &>(message), p0, p1); break;
 			case Id::StaticObjectStatusResp: m_handler.handle( static_cast<const StaticObjectStatusResp &>(message), p0, p1); break;
@@ -741,7 +741,7 @@ public:
 			case Id::PlayerEntitiesStatusReq: m_handler.handle( static_cast<const PlayerEntitiesStatusReq &>(message), p0, p1, p2); break;
 			case Id::PlayerEntitiesStatusResp: m_handler.handle( static_cast<const PlayerEntitiesStatusResp &>(message), p0, p1, p2); break;
 			case Id::EntityGetInfoReq: m_handler.handle( static_cast<const EntityGetInfoReq &>(message), p0, p1, p2); break;
-			case Id::EntityGetInfoResp: m_handler.handle( static_cast<const EntityGetInfoResp &>(message), p0, p1, p2); break;
+			case Id::ShipInfo: m_handler.handle( static_cast<const ShipInfo &>(message), p0, p1, p2); break;
 			case Id::EntityChangeCourseReq: m_handler.handle( static_cast<const EntityChangeCourseReq &>(message), p0, p1, p2); break;
 			case Id::StaticObjectStatusReq: m_handler.handle( static_cast<const StaticObjectStatusReq &>(message), p0, p1, p2); break;
 			case Id::StaticObjectStatusResp: m_handler.handle( static_cast<const StaticObjectStatusResp &>(message), p0, p1, p2); break;
@@ -775,7 +775,7 @@ public:
 			case Id::PlayerEntitiesStatusReq: m_handler.handle( static_cast<const PlayerEntitiesStatusReq &>(message), p0, p1, p2, p3); break;
 			case Id::PlayerEntitiesStatusResp: m_handler.handle( static_cast<const PlayerEntitiesStatusResp &>(message), p0, p1, p2, p3); break;
 			case Id::EntityGetInfoReq: m_handler.handle( static_cast<const EntityGetInfoReq &>(message), p0, p1, p2, p3); break;
-			case Id::EntityGetInfoResp: m_handler.handle( static_cast<const EntityGetInfoResp &>(message), p0, p1, p2, p3); break;
+			case Id::ShipInfo: m_handler.handle( static_cast<const ShipInfo &>(message), p0, p1, p2, p3); break;
 			case Id::EntityChangeCourseReq: m_handler.handle( static_cast<const EntityChangeCourseReq &>(message), p0, p1, p2, p3); break;
 			case Id::StaticObjectStatusReq: m_handler.handle( static_cast<const StaticObjectStatusReq &>(message), p0, p1, p2, p3); break;
 			case Id::StaticObjectStatusResp: m_handler.handle( static_cast<const StaticObjectStatusResp &>(message), p0, p1, p2, p3); break;
@@ -805,7 +805,7 @@ inline std::ostream & operator<<(std::ostream & os, const AbstractMessage & msg)
 		case Id::PlayerEntitiesStatusReq: os << static_cast<const PlayerEntitiesStatusReq &>(msg); break;
 		case Id::PlayerEntitiesStatusResp: os << static_cast<const PlayerEntitiesStatusResp &>(msg); break;
 		case Id::EntityGetInfoReq: os << static_cast<const EntityGetInfoReq &>(msg); break;
-		case Id::EntityGetInfoResp: os << static_cast<const EntityGetInfoResp &>(msg); break;
+		case Id::ShipInfo: os << static_cast<const ShipInfo &>(msg); break;
 		case Id::EntityChangeCourseReq: os << static_cast<const EntityChangeCourseReq &>(msg); break;
 		case Id::StaticObjectStatusReq: os << static_cast<const StaticObjectStatusReq &>(msg); break;
 		case Id::StaticObjectStatusResp: os << static_cast<const StaticObjectStatusResp &>(msg); break;

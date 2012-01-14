@@ -33,7 +33,7 @@ public:
     void setCourse(Common::Game::Position);
 
     void handle(const Common::Messages::PlayerEntitiesStatusResp &);
-    void handle(const Common::Messages::EntityGetInfoResp &);
+    void handle(const Common::Messages::ShipInfo &);
     void handle(const Common::Messages::AbstractMessage &) {}
 
 private:
