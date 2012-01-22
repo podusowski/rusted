@@ -24,7 +24,7 @@ void Ship::setCourse(Position position)
     m_course.course = position;
     m_course.startTime = time;
 
-    LOG_DEBUG << "Setting course from " << m_position << " to " << position << ", start time: " << time << "\n";
+    LOG_DEBUG << "Setting course from " << m_position << " to " << position << ", start time: " << time;
 }
 
 Position Ship::calculatePosition(unsigned time)
@@ -47,7 +47,7 @@ Position Ship::calculatePosition(unsigned time)
     {
         m_position = m_course.course;
 
-        LOG_DEBUG << "Ship arrived at " << m_position << "\n";
+        LOG_DEBUG << "Ship arrived at " << m_position;
 
         return m_position;
     }

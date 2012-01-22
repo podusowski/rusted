@@ -6,7 +6,7 @@
 
 using namespace Cake::Diagnostics;
 
-Logger::Logger()
+Logger::Logger() : m_appName("undef")
 {
     m_banners.insert(std::make_pair(DEBUG,   "\033[1;37mDBG\033[0m"));
     m_banners.insert(std::make_pair(INFO,    "\033[1;34mINF\033[0m"));
@@ -58,7 +58,7 @@ std::string Logger::generateHeader(LogLevel level, const std::string & file, uns
     std::stringstream ss;
     ss  
         << std::setw(10) << std::setiosflags(std::ios::right) << m_appName << "("
-        << "t:" << Cake::Threading::Thread::self() << ") "
+        << "thread:" << Cake::Threading::Thread::self() << ") "
         << std::setw(max_file_length + 4) << std::setiosflags(std::ios::right) << fileWithLine.str() 
         << " "
         << m_banners[level] << " ";

@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
+#include <boost/function.hpp>
 
 #include "Object/ObjectFactory.hpp"
 #include "Game/Object/ObjectBase.hpp"
@@ -17,6 +18,7 @@ class Universe
 {
 public:
     typedef std::vector<boost::shared_ptr<Object::ObjectBase> > Objects;
+    typedef boost::function<void(Common::Game::Object::ObjectBase &)> ObjectAddedCallback;
 
     void add(boost::shared_ptr<Object::ObjectBase> object);
 
@@ -67,8 +69,11 @@ public:
         return ret;
     }
 
+    void setObjectAddedCallback(ObjectAddedCallback);
+
 private:
     std::map<unsigned, boost::shared_ptr<Object::ObjectBase> > m_objects;
+    ObjectAddedCallback m_objectAddedCallback;
 };
 
 }

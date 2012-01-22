@@ -1,6 +1,8 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include <boost/shared_ptr.hpp>
+#include <boost/bind.hpp>
 
 #include "Cake/DependencyInjection/Registry.hpp"
 
@@ -92,4 +94,27 @@ TEST_F(UniverseTest, AddSomeShipsAndGetByOwner)
 
     ASSERT_EQ(1, playerObjects.size());
     ASSERT_EQ(ship1.get(), playerObjects[0].get());
+}
+
+class UniverseCallbackMock
+{
+public:
+    MOCK_METHOD1(objectAdded, void(Common::Game::Object::ObjectBase &));
+};
+
+TEST_F(UniverseTest, ObjectAddedCallback)
+{
+    Common::Game::Universe universe;
+    UniverseCallbackMock universeCallbackMock;
+
+    EXPECT_CALL(universeCallbackMock, objectAdded(_)).Times(1);
+
+    universe.setObjectAddedCallback(boost::bind(&UniverseCallbackMock::objectAdded, &universeCallbackMock, _1));
+
+    // add some object
+    boost::shared_ptr<Common::Game::Object::ObjectBase> ship1(new Common::Game::Object::Ship());
+    ship1->setId(1);
+    dynamic_cast<Common::Game::Object::OwnedObjectBase&>(*ship1).setOwnerId(1);
+
+    universe.add(ship1);
 }
