@@ -3,31 +3,25 @@
 
 using namespace Client::Services;
 
-StaticObjectService::StaticObjectService(Network::Connection & connection) : 
-    m_connection(connection)
+StaticObjectService::StaticObjectService(Network::Connection & connection, Common::Game::Universe & universe) : 
+    m_connection(connection),
+    m_universe(universe)
 {
 }
 
-void StaticObjectService::setStaticObjectAddedCallback(StaticObjectService::StaticObjectAddedCallback callback)
+void StaticObjectService::fetchStaticObjects()
 {
-    m_staticObjectAddedCallback = callback;
-}
-
-void StaticObjectService::asyncFetchStaticObjects(StaticObjectService::StaticObjectAddedCallback callback)
-{
-    m_staticObjectAddedCallback = callback;
-
     Common::Messages::StaticObjectStatusReq req;
     m_connection.send(req);
 }
 
 void StaticObjectService::handle(const Common::Messages::StaticObjectStatusResp & message)
 {
-    LOG_DEBUG << "Static objects received\n";
+    LOG_DEBUG << "Static objects received";
 
     BOOST_FOREACH(boost::tuple<int> staticObject, message.objects)
     {
-        LOG_DEBUG << "  Static object, id: " << staticObject.get<0>() << "\n";
+        LOG_DEBUG << "  Static object, id: " << staticObject.get<0>();
 
         Common::Messages::StaticObjectInfoReq req;
         req.staticObjectId = staticObject.get<0>();
@@ -37,11 +31,10 @@ void StaticObjectService::handle(const Common::Messages::StaticObjectStatusResp 
 
 void StaticObjectService::handle(const Common::Messages::StaticObjectInfoResp & message)
 {
-    Common::Game::Object::StaticObject object;
-    object.setId(message.staticObjectId);
-    object.setPosition(Common::Game::Position(message.x, message.y, message.z));
+    boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::StaticObject);
+    object->setId(message.staticObjectId);
+    object->setPosition(Common::Game::Position(message.x, message.y, message.z));
+    m_universe.add(object);
 
-    LOG_DEBUG << "New static object: " << object << "\n";
-
-    m_staticObjectAddedCallback(object);
+    LOG_DEBUG << "New static object visible: " << *object;
 }

@@ -14,17 +14,19 @@ class StaticObjectView : public IView
 {
 public:
     StaticObjectView(Services::StaticObjectService &,
-                     Graphics::IGraphics &);
+                     Graphics::IGraphics &,
+                     Common::Game::Universe &);
 
     void activate();
     void deactivate();
     void frameStarted();
 
-    void staticObjectAdded(Common::Game::Object::StaticObject &);
+    void objectAdded(Common::Game::Object::ObjectBase &);
 
 private:
     Services::StaticObjectService & m_staticObjectService;
     Graphics::IGraphics & m_graphics;
+    Common::Game::Universe & m_universe;
 };
 
 }

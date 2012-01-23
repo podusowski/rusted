@@ -15,9 +15,9 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
     m_authorizationService(connection, m_playerInfo),
     m_rustedTimeService(connection),
     m_entityService(connection, m_playerInfo, m_universe),
-    m_staticObjectService(connection),
+    m_staticObjectService(connection, m_universe),
 
-    m_staticObjectView(m_staticObjectService, graphics),
+    m_staticObjectView(m_staticObjectService, graphics, m_universe),
     m_pilotView(graphics, input, m_entityService, gui),
 
     m_pilotState(m_stateManager, graphics, gui, m_entityService, m_staticObjectView, m_pilotView),
