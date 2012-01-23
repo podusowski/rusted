@@ -16,6 +16,6 @@ MAKEDEP=$(CC) -MM $(CFLAGS) $< | \
 
 $(BUILD)/$(BUILDPREFIX)/%.o: %.cpp
 	@mkdir -p `dirname $@`
-	@/bin/echo -e "$(FONT_BOLD)$(CC)$(FONT_RESET) $<" 
+	@/bin/echo -ne "$(FONT_BOLD)$(CC)$(FONT_RESET) $< "
 	@$(MAKEDEP)
-	@$(CC) $(CFLAGS) -c $< -o $@
+	@/usr/bin/time -f %E -- $(CC) $(CFLAGS) -c $< -o $@
