@@ -4,7 +4,7 @@
 
 using namespace Client::Services;
 
-RustedTimeService::RustedTimeService(Network::Connection & connection) : 
+RustedTimeService::RustedTimeService(Network::IConnection & connection) : 
     m_connection(connection)
 {
 }

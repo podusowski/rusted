@@ -3,7 +3,7 @@
 #include "Common/Game/Universe.hpp"
 #include "Common/Game/Object/StaticObject.hpp"
 #include "Client/Services/AbstractService.hpp"
-#include "Client/Network/Connection.hpp"
+#include "Client/Network/IConnection.hpp"
 
 namespace Client
 {
@@ -13,7 +13,7 @@ namespace Services
 class StaticObjectService : public AbstractService<StaticObjectService>
 {
 public:
-    StaticObjectService(Network::Connection &, Common::Game::Universe & universe);
+    StaticObjectService(Network::IConnection &, Common::Game::Universe & universe);
 
     void fetchStaticObjects();
 
@@ -22,7 +22,7 @@ public:
     void handle(const Common::Messages::AbstractMessage &) {}
 
 private:
-    Network::Connection & m_connection;
+    Network::IConnection & m_connection;
     Common::Game::Universe & m_universe;
 };
 

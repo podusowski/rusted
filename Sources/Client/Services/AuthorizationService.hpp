@@ -3,7 +3,7 @@
 #include <string>
 #include <boost/function.hpp>
 
-#include "Network/Connection.hpp"
+#include "Network/IConnection.hpp"
 #include "Client/Services/AbstractService.hpp"
 #include "Client/Game/PlayerInfo.hpp"
 
@@ -17,7 +17,7 @@ class AuthorizationService : public AbstractService<AuthorizationService>
 public:
     typedef boost::function<void(bool)> LoggedInCallback;
 
-    AuthorizationService(Network::Connection &, Game::PlayerInfo & playerInfo);
+    AuthorizationService(Network::IConnection &, Game::PlayerInfo & playerInfo);
     void login(std::string login, std::string password, LoggedInCallback);
 
     void handle(const Common::Messages::ServerVersionResp &);
@@ -27,7 +27,7 @@ public:
 private:
     LoggedInCallback m_loggedInCallback;
     bool m_versionChecked;
-    Network::Connection & m_connection;
+    Network::IConnection & m_connection;
     std::string m_login;
     std::string m_password;
     Game::PlayerInfo & m_playerInfo;

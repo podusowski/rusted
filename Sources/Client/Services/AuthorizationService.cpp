@@ -4,7 +4,7 @@
 
 using namespace Client::Services;
 
-AuthorizationService::AuthorizationService(Network::Connection & connection, Game::PlayerInfo & playerInfo) : 
+AuthorizationService::AuthorizationService(Network::IConnection & connection, Game::PlayerInfo & playerInfo) : 
     m_versionChecked(false),
     m_connection(connection),
     m_playerInfo(playerInfo)

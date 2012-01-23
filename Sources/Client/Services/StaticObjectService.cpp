@@ -3,7 +3,7 @@
 
 using namespace Client::Services;
 
-StaticObjectService::StaticObjectService(Network::Connection & connection, Common::Game::Universe & universe) : 
+StaticObjectService::StaticObjectService(Network::IConnection & connection, Common::Game::Universe & universe) : 
     m_connection(connection),
     m_universe(universe)
 {
