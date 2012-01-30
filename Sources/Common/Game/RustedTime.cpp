@@ -5,7 +5,7 @@
 
 using namespace Common::Game;
 
-RustedTime::RustedTime() : m_epoch(boost::date_time::second_clock<boost::posix_time::ptime>::local_time())
+RustedTime::RustedTime() : m_epoch(now())
 {
     LOG_INFO << "Rusted epoch set to " << m_epoch;
 }
@@ -27,4 +27,24 @@ void RustedTime::setReferenceTime(unsigned reference)
     m_epoch += boost::posix_time::seconds(now - reference);
 
     LOG_INFO << "New epoch set to " << m_epoch;
+}
+
+TimeValue RustedTime::getCurrentTime()
+{
+    boost::posix_time::ptime t(boost::date_time::second_clock<boost::posix_time::ptime>::local_time());
+    boost::posix_time::time_duration duration = t - m_epoch;
+
+    // actually, we need mili resolution, but since we're too lazy to implement
+    // converters, we will stick with micro
+    assert(duration.resolution() == boost::date_time::micro);
+
+    unsigned seconds = duration.total_seconds();
+    unsigned miliseconds = duration.fractional_seconds() / 1000;
+    
+    return TimeValue(seconds, miliseconds);
+}
+
+boost::posix_time::ptime RustedTime::now()
+{
+    return boost::date_time::microsec_clock<boost::posix_time::ptime>::local_time();
 }

@@ -16,8 +16,11 @@ public:
     boost::posix_time::ptime getRustedEpoch();
     unsigned getSeconds();
     void setReferenceTime(unsigned);
+    TimeValue getCurrentTime();
 
 private:
+    boost::posix_time::ptime now();
+
     boost::posix_time::ptime m_epoch;
 };
 
