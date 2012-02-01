@@ -6,6 +6,7 @@
 #include "Game/UnitTests/RustedTimeStub.hpp"
 
 using namespace testing;
+using namespace Common::Game;
 
 class ShipTest : public Test
 {
@@ -32,34 +33,50 @@ TEST_F(ShipTest, TestMoveByVector)
 
     ship.setPosition(Common::Game::Position(0, 0, 0));
 
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(0));
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
     ship.setCourse(Common::Game::Position(100, 0, 0));
     Mock::VerifyAndClear(&getRustedTimeStub());
 
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(50));
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(50, 0)));
     ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
     Mock::VerifyAndClear(&getRustedTimeStub());
 
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
     ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
     Mock::VerifyAndClear(&getRustedTimeStub());
 
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
     ship.setCourse(Common::Game::Position(100, 100, 0));
     Mock::VerifyAndClear(&getRustedTimeStub());
 
     // still the same place
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
     ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
     Mock::VerifyAndClear(&getRustedTimeStub());
 
     // should be half the way
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(150));
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(150, 0)));
     ASSERT_EQ(Common::Game::Position(100, 50, 0), ship.getPosition());
     Mock::VerifyAndClear(&getRustedTimeStub());
 
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(200));
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(200, 0)));
     ASSERT_EQ(Common::Game::Position(100, 100, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
+}
+
+TEST_F(ShipTest, HighPrecisionTimer)
+{
+    Common::Game::Object::Ship ship;
+
+    ship.setPosition(Common::Game::Position(0, 0, 0));
+    ship.setSpeed(2);
+
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
+    ship.setCourse(Common::Game::Position(2, 0, 0));
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 500)));
+    ASSERT_EQ(Common::Game::Position(1, 0, 0), ship.getPosition());
     Mock::VerifyAndClear(&getRustedTimeStub());
 }
 
@@ -69,11 +86,11 @@ TEST_F(ShipTest, MoveToTheSamePosition)
 
     ship.setPosition(Common::Game::Position(1, 2, 3));
 
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
     ship.setCourse(Common::Game::Position(1, 2, 3));
     Mock::VerifyAndClear(&getRustedTimeStub());
 
-    EXPECT_CALL(getRustedTimeStub(), getSeconds()).Times(1).WillOnce(Return(100));
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
     ASSERT_EQ(Common::Game::Position(1, 2, 3), ship.getPosition());
     Mock::VerifyAndClear(&getRustedTimeStub());
 }

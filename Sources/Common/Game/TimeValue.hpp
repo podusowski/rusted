@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ostream>
+
 namespace Common
 {
 namespace Game
@@ -8,20 +10,36 @@ namespace Game
 class TimeValue
 {
 public:
+    TimeValue() :
+        m_seconds(0),
+        m_miliseconds(0)
+    {
+    }
+
     TimeValue(unsigned seconds, unsigned miliseconds) :
         m_seconds(seconds),
         m_miliseconds(miliseconds)
     {
     }
 
-    unsigned getSeconds()
+    unsigned getSeconds() const
     {
         return m_seconds;
     }
 
-    unsigned getMiliseconds()
+    unsigned getMiliseconds() const
     {
         return m_miliseconds;
+    }
+
+    bool operator==(const TimeValue & val)
+    {
+        return m_seconds == val.m_seconds && m_miliseconds == val.m_miliseconds;
+    }
+
+    TimeValue operator-(const TimeValue & val)
+    {
+        return TimeValue(m_seconds - val.m_seconds, m_miliseconds - val.m_miliseconds);
     }
 
 private:
@@ -30,4 +48,9 @@ private:
 };
 
 }
+}
+
+inline std::ostream & operator<<(std::ostream & os, const Common::Game::TimeValue & val)
+{
+    return os << val.getSeconds() << "." << val.getMiliseconds() << "s";
 }

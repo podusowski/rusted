@@ -5,9 +5,13 @@
 using namespace Common::Game::Object;
 using namespace Common::Game;
 
+Ship::Ship() : m_speed(1)
+{
+}
+
 Position Ship::getPosition()
 {
-    return calculatePosition(m_time->getSeconds());
+    return calculatePosition(m_time->getCurrentTime());
 }
 
 void Ship::setPosition(const Position & position)
@@ -18,7 +22,7 @@ void Ship::setPosition(const Position & position)
 
 void Ship::setCourse(Position position)
 {
-    unsigned time = m_time->getSeconds();
+    TimeValue time = m_time->getCurrentTime();
 
     m_position = calculatePosition(time);
     m_course.course = position;
@@ -27,21 +31,25 @@ void Ship::setCourse(Position position)
     LOG_DEBUG << "Setting course from " << m_position << " to " << position << ", start time: " << time;
 }
 
-Position Ship::calculatePosition(unsigned time)
+void Ship::setSpeed(unsigned speed)
 {
-    const unsigned speed = 1;
+    m_speed = speed;
+}
 
+Position Ship::calculatePosition(TimeValue time)
+{
     if (m_course.course == m_position)
         return m_position;
 
     unsigned distance = Position::distance(m_course.course, m_position);
-    unsigned totalTripTime = distance / speed;
-    unsigned timeTakenSoFar = time - m_course.startTime;
+    unsigned totalTripTime = distance / m_speed;
+    TimeValue timeTakenSoFar = time - m_course.startTime;
+    float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
 
-    if (timeTakenSoFar == 0)
+    if (timeTakenSoFar == TimeValue(0, 0))
         return m_position;
 
-    float tripProgress = float(timeTakenSoFar) / float(totalTripTime);
+    float tripProgress = float(secondsTakenSoFar) / float(totalTripTime);
 
     if (tripProgress >= 1.0)
     {

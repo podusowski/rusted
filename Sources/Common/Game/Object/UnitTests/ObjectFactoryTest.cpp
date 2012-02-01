@@ -4,8 +4,24 @@
 #include "Game/Object/Ship.hpp"
 #include "Game/Object/StaticObject.hpp"
 #include "DataBase/DataBaseNode.hpp"
+#include "Game/UnitTests/RustedTimeStub.hpp"
 
-TEST(ObjectFactoryTest, TestLoadShip)
+using namespace testing;
+
+class ObjectFactoryTest : public Test
+{
+public:
+    void SetUp()
+    {
+        Cake::DependencyInjection::clear();
+        boost::shared_ptr<Common::Game::IRustedTime> time(new RustedTimeStub);
+        Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(time);
+
+        ON_CALL(dynamic_cast<RustedTimeStub&>(*time), getCurrentTime()).WillByDefault(Return(Common::Game::TimeValue()));
+    }
+};
+
+TEST_F(ObjectFactoryTest, TestLoadShip)
 {
     Common::DataBase::DataBaseNode node("object");
     node.setValue("type", "Ship");
@@ -28,7 +44,7 @@ TEST(ObjectFactoryTest, TestLoadShip)
     ASSERT_EQ(5, position.getZ());
 }
 
-TEST(ObjectFactoryTest, LoadStaticObject)
+TEST_F(ObjectFactoryTest, LoadStaticObject)
 {
     Common::DataBase::DataBaseNode node("object");
     node.setValue("type", "StaticObject");

@@ -130,6 +130,6 @@ public:
 template<typename T>
 std::ostream & operator<<(std::ostream & os, const Common::Point3<T> & p)
 {
-    os << "x: " << p.getX() << ", y: " << p.getY() << ", z: " << p.getZ();
+    os << "(" << p.getX() << ", " << p.getY() << ", " << p.getZ() << ")";
     return os;
 }
