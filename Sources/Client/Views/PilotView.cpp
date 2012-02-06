@@ -51,13 +51,13 @@ void PilotView::updateCameraPosition()
 {
     // camera motion
     Common::Game::Position position = m_entityService.getCurrentEntity().getPosition();
-    Common::Game::Position camPosition = position + Common::Game::Position(0, 0, 150);
+    Common::Game::Position camPosition = position + Common::Game::Position(0, 0, 180);
 
     // some nasty dbg 
     static int counter = 0;
     if (counter++ % 100 == 0)
     {
-        LOG_INFO << "camera posistion(" << camPosition << ")";
+        LOG_INFO << "camera posistion: " << camPosition;
     }
 
     Ogre::Camera & camera = m_graphics.getCamera();

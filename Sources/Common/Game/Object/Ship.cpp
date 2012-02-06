@@ -28,7 +28,7 @@ void Ship::setCourse(Position position)
     m_course.course = position;
     m_course.startTime = time;
 
-    LOG_DEBUG << "Setting course from " << m_position << " to " << position << ", start time: " << time;
+    LOG_DEBUG << "Setting course from " << m_position << " to " << position << ", start time: " << time << ", speed: " << m_speed;
 }
 
 void Ship::setSpeed(unsigned speed)
@@ -45,6 +45,7 @@ Position Ship::calculatePosition(TimeValue time)
     unsigned totalTripTime = distance / m_speed;
     TimeValue timeTakenSoFar = time - m_course.startTime;
     float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
+
 
     if (timeTakenSoFar == TimeValue(0, 0))
         return m_position;

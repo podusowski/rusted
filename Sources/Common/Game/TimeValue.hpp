@@ -32,14 +32,16 @@ public:
         return m_miliseconds;
     }
 
-    bool operator==(const TimeValue & val)
+    bool operator==(const TimeValue & val) const
     {
         return m_seconds == val.m_seconds && m_miliseconds == val.m_miliseconds;
     }
 
     TimeValue operator-(const TimeValue & val)
     {
-        return TimeValue(m_seconds - val.m_seconds, m_miliseconds - val.m_miliseconds);
+        return TimeValue(m_miliseconds >= val.m_miliseconds ? m_seconds - val.m_seconds: m_seconds - val.m_seconds - 1 ,
+                        m_miliseconds >= val.m_miliseconds ? m_miliseconds - val.m_miliseconds: (1000 + m_miliseconds) - val.m_miliseconds );
+
     }
 
 private:

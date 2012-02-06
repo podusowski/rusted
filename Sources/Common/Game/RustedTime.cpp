@@ -31,7 +31,7 @@ void RustedTime::setReferenceTime(unsigned reference)
 
 TimeValue RustedTime::getCurrentTime()
 {
-    boost::posix_time::ptime t(boost::date_time::second_clock<boost::posix_time::ptime>::local_time());
+    boost::posix_time::ptime t = now();
     boost::posix_time::time_duration duration = t - m_epoch;
 
     // actually, we need mili resolution, but since we're too lazy to implement
@@ -40,8 +40,10 @@ TimeValue RustedTime::getCurrentTime()
 
     unsigned seconds = duration.total_seconds();
     unsigned miliseconds = duration.fractional_seconds() / 1000;
-    
-    return TimeValue(seconds, miliseconds);
+
+    TimeValue ret(seconds, miliseconds);
+
+    return ret;
 }
 
 boost::posix_time::ptime RustedTime::now()
