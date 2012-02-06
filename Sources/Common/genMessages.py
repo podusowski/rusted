@@ -50,7 +50,7 @@ def genAbstractMessage():
 	messagesHpp.write(
 		"struct AbstractMessage\n{\n"
 		"\tvirtual Id::Messages getId() const = 0 ;\n"
-		"\tvirtual void serialize(::Common::RustedCodec::IWriteBuffer & buf) = 0;\n"
+		"\tvirtual void serialize(::Common::RustedCodec::IWriteBuffer & buf) const = 0;\n"
 		"};\n\n"
 	)
 	
@@ -83,7 +83,7 @@ def genMessageStruct(message):
 	# coder function
 	messagesHpp.write(
 		"\n"
-		"\tvoid serialize(Common::RustedCodec::IWriteBuffer & buf)\n\t{\n"
+		"\tvoid serialize(Common::RustedCodec::IWriteBuffer & buf) const\n\t{\n"
 		"\t\tCommon::RustedCodec::RustedAbstractCoder coder(buf);\n"
 		"\t\tcoder\n"
 		"\t\t\t<< Id::" + message.getAttribute("id") + "\n"

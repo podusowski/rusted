@@ -69,7 +69,7 @@ TEST_F(UniverseTest, GetWrongType)
 
     universe.add(ship);
 
-    ASSERT_THROW(universe.getById<Common::Game::Object::StaticObject>(1), std::bad_cast);
+    ASSERT_ANY_THROW(universe.getById<Common::Game::Object::StaticObject>(1));
 }
 
 TEST_F(UniverseTest, AddSomeShipsAndGetByOwner)

@@ -1,6 +1,7 @@
 #include <stdexcept>
 #include <boost/foreach.hpp>
 
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Common/Game/Utilities/PasswordHash.hpp"
 #include "Server/Game/PlayerContainer.hpp"
 
@@ -27,7 +28,10 @@ Player & PlayerContainer::create(const std::string & login,
             {
                 int id = (*it)->getValue<int>("id");
                 Player * player = new Player(id);
-                m_connectionMap.insert(std::make_pair(connection.getId(), player));
+
+                LOG_DEBUG << "Adding player: " << id << " with connection: " << connection.getId();
+
+                m_connectionMap.insert(std::make_pair(&connection, player));
                 return *player;
             }
             else
@@ -41,7 +45,33 @@ Player & PlayerContainer::create(const std::string & login,
 
 Player & PlayerContainer::getBy(Network::IConnection & connection)
 {
-    return *m_connectionMap.at(connection.getId());
+    return *m_connectionMap.at(&connection);
+}
+
+std::vector<Player*> PlayerContainer::getAll()
+{
+    std::vector<Player*> ret(m_connectionMap.size());
+
+    for (std::map<Server::Network::IConnection *, Player*>::iterator it = m_connectionMap.begin();
+         it != m_connectionMap.end(); it++)
+    {
+       ret.push_back(it->second); 
+    }
+
+    return ret;
+}
+
+std::vector<Server::Network::IConnection *> PlayerContainer::getAllConnections()
+{
+    std::vector<Server::Network::IConnection*> ret;
+
+    for (std::map<Server::Network::IConnection *, Player *>::iterator it = m_connectionMap.begin();
+         it != m_connectionMap.end(); it++)
+    {
+       ret.push_back(it->first); 
+    }
+
+    return ret;
 }
 
 

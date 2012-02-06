@@ -9,7 +9,7 @@
 class ConnectionStub : public Server::Network::IConnection
 {
 public:
-    void send(Common::Messages::AbstractMessage & message);
+    void send(const Common::Messages::AbstractMessage & message);
     void addListener(Server::Network::IConnectionListener & listener);
 
     size_t getReceivedCount();

@@ -13,7 +13,7 @@ class IConnectionListener;
 class IConnection
 {
 public:
-    virtual void send(Common::Messages::AbstractMessage & message) = 0;
+    virtual void send(const Common::Messages::AbstractMessage & message) = 0;
     virtual void addListener(IConnectionListener & listener) = 0;
     virtual int getId() = 0;
 };

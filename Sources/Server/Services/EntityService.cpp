@@ -4,8 +4,9 @@
 
 using namespace Server::Services;
 
-EntityService::EntityService(Common::Game::Universe & universe) :
-    m_universe(universe)
+EntityService::EntityService(Common::Game::Universe & universe, Server::Game::PlayerContainer & playerContainer) :
+    m_universe(universe),
+    m_playerContainer(playerContainer)
 {
 }
 
@@ -22,11 +23,20 @@ void EntityService::handle(const Common::Messages::EntityGetInfoReq & getInfoReq
     connection.send(shipInfo);
 }
 
-void EntityService::handle(const Common::Messages::EntityChangeCourseReq & changeCourseReq, Network::IConnection &)
+void EntityService::handle(const Common::Messages::EntityChangeCourseReq & changeCourseReq, Network::IConnection & connection)
 {
     Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(changeCourseReq.entityId);
     Common::Point3<int> destination(changeCourseReq.courseX,
                                     changeCourseReq.courseY,
                                     changeCourseReq.courseZ);
     ship.setCourse(destination);
+
+    std::vector<Network::IConnection *> connections = m_playerContainer.getAllConnections();
+    for (std::vector<Network::IConnection *>::iterator it = connections.begin(); it != connections.end(); it++)
+    {
+        if (*it != &connection)
+        {
+            (*it)->send(changeCourseReq);
+        }
+    }
 }

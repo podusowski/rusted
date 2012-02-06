@@ -2,7 +2,7 @@
 
 #include <UnitTests/ConnectionStub.hpp>
 
-void ConnectionStub::send(Common::Messages::AbstractMessage & message)
+void ConnectionStub::send(const Common::Messages::AbstractMessage & message)
 {
     std::vector<char> messageBuffer;
     Common::RustedCodec::SimpleWriteBuffer writer(messageBuffer);

@@ -18,7 +18,7 @@ public:
 	Connection(int id, Cake::Networking::Socket & socket, Services::IServiceDeployment & serviceDeployment);
 	void run();
 	void addListener(IConnectionListener & listener);
-	void send(::Common::Messages::AbstractMessage & message);
+	void send(const Common::Messages::AbstractMessage & message);
     int getId();
 
 private:

@@ -22,9 +22,11 @@ public:
                     Network::IConnection & connection);
 
     Server::Game::Player & getBy(Network::IConnection & connection);
+    std::vector<Player*> getAll();
+    std::vector<Network::IConnection *> getAllConnections();
 
 private:
-    std::map<int, Server::Game::Player *> m_connectionMap;
+    std::map<Network::IConnection *, Server::Game::Player *> m_connectionMap;
     Common::DataBase::DataBase & m_db;
 };
 

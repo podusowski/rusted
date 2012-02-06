@@ -48,14 +48,14 @@ enum Messages
 struct AbstractMessage
 {
 	virtual Id::Messages getId() const = 0 ;
-	virtual void serialize(::Common::RustedCodec::IWriteBuffer & buf) = 0;
+	virtual void serialize(::Common::RustedCodec::IWriteBuffer & buf) const = 0;
 };
 
 struct ServerVersionReq : public AbstractMessage
 {
 	Id::Messages getId() const { return Id::ServerVersionReq; }
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -78,7 +78,7 @@ struct ServerVersionResp : public AbstractMessage
 	Id::Messages getId() const { return Id::ServerVersionResp; }
 	std::string version;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -104,7 +104,7 @@ struct UserAuthorizationReq : public AbstractMessage
 	std::string login;
 	std::string password;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -132,7 +132,7 @@ struct UserAuthorizationResp : public AbstractMessage
 	bool success;
 	int player_id;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -158,7 +158,7 @@ struct PlayerResourcesStatusReq : public AbstractMessage
 {
 	Id::Messages getId() const { return Id::PlayerResourcesStatusReq; }
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -183,7 +183,7 @@ struct PlayerResourcesStatusResp : public AbstractMessage
 	int uranium;
 	int credits;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -211,7 +211,7 @@ struct RustedTimeEpochReq : public AbstractMessage
 {
 	Id::Messages getId() const { return Id::RustedTimeEpochReq; }
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -234,7 +234,7 @@ struct RustedTimeEpochResp : public AbstractMessage
 	Id::Messages getId() const { return Id::RustedTimeEpochResp; }
 	int time;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -258,7 +258,7 @@ struct PlayerEntitiesStatusReq : public AbstractMessage
 {
 	Id::Messages getId() const { return Id::PlayerEntitiesStatusReq; }
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -281,7 +281,7 @@ struct PlayerEntitiesStatusResp : public AbstractMessage
 	Id::Messages getId() const { return Id::PlayerEntitiesStatusResp; }
 	std::vector<boost::tuple<int> > entities;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -305,7 +305,7 @@ struct EntityGetInfoReq : public AbstractMessage
 	Id::Messages getId() const { return Id::EntityGetInfoReq; }
 	int id;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -334,7 +334,7 @@ struct ShipInfo : public AbstractMessage
 	int y;
 	int z;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -370,7 +370,7 @@ struct EntityChangeCourseReq : public AbstractMessage
 	int courseY;
 	int courseZ;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -400,7 +400,7 @@ struct StaticObjectStatusReq : public AbstractMessage
 {
 	Id::Messages getId() const { return Id::StaticObjectStatusReq; }
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -423,7 +423,7 @@ struct StaticObjectStatusResp : public AbstractMessage
 	Id::Messages getId() const { return Id::StaticObjectStatusResp; }
 	std::vector<boost::tuple<int> > objects;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -447,7 +447,7 @@ struct StaticObjectInfoReq : public AbstractMessage
 	Id::Messages getId() const { return Id::StaticObjectInfoReq; }
 	int staticObjectId;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder
@@ -475,7 +475,7 @@ struct StaticObjectInfoResp : public AbstractMessage
 	int y;
 	int z;
 
-	void serialize(Common::RustedCodec::IWriteBuffer & buf)
+	void serialize(Common::RustedCodec::IWriteBuffer & buf) const
 	{
 		Common::RustedCodec::RustedAbstractCoder coder(buf);
 		coder

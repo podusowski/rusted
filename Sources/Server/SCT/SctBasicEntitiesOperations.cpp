@@ -10,20 +10,17 @@
 #include "Core/Connection.hpp"
 #include "Preconditions.hpp"
 
+using namespace Common::Messages;
+
 class SctBasicEntitiesOperations : public testing::Test 
 {
 public:
-    void testPlayerEntitiesStatusReq();
-    void testEntityChangeCourseReq();
-
     std::auto_ptr<Common::Messages::AbstractMessage> procedureEntityGetInfo(SCT::Connection & connection, int entityId);
     void procedureEntityChangeCourse(SCT::Connection & connection, int entityId, int x, int y, int z);
 };
 
 TEST_F(SctBasicEntitiesOperations, testPlayerEntitiesStatusReq)
 {
-    using namespace ::Common::Messages;
-
     SCT::PreconditionPlayerLoggedIn precondition;
     SCT::Connection & connection = precondition.getConnection();
 
@@ -59,6 +56,43 @@ TEST_F(SctBasicEntitiesOperations, testEntityChangeCourseReq)
     EXPECT_TRUE(2 == entitiesGetInfoResp2.x);
     EXPECT_TRUE(1 == entitiesGetInfoResp2.y);
     EXPECT_TRUE(1 == entitiesGetInfoResp2.z);
+}
+
+TEST_F(SctBasicEntitiesOperations, ChangeShipCourseAnotherPlayerIsNotified)
+{
+    std::string dbFile = "SampleDataBase.xml";
+
+	SCT::Component component;
+    component.setConfigValue("--database.provider", "xml");
+    component.setConfigValue("--database.xml.filename", dbFile);
+    component.start();
+
+    // log in user1
+    boost::shared_ptr<SCT::Connection> connection1 = component.createConnection();
+
+    UserAuthorizationReq userAuthorizationReq1;
+    userAuthorizationReq1.login = "user1";
+    userAuthorizationReq1.password = "password";
+    connection1->send(userAuthorizationReq1);
+
+    std::auto_ptr<AbstractMessage> userAuthorizationResp1 = connection1->receive();
+    ASSERT_TRUE(dynamic_cast<UserAuthorizationResp&>(*userAuthorizationResp1).success);
+
+    // log in user2
+    boost::shared_ptr<SCT::Connection> connection2 = component.createConnection();
+
+    UserAuthorizationReq userAuthorizationReq2;
+    userAuthorizationReq2.login = "user2";
+    userAuthorizationReq2.password = "password";
+    connection2->send(userAuthorizationReq2);
+
+    std::auto_ptr<AbstractMessage> userAuthorizationResp2 = connection2->receive();
+    ASSERT_TRUE(dynamic_cast<UserAuthorizationResp&>(*userAuthorizationResp2).success);
+
+    procedureEntityChangeCourse(*connection1, 1, 2, 1, 1);
+
+    // second player gets notified
+    std::auto_ptr<AbstractMessage> entityChangeCourse2 = connection2->receive();
 }
 
 std::auto_ptr<Common::Messages::AbstractMessage> SctBasicEntitiesOperations::procedureEntityGetInfo(

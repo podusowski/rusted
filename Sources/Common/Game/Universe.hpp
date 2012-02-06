@@ -4,6 +4,8 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Object/ObjectFactory.hpp"
 #include "Game/Object/ObjectBase.hpp"
 #include "Game/Object/OwnedObjectBase.hpp"
@@ -28,7 +30,18 @@ public:
 
         if (it != m_objects.end())
         {
-            return dynamic_cast<ObjectType&>(*it->second);
+            ObjectType * object = dynamic_cast<ObjectType*>(it->second.get());
+            if (object)
+            {
+                return *object;
+            }
+            else
+            {
+                std::stringstream ss;
+                ss << "object id: " << id << " is of type " 
+                   << TYPENAME(*it->second) << " while " << TYPENAME(ObjectType) << " requested";
+                throw std::runtime_error(ss.str());
+            }
         }
         else
         {

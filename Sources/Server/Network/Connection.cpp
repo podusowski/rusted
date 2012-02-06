@@ -28,7 +28,7 @@ void Connection::addListener(IConnectionListener & listener)
     m_listenersToAdd.push_back(&listener);
 }
 
-void Connection::send(::Common::Messages::AbstractMessage & message)
+void Connection::send(const Common::Messages::AbstractMessage & message)
 {
     LOG_DEBUG << "<connection:" << m_id << "> Sending: " << message;
 
