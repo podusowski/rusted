@@ -1,14 +1,11 @@
 #include <gtest/gtest.h>
 
-#include <fstream>
-#include <iostream>
-#include <boost/foreach.hpp>
-
-#include <Common/Thread.hpp>
+#include "Cake/Threading/Thread.hpp"
 
 #include "Core/Component.hpp"
 #include "Core/Connection.hpp"
 #include "Preconditions.hpp"
+#include "UserFunctions.hpp"
 
 using namespace Common::Messages;
 
@@ -33,7 +30,7 @@ TEST_F(ShipSct, testEntityChangeCourseReq)
 
     procedureEntityChangeCourse(connection, 1, 2, 1, 1);
 
-    Common::Thread::wait(2.0);
+    Cake::Threading::Thread::wait(2.0);
 
     std::auto_ptr<Common::Messages::AbstractMessage> entityGetInfoRespA2 = procedureEntityGetInfo(connection, 1);
     Common::Messages::ShipInfo & entitiesGetInfoResp2 = dynamic_cast<Common::Messages::ShipInfo&>(*entityGetInfoRespA2);
@@ -52,27 +49,8 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
     component.setConfigValue("--database.xml.filename", dbFile);
     component.start();
 
-    // log in user1
-    boost::shared_ptr<SCT::Connection> connection1 = component.createConnection();
-
-    UserAuthorizationReq userAuthorizationReq1;
-    userAuthorizationReq1.login = "user1";
-    userAuthorizationReq1.password = "password";
-    connection1->send(userAuthorizationReq1);
-
-    std::auto_ptr<AbstractMessage> userAuthorizationResp1 = connection1->receive();
-    ASSERT_TRUE(dynamic_cast<UserAuthorizationResp&>(*userAuthorizationResp1).success);
-
-    // log in user2
-    boost::shared_ptr<SCT::Connection> connection2 = component.createConnection();
-
-    UserAuthorizationReq userAuthorizationReq2;
-    userAuthorizationReq2.login = "user2";
-    userAuthorizationReq2.password = "password";
-    connection2->send(userAuthorizationReq2);
-
-    std::auto_ptr<AbstractMessage> userAuthorizationResp2 = connection2->receive();
-    ASSERT_TRUE(dynamic_cast<UserAuthorizationResp&>(*userAuthorizationResp2).success);
+    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
 
     procedureEntityChangeCourse(*connection1, 1, 2, 1, 1);
 

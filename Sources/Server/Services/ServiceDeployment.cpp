@@ -13,7 +13,7 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
 
     m_rustedTimeService(*m_time),
     m_authorizationService(m_players, *this),
-    m_playerService(m_universe),
+    m_playerService(m_universe, m_players),
     m_entityService(m_universe, m_players),
     m_staticObjectsService(m_universe)
 {

@@ -5,8 +5,9 @@
 
 using namespace Server::Services;
 
-PlayerService::PlayerService(Common::Game::Universe & universe) :
-        m_universe(universe)
+PlayerService::PlayerService(Common::Game::Universe & universe, Server::Game::PlayerContainer & playerContainer) :
+        m_universe(universe),
+        m_playerContainer(playerContainer)
 {
 }
 
@@ -22,11 +23,11 @@ void PlayerService::handle(const Common::Messages::PlayerResourcesStatusReq &, N
 void PlayerService::handle(const Common::Messages::PlayerEntitiesStatusReq &, Network::IConnection & connection)
 {
     Common::Messages::PlayerEntitiesStatusResp resp;
-#warning get proper player id when playerContainer is implemented
-//TODO: get proper player id when playerContainer is implemented
-//
+
+    Game::Player & player = m_playerContainer.getBy(connection);
+
     std::vector<boost::shared_ptr<Common::Game::Object::ObjectBase> > playerEntities
-        = m_universe.getByOwnerId<Common::Game::Object::Ship>(1);
+        = m_universe.getByOwnerId<Common::Game::Object::Ship>(player.getId());
 
     for (std::vector<boost::shared_ptr<Common::Game::Object::ObjectBase> >::iterator it = playerEntities.begin(); 
          it != playerEntities.end(); it++)

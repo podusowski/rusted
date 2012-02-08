@@ -6,6 +6,7 @@
 #include "Core/Component.hpp"
 #include "Core/Connection.hpp"
 #include "Preconditions.hpp"
+#include "UserFunctions.hpp"
 
 TEST(UserSct, Authorize)
 {
@@ -51,17 +52,38 @@ TEST(UserSct, Authorize)
 	}
 }
 
-TEST(UserSct, EntitiesStatusReq)
+TEST(UserSct, TwoUsersEntitiesStatusReq)
 {
-    SCT::PreconditionPlayerLoggedIn precondition;
-    SCT::Connection & connection = precondition.getConnection();
+    std::string dbFile = "SampleDataBase.xml";
 
-    Common::Messages::PlayerEntitiesStatusReq msg;
-    connection.send(msg);
+	SCT::Component component;
+    component.setConfigValue("--database.provider", "xml");
+    component.setConfigValue("--database.xml.filename", dbFile);
+    component.start();
 
-    std::auto_ptr<AbstractMessage> resp = connection.receive();
-    EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
-    Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
-    ASSERT_EQ(1, playerEntitiesStatusResp.entities.size()); 
-    ASSERT_EQ(1, playerEntitiesStatusResp.entities[0].get<0>());
+    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+
+    // first player
+    {
+        Common::Messages::PlayerEntitiesStatusReq msg;
+        connection1->send(msg);
+
+        std::auto_ptr<AbstractMessage> resp = connection1->receive();
+        EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
+        Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
+        ASSERT_EQ(1, playerEntitiesStatusResp.entities.size()); 
+        ASSERT_EQ(1, playerEntitiesStatusResp.entities[0].get<0>());
+    }
+
+    // second player
+    {
+        Common::Messages::PlayerEntitiesStatusReq msg;
+        connection2->send(msg);
+
+        std::auto_ptr<AbstractMessage> resp = connection2->receive();
+        EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
+        Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
+        ASSERT_EQ(2, playerEntitiesStatusResp.entities.size()); 
+    }
 }
