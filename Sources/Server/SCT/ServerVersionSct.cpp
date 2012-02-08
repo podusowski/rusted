@@ -1,14 +1,13 @@
 #include <gtest/gtest.h>
 
 #include <iostream>
-#include <boost/foreach.hpp>
 
-#include <Core/Component.hpp>
-#include <Core/Connection.hpp>
+#include "Core/Component.hpp"
+#include "Core/Connection.hpp"
 
-TEST(SctServerVersion, testServerVersion)
+TEST(ServerVersionSct, testServerVersion)
 {
-	using namespace ::Common::Messages;
+	using namespace Common::Messages;
 
     std::string dbFile = "SampleDataBase.xml";
 
@@ -25,7 +24,7 @@ TEST(SctServerVersion, testServerVersion)
 	EXPECT_TRUE(Common::Messages::Id::ServerVersionResp == resp->getId());
 }
 
-TEST(SctServerVersion, FewConnections)
+TEST(ServerVersionSct, FewConnections)
 {
 	using namespace Common::Messages;
 

@@ -10,7 +10,7 @@
 #include <Core/Connection.hpp>
 #include "Preconditions.hpp"
 
-TEST(SctStaticObjects, StaticObjectsStatusReq)
+TEST(StaticObjectsSct, StaticObjectsStatusReq)
 {
     SCT::PreconditionPlayerLoggedIn precondition;
     SCT::Connection & connection = precondition.getConnection();
@@ -25,7 +25,7 @@ TEST(SctStaticObjects, StaticObjectsStatusReq)
     ASSERT_EQ(3, staticObjectStatusResp.objects[0].get<0>());
 }
 
-TEST(SctStaticObjects, StaticObjectInfoReq)
+TEST(StaticObjectsSct, StaticObjectInfoReq)
 {
     SCT::PreconditionPlayerLoggedIn precondition;
     SCT::Connection & connection = precondition.getConnection();

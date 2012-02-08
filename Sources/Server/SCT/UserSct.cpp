@@ -3,10 +3,11 @@
 #include <iostream>
 #include <boost/foreach.hpp>
 
-#include <Core/Component.hpp>
-#include <Core/Connection.hpp>
+#include "Core/Component.hpp"
+#include "Core/Connection.hpp"
+#include "Preconditions.hpp"
 
-TEST(SctUserAuthorization, testAuthorizeUser)
+TEST(UserSct, Authorize)
 {
 	using namespace ::Common::Messages;
 
@@ -48,4 +49,19 @@ TEST(SctUserAuthorization, testAuthorizeUser)
 		EXPECT_EQ(0xf00d, playerResourcesStatus.uranium);
 		EXPECT_EQ(0xf00d, playerResourcesStatus.credits);
 	}
+}
+
+TEST(UserSct, EntitiesStatusReq)
+{
+    SCT::PreconditionPlayerLoggedIn precondition;
+    SCT::Connection & connection = precondition.getConnection();
+
+    Common::Messages::PlayerEntitiesStatusReq msg;
+    connection.send(msg);
+
+    std::auto_ptr<AbstractMessage> resp = connection.receive();
+    EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
+    Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
+    ASSERT_EQ(1, playerEntitiesStatusResp.entities.size()); 
+    ASSERT_EQ(1, playerEntitiesStatusResp.entities[0].get<0>());
 }

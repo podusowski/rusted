@@ -12,29 +12,14 @@
 
 using namespace Common::Messages;
 
-class SctBasicEntitiesOperations : public testing::Test 
+class ShipSct : public testing::Test 
 {
 public:
     std::auto_ptr<Common::Messages::AbstractMessage> procedureEntityGetInfo(SCT::Connection & connection, int entityId);
     void procedureEntityChangeCourse(SCT::Connection & connection, int entityId, int x, int y, int z);
 };
 
-TEST_F(SctBasicEntitiesOperations, testPlayerEntitiesStatusReq)
-{
-    SCT::PreconditionPlayerLoggedIn precondition;
-    SCT::Connection & connection = precondition.getConnection();
-
-    Common::Messages::PlayerEntitiesStatusReq msg;
-    connection.send(msg);
-
-    std::auto_ptr<AbstractMessage> resp = connection.receive();
-    EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
-    Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
-    ASSERT_EQ(1, playerEntitiesStatusResp.entities.size()); 
-    ASSERT_EQ(1, playerEntitiesStatusResp.entities[0].get<0>());
-}
-
-TEST_F(SctBasicEntitiesOperations, testEntityChangeCourseReq)
+TEST_F(ShipSct, testEntityChangeCourseReq)
 {
     SCT::PreconditionPlayerLoggedIn precondition;
     SCT::Connection & connection = precondition.getConnection();
@@ -58,7 +43,7 @@ TEST_F(SctBasicEntitiesOperations, testEntityChangeCourseReq)
     EXPECT_TRUE(1 == entitiesGetInfoResp2.z);
 }
 
-TEST_F(SctBasicEntitiesOperations, ChangeShipCourseAnotherPlayerIsNotified)
+TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
 {
     std::string dbFile = "SampleDataBase.xml";
 
@@ -95,7 +80,7 @@ TEST_F(SctBasicEntitiesOperations, ChangeShipCourseAnotherPlayerIsNotified)
     std::auto_ptr<AbstractMessage> entityChangeCourse2 = connection2->receive();
 }
 
-std::auto_ptr<Common::Messages::AbstractMessage> SctBasicEntitiesOperations::procedureEntityGetInfo(
+std::auto_ptr<Common::Messages::AbstractMessage> ShipSct::procedureEntityGetInfo(
     SCT::Connection & connection, 
     int entityId)
 {
@@ -110,7 +95,7 @@ std::auto_ptr<Common::Messages::AbstractMessage> SctBasicEntitiesOperations::pro
     return shipInfo;
 }
 
-void SctBasicEntitiesOperations::procedureEntityChangeCourse(
+void ShipSct::procedureEntityChangeCourse(
     SCT::Connection & connection, 
     int entityId, 
     int x, int y, int z)
