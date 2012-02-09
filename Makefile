@@ -1,37 +1,19 @@
 BUILD=$(PWD)/_build
 SOURCE_DIR=$(PWD)/Sources
 
-CPUS := `grep processor /proc/cpuinfo | wc -l`
+TARGET_CONFIGS := $(shell find $(SOURCE_DIR) -name *.mk2)
+include $(TARGET_CONFIGS)
 
-MFLAGS := --no-builtin-rules
-MFLAGS += --no-print-directory
-MFLAGS += --include-dir $(PWD)/Make
+include Make/util.colors.mk
+include Make/template.static_library.mk
+include Make/recipe.c++.mk
 
-ifeq ($(MAKELEVEL), 0)
-  MFLAGS += -j$(CPUS)
-endif
-
-MFLAGS += -s
-
-.DEFAULT:
-	@( test `find $(SOURCE_DIR) -name $@.mk | wc -l` -eq 1 || ( echo "there must be single $@.mk file" ; exit 1 ) ) && \
-	$(MAKE) -f $@.mk \
-		--directory `dirname \`find $(SOURCE_DIR) -name $@.mk\`` \
-		$(MFLAGS) \
-		BUILD=$(BUILD) \
-		TOP_DIR=$(PWD) \
-		$@ \
-	|| ( echo "failed to build $@"; exit 1 )
+$(foreach i, $(STATIC_LIBRARIES), $(eval $(call static_library_TEMPLATE,$(i))))
+$(foreach i, $(STATIC_LIBRARIES), $(info $(call static_library_TEMPLATE,$(i))))
 
 .PHONY: help
 help:
-	@echo "Available targets:"
-	@echo
-	@find $(SOURCE_DIR) -name *.mk -exec basename {} \; | sed s/.mk//
-
-.PHONY: all
-all:
-	@find $(SOURCE_DIR) -name *.mk -exec basename {} \; | sed s/.mk// | xargs make
+	@echo Static libraries: $(STATIC_LIBRARIES)
 
 .PHONY: clean
 clean:

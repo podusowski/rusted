@@ -1,4 +1,4 @@
-LIBNAME=libCommon.a
+STATIC_LIBRARIES+=libCommon
 
 libCommon_SOURCES=Thread.cpp \
 		RustedCodec/RustedAbstractCoder.cpp \
@@ -33,4 +33,3 @@ $(LIBNAME): Messages/Messages.hpp
 Messages/Messages.hpp: Messages/Messages.xml genMessages.py
 	./genMessages.py
 
-include Makefile.leaf
