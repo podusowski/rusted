@@ -1,9 +1,29 @@
 BUILD=$(PWD)/_build
 SOURCE_DIR=$(PWD)/Sources
 
+define include_target_TEMPLATE
+
+$(info target config: $(1))
+
+TARGET_BASE=$(shell dirname $(1))
+
+SOURCES:=
+
+include $(1)
+
+SOURCES:=$$(addprefix $$(TARGET_BASE)/,$$(SOURCES))
+$$(TARGET)_SOURCES:=$$(SOURCES)
+
+$$(info target: $$(TARGET), type: $$(TYPE))
+$$(info sources: $$($$(TARGET)_SOURCES))
+$$(info basedir: $$(TARGET_BASE))
+
+endef
+
 #find and include all target configs
 TARGET_CONFIGS := $(shell find $(SOURCE_DIR) -name *.mk2)
-include $(TARGET_CONFIGS)
+$(foreach i, $(TARGET_CONFIGS),$(eval $(call include_target_TEMPLATE,$(i))))
+#include $(TARGET_CONFIGS)
 
 include Make/util.colors.mk
 include Make/template.static_library.mk
