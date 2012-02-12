@@ -5,6 +5,7 @@ include Make/util.colors.mk
 include Make/template.static_library.mk
 include Make/template.application.mk
 include Make/recipe.c++.mk
+include Make/recipe.resources.mk
 
 .PHONY: help
 help:
@@ -29,6 +30,7 @@ SOURCES:=
 CFLAGS:=
 LDFLAGS:=
 DEPENDENCIES:=
+RESOURCES:=
 
 include $(1)
 
@@ -61,6 +63,10 @@ $$(TARGET): DEPENDENCIES:=$$(DEPENDENCIES)
 $$(TARGET): TARGET_BASE:=$$(TARGET_BASE)
 $$(TARGET): $$(DEPENDENCIES)
 
+ifneq ($$(RESOURCES),)
+$$(eval $$(call recipe_resources_TEMPLATE,$$(RESOURCES)))
+endif
+
 $$(eval $$(call recipe_c++_TEMPLATE,$$(BUILD)/build.$$(TARGET),$$(TARGET_BASE)))
 $$(eval $$(call $$(TYPE)_TEMPLATE,$$(TARGET)))
 
@@ -74,3 +80,4 @@ $(foreach i, $(TARGET_CONFIGS),$(eval $(call include_target_TEMPLATE,$(i))))
 
 .PHONY: all
 all: $(TARGETS)
+
