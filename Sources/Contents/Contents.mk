@@ -1,3 +1,6 @@
+TARGET:=Contents
+TYPE:=custom
+
 .PHONY: Contents 
 Contents:
 	@echo "COPY Contents"

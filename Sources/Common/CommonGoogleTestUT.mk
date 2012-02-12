@@ -1,4 +1,5 @@
-APPNAME=CommonGoogleTestUT
+TARGET:=CommonGoogleTestUT
+TYPE:=application
 		
 SOURCES+=UnitTests/mainGoogleTestUT.cpp
 SOURCES+=Game/UnitTests/UniverseTest.cpp

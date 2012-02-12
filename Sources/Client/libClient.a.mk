@@ -1,4 +1,5 @@
-LIBNAME=libClient.a
+TARGET:=libClient.a
+TYPE:=static_library
 
 SOURCES+=Engine/Application.cpp
 SOURCES+=Engine/Engine.cpp

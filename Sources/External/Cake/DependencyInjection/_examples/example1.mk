@@ -1,4 +1,4 @@
-APPNAME=example1
+TARGET:=example1
+TYPE:=application
 CFLAGS+=-I../..
 SOURCES+=example1.cpp
-include Makefile.leaf

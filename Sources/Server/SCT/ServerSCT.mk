@@ -1,4 +1,5 @@
-APPNAME=ServerSCT
+TARGET:=ServerSCT
+TYPE:=application
 
 SOURCES:=mainSCT.cpp
 SOURCES+=Core/Component.cpp

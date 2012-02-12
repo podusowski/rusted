@@ -1,4 +1,5 @@
-APPNAME=ClientUT
+TARGET:=ClientUT
+TYPE:=application
 
 SOURCES+=../Common/UnitTests/mainGoogleTestUT.cpp
 
@@ -20,5 +21,3 @@ LDFLAGS+=-lboost_system
 DEPENDENCIES+=libClient.a
 DEPENDENCIES+=libCommon.a
 DEPENDENCIES+=libCake.a
-
-include Makefile.leaf

@@ -1,4 +1,5 @@
-APPNAME=CommonUT
+TARGET:=CommonUT
+TYPE:=application
 		
 SOURCES=UnitTests/mainUT.cpp \
         UnitTests/ThreadTest.cpp \

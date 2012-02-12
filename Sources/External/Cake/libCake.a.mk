@@ -1,4 +1,4 @@
-TARGET:=libCake
+TARGET:=libCake.a
 TYPE:=static_library
 
 CFLAGS+=-I. -I.. -I$(TARGET_BASE) -I$(TARGET_BASE)/..

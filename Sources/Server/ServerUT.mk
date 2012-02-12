@@ -1,4 +1,5 @@
-APPNAME=ServerUT
+TARGET:=ServerUT
+TYPE:=application
 
 SOURCES=UnitTests/mainUT.cpp \
         Game/UnitTests/PlayerTest.cpp \

@@ -1,4 +1,5 @@
-LIBNAME=libServer.a
+TARGET:=libServer.a
+TYPE:=static_library
 
 SOURCES= \
 		main.cpp \
@@ -15,10 +16,10 @@ SOURCES= \
         Game/PlayerContainer.cpp \
 
 CFLAGS+=-Wall -pedantic -g 
-CFLAGS+=-I../
-CFLAGS+=-I. 
-CFLAGS+=-I../Common
-CFLAGS+=-I../External
+CFLAGS+=-I$(TARGET_BASE)
+CFLAGS+=-I$(TARGET_BASE)/..
+CFLAGS+=-I$(TARGET_BASE)/../Common
+CFLAGS+=-I$(TARGET_BASE)/../External
 CFLAGS+=-I/usr/include/libxml2
 
 include Makefile.leaf

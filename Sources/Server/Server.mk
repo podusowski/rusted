@@ -1,18 +1,17 @@
-APPNAME=Server
+TARGET:=Server
+TYPE:=application
 
 LDFLAGS=-L. -L$(BUILD) -lServer -lCommon -lCake -lpthread -lboost_system -lxml2
 
-$(APPNAME): $(BUILD)/Server.cfg $(BUILD)/TestDataBase.xml $(BUILD)/runTestServer
+$(TARGET): $(BUILD) $(BUILD)/Server.cfg $(BUILD)/TestDataBase.xml $(BUILD)/runTestServer
 
-$(BUILD)/Server.cfg: Server.cfg
+$(BUILD)/Server.cfg: $(TARGET_BASE)/Server.cfg
 	cp $< $@
 
-$(BUILD)/TestDataBase.xml: TestDataBase.xml
+$(BUILD)/TestDataBase.xml: $(TARGET_BASE)/TestDataBase.xml
 	cp $< $@
 
-$(BUILD)/runTestServer: runTestServer
+$(BUILD)/runTestServer: $(TARGET_BASE)/runTestServer
 	cp $< $@
 
 DEPENDENCIES+=libServer.a libCommon.a libCake.a
-
-include Makefile.leaf
