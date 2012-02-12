@@ -9,7 +9,7 @@ include Make/recipe.resources.mk
 
 .PHONY: help
 help:
-	@echo -e '$(shell basename $(PWD)) targets:\n$(TARGETS_HELP)'
+	@echo -e '$(shell basename $(PWD)) targets:\n$(FONT_BOLD)\tall$(FONT_RESET)\n$(TARGETS_HELP)'
 
 .PHONY: clean
 clean:
