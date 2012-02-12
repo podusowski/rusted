@@ -1,7 +1,8 @@
 TARGET:=ut_deepp
 TYPE:=application
 
-CFLAGS+=-I../.. -DDEEPP_ENABLE_LOG
+CFLAGS+=-DDEEPP_ENABLE_LOG
+CFLAGS+=-I$(TARGET_BASE)/../..
 LDFLAGS+=-lpthread -lgtest
 
 SOURCES+=InjectTest.cpp

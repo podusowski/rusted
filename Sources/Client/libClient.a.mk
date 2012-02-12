@@ -21,9 +21,10 @@ SOURCES+=Views/StaticObjectView.cpp
 SOURCES+=Views/PilotView.cpp
 SOURCES+=Graphics/OgreObject.cpp
 
-CFLAGS+=-I../ -I. 
-CFLAGS+=-I../Common 
-CFLAGS+=-I../External
+CFLAGS+=-I$(TARGET_BASE)
+CFLAGS+=-I$(TARGET_BASE)/../ 
+CFLAGS+=-I$(TARGET_BASE)/../Common 
+CFLAGS+=-I$(TARGET_BASE)/../External
 CFLAGS+=-I/usr/include/libxml2
 CFLAGS+=-I/usr/include/OGRE
 CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/RendererModules/Ogre

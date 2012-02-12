@@ -1,4 +1,4 @@
 TARGET:=example2
 TYPE:=application
-CFLAGS+=-I../..
+CFLAGS+=-I$(TARGET_BASE)/../..
 SOURCES+=example2.cpp

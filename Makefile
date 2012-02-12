@@ -10,12 +10,10 @@ include Make/recipe.c++.mk
 help:
 	@echo -e '$(shell basename $(PWD)) targets:\n$(TARGETS_HELP)'
 
-.PHONY: all
-all: $(TARGETS)
-
 .PHONY: clean
 clean:
-	rm -rf $(BUILD)
+	@/bin/echo -e '$(FONT_BOLD)rm$(FONT_RESET) $(BUILD)'
+	@rm -rf $(BUILD)
 
 $(BUILD):
 	@/bin/echo -e '$(FONT_BOLD)mkdir$(FONT_RESET) $(BUILD)'
@@ -68,3 +66,5 @@ TARGETS_HELP:=
 TARGET_CONFIGS := $(shell find $(SOURCE_DIR) -name *.mk)
 $(foreach i, $(TARGET_CONFIGS),$(eval $(call include_target_TEMPLATE,$(i))))
 
+.PHONY: all
+all: $(TARGETS)
