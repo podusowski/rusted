@@ -1,6 +1,7 @@
-LIBNAME=libCake.a
+TARGET:=libCake
+TYPE:=static_library
 
-CFLAGS+=-I. -I..
+CFLAGS+=-I. -I.. -I$(TARGET_BASE) -I$(TARGET_BASE)/..
 
 SOURCES+=Configuration/Configuration.cpp
 
@@ -23,5 +24,3 @@ SOURCES+=System/AtomicSyscall.cpp
 SOURCES+=System/ShellResult.cpp
 SOURCES+=System/Shell.cpp
 SOURCES+=System/Time.cpp
-
-include Makefile.leaf

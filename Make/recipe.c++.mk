@@ -7,6 +7,11 @@ CFLAGS+=-Wall -O0
 #	@$(MAKEDEP)
 #	@/usr/bin/time -f %E -- $(CC) $(CFLAGS) -c $< -o $@
 
-%.o: %.cpp
-	@echo compile c++: $@ from $< $(CFLAGS)
+define recipe_c++_TEMPLATE
 
+$(1)/%.o: $(2)/%.cpp
+	@mkdir -p `dirname $$@`
+	@/bin/echo -ne "$(FONT_BOLD)$(CC)$(FONT_RESET) $$< "
+	@/usr/bin/time -f %E -- $$(CC) $$(CFLAGS) -c $$< -o $$@
+
+endef
