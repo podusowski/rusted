@@ -64,7 +64,7 @@ $$(TARGET): TARGET_BASE:=$$(TARGET_BASE)
 $$(TARGET): $$(DEPENDENCIES)
 
 ifneq ($$(RESOURCES),)
-$$(eval $$(call recipe_resources_TEMPLATE,$$(RESOURCES)))
+$$(foreach i,$$(RESOURCES),$$(eval $$(call recipe_resources_TEMPLATE,$$(i))))
 endif
 
 $$(eval $$(call recipe_c++_TEMPLATE,$$(BUILD)/build.$$(TARGET),$$(TARGET_BASE)))
