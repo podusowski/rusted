@@ -6,6 +6,21 @@ include Make/template.static_library.mk
 include Make/template.application.mk
 include Make/recipe.c++.mk
 
+.PHONY: help
+help:
+	@echo -e '$(shell basename $(PWD)) targets:\n$(TARGETS_HELP)'
+
+.PHONY: all
+all: $(TARGETS)
+
+.PHONY: clean
+clean:
+	rm -rf $(BUILD)
+
+$(BUILD):
+	@/bin/echo -e '$(FONT_BOLD)mkdir$(FONT_RESET) $(BUILD)'
+	@mkdir -p $(BUILD)
+
 define include_target_TEMPLATE
 
 TARGET_BASE=$(shell dirname $(1))
@@ -14,6 +29,7 @@ TARGET:=
 TYPE:=
 SOURCES:=
 CFLAGS:=
+LDFLAGS:=
 DEPENDENCIES:=
 
 include $(1)
@@ -26,37 +42,29 @@ ifeq ($$(TYPE),)
 $$(error no type specified in $(1))
 endif
 
-OBJS:=$$(addprefix $$(BUILD)/$$(TARGET)/,$$(SOURCES))
+TARGETS+=$$(TARGET)
+TARGETS_HELP+=\t$$(FONT_BOLD)$$(TARGET)$$(FONT_RESET) ($$(TYPE))\n
+
+OBJS:=$$(addprefix $$(BUILD)/build.$$(TARGET)/,$$(SOURCES))
 OBJS:=$$(OBJS:.cpp=.o)
 $$(TARGET)_OBJS:=$$(OBJS)
 
 SOURCES:=$$(addprefix $$(TARGET_BASE)/,$$(SOURCES))
 $$(TARGET)_SOURCES:=$$(SOURCES)
 
-#$$(info sources: $$($$(TARGET)_SOURCES))
-#$$(info objs: $$($$(TARGET)_OBJS))
-
 $$(TARGET): CFLAGS:=$$(CFLAGS)
+$$(TARGET): LDFLAGS:=$$(LDFLAGS)
+$$(TARGET): DEPENDENCIES:=$$(DEPENDENCIES)
 $$(TARGET): $$(DEPENDENCIES)
 
-$$(eval $$(call recipe_c++_TEMPLATE,$$(BUILD)/$$(TARGET),$$(TARGET_BASE)))
+$$(eval $$(call recipe_c++_TEMPLATE,$$(BUILD)/build.$$(TARGET),$$(TARGET_BASE)))
 $$(eval $$(call $$(TYPE)_TEMPLATE,$$(TARGET)))
-
-TARGETS+=$$(TARGET)
 
 endef
 
 #find and include all target configs
+TARGETS:=
+TARGETS_HELP:=
 TARGET_CONFIGS := $(shell find $(SOURCE_DIR) -name *.mk)
 $(foreach i, $(TARGET_CONFIGS),$(eval $(call include_target_TEMPLATE,$(i))))
 
-.PHONY: help
-help:
-	@echo Targets: $(TARGETS)
-
-.PHONY: clean
-clean:
-	rm -rf $(BUILD)
-
-$(BUILD):
-	mkdir -p $(BUILD)

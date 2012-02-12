@@ -31,4 +31,3 @@ CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/
 
 DEPENDENCIES+=libCommon.a CEGUI
 
-include Makefile.leaf

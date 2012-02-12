@@ -16,6 +16,3 @@ LDFLAGS=-L. -L$(BUILD) -lCommon -lCake -lpthread -lboost_system -lxml2 -lgtest -
 
 DEPENDENCIES+=libCommon.a
 DEPENDENCIES+=libCake.a
-
-include Makefile.leaf
-

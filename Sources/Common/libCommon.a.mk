@@ -24,14 +24,12 @@ SOURCES+=Game/Object/StaticObject.cpp
 SOURCES+=Game/UniverseLoader.cpp
 
 CFLAGS+=-Wall -pedantic -g 
-CFLAGS+=-I. 
-CFLAGS+=-I.. 
+CFLAGS+=-I$(TARGET_BASE)
+CFLAGS+=-I$(TARGET_BASE)/.. 
+CFLAGS+=-I$(TARGET_BASE)/../External/
 CFLAGS+=-I/usr/include/libxml2
-CFLAGS+=-I../External/
 
 $(LIBNAME): Messages/Messages.hpp
 
 Messages/Messages.hpp: Messages/Messages.xml genMessages.py
 	./genMessages.py
-
-include Makefile.leaf

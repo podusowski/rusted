@@ -1,7 +1,7 @@
 TARGET:=Server
 TYPE:=application
 
-LDFLAGS=-L. -L$(BUILD) -lServer -lCommon -lCake -lpthread -lboost_system -lxml2
+LDFLAGS:=-L$(BUILD) -lServer -lCommon -lCake -lpthread -lboost_system -lxml2
 
 $(TARGET): $(BUILD) $(BUILD)/Server.cfg $(BUILD)/TestDataBase.xml $(BUILD)/runTestServer
 

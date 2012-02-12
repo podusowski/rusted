@@ -1,3 +1,0 @@
-.PHONY: $(META)
-$(META): $(DEPENDENCIES)
-

@@ -34,5 +34,3 @@ Messages/UnitTests/MessagesTest.cpp: Messages/Messages.xml genMessages.py genMes
 	@mkdir -p Messages/UnitTests
 	./genMessagesUT.py
 
-include Makefile.leaf
-

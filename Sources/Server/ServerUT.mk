@@ -12,5 +12,3 @@ LDFLAGS=-L. -L$(BUILD) -lpthread -lboost_system -lxml2 -lcppunit -lServer -lComm
 DEPENDENCIES+=libServer.a
 DEPENDENCIES+=libCommon.a
 DEPENDENCIES+=libCake.a
-
-include Makefile.leaf

@@ -27,5 +27,3 @@ RESOURCES+=SampleDataBase.xml
 DEPENDENCIES+=Server
 DEPENDENCIES+=libCommon.a
 DEPENDENCIES+=libCake.a
-
-include Makefile.leaf
