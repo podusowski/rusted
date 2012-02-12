@@ -29,7 +29,7 @@ CFLAGS+=-I$(TARGET_BASE)/..
 CFLAGS+=-I$(TARGET_BASE)/../External/
 CFLAGS+=-I/usr/include/libxml2
 
-$(LIBNAME): Messages/Messages.hpp
+$(TARGET): $(TARGET_BASE)/Messages/Messages.hpp
 
-Messages/Messages.hpp: Messages/Messages.xml genMessages.py
-	./genMessages.py
+$(TARGET_BASE)/Messages/Messages.hpp: $(TARGET_BASE)/Messages/Messages.xml $(TARGET_BASE)/genMessages.py
+	cd $(TARGET_BASE) && ./genMessages.py

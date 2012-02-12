@@ -30,5 +30,5 @@ $(CEGUI_LIB): $(TARGET_BASE)/$(CEGUI_PACKAGE)
 		--disable-tga \
 		--disable-stb \
 		--disable-libxml \
-	&& make -j2 -s
+	&& make -j$(JOBS) -s
 
