@@ -24,7 +24,6 @@ SOURCES+=Game/Object/StaticObject.cpp
 SOURCES+=Game/UniverseLoader.cpp
 
 CFLAGS+=-Wall -pedantic -g 
-CFLAGS+=.
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/.. 
 CFLAGS+=-I$(TARGET_BASE)/../External/

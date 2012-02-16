@@ -2,10 +2,10 @@ AR:=ar rcs
 
 define static_library_TEMPLATE
 
-$(1): $$(BUILD)/$(1)
-$$(BUILD)/$(1): $$(BUILD) $$($(1)_OBJS)
+$(1): $$($(1)_OBJS)
+	@mkdir -p $$(BUILD)
 	@/bin/echo -e "$(FONT_BOLD)$(AR)$(FONT_RESET) `basename $$@` "
-	@$(AR) $$@ $($(1)_OBJS)
+	@$(AR) $$(BUILD)/$$@ $($(1)_OBJS)
 
 endef
 

@@ -5,7 +5,7 @@ $(info $(CPUS) cpus detected, $(JOBS) processes will be used)
 
 .PHONY: default
 default:
-	@make --no-print-directory -j$(JOBS) -f Make/Makefile JOBS=$(JOBS)
+	@$(MAKE) -r --no-print-directory -j$(JOBS) -f Make/Makefile JOBS=$(JOBS)
 
 .DEFAULT:
-	@make --no-print-directory -j$(JOBS) -f Make/Makefile $@ JOBS=$(JOBS)
+	@make -r --no-print-directory -j$(JOBS) -f Make/Makefile $@ JOBS=$(JOBS)

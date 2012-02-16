@@ -1,6 +1,8 @@
 BUILD=$(PWD)/_build
 SOURCE_DIR=$(PWD)/Sources
 
+VPATH:=$(BUILD)
+
 include Make/util.colors.mk
 include Make/template.static_library.mk
 include Make/template.application.mk
@@ -56,6 +58,7 @@ DEPS:=$$(DEPS:.cpp=.o.d)
 SOURCES:=$$(addprefix $$(TARGET_BASE)/,$$(SOURCES))
 $$(TARGET)_SOURCES:=$$(SOURCES)
 $$(SOURCES): $$(DEPENDENCIES)
+$$(OBJS): $(1)
 
 $$(TARGET): CFLAGS:=$$(CFLAGS)
 $$(TARGET): LDFLAGS:=$$(LDFLAGS)
