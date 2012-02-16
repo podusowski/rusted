@@ -1,22 +1,22 @@
 TARGET:=libCommon.a
 TYPE:=static_library
 
-SOURCES=Thread.cpp \
-		RustedCodec/RustedAbstractCoder.cpp \
-		RustedCodec/RustedAbstractDecoder.cpp \
-		RustedCodec/SimpleWriteBuffer.cpp \
-		RustedCodec/SimpleReadBuffer.cpp \
-		RustedCodec/AsioReadBuffer.cpp \
-		RustedCodec/AsioWriteBuffer.cpp
+SOURCES:=Thread.cpp
+SOURCES+=RustedCodec/RustedAbstractCoder.cpp
+SOURCES+=RustedCodec/RustedAbstractDecoder.cpp
+SOURCES+=RustedCodec/SimpleWriteBuffer.cpp
+SOURCES+=RustedCodec/SimpleReadBuffer.cpp
+SOURCES+=RustedCodec/AsioReadBuffer.cpp
+SOURCES+=RustedCodec/AsioWriteBuffer.cpp
 SOURCES+=RustedCodec/CakeWriteBuffer.cpp
 SOURCES+=RustedCodec/CakeReadBuffer.cpp
-SOURCES+=Configuration/Configuration.cpp \
-        DataBase/DataBase.cpp \
-        DataBase/DataBaseNode.cpp \
-        DataBase/XmlDataProvider.cpp \
-        DataBase/DataBaseFactory.cpp \
-        Game/RustedTime.cpp \
-	    Game/Utilities/PasswordHash.cpp
+SOURCES+=Configuration/Configuration.cpp
+SOURCES+=DataBase/DataBase.cpp
+SOURCES+=DataBase/DataBaseNode.cpp
+SOURCES+=DataBase/XmlDataProvider.cpp
+SOURCES+=DataBase/DataBaseFactory.cpp
+SOURCES+=Game/RustedTime.cpp
+SOURCES+=Game/Utilities/PasswordHash.cpp
 SOURCES+=Game/Universe.cpp
 SOURCES+=Game/Object/ObjectFactory.cpp
 SOURCES+=Game/Object/Ship.cpp
@@ -24,6 +24,7 @@ SOURCES+=Game/Object/StaticObject.cpp
 SOURCES+=Game/UniverseLoader.cpp
 
 CFLAGS+=-Wall -pedantic -g 
+CFLAGS+=.
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/.. 
 CFLAGS+=-I$(TARGET_BASE)/../External/
