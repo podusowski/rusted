@@ -17,6 +17,7 @@ SOURCES+=Services/RustedTimeService.cpp
 SOURCES+=Services/AuthorizationService.cpp
 SOURCES+=Services/EntityService.cpp
 SOURCES+=Services/StaticObjectService.cpp
+SOURCES+=Services/ObjectService.cpp
 SOURCES+=Views/StaticObjectView.cpp
 SOURCES+=Views/PilotView.cpp
 SOURCES+=Graphics/OgreObject.cpp

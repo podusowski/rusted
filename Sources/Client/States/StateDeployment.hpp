@@ -6,9 +6,12 @@
 #include "Client/States/EntitySelectState.hpp"
 #include "Client/States/LoginState.hpp"
 #include "Client/States/PilotState.hpp"
+
 #include "Client/Services/RustedTimeService.hpp"
 #include "Client/Services/EntityService.hpp"
 #include "Client/Services/StaticObjectService.hpp"
+#include "Client/Services/ObjectService.hpp"
+
 #include "Client/Game/PlayerInfo.hpp"
 #include "Client/States/IStateDeployment.hpp"
 #include "Client/Views/StaticObjectView.hpp"
@@ -43,6 +46,7 @@ private:
     Services::RustedTimeService m_rustedTimeService;
     Services::EntityService m_entityService;
     Services::StaticObjectService m_staticObjectService;
+    Services::ObjectService m_objectService;
 
     Views::StaticObjectView m_staticObjectView;
     Views::PilotView m_pilotView;
