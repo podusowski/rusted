@@ -86,3 +86,14 @@ void EntityService::handle(const Common::Messages::ShipInfo & entityGetInfoResp)
        }
     }
 }
+
+void EntityService::handle(const Common::Messages::EntityChangeCourseReq & entityChangeCourse)
+{
+    LOG_DEBUG << "Ship " << entityChangeCourse.entityId << " changed course";
+
+    Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(entityChangeCourse.entityId);
+    ship.setCourse(Common::Game::Position(
+        entityChangeCourse.courseX,
+        entityChangeCourse.courseY,
+        entityChangeCourse.courseZ));
+}
