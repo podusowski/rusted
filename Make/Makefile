@@ -45,7 +45,14 @@ $$(error no type specified in $(1))
 endif
 
 TARGETS+=$$(TARGET)
-TARGETS_HELP+=\t$$(FONT_BOLD)$$(TARGET)$$(FONT_RESET) ($$(TYPE))\n
+
+ifneq ($$(DEPENDENCIES),)
+  HELP_DEPENDS_ON:=depends on$$(DEPENDENCIES)
+else
+  HELP_DEPENDS_ON:=
+endif
+
+TARGETS_HELP+=\t$$(FONT_BOLD)$$(TARGET)$$(FONT_RESET) ($$(TYPE)) $$(HELP_DEPENDS_ON)\n
 
 OBJS:=$$(addprefix $$(BUILD)/build.$$(TARGET)/,$$(SOURCES))
 OBJS:=$$(OBJS:.cpp=.o)
