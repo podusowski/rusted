@@ -89,4 +89,16 @@ static objects
 	<param type="int32" name="z" />
 </message>
 
+<!--
+objects
+-->
+
+<message id="GetVisibleObjects" />
+
+<message id="VisibleObjects">
+    <list name="objects">
+        <listparam type="int32" name="id" />
+    </list>
+</message>
+
 </messages>
