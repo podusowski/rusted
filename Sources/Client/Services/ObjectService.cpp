@@ -17,9 +17,20 @@ void ObjectService::fetchVisibleObjects()
     m_connection.send(getVisibleObjects);
 }
 
-void ObjectService::handle(const Common::Messages::VisibleObjects &)
+void ObjectService::handle(const Common::Messages::VisibleObjects & visibleObjects)
 {
     LOG_DEBUG << "Got visible objects";
+
+    for (auto object: visibleObjects.objects)
+    {
+        LOG_DEBUG << "Fetch info about object id: " << object.get<0>();
+
+        //TODO we might have it already
+
+        Common::Messages::GetObjectInfo getObjectInfo;
+        getObjectInfo.id = object.get<0>();
+        m_connection.send(getObjectInfo);
+    }
 }
 
 void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)

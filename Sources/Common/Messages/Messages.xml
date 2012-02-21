@@ -101,13 +101,8 @@ objects
     </list>
 </message>
 
-<message id="GetObjectType">
+<message id="GetObjectInfo">
     <param type="int32" name="id" />
-</message>
-
-<message id="ObjectType">
-    <param type="int32" name="id" />
-    <param type="string" name="type" />
 </message>
 
 </messages>
