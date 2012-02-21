@@ -64,14 +64,6 @@ void EntityService::handle(const Common::Messages::ShipInfo & entityGetInfoResp)
 {
     LOG_DEBUG << "Got ship info (id: " << entityGetInfoResp.id << ")";
 
-    boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
-    Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
-    ship.setId(entityGetInfoResp.id);
-    ship.setOwnerId(entityGetInfoResp.player_id);
-    ship.setPosition(Common::Game::Position(entityGetInfoResp.x, entityGetInfoResp.y, entityGetInfoResp.z));
-
-    m_universe.add(object);
-
     // are we waiting for this entity info?
     std::set<int>::iterator it = m_myEntities.find(entityGetInfoResp.id);
     if (it != m_myEntities.end())

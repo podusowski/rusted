@@ -16,6 +16,7 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
     m_rustedTimeService(connection),
     m_entityService(connection, m_playerInfo, m_universe),
     m_staticObjectService(connection, m_universe),
+    m_objectService(m_universe),
 
     m_staticObjectView(m_staticObjectService, graphics, m_universe),
     m_pilotView(graphics, input, m_entityService, gui),
@@ -48,5 +49,6 @@ void StateDeployment::deployAuthorizedConnection()
     m_connection.addListener(m_rustedTimeService);
     m_connection.addListener(m_entityService);
     m_connection.addListener(m_staticObjectService);
+    m_connection.addListener(m_objectService);
 }
 
