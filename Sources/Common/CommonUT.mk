@@ -35,7 +35,9 @@ LDFLAGS+=-lgmock
 DEPENDENCIES+=libCommon.a
 DEPENDENCIES+=libCake.a
 
-Messages/UnitTests/MessagesTest.cpp: Messages/Messages.xml genMessages.py genMessagesUT.py
-	@mkdir -p Messages/UnitTests
-	./genMessagesUT.py
+$(TARGET): $(TARGET_BASE)/Messages/UnitTests/MessagesTest.cpp
+
+$(TARGET_BASE)/Messages/UnitTests/MessagesTest.cpp: $(TARGET_BASE)/Messages/Messages.xml $(TARGET_BASE)/genMessages.py $(TARGET_BASE)/genMessagesUT.py
+	@mkdir -p $(TARGET_BASE)/Messages/UnitTests
+	cd $(TARGET_BASE) && ./genMessagesUT.py
 

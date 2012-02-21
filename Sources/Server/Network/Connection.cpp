@@ -54,7 +54,7 @@ void Connection::run()
             m_listenersToAdd.clear();
 
             // receive message
-            std::auto_ptr< AbstractMessage > message = MessageFactory::create(*buffer);
+            boost::shared_ptr<AbstractMessage> message = MessageFactory::create(*buffer);
 
             LOG_DEBUG << "<connection:" << m_id << "> Received: " << *message;
 

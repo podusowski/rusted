@@ -17,7 +17,7 @@ TEST(StaticObjectsSct, StaticObjectsStatusReq)
 
     Common::Messages::StaticObjectStatusReq staticObjectStatusReq;
     connection.send(staticObjectStatusReq);
-    std::auto_ptr<Common::Messages::AbstractMessage> resp = connection.receive();
+    boost::shared_ptr<Common::Messages::AbstractMessage> resp = connection.receive();
     EXPECT_EQ(Common::Messages::Id::StaticObjectStatusResp, resp->getId());
 
     Common::Messages::StaticObjectStatusResp & staticObjectStatusResp = dynamic_cast<Common::Messages::StaticObjectStatusResp&>(*resp);
@@ -33,7 +33,7 @@ TEST(StaticObjectsSct, StaticObjectInfoReq)
     Common::Messages::StaticObjectInfoReq staticObjectInfoReq;
     staticObjectInfoReq.staticObjectId = 3;
     connection.send(staticObjectInfoReq);
-    std::auto_ptr<Common::Messages::AbstractMessage> resp = connection.receive();
+    boost::shared_ptr<Common::Messages::AbstractMessage> resp = connection.receive();
     EXPECT_EQ(Common::Messages::Id::StaticObjectInfoResp, resp->getId());
 
     Common::Messages::StaticObjectInfoResp & staticObjectInfoResp = dynamic_cast<Common::Messages::StaticObjectInfoResp&>(*resp);

@@ -21,6 +21,6 @@ TEST(ObjectsSct, FetchVisibleObjects)
     Common::Messages::GetVisibleObjects getVisibleObjects;
     connection1->send(getVisibleObjects);
 
-    std::auto_ptr<Common::Messages::AbstractMessage> visibleObjects = connection1->receive();
+    boost::shared_ptr<Common::Messages::AbstractMessage> visibleObjects = connection1->receive();
     EXPECT_EQ(4, dynamic_cast<Common::Messages::VisibleObjects&>(*visibleObjects).objects.size());
 }

@@ -26,10 +26,10 @@ void Connection::run()
         using namespace Common::Messages;
 
         Common::RustedCodec::AsioReadBuffer buffer(m_socket);
-        std::auto_ptr<AbstractMessage> message = MessageFactory::create(buffer);
+        boost::shared_ptr<AbstractMessage> message = MessageFactory::create(buffer);
         
         LOG_INFO << "Message received, " << TYPENAME(*message) << ", putting it on the queue";
-        m_messages.push(message.release());
+        m_messages.push(message);
         //FIXME: make a lock here
     }
 }
@@ -88,7 +88,7 @@ void Connection::yield()
     {
         LOG_INFO << "Yielded while message queue is not empty (messages waiting: " << m_messages.size() << ")";
 
-        Common::Messages::AbstractMessage * message = m_messages.front();
+        auto message = m_messages.front();
         m_messages.pop();
 
         BOOST_FOREACH(IConnectionListener * listener, m_listeners)

@@ -41,12 +41,12 @@ void Connection::send(::Common::Messages::AbstractMessage & message)
     }
 }
 
-std::auto_ptr< AbstractMessage > Connection::receive()
+boost::shared_ptr<AbstractMessage> Connection::receive()
 {
     LOG_INFO << "Waiting for message...";
 
     Common::RustedCodec::AsioReadBuffer buffer(*m_socket);
-    std::auto_ptr< AbstractMessage > message;
+    boost::shared_ptr<AbstractMessage> message;
 
     try
     {

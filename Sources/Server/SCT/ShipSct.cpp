@@ -12,7 +12,7 @@ using namespace Common::Messages;
 class ShipSct : public testing::Test 
 {
 public:
-    std::auto_ptr<Common::Messages::AbstractMessage> procedureEntityGetInfo(SCT::Connection & connection, int entityId);
+    boost::shared_ptr<Common::Messages::AbstractMessage> procedureEntityGetInfo(SCT::Connection & connection, int entityId);
     void procedureEntityChangeCourse(SCT::Connection & connection, int entityId, int x, int y, int z);
 };
 
@@ -21,7 +21,7 @@ TEST_F(ShipSct, testEntityChangeCourseReq)
     SCT::PreconditionPlayerLoggedIn precondition;
     SCT::Connection & connection = precondition.getConnection();
 
-    std::auto_ptr<Common::Messages::AbstractMessage> entityGetInfoRespA = procedureEntityGetInfo(connection, 1);
+    auto entityGetInfoRespA = procedureEntityGetInfo(connection, 1);
     Common::Messages::ShipInfo & entitiesGetInfoResp = dynamic_cast<Common::Messages::ShipInfo&>(*entityGetInfoRespA);
     EXPECT_TRUE(1 == entitiesGetInfoResp.player_id);
     EXPECT_TRUE(1 == entitiesGetInfoResp.x);
@@ -32,7 +32,7 @@ TEST_F(ShipSct, testEntityChangeCourseReq)
 
     Cake::Threading::Thread::wait(2.0);
 
-    std::auto_ptr<Common::Messages::AbstractMessage> entityGetInfoRespA2 = procedureEntityGetInfo(connection, 1);
+    boost::shared_ptr<Common::Messages::AbstractMessage> entityGetInfoRespA2 = procedureEntityGetInfo(connection, 1);
     Common::Messages::ShipInfo & entitiesGetInfoResp2 = dynamic_cast<Common::Messages::ShipInfo&>(*entityGetInfoRespA2);
     EXPECT_TRUE(1 == entitiesGetInfoResp2.player_id);
     EXPECT_TRUE(2 == entitiesGetInfoResp2.x);
@@ -55,10 +55,10 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
     procedureEntityChangeCourse(*connection1, 1, 2, 1, 1);
 
     // second player gets notified
-    std::auto_ptr<AbstractMessage> entityChangeCourse2 = connection2->receive();
+    auto entityChangeCourse2 = connection2->receive();
 }
 
-std::auto_ptr<Common::Messages::AbstractMessage> ShipSct::procedureEntityGetInfo(
+boost::shared_ptr<Common::Messages::AbstractMessage> ShipSct::procedureEntityGetInfo(
     SCT::Connection & connection, 
     int entityId)
 {
@@ -67,7 +67,7 @@ std::auto_ptr<Common::Messages::AbstractMessage> ShipSct::procedureEntityGetInfo
 
     connection.send(entityGetInfoReq);
 
-    std::auto_ptr<Common::Messages::AbstractMessage> shipInfo = connection.receive();
+    auto shipInfo = connection.receive();
     EXPECT_TRUE(Common::Messages::Id::ShipInfo == shipInfo->getId());
 
     return shipInfo;

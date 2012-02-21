@@ -27,7 +27,7 @@ TEST(UserSct, Authorize)
 		msg.password = "password";
 		connection->send(msg);
 
-		std::auto_ptr<AbstractMessage> resp = connection->receive();
+		boost::shared_ptr<AbstractMessage> resp = connection->receive();
 		EXPECT_EQ(Common::Messages::Id::UserAuthorizationResp, resp->getId());
 		Common::Messages::UserAuthorizationResp & userAuthorizationResp =
 			dynamic_cast<Common::Messages::UserAuthorizationResp&>(*(resp.get()));
@@ -38,10 +38,10 @@ TEST(UserSct, Authorize)
 
 	// check player's resources
 	{
-		::Common::Messages::PlayerResourcesStatusReq resourcesStatusReq;
+		Common::Messages::PlayerResourcesStatusReq resourcesStatusReq;
 		connection->send(resourcesStatusReq);
 
-		std::auto_ptr<AbstractMessage> resp = connection->receive();
+		boost::shared_ptr<AbstractMessage> resp = connection->receive();
 		EXPECT_EQ(Common::Messages::Id::PlayerResourcesStatusResp, resp->getId());
 		Common::Messages::PlayerResourcesStatusResp & playerResourcesStatus =
 			dynamic_cast<Common::Messages::PlayerResourcesStatusResp&>(*(resp.get()));
@@ -69,7 +69,7 @@ TEST(UserSct, TwoUsersEntitiesStatusReq)
         Common::Messages::PlayerEntitiesStatusReq msg;
         connection1->send(msg);
 
-        std::auto_ptr<AbstractMessage> resp = connection1->receive();
+        boost::shared_ptr<AbstractMessage> resp = connection1->receive();
         EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
         Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
         ASSERT_EQ(1, playerEntitiesStatusResp.entities.size()); 
@@ -81,7 +81,7 @@ TEST(UserSct, TwoUsersEntitiesStatusReq)
         Common::Messages::PlayerEntitiesStatusReq msg;
         connection2->send(msg);
 
-        std::auto_ptr<AbstractMessage> resp = connection2->receive();
+        boost::shared_ptr<AbstractMessage> resp = connection2->receive();
         EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
         Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
         ASSERT_EQ(2, playerEntitiesStatusResp.entities.size()); 

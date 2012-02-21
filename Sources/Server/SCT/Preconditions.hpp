@@ -27,7 +27,7 @@ public:
         userAuthorizationReq.password = "password";
         m_connection->send(userAuthorizationReq);
 
-        std::auto_ptr<AbstractMessage> userAuthorizationResp = m_connection->receive();
+        boost::shared_ptr<AbstractMessage> userAuthorizationResp = m_connection->receive();
         assert(Id::UserAuthorizationResp == userAuthorizationResp->getId());
     }
 
@@ -35,7 +35,7 @@ public:
     SCT::Connection & getConnection() { return *m_connection; }
 
 private:
-    std::auto_ptr<SCT::Component> m_component;
+    boost::shared_ptr<SCT::Component> m_component;
     boost::shared_ptr<SCT::Connection> m_connection;
 };
 

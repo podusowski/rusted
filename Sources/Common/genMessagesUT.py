@@ -67,7 +67,7 @@ def genTests():
 			"\tSimpleWriteBuffer buf(raw_buf);\n"
 			"\tinMessage.serialize(buf);\n\n"
 			"\tSimpleReadBuffer read_buf(raw_buf);\n"
-			"\tstd::auto_ptr<AbstractMessage> outMessage = ::Common::Messages::MessageFactory::create(read_buf);\n\n"
+			"\tboost::shared_ptr<AbstractMessage> outMessage = ::Common::Messages::MessageFactory::create(read_buf);\n\n"
 			"\tCPPUNIT_ASSERT(0 != dynamic_cast<" + message.getAttribute("id") + " *>(outMessage.get()));\n"
 			"\tCPPUNIT_ASSERT_EQUAL(::Common::Messages::Id::" + message.getAttribute("id") + ", outMessage->getId());\n"
 		)
