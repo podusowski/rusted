@@ -10,3 +10,5 @@ $(1)/%.o: $(2)/%.cpp
 	@$$(CC) -MM $$(CFLAGS) $$< | sed 's!$$(notdir $$@):!$$@:!' > $$@.d
 
 endef
+
+%.hpp: ;
