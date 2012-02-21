@@ -15,7 +15,7 @@ SOURCES=UnitTests/mainUT.cpp \
         DataBase/UnitTests/DataBaseModuleTest.cpp \
 		Game/Utilities/UnitTests/PasswordHashTest.cpp \
 
-CFLAGS=-Wall -pedantic -g
+CFLAGS+=-Wall -pedantic -g
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common
