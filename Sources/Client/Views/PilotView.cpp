@@ -8,16 +8,20 @@ using namespace Client::Views;
 PilotView::PilotView(Graphics::IGraphics & graphics, 
                      Input::IInput & input, 
                      Services::EntityService & entityService,
+                     Services::ObjectService & objectService,
                      Client::Gui::Gui & gui) :
     m_graphics(graphics),
     m_input(input),
     m_entityService(entityService),
+    m_objectService(objectService),
     m_gui(gui)
 {
 }
 
 void PilotView::activate()
 {
+    m_objectService.fetchVisibleObjects();
+
     m_entityObject.reset(new Graphics::OgreObject(m_graphics.getSceneManager(), "Cube.mesh"));
     m_entityObject->getSceneNode().yaw(Ogre::Radian(0.8));
     m_entityObject->getSceneNode().pitch(Ogre::Radian(0.8));

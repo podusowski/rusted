@@ -3,9 +3,15 @@
 
 using namespace Client::Services;
 
-ObjectService::ObjectService(Common::Game::Universe & universe) :
+ObjectService::ObjectService(Client::Network::IConnection & connection, Common::Game::Universe & universe) :
+    m_connection(connection),
     m_universe(universe)
 {
+}
+
+void ObjectService::fetchVisibleObjects()
+{
+    LOG_DEBUG << "Fetching visible objects";
 }
 
 void ObjectService::handle(const Common::Messages::VisibleObjects &)
