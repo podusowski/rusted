@@ -62,8 +62,6 @@ void EntityService::handle(const Common::Messages::PlayerEntitiesStatusResp & en
 
 void EntityService::handle(const Common::Messages::ShipInfo & entityGetInfoResp)
 {
-    LOG_DEBUG << "Got ship info (id: " << entityGetInfoResp.id << ")";
-
     // are we waiting for this entity info?
     std::set<int>::iterator it = m_myEntities.find(entityGetInfoResp.id);
     if (it != m_myEntities.end())
