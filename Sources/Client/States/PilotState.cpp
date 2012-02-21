@@ -9,11 +9,11 @@ PilotState::PilotState(IStateManagerStack &,
                        Graphics::IGraphics & graphics,
                        Client::Gui::Gui & gui, 
                        Client::Services::EntityService &,
-                       Views::StaticObjectView & staticObjectView,
+                       Views::ObjectsView & objectsView,
                        Views::PilotView & pilotView) :
     m_graphics(graphics),
     m_gui(gui),
-    m_staticObjectView(staticObjectView),
+    m_objectsView(objectsView),
     m_pilotView(pilotView)
 {
 }
@@ -22,7 +22,7 @@ void PilotState::activate()
 {
     m_gui.setLayout("PilotScreen.layout");
 
-    m_staticObjectView.activate();
+    m_objectsView.activate();
     m_pilotView.activate();
 }
 
@@ -33,5 +33,6 @@ void PilotState::deactivate()
 void PilotState::frameStarted()
 {
     m_pilotView.frameStarted();
+    m_objectsView.frameStarted();
 }
 

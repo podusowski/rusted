@@ -10,12 +10,12 @@ namespace Client
 namespace Views
 {
 
-class StaticObjectView : public IView
+class ObjectsView : public IView
 {
 public:
-    StaticObjectView(Services::StaticObjectService &,
-                     Graphics::IGraphics &,
-                     Common::Game::Universe &);
+    ObjectsView(Services::StaticObjectService &,
+                Graphics::IGraphics &,
+                Common::Game::Universe &);
 
     void activate();
     void deactivate();

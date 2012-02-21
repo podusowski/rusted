@@ -5,7 +5,7 @@
 #include "Client/Gui/Gui.hpp"
 #include "Client/Services/EntityService.hpp"
 #include "Client/Graphics/IGraphics.hpp"
-#include "Client/Views/StaticObjectView.hpp"
+#include "Client/Views/ObjectsView.hpp"
 #include "Client/Views/PilotView.hpp"
 
 namespace Client
@@ -20,7 +20,7 @@ public:
                Graphics::IGraphics &,
                Client::Gui::Gui &, 
                Client::Services::EntityService &,
-               Views::StaticObjectView &,
+               Views::ObjectsView &,
                Views::PilotView &);
     void activate();
     void deactivate();
@@ -29,7 +29,7 @@ public:
 private:
     Graphics::IGraphics & m_graphics;
     Client::Gui::Gui & m_gui;
-    Views::StaticObjectView & m_staticObjectView;
+    Views::ObjectsView & m_objectsView;
     Views::PilotView & m_pilotView;
 };
 

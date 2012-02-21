@@ -14,7 +14,7 @@
 
 #include "Client/Game/PlayerInfo.hpp"
 #include "Client/States/IStateDeployment.hpp"
-#include "Client/Views/StaticObjectView.hpp"
+#include "Client/Views/ObjectsView.hpp"
 #include "Client/Views/PilotView.hpp"
 
 namespace Client
@@ -48,7 +48,7 @@ private:
     Services::StaticObjectService m_staticObjectService;
     Services::ObjectService m_objectService;
 
-    Views::StaticObjectView m_staticObjectView;
+    Views::ObjectsView m_staticObjectView;
     Views::PilotView m_pilotView;
 
     States::PilotState m_pilotState;

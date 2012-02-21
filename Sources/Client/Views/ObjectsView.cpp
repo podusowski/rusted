@@ -2,11 +2,11 @@
 #include <OgreEntity.h>
 
 #include "Cake/Diagnostics/Logger.hpp"
-#include "Client/Views/StaticObjectView.hpp"
+#include "Client/Views/ObjectsView.hpp"
 
 using namespace Client::Views;
 
-StaticObjectView::StaticObjectView(Services::StaticObjectService & staticObjectService,
+ObjectsView::ObjectsView(Services::StaticObjectService & staticObjectService,
                                    Graphics::IGraphics & graphics,
                                    Common::Game::Universe & universe) :
     m_staticObjectService(staticObjectService),
@@ -15,21 +15,21 @@ StaticObjectView::StaticObjectView(Services::StaticObjectService & staticObjectS
 {
 }
 
-void StaticObjectView::activate()
+void ObjectsView::activate()
 {
-    m_universe.setObjectAddedCallback(boost::bind(&StaticObjectView::objectAdded, this, _1));
+    m_universe.setObjectAddedCallback(boost::bind(&ObjectsView::objectAdded, this, _1));
     m_staticObjectService.fetchStaticObjects();
 }
 
-void StaticObjectView::deactivate()
+void ObjectsView::deactivate()
 {
 }
 
-void StaticObjectView::frameStarted()
+void ObjectsView::frameStarted()
 {
 }
 
-void StaticObjectView::objectAdded(Common::Game::Object::ObjectBase & object)
+void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
 {
     if (typeid(object) == typeid(Common::Game::Object::StaticObject))
     {
