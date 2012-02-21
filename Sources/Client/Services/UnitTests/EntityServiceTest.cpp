@@ -20,6 +20,9 @@ public:
     }
 };
 
+/*
+ * this is handled by ObjectService
+ *
 TEST_F(EntityServiceTest, EntityGetInfoResp)
 {
     Client::Network::ConnectionMock connection;
@@ -41,3 +44,4 @@ TEST_F(EntityServiceTest, EntityGetInfoResp)
 
     EXPECT_NO_THROW(universe.getById<Common::Game::Object::Ship>(1));
 }
+*/
