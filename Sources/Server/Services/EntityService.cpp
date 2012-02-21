@@ -41,7 +41,7 @@ void EntityService::handle(const Common::Messages::EntityChangeCourseReq & chang
     }
 }
 
-void EntityService::handle(const Common::Messages::GetVisibleObjects & changeCourseReq, Network::IConnection & connection)
+void EntityService::handle(const Common::Messages::GetVisibleObjects &, Network::IConnection & connection)
 {
     Common::Messages::VisibleObjects visibleObjects;
 
@@ -56,5 +56,24 @@ void EntityService::handle(const Common::Messages::GetVisibleObjects & changeCou
     }
 
     connection.send(visibleObjects);
+}
+
+void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo, Network::IConnection & connection)
+{
+    Common::Game::Object::ObjectBase & object = m_universe.getById<Common::Game::Object::ObjectBase>(getObjectInfo.id);
+
+    if (typeid(object) == typeid(Common::Game::Object::Ship))
+    {
+         Common::Messages::ShipInfo shipInfo;
+
+         Common::Game::Position position = object.getPosition();
+         shipInfo.id = getObjectInfo.id;
+         shipInfo.player_id = dynamic_cast<Common::Game::Object::Ship&>(object).getOwnerId();
+         shipInfo.x = position.getX();
+         shipInfo.y = position.getY();
+         shipInfo.z = position.getZ();
+
+         connection.send(shipInfo);
+    }
 }
 
