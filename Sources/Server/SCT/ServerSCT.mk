@@ -9,6 +9,7 @@ SOURCES+=ServerVersionSct.cpp
 SOURCES+=UserSct.cpp
 SOURCES+=ShipSct.cpp
 SOURCES+=StaticObjectsSct.cpp
+SOURCES+=ObjectsSct.cpp
 
 CFLAGS+=-Wall -pedantic -g 
 CFLAGS+=-I$(TARGET_BASE)

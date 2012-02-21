@@ -43,6 +43,21 @@ TEST_F(UniverseTest, GetByType)
     ASSERT_EQ(1, objects.size());
 }
 
+TEST_F(UniverseTest, GetAll)
+{
+    Common::Game::Universe universe;
+    boost::shared_ptr<Common::Game::Object::ObjectBase> ship(new Common::Game::Object::Ship());
+    ship->setId(1);
+    universe.add(ship);
+
+    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::StaticObject());
+    staticObject->setId(2);
+    universe.add(staticObject);
+
+    Common::Game::Universe::Objects objects = universe.getAll();
+    ASSERT_EQ(2, objects.size());
+}
+
 TEST_F(UniverseTest, AddOneShipAndGetIt)
 {
     Common::Game::Universe universe;

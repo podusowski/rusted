@@ -82,6 +82,20 @@ public:
         return ret;
     }
 
+    Objects getAll()
+    {
+        Objects ret;
+
+        for (std::map<unsigned, boost::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.begin();
+             it != m_objects.end(); it++)
+        {
+            ret.push_back(it->second);
+        }
+
+        return ret;
+
+    }
+
     void setObjectAddedCallback(ObjectAddedCallback);
 
 private:

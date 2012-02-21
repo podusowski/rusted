@@ -40,3 +40,21 @@ void EntityService::handle(const Common::Messages::EntityChangeCourseReq & chang
         }
     }
 }
+
+void EntityService::handle(const Common::Messages::GetVisibleObjects & changeCourseReq, Network::IConnection & connection)
+{
+    Common::Messages::VisibleObjects visibleObjects;
+
+    LOG_DEBUG << "Filling visible objects";
+
+    auto objects = m_universe.getAll(); 
+    for (auto object: objects)
+    {
+        LOG_DEBUG << "  id: " << object->getId() << ", type: " << TYPENAME(*object);
+
+        visibleObjects.objects.push_back(boost::make_tuple(object->getId()));
+    }
+
+    connection.send(visibleObjects);
+}
+
