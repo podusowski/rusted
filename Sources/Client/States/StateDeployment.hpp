@@ -48,7 +48,7 @@ private:
     Services::StaticObjectService m_staticObjectService;
     Services::ObjectService m_objectService;
 
-    Views::ObjectsView m_staticObjectView;
+    Views::ObjectsView m_objectsView;
     Views::PilotView m_pilotView;
 
     States::PilotState m_pilotState;
