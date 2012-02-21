@@ -12,10 +12,14 @@ ObjectService::ObjectService(Client::Network::IConnection & connection, Common::
 void ObjectService::fetchVisibleObjects()
 {
     LOG_DEBUG << "Fetching visible objects";
+
+    Common::Messages::GetVisibleObjects getVisibleObjects;
+    m_connection.send(getVisibleObjects);
 }
 
 void ObjectService::handle(const Common::Messages::VisibleObjects &)
 {
+    LOG_DEBUG << "Got visible objects";
 }
 
 void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
