@@ -20,11 +20,6 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
 
 void PilotView::activate()
 {
-    m_entityObject.reset(new Graphics::OgreObject(m_graphics.getSceneManager(), "Cube.mesh"));
-    m_entityObject->getSceneNode().yaw(Ogre::Radian(0.8));
-    m_entityObject->getSceneNode().pitch(Ogre::Radian(0.8));
-    m_entityObject->getSceneNode().roll(Ogre::Radian(0.8));
-
     m_input.addMouseListener(*this);
 }
 
@@ -40,9 +35,6 @@ void PilotView::frameStarted()
 
 void PilotView::updateShipPosition()
 {
-    Common::Game::Position position = m_entityService.getCurrentEntity().getPosition();
-    m_entityObject->getSceneNode().setPosition(position.getX(), position.getY(), position.getZ());
-
     CEGUI::Window * shipPosition = m_gui.getLayoutWindow().getChildRecursive("ShipPosition");
     std::stringstream ss;
     ss << m_entityService.getCurrentEntity().getPosition();
