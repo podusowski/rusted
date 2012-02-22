@@ -133,3 +133,18 @@ TEST_F(UniverseTest, ObjectAddedCallback)
 
     universe.add(ship1);
 }
+
+TEST_F(UniverseTest, DoubleInsert)
+{
+    Common::Game::Universe universe;
+
+    boost::shared_ptr<Common::Game::Object::ObjectBase> obj1(new Common::Game::Object::StaticObject());
+    obj1->setId(1);
+
+    universe.add(obj1);
+
+    boost::shared_ptr<Common::Game::Object::ObjectBase> obj2(new Common::Game::Object::StaticObject());
+    obj2->setId(1);
+
+    EXPECT_ANY_THROW(universe.add(obj2));
+}
