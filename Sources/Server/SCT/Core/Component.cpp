@@ -8,8 +8,8 @@
 #include <boost/foreach.hpp>
 
 #include "Cake/Diagnostics/Logger.hpp"
+#include "Cake/Threading/Thread.hpp"
 
-#include "Common/Thread.hpp"
 #include "Component.hpp"
 
 using namespace ::SCT;
@@ -85,6 +85,20 @@ void Component::start()
         LOG_INFO << "Running \"" << filename << "\", pid: " << m_pid;
     }
 
-    ::Common::Thread::wait(1);
+    Cake::Threading::Thread::wait(0, 500);
+
+    #if 0
+    for (int i = 0; i < 100; i++)
+    {
+        try
+        {
+            Connection testConnection("127.0.0.1", m_port);
+        }
+        catch (...)
+        {
+            Cake::Threading::Thread::wait(0, 500);
+        }
+    }
+    #endif
 }
 

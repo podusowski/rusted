@@ -24,7 +24,7 @@ public:
 	void start();
 	bool isRunning();
 
-	static void wait(float p_secs);
+	static void wait(int secs, int mili = 0);
 	static unsigned self();
 private:
 	static void * m_run(void *);

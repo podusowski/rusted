@@ -42,11 +42,11 @@ void Thread::start()
 	}
 }
 
-void Thread::wait(float p_secs)
+void Thread::wait(int secs, int mili)
 {
 	timespec l_ts;
-	l_ts.tv_sec = floor(p_secs);
-	l_ts.tv_nsec = ( p_secs - l_ts.tv_sec ) * 1000;
+	l_ts.tv_sec = secs;
+	l_ts.tv_nsec = mili * 1000 * 1000;
 	nanosleep(&l_ts, 0);
 }
 
