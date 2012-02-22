@@ -1,5 +1,5 @@
 CC=g++
-DEFAULT_CFLAGS+=-Wall -O0 -std=gnu++0x
+DEFAULT_CFLAGS+=-Wall -g -O0 -std=gnu++0x
 
 define recipe_c++_TEMPLATE
 
