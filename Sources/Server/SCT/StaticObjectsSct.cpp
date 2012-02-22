@@ -17,12 +17,10 @@ TEST(StaticObjectsSct, StaticObjectsStatusReq)
 
     Common::Messages::StaticObjectStatusReq staticObjectStatusReq;
     connection.send(staticObjectStatusReq);
-    boost::shared_ptr<Common::Messages::AbstractMessage> resp = connection.receive();
-    EXPECT_EQ(Common::Messages::Id::StaticObjectStatusResp, resp->getId());
 
-    Common::Messages::StaticObjectStatusResp & staticObjectStatusResp = dynamic_cast<Common::Messages::StaticObjectStatusResp&>(*resp);
-    ASSERT_EQ(1, staticObjectStatusResp.objects.size());
-    ASSERT_EQ(3, staticObjectStatusResp.objects[0].get<0>());
+    auto staticObjectStatusResp = connection.receive<Common::Messages::StaticObjectStatusResp>();
+    ASSERT_EQ(1, staticObjectStatusResp->objects.size());
+    ASSERT_EQ(3, staticObjectStatusResp->objects[0].get<0>());
 }
 
 TEST(StaticObjectsSct, StaticObjectInfoReq)
@@ -33,13 +31,11 @@ TEST(StaticObjectsSct, StaticObjectInfoReq)
     Common::Messages::StaticObjectInfoReq staticObjectInfoReq;
     staticObjectInfoReq.staticObjectId = 3;
     connection.send(staticObjectInfoReq);
-    boost::shared_ptr<Common::Messages::AbstractMessage> resp = connection.receive();
-    EXPECT_EQ(Common::Messages::Id::StaticObjectInfoResp, resp->getId());
 
-    Common::Messages::StaticObjectInfoResp & staticObjectInfoResp = dynamic_cast<Common::Messages::StaticObjectInfoResp&>(*resp);
-    EXPECT_EQ(3, staticObjectInfoResp.staticObjectId);
-    EXPECT_EQ(100, staticObjectInfoResp.x);
-    EXPECT_EQ(100, staticObjectInfoResp.y);
-    EXPECT_EQ(100, staticObjectInfoResp.z);
+    auto staticObjectInfoResp = connection.receive<Common::Messages::StaticObjectInfoResp>();
+    EXPECT_EQ(3, staticObjectInfoResp->staticObjectId);
+    EXPECT_EQ(100, staticObjectInfoResp->x);
+    EXPECT_EQ(100, staticObjectInfoResp->y);
+    EXPECT_EQ(100, staticObjectInfoResp->z);
 }
 

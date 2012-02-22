@@ -20,8 +20,7 @@ TEST(ServerVersionSct, testServerVersion)
 	Common::Messages::ServerVersionReq msg;
 	connection->send(msg);
 
-	boost::shared_ptr<AbstractMessage> resp = connection->receive();
-	EXPECT_TRUE(Common::Messages::Id::ServerVersionResp == resp->getId());
+	connection->receive<Common::Messages::ServerVersionResp>();
 }
 
 TEST(ServerVersionSct, FewConnections)
@@ -41,9 +40,7 @@ TEST(ServerVersionSct, FewConnections)
 
         Common::Messages::ServerVersionReq msg;
         connection->send(msg);
-
-        boost::shared_ptr<AbstractMessage> resp = connection->receive();
-        EXPECT_TRUE(Common::Messages::Id::ServerVersionResp == resp->getId());
+        connection->receive<Common::Messages::ServerVersionResp>();
 	}
 }
 

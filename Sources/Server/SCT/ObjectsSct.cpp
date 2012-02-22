@@ -17,8 +17,8 @@ TEST(ObjectsSct, FetchVisibleObjects)
     Common::Messages::GetVisibleObjects getVisibleObjects;
     connection1->send(getVisibleObjects);
 
-    boost::shared_ptr<Common::Messages::AbstractMessage> visibleObjects = connection1->receive();
-    EXPECT_EQ(4, dynamic_cast<Common::Messages::VisibleObjects&>(*visibleObjects).objects.size());
+    boost::shared_ptr<Common::Messages::VisibleObjects> visibleObjects = connection1->receive<Common::Messages::VisibleObjects>();
+    EXPECT_EQ(4, visibleObjects->objects.size());
 }
 
 TEST(ObjectsSct, GetObjectInfo_Ship)
@@ -32,8 +32,7 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
     getObjectInfo.id = 1;
     connection1->send(getObjectInfo);
 
-    boost::shared_ptr<Common::Messages::AbstractMessage> objectInfo = connection1->receive();
-    EXPECT_EQ(Common::Messages::Id::ShipInfo, objectInfo->getId());
+    connection1->receive<Common::Messages::ShipInfo>();
 }
 
 TEST(ObjectsSct, GetObjectInfo_StaticObject)
@@ -47,6 +46,5 @@ TEST(ObjectsSct, GetObjectInfo_StaticObject)
     getObjectInfo.id = 3;
     connection1->send(getObjectInfo);
 
-    boost::shared_ptr<Common::Messages::AbstractMessage> objectInfo = connection1->receive();
-    EXPECT_EQ(Common::Messages::Id::StaticObjectInfoResp, objectInfo->getId());
+    connection1->receive<Common::Messages::StaticObjectInfoResp>();
 }

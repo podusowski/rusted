@@ -27,8 +27,7 @@ public:
         userAuthorizationReq.password = "password";
         m_connection->send(userAuthorizationReq);
 
-        boost::shared_ptr<AbstractMessage> userAuthorizationResp = m_connection->receive();
-        assert(Id::UserAuthorizationResp == userAuthorizationResp->getId());
+        m_connection->receive<UserAuthorizationResp>();
     }
 
     SCT::Component & getComponent() { return *m_component; }

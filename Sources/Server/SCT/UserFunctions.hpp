@@ -20,8 +20,8 @@ inline boost::shared_ptr<SCT::Connection> authorizeUser(SCT::Component & compone
     userAuthorizationReq.password = password;
     connection->send(userAuthorizationReq);
 
-    boost::shared_ptr<AbstractMessage> userAuthorizationResp = connection->receive();
-    EXPECT_TRUE(dynamic_cast<UserAuthorizationResp&>(*userAuthorizationResp).success);
+    auto userAuthorizationResp = connection->receive<UserAuthorizationResp>();
+    EXPECT_TRUE(userAuthorizationResp->success);
 
     return connection;
 }

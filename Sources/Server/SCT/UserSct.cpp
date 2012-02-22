@@ -27,13 +27,9 @@ TEST(UserSct, Authorize)
 		msg.password = "password";
 		connection->send(msg);
 
-		boost::shared_ptr<AbstractMessage> resp = connection->receive();
-		EXPECT_EQ(Common::Messages::Id::UserAuthorizationResp, resp->getId());
-		Common::Messages::UserAuthorizationResp & userAuthorizationResp =
-			dynamic_cast<Common::Messages::UserAuthorizationResp&>(*(resp.get()));
-
-		EXPECT_EQ(true, userAuthorizationResp.success);
-		EXPECT_EQ(1, userAuthorizationResp.player_id);
+		auto resp = connection->receive<Common::Messages::UserAuthorizationResp>();
+		EXPECT_EQ(true, resp->success);
+		EXPECT_EQ(1, resp->player_id);
 	}
 
 	// check player's resources
@@ -41,14 +37,10 @@ TEST(UserSct, Authorize)
 		Common::Messages::PlayerResourcesStatusReq resourcesStatusReq;
 		connection->send(resourcesStatusReq);
 
-		boost::shared_ptr<AbstractMessage> resp = connection->receive();
-		EXPECT_EQ(Common::Messages::Id::PlayerResourcesStatusResp, resp->getId());
-		Common::Messages::PlayerResourcesStatusResp & playerResourcesStatus =
-			dynamic_cast<Common::Messages::PlayerResourcesStatusResp&>(*(resp.get()));
-
-		EXPECT_EQ(0xf00d, playerResourcesStatus.carbon);
-		EXPECT_EQ(0xf00d, playerResourcesStatus.uranium);
-		EXPECT_EQ(0xf00d, playerResourcesStatus.credits);
+		auto resp = connection->receive<Common::Messages::PlayerResourcesStatusResp>();
+		EXPECT_EQ(0xf00d, resp->carbon);
+		EXPECT_EQ(0xf00d, resp->uranium);
+		EXPECT_EQ(0xf00d, resp->credits);
 	}
 }
 
@@ -69,11 +61,9 @@ TEST(UserSct, TwoUsersEntitiesStatusReq)
         Common::Messages::PlayerEntitiesStatusReq msg;
         connection1->send(msg);
 
-        boost::shared_ptr<AbstractMessage> resp = connection1->receive();
-        EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
-        Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
-        ASSERT_EQ(1, playerEntitiesStatusResp.entities.size()); 
-        ASSERT_EQ(1, playerEntitiesStatusResp.entities[0].get<0>());
+        auto playerEntitiesStatusResp = connection1->receive<Common::Messages::PlayerEntitiesStatusResp>();
+        ASSERT_EQ(1, playerEntitiesStatusResp->entities.size()); 
+        ASSERT_EQ(1, playerEntitiesStatusResp->entities[0].get<0>());
     }
 
     // second player
@@ -81,9 +71,7 @@ TEST(UserSct, TwoUsersEntitiesStatusReq)
         Common::Messages::PlayerEntitiesStatusReq msg;
         connection2->send(msg);
 
-        boost::shared_ptr<AbstractMessage> resp = connection2->receive();
-        EXPECT_TRUE(Common::Messages::Id::PlayerEntitiesStatusResp == resp->getId());
-        Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp = static_cast<Common::Messages::PlayerEntitiesStatusResp &>(*resp);
-        ASSERT_EQ(2, playerEntitiesStatusResp.entities.size()); 
+        auto playerEntitiesStatusResp = connection2->receive<Common::Messages::PlayerEntitiesStatusResp>();
+        ASSERT_EQ(2, playerEntitiesStatusResp->entities.size()); 
     }
 }

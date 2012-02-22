@@ -41,24 +41,3 @@ void Connection::send(::Common::Messages::AbstractMessage & message)
     }
 }
 
-boost::shared_ptr<AbstractMessage> Connection::receive()
-{
-    LOG_INFO << "Waiting for message...";
-
-    Common::RustedCodec::AsioReadBuffer buffer(*m_socket);
-    boost::shared_ptr<AbstractMessage> message;
-
-    try
-    {
-        message = MessageFactory::create(buffer);
-    }
-    catch (...)
-    {
-        LOG_INFO << "Server droped the connection";
-        throw;
-    }
-
-    LOG_INFO << "Received " << *message;
-
-    return message;
-}

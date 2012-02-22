@@ -12,7 +12,7 @@ using namespace Common::Messages;
 class ShipSct : public testing::Test 
 {
 public:
-    boost::shared_ptr<Common::Messages::AbstractMessage> procedureEntityGetInfo(SCT::Connection & connection, int entityId);
+    boost::shared_ptr<Common::Messages::ShipInfo> procedureEntityGetInfo(SCT::Connection & connection, int entityId);
     void procedureEntityChangeCourse(SCT::Connection & connection, int entityId, int x, int y, int z);
 };
 
@@ -32,12 +32,11 @@ TEST_F(ShipSct, testEntityChangeCourseReq)
 
     Cake::Threading::Thread::wait(2.0);
 
-    boost::shared_ptr<Common::Messages::AbstractMessage> entityGetInfoRespA2 = procedureEntityGetInfo(connection, 1);
-    Common::Messages::ShipInfo & entitiesGetInfoResp2 = dynamic_cast<Common::Messages::ShipInfo&>(*entityGetInfoRespA2);
-    EXPECT_TRUE(1 == entitiesGetInfoResp2.player_id);
-    EXPECT_TRUE(2 == entitiesGetInfoResp2.x);
-    EXPECT_TRUE(1 == entitiesGetInfoResp2.y);
-    EXPECT_TRUE(1 == entitiesGetInfoResp2.z);
+    auto shipInfo2 = procedureEntityGetInfo(connection, 1);
+    EXPECT_TRUE(1 == shipInfo2->player_id);
+    EXPECT_TRUE(2 == shipInfo2->x);
+    EXPECT_TRUE(1 == shipInfo2->y);
+    EXPECT_TRUE(1 == shipInfo2->z);
 }
 
 TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
@@ -55,10 +54,10 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
     procedureEntityChangeCourse(*connection1, 1, 2, 1, 1);
 
     // second player gets notified
-    auto entityChangeCourse2 = connection2->receive();
+    connection2->receive<Common::Messages::EntityChangeCourseReq>();
 }
 
-boost::shared_ptr<Common::Messages::AbstractMessage> ShipSct::procedureEntityGetInfo(
+boost::shared_ptr<Common::Messages::ShipInfo> ShipSct::procedureEntityGetInfo(
     SCT::Connection & connection, 
     int entityId)
 {
@@ -67,8 +66,7 @@ boost::shared_ptr<Common::Messages::AbstractMessage> ShipSct::procedureEntityGet
 
     connection.send(entityGetInfoReq);
 
-    auto shipInfo = connection.receive();
-    EXPECT_TRUE(Common::Messages::Id::ShipInfo == shipInfo->getId());
+    auto shipInfo = connection.receive<Common::Messages::ShipInfo>();
 
     return shipInfo;
 }
