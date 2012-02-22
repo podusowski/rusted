@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Common/Thread.hpp"
-
 #include "Client/States/IState.hpp"
 #include "Client/States/IStateManagerStack.hpp"
 #include "Client/Gui/Gui.hpp"

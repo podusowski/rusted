@@ -1,7 +1,6 @@
 TARGET:=libCommon.a
 TYPE:=static_library
 
-SOURCES:=Thread.cpp
 SOURCES+=RustedCodec/RustedAbstractCoder.cpp
 SOURCES+=RustedCodec/RustedAbstractDecoder.cpp
 SOURCES+=RustedCodec/SimpleWriteBuffer.cpp

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Cake/Threading/Thread.hpp"
+
 #include "Client/Graphics/IGraphics.hpp"
 #include "Client/Input/Input.hpp"
 #include "Client/States/StateManager.hpp"
@@ -29,7 +31,7 @@ public:
                     Input::Input &,
                     Gui::Gui & gui, 
                     Network::Connection &, 
-                    Common::Thread &);
+                    Cake::Threading::Thread &);
     void frameStarted();
 
     void deployNewConnection();
@@ -39,7 +41,7 @@ private:
     StateManager m_stateManager;
     Game::PlayerInfo m_playerInfo;
     Network::Connection & m_connection;
-    Common::Thread & m_connectionThread;
+    Cake::Threading::Thread & m_connectionThread;
     Common::Game::Universe m_universe;
 
     Services::AuthorizationService m_authorizationService;

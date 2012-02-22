@@ -4,7 +4,7 @@
 #include <boost/asio.hpp>
 #include <boost/shared_ptr.hpp>
 
-#include "Common/IRunnable.hpp"
+#include "Cake/Threading/IRunnable.hpp"
 #include "Common/Configuration/Configuration.hpp"
 #include "IConnection.hpp"
 #include "IConnectionListener.hpp"
@@ -21,7 +21,7 @@ namespace Network
  *
  * Class is implementing listener pattern to inform about incoming messages.
  */
-class Connection : public IConnection, public Common::IRunnable
+class Connection : public IConnection, public Cake::Threading::IRunnable
 {
 public:
     Connection(Common::Configuration::Configuration & cfg);

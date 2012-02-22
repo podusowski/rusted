@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <boost/asio.hpp>
 
-#include "Common/Thread.hpp"
+#include "Cake/Threading/Thread.hpp"
 
 #include <RustedCodec/AsioReadBuffer.hpp>
 #include <RustedCodec/AsioWriteBuffer.hpp>
@@ -35,7 +35,7 @@ void AsioBufferTest::testAsioReadBuffer()
 	::system("bash -c \"echo -n abcd | netcat -l 1221 &\"");
 
 	// we must wait a bit to get netcat up
-	::Common::Thread::wait(1);
+	Cake::Threading::Thread::wait(0, 500);
 
 	// connect to netcat
 	tcp::endpoint addr(boost::asio::ip::address_v4::from_string("127.0.0.1"), 1221);
@@ -63,7 +63,7 @@ void AsioBufferTest::testAsioWriteBuffer()
 	::system("bash -c \"netcat -l 1222 > /tmp/testAsioWriteBuffer.tmp &\"");
 
 	// we must wait a bit to get netcat up
-	::Common::Thread::wait(1);
+	Cake::Threading::Thread::wait(0, 500);
 
 	// connect to netcat
 	tcp::endpoint addr(boost::asio::ip::address_v4::from_string("127.0.0.1"), 1222);

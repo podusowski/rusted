@@ -1,7 +1,6 @@
 #include <OgreWindowEventUtilities.h>
 
 #include "Cake/Diagnostics/Logger.hpp"
-#include "Common/Thread.hpp"
 
 #include "Client/Gui/CEGUIIncludes.hpp"
 #include "Client/Engine/Engine.hpp"

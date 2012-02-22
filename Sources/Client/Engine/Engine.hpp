@@ -28,7 +28,7 @@ private:
     boost::scoped_ptr<Input::Input> m_input;
     boost::scoped_ptr<States::StateDeployment> m_stateDeployment;
     Network::Connection m_connection;
-    Common::Thread m_connectionThread;
+    Cake::Threading::Thread m_connectionThread;
     Common::Configuration::Configuration & m_cfg;
 };
 

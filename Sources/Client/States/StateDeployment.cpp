@@ -8,7 +8,7 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
                                  Input::Input & input,
                                  Gui::Gui & gui, 
                                  Network::Connection & connection, 
-                                 Common::Thread & thread) :
+                                 Cake::Threading::Thread & thread) :
     m_connection(connection),
     m_connectionThread(thread),
 

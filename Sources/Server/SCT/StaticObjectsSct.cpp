@@ -4,10 +4,8 @@
 #include <iostream>
 #include <boost/foreach.hpp>
 
-#include <Common/Thread.hpp>
-
-#include <Core/Component.hpp>
-#include <Core/Connection.hpp>
+#include "Core/Component.hpp"
+#include "Core/Connection.hpp"
 #include "Preconditions.hpp"
 
 TEST(StaticObjectsSct, StaticObjectsStatusReq)
