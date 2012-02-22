@@ -1,4 +1,5 @@
 #include "Common/Game/Object/Ship.hpp"
+#include "Common/Game/Object/StaticObject.hpp"
 
 #include "Server/Services/EntityService.hpp"
 
@@ -62,6 +63,8 @@ void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo
 {
     Common::Game::Object::ObjectBase & object = m_universe.getById<Common::Game::Object::ObjectBase>(getObjectInfo.id);
 
+    LOG_DEBUG << "Getting info about object id: " << getObjectInfo.id << ", type: " << TYPENAME(object);
+
     if (typeid(object) == typeid(Common::Game::Object::Ship))
     {
          Common::Messages::ShipInfo shipInfo;
@@ -74,6 +77,11 @@ void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo
          shipInfo.z = position.getZ();
 
          connection.send(shipInfo);
+    }
+    else if (typeid(object) == typeid(Common::Game::Object::StaticObject))
+    {
+        Common::Messages::StaticObjectInfoResp staticObjectInfo;
+        connection.send(staticObjectInfo);
     }
 }
 

@@ -35,3 +35,18 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
     boost::shared_ptr<Common::Messages::AbstractMessage> objectInfo = connection1->receive();
     EXPECT_EQ(Common::Messages::Id::ShipInfo, objectInfo->getId());
 }
+
+TEST(ObjectsSct, GetObjectInfo_StaticObject)
+{
+	SCT::Component component("SampleDataBase.xml");
+    component.start();
+
+    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+
+    Common::Messages::GetObjectInfo getObjectInfo;
+    getObjectInfo.id = 3;
+    connection1->send(getObjectInfo);
+
+    boost::shared_ptr<Common::Messages::AbstractMessage> objectInfo = connection1->receive();
+    EXPECT_EQ(Common::Messages::Id::StaticObjectInfoResp, objectInfo->getId());
+}
