@@ -22,6 +22,18 @@ Input::Input(Ogre::RenderWindow & window, Client::Gui::Gui &) :
 
     oisOptions.insert(OIS::ParamList::value_type("WINDOW", windowHandleStr));
 
+#if defined OIS_WIN32_PLATFORM
+    oisOptions.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_FOREGROUND" )));
+    oisOptions.insert(std::make_pair(std::string("w32_mouse"), std::string("DISCL_NONEXCLUSIVE")));
+    oisOptions.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_FOREGROUND")));
+    oisOptions.insert(std::make_pair(std::string("w32_keyboard"), std::string("DISCL_NONEXCLUSIVE")));
+#elif defined OIS_LINUX_PLATFORM
+    oisOptions.insert(std::make_pair(std::string("x11_mouse_grab"), std::string("false")));
+    oisOptions.insert(std::make_pair(std::string("x11_mouse_hide"), std::string("false")));
+    oisOptions.insert(std::make_pair(std::string("x11_keyboard_grab"), std::string("false")));
+    oisOptions.insert(std::make_pair(std::string("XAutoRepeatOn"), std::string("true")));
+#endif
+
     m_oisInputManager = OIS::InputManager::createInputSystem(oisOptions);
 
     m_oisMouse = static_cast<OIS::Mouse *>(m_oisInputManager->createInputObject(OIS::OISMouse, true));
