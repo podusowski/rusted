@@ -18,6 +18,7 @@ public:
 
     void handle(const Common::Messages::VisibleObjects &);
     void handle(const Common::Messages::ShipInfo &);
+    void handle(const Common::Messages::StaticObjectInfoResp &);
     void handle(const Common::Messages::AbstractMessage &) {}
 
 private:

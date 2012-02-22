@@ -18,7 +18,6 @@ public:
     void fetchStaticObjects();
 
     void handle(const Common::Messages::StaticObjectStatusResp &);
-    void handle(const Common::Messages::StaticObjectInfoResp &);
     void handle(const Common::Messages::AbstractMessage &) {}
 
 private:

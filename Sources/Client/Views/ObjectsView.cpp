@@ -22,7 +22,6 @@ ObjectsView::ObjectsView(Services::StaticObjectService & staticObjectService,
 void ObjectsView::activate()
 {
     m_universe.setObjectAddedCallback(boost::bind(&ObjectsView::objectAdded, this, _1));
-    m_staticObjectService.fetchStaticObjects();
     m_objectService.fetchVisibleObjects();
 }
 

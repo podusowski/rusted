@@ -29,12 +29,3 @@ void StaticObjectService::handle(const Common::Messages::StaticObjectStatusResp 
     }
 }
 
-void StaticObjectService::handle(const Common::Messages::StaticObjectInfoResp & message)
-{
-    boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::StaticObject);
-    object->setId(message.staticObjectId);
-    object->setPosition(Common::Game::Position(message.x, message.y, message.z));
-    m_universe.add(object);
-
-    LOG_DEBUG << "New static object visible: " << *object;
-}

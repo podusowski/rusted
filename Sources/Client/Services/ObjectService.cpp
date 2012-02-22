@@ -1,4 +1,5 @@
 #include "Common/Game/Object/Ship.hpp"
+#include "Common/Game/Object/StaticObject.hpp"
 #include "ObjectService.hpp"
 
 using namespace Client::Services;
@@ -44,4 +45,14 @@ void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
     ship.setPosition(Common::Game::Position(shipInfo.x, shipInfo.y, shipInfo.z));
 
     m_universe.add(object);
+}
+
+void ObjectService::handle(const Common::Messages::StaticObjectInfoResp & message)
+{
+    boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::StaticObject);
+    object->setId(message.staticObjectId);
+    object->setPosition(Common::Game::Position(message.x, message.y, message.z));
+    m_universe.add(object);
+
+    LOG_DEBUG << "New static object visible: " << TYPENAME(*object);
 }
