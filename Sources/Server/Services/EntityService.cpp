@@ -81,6 +81,13 @@ void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo
     else if (typeid(object) == typeid(Common::Game::Object::StaticObject))
     {
         Common::Messages::StaticObjectInfoResp staticObjectInfo;
+
+        Common::Game::Position position = object.getPosition();
+        staticObjectInfo.staticObjectId = getObjectInfo.id;
+        staticObjectInfo.x = position.getX();
+        staticObjectInfo.y = position.getY();
+        staticObjectInfo.z = position.getZ();
+
         connection.send(staticObjectInfo);
     }
 }

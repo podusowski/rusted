@@ -46,5 +46,9 @@ TEST(ObjectsSct, GetObjectInfo_StaticObject)
     getObjectInfo.id = 3;
     connection1->send(getObjectInfo);
 
-    connection1->receive<Common::Messages::StaticObjectInfoResp>();
+    auto staticObjectInfoResp = connection1->receive<Common::Messages::StaticObjectInfoResp>();
+    EXPECT_EQ(getObjectInfo.id, staticObjectInfoResp->staticObjectId);
+    EXPECT_EQ(100, staticObjectInfoResp->x);
+    EXPECT_EQ(100, staticObjectInfoResp->y);
+    EXPECT_EQ(100, staticObjectInfoResp->z);
 }
