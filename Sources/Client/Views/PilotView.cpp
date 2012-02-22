@@ -51,7 +51,7 @@ void PilotView::updateCameraPosition()
     static int counter = 0;
     if (counter++ % 100 == 0)
     {
-        LOG_INFO << "camera posistion: " << camPosition;
+        LOG_DEBUG << "camera posistion: " << camPosition;
     }
 
     Ogre::Camera & camera = m_graphics.getCamera();
