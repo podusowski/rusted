@@ -52,7 +52,6 @@ void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
     {
         LOG_WARN << "Can't insert object, reason: " << ex.what();
     }
-
 }
 
 // TODO: if object is present, we need to update it
