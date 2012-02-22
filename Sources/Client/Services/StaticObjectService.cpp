@@ -1,3 +1,5 @@
+// TODO: remove this service
+
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Client/Services/StaticObjectService.hpp"
 
