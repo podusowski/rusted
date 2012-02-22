@@ -21,8 +21,11 @@ Component::Component()
     std::cout << "\n";
 }
 
-Component::Component(const std::string & cfg) : m_cfg(cfg)
+Component::Component(const std::string & database)
 {
+    setConfigValue("--database.provider", "xml");
+    setConfigValue("--database.xml.filename", database);
+
     std::cout << "\n";
 }
 
@@ -59,10 +62,6 @@ void Component::start()
     if (!m_pid)
     {
         setConfigValue("--network.port", boost::lexical_cast<std::string>(m_port));
-        if (!m_cfg.empty())
-        {
-            setConfigValue("--cfg", m_cfg);
-        }
 
         char ** argv = new char*[m_cmdLineOptions.size() * 2 + 2];
         argv[0] = const_cast<char *>(filename.c_str());
@@ -79,7 +78,7 @@ void Component::start()
         }
 
         ::execv(filename.c_str(), argv);
-        LOG_ERR << "execv returned with error, errno: " << errno << "\n";
+        LOG_ERR << "execv returned with error, errno: " << errno;
     }
     else
     {

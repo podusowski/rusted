@@ -14,7 +14,7 @@ class Component
 {
 public:
 	Component();
-    Component(const std::string & cfg);
+    Component(const std::string & database);
 	~Component();
     void setConfigValue(const std::string & name, const std::string & value);
     void start();
@@ -23,7 +23,6 @@ public:
 private:
 	pid_t m_pid;
 	int m_port;
-    std::string m_cfg;
     std::map<std::string, std::string> m_cmdLineOptions;
 };
 

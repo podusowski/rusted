@@ -9,11 +9,7 @@ using namespace Common::Messages;
 
 TEST(ObjectsSct, FetchVisibleObjects)
 {
-    std::string dbFile = "SampleDataBase.xml";
-
-	SCT::Component component;
-    component.setConfigValue("--database.provider", "xml");
-    component.setConfigValue("--database.xml.filename", dbFile);
+	SCT::Component component("SampleDataBase.xml");
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -27,11 +23,7 @@ TEST(ObjectsSct, FetchVisibleObjects)
 
 TEST(ObjectsSct, GetObjectInfo_Ship)
 {
-    std::string dbFile = "SampleDataBase.xml";
-
-	SCT::Component component;
-    component.setConfigValue("--database.provider", "xml");
-    component.setConfigValue("--database.xml.filename", dbFile);
+	SCT::Component component("SampleDataBase.xml");
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
