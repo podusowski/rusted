@@ -50,5 +50,8 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
     else if (typeid(object) == typeid(Common::Game::Object::Ship))
     {
         LOG_DEBUG << "New ship object:" << object;
+
+        boost::shared_ptr<Object> obj(new Object(object));
+        m_objects.push_back(obj);
     }
 }

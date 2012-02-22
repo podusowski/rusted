@@ -19,6 +19,7 @@ SOURCES+=Services/EntityService.cpp
 SOURCES+=Services/StaticObjectService.cpp
 SOURCES+=Services/ObjectService.cpp
 SOURCES+=Views/ObjectsView.cpp
+SOURCES+=Views/Object.cpp
 SOURCES+=Views/PilotView.cpp
 SOURCES+=Graphics/OgreObject.cpp
 
