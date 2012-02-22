@@ -34,25 +34,41 @@ void ObjectService::handle(const Common::Messages::VisibleObjects & visibleObjec
     }
 }
 
+// TODO: if object is present, we need to update it
 void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
 {
-    LOG_DEBUG << "Got ship info (id: " << shipInfo.id << ")";
+    try
+    {
+        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
+        Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
+        ship.setId(shipInfo.id);
+        ship.setOwnerId(shipInfo.player_id);
+        ship.setPosition(Common::Game::Position(shipInfo.x, shipInfo.y, shipInfo.z));
+        m_universe.add(object);
 
-    boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
-    Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
-    ship.setId(shipInfo.id);
-    ship.setOwnerId(shipInfo.player_id);
-    ship.setPosition(Common::Game::Position(shipInfo.x, shipInfo.y, shipInfo.z));
+        LOG_DEBUG << "New ship visible (id: " << shipInfo.id << ")";
+    }
+    catch (std::exception & ex)
+    {
+        LOG_WARN << "Can't insert object, reason: " << ex.what();
+    }
 
-    m_universe.add(object);
 }
 
+// TODO: if object is present, we need to update it
 void ObjectService::handle(const Common::Messages::StaticObjectInfoResp & message)
 {
-    boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::StaticObject);
-    object->setId(message.staticObjectId);
-    object->setPosition(Common::Game::Position(message.x, message.y, message.z));
-    m_universe.add(object);
+    try
+    {
+        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::StaticObject);
+        object->setId(message.staticObjectId);
+        object->setPosition(Common::Game::Position(message.x, message.y, message.z));
+        m_universe.add(object);
 
-    LOG_DEBUG << "New static object visible: " << TYPENAME(*object);
+        LOG_DEBUG << "New static object visible: " << TYPENAME(*object);
+    }
+    catch (std::exception & ex)
+    {
+        LOG_WARN << "Can't insert object, reason: " << ex.what();
+    }
 }

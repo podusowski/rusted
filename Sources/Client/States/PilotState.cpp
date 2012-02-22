@@ -32,7 +32,7 @@ void PilotState::deactivate()
 
 void PilotState::frameStarted()
 {
-    m_pilotView.frameStarted();
     m_objectsView.frameStarted();
+    m_pilotView.frameStarted();
 }
 
