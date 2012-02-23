@@ -9,7 +9,6 @@ SOURCES+=Game/UnitTests/UniverseLoaderTest.cpp
 SOURCES+=Game/UnitTests/RustedTimeTest.cpp
 SOURCES+=Game/UnitTests/TimeValueTest.cpp
 
-CFLAGS=-Wall -pedantic -g
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common

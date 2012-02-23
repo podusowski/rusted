@@ -5,6 +5,8 @@ using namespace Client::Game;
 
 void PlayerInfo::setId(int id)
 {
+    LOG_DEBUG << "New player id: " << id;
+
     m_id = id;
 }
 

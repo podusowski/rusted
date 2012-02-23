@@ -148,3 +148,19 @@ TEST_F(UniverseTest, DoubleInsert)
 
     EXPECT_ANY_THROW(universe.add(obj2));
 }
+
+TEST_F(UniverseTest, GetByOwnerId)
+{
+    Common::Game::Universe universe;
+    boost::shared_ptr<Common::Game::Object::ObjectBase> ship(new Common::Game::Object::Ship());
+    ship->setId(1);
+    dynamic_cast<Common::Game::Object::Ship&>(*ship).setOwnerId(2);
+    universe.add(ship);
+
+    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::StaticObject());
+    staticObject->setId(2);
+    universe.add(staticObject);
+
+    auto objects = universe.getByOwnerId<Common::Game::Object::Ship>(2);
+    ASSERT_EQ(1, objects.size());
+}
