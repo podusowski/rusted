@@ -57,6 +57,26 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
     connection2->receive<Common::Messages::EntityChangeCourseReq>();
 }
 
+TEST_F(ShipSct, ChangeShipCourseAnotherPlayerWasConnectedEarlier)
+{
+    std::string dbFile = "SampleDataBase.xml";
+
+	SCT::Component component;
+    component.setConfigValue("--database.provider", "xml");
+    component.setConfigValue("--database.xml.filename", dbFile);
+    component.start();
+
+    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+
+    {
+        boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+    }
+
+    procedureEntityChangeCourse(*connection1, 1, 2, 1, 1);
+
+    Cake::Threading::Thread::wait(0, 500);
+}
+
 boost::shared_ptr<Common::Messages::ShipInfo> ShipSct::procedureEntityGetInfo(
     SCT::Connection & connection, 
     int entityId)
