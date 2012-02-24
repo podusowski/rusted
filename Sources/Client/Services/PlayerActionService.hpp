@@ -1,8 +1,6 @@
 #pragma once
 
-#include <set>
 #include <boost/optional.hpp>
-#include <boost/function.hpp>
 
 #include "Cake/DependencyInjection/Inject.hpp"
 
