@@ -14,27 +14,31 @@ PlayerActionService::PlayerActionService(Network::IConnection & connection,
 {
 }
 
-void PlayerActionService::setCurrentEntity(Common::Game::Object::Ship & ship)
+void PlayerActionService::focusObject(Common::Game::Object::ObjectBase & ship)
 {
-    m_currentShip = &ship;
+    m_focusedObject = &ship;
 }
 
-Common::Game::Object::Ship & PlayerActionService::getCurrentEntity()
+Common::Game::Object::ObjectBase & PlayerActionService::getFocusedObject()
 {
-    assert(m_currentShip);
-    return **m_currentShip;
+    assert(m_focusedObject);
+
+    return **m_focusedObject;
 }
 
-void PlayerActionService::setCourse(Common::Game::Position course)
+void PlayerActionService::setFocusedObjectCourse(Common::Game::Position course)
 {
-    assert(m_currentShip);
+    assert(m_focusedObject);
 
-    (*m_currentShip)->setCourse(course);
+    dynamic_cast<Common::Game::Object::Ship&>(**m_focusedObject).setCourse(course);
+
     Common::Messages::EntityChangeCourseReq req;
-    req.entityId = (*m_currentShip)->getId();
+
+    req.entityId = (*m_focusedObject)->getId();
     req.courseX = course.getX();
     req.courseY = course.getY();
     req.courseZ = course.getZ();
+
     m_connection.send(req);
 }
 

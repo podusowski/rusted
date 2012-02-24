@@ -37,14 +37,14 @@ void PilotView::updateShipPosition()
 {
     CEGUI::Window * shipPosition = m_gui.getLayoutWindow().getChildRecursive("ShipPosition");
     std::stringstream ss;
-    ss << m_playerActionService.getCurrentEntity().getPosition();
+    ss << m_playerActionService.getFocusedObject().getPosition();
     shipPosition->setText(ss.str());
 }
 
 void PilotView::updateCameraPosition()
 {
     // camera motion
-    Common::Game::Position position = m_playerActionService.getCurrentEntity().getPosition();
+    Common::Game::Position position = m_playerActionService.getFocusedObject().getPosition();
     Common::Game::Position camPosition = position + Common::Game::Position(0, 0, 180);
 
     // some nasty dbg 
@@ -81,6 +81,6 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
         int left = x - (m_graphics.getWidth() / 2);
 
         Position delta(left, -top, 0); 
-        m_playerActionService.setCourse(cameraPosition + delta);
+        m_playerActionService.setFocusedObjectCourse(cameraPosition + delta);
     }
 }

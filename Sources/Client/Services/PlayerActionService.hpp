@@ -23,9 +23,9 @@ class PlayerActionService : public AbstractService<PlayerActionService>
 public:
     PlayerActionService(Network::IConnection &, Game::PlayerInfo &, Common::Game::Universe &);
 
-    void setCurrentEntity(Common::Game::Object::Ship &);
-    Common::Game::Object::Ship & getCurrentEntity();
-    void setCourse(Common::Game::Position);
+    void focusObject(Common::Game::Object::ObjectBase &);
+    Common::Game::Object::ObjectBase & getFocusedObject();
+    void setFocusedObjectCourse(Common::Game::Position);
 
     void handle(const Common::Messages::AbstractMessage &) {}
 
@@ -35,7 +35,7 @@ private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     Common::Game::Universe & m_universe;
 
-    boost::optional<Common::Game::Object::Ship *> m_currentShip;
+    boost::optional<Common::Game::Object::ObjectBase *> m_focusedObject;
 };
 
 }

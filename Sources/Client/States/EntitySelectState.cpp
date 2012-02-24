@@ -71,7 +71,7 @@ bool EntitySelectState::flyButtonClicked(const CEGUI::EventArgs &)
 
     LOG_INFO << "Ship selected (id: " << ship.getId() << ")";
 
-    m_playerActionService.setCurrentEntity(ship);
+    m_playerActionService.focusObject(ship);
     m_stateManagerStack.pushState(m_pilotState);
     return true;
 }
