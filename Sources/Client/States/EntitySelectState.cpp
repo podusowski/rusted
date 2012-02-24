@@ -11,14 +11,14 @@ using namespace Client::States;
 EntitySelectState::EntitySelectState(IStateManagerStack & stateManagerStack,
                                      Gui::Gui & gui, 
                                      Network::Connection & connection,
-                                     Services::EntityService & entityService,
+                                     Services::PlayerActionService & playerActionService,
                                      Services::ObjectService & objectService,
                                      States::PilotState & pilotState,
                                      Common::Game::Universe & universe,
                                      Client::Game::PlayerInfo & playerInfo) :
     m_stateManagerStack(stateManagerStack),
     m_gui(gui),
-    m_entityService(entityService),
+    m_playerActionService(playerActionService),
     m_objectService(objectService),
     m_pilotState(pilotState),
     m_universe(universe),
@@ -71,7 +71,7 @@ bool EntitySelectState::flyButtonClicked(const CEGUI::EventArgs &)
 
     LOG_INFO << "Ship selected (id: " << ship.getId() << ")";
 
-    m_entityService.setCurrentEntity(ship);
+    m_playerActionService.setCurrentEntity(ship);
     m_stateManagerStack.pushState(m_pilotState);
     return true;
 }

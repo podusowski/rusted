@@ -3,7 +3,6 @@ TYPE:=application
 
 SOURCES+=../Common/UnitTests/mainGoogleTestUT.cpp
 
-SOURCES+=Services/UnitTests/EntityServiceTest.cpp
 
 CFLAGS:=-Wall -pedantic -g
 CFLAGS+=-I$(TARGET_BASE)

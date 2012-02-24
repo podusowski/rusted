@@ -7,12 +7,12 @@ using namespace Client::Views;
 
 PilotView::PilotView(Graphics::IGraphics & graphics, 
                      Input::IInput & input, 
-                     Services::EntityService & entityService,
+                     Services::PlayerActionService & playerActionService,
                      Services::ObjectService & objectService,
                      Client::Gui::Gui & gui) :
     m_graphics(graphics),
     m_input(input),
-    m_entityService(entityService),
+    m_playerActionService(playerActionService),
     m_objectService(objectService),
     m_gui(gui)
 {
@@ -37,14 +37,14 @@ void PilotView::updateShipPosition()
 {
     CEGUI::Window * shipPosition = m_gui.getLayoutWindow().getChildRecursive("ShipPosition");
     std::stringstream ss;
-    ss << m_entityService.getCurrentEntity().getPosition();
+    ss << m_playerActionService.getCurrentEntity().getPosition();
     shipPosition->setText(ss.str());
 }
 
 void PilotView::updateCameraPosition()
 {
     // camera motion
-    Common::Game::Position position = m_entityService.getCurrentEntity().getPosition();
+    Common::Game::Position position = m_playerActionService.getCurrentEntity().getPosition();
     Common::Game::Position camPosition = position + Common::Game::Position(0, 0, 180);
 
     // some nasty dbg 
@@ -81,6 +81,6 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
         int left = x - (m_graphics.getWidth() / 2);
 
         Position delta(left, -top, 0); 
-        m_entityService.setCourse(cameraPosition + delta);
+        m_playerActionService.setCourse(cameraPosition + delta);
     }
 }

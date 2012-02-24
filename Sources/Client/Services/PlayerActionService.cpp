@@ -1,11 +1,11 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
 #include "Common/Game/Object/Ship.hpp"
-#include "Client/Services/EntityService.hpp"
+#include "Client/Services/PlayerActionService.hpp"
 
 using namespace Client::Services;
 
-EntityService::EntityService(Network::IConnection & connection, 
+PlayerActionService::PlayerActionService(Network::IConnection & connection, 
                              Game::PlayerInfo & playerInfo,
                              Common::Game::Universe & universe) :
     m_playerInfo(playerInfo),
@@ -14,18 +14,18 @@ EntityService::EntityService(Network::IConnection & connection,
 {
 }
 
-void EntityService::setCurrentEntity(Common::Game::Object::Ship & ship)
+void PlayerActionService::setCurrentEntity(Common::Game::Object::Ship & ship)
 {
     m_currentShip = &ship;
 }
 
-Common::Game::Object::Ship & EntityService::getCurrentEntity()
+Common::Game::Object::Ship & PlayerActionService::getCurrentEntity()
 {
     assert(m_currentShip);
     return **m_currentShip;
 }
 
-void EntityService::setCourse(Common::Game::Position course)
+void PlayerActionService::setCourse(Common::Game::Position course)
 {
     assert(m_currentShip);
 

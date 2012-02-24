@@ -7,7 +7,7 @@
 #include "Client/Input/IInput.hpp"
 #include "Gui/Gui.hpp" 
 #include "Client/Graphics/OgreObject.hpp"
-#include "Client/Services/EntityService.hpp"
+#include "Client/Services/PlayerActionService.hpp"
 #include "Client/Services/ObjectService.hpp"
 
 namespace Client
@@ -21,7 +21,7 @@ class PilotView : public IView,
 public:
     PilotView(Graphics::IGraphics &, 
               Input::IInput &, 
-              Services::EntityService &,
+              Services::PlayerActionService &,
               Services::ObjectService &,
               Gui::Gui &);
 
@@ -39,7 +39,7 @@ public:
 private:
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;
-    Services::EntityService & m_entityService;
+    Services::PlayerActionService & m_playerActionService;
     Services::ObjectService & m_objectService;
     Gui::Gui & m_gui;
     boost::scoped_ptr<Graphics::OgreObject> m_entityObject;

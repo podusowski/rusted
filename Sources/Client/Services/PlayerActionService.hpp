@@ -20,10 +20,10 @@ namespace Client
 namespace Services
 {
 
-class EntityService : public AbstractService<EntityService> 
+class PlayerActionService : public AbstractService<PlayerActionService> 
 {
 public:
-    EntityService(Network::IConnection &, Game::PlayerInfo &, Common::Game::Universe &);
+    PlayerActionService(Network::IConnection &, Game::PlayerInfo &, Common::Game::Universe &);
 
     void setCurrentEntity(Common::Game::Object::Ship &);
     Common::Game::Object::Ship & getCurrentEntity();

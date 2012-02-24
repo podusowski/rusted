@@ -14,15 +14,15 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
 
     m_authorizationService(connection, m_playerInfo),
     m_rustedTimeService(connection),
-    m_entityService(connection, m_playerInfo, m_universe),
+    m_playerActionService(connection, m_playerInfo, m_universe),
     m_staticObjectService(connection, m_universe),
     m_objectService(connection, m_universe),
 
     m_objectsView(m_staticObjectService, m_objectService, graphics, m_universe),
-    m_pilotView(graphics, input, m_entityService, m_objectService, gui),
+    m_pilotView(graphics, input, m_playerActionService, m_objectService, gui),
 
-    m_pilotState(m_stateManager, graphics, gui, m_entityService, m_objectsView, m_pilotView),
-    m_entitySelect(m_stateManager, gui, connection, m_entityService, m_objectService, m_pilotState, m_universe, m_playerInfo),
+    m_pilotState(m_stateManager, graphics, gui, m_playerActionService, m_objectsView, m_pilotView),
+    m_entitySelect(m_stateManager, gui, connection, m_playerActionService, m_objectService, m_pilotState, m_universe, m_playerInfo),
     m_loginState(m_stateManager, gui, m_entitySelect, m_authorizationService, m_rustedTimeService, *this)
 {
     m_stateManager.pushState(m_loginState);
@@ -47,7 +47,7 @@ void StateDeployment::deployAuthorizedConnection()
     LOG_DEBUG << "Deploying authorized connection";
 
     m_connection.addListener(m_rustedTimeService);
-    m_connection.addListener(m_entityService);
+    m_connection.addListener(m_playerActionService);
     m_connection.addListener(m_staticObjectService);
     m_connection.addListener(m_objectService);
 }

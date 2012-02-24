@@ -8,7 +8,7 @@ using namespace Client::States;
 PilotState::PilotState(IStateManagerStack &,
                        Graphics::IGraphics & graphics,
                        Client::Gui::Gui & gui, 
-                       Client::Services::EntityService &,
+                       Client::Services::PlayerActionService &,
                        Views::ObjectsView & objectsView,
                        Views::PilotView & pilotView) :
     m_graphics(graphics),

@@ -5,7 +5,7 @@
 #include "Client/Gui/Gui.hpp"
 #include "Client/Network/Connection.hpp"
 #include "Client/States/IStateManagerStack.hpp"
-#include "Client/Services/EntityService.hpp"
+#include "Client/Services/PlayerActionService.hpp"
 #include "Client/States/PilotState.hpp"
 
 namespace Client
@@ -29,7 +29,7 @@ public:
     EntitySelectState(IStateManagerStack &,
                       Gui::Gui &, 
                       Network::Connection &,
-                      Services::EntityService &,
+                      Services::PlayerActionService &,
                       Services::ObjectService &,
                       States::PilotState &,
                       Common::Game::Universe &,
@@ -44,7 +44,7 @@ private:
 
     States::IStateManagerStack & m_stateManagerStack;
     Gui::Gui & m_gui;
-    Services::EntityService & m_entityService;
+    Services::PlayerActionService & m_playerActionService;
     Services::ObjectService & m_objectService;
     CEGUI::Window * m_layout;
     States::PilotState & m_pilotState;

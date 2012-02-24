@@ -10,7 +10,7 @@
 #include "Client/States/PilotState.hpp"
 
 #include "Client/Services/RustedTimeService.hpp"
-#include "Client/Services/EntityService.hpp"
+#include "Client/Services/PlayerActionService.hpp"
 #include "Client/Services/StaticObjectService.hpp"
 #include "Client/Services/ObjectService.hpp"
 
@@ -46,7 +46,7 @@ private:
 
     Services::AuthorizationService m_authorizationService;
     Services::RustedTimeService m_rustedTimeService;
-    Services::EntityService m_entityService;
+    Services::PlayerActionService m_playerActionService;
     Services::StaticObjectService m_staticObjectService;
     Services::ObjectService m_objectService;
 
