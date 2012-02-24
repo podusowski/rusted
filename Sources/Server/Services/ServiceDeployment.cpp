@@ -14,8 +14,7 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg)
     m_rustedTimeService(*m_time),
     m_authorizationService(m_players, *this),
     m_playerService(m_universe, m_players),
-    m_entityService(m_universe, m_players),
-    m_staticObjectsService(m_universe)
+    m_entityService(m_universe, m_players)
 {
     Common::Game::UniverseLoader loader;
     loader.load(m_universe, m_db);
@@ -36,5 +35,4 @@ void ServiceDeployment::deployAuthorizedConnection(Server::Network::IConnection 
     connection.addListener(m_rustedTimeService);
     connection.addListener(m_playerService);
     connection.addListener(m_entityService);
-    connection.addListener(m_staticObjectsService);
 }

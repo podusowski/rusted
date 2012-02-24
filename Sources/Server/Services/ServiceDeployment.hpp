@@ -13,7 +13,6 @@
 #include "Server/Services/AuthorizationService.hpp"
 #include "Server/Services/PlayerService.hpp"
 #include "Server/Services/EntityService.hpp"
-#include "Server/Services/StaticObjectsService.hpp"
 
 #include "Common/Game/Universe.hpp"
 
@@ -41,7 +40,6 @@ private:
     Server::Services::AuthorizationService m_authorizationService;
     Services::PlayerService m_playerService;
     Services::EntityService m_entityService;
-    Services::StaticObjectsService m_staticObjectsService;
 };
 
 }
