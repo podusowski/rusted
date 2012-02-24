@@ -15,10 +15,9 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
     m_authorizationService(connection, m_playerInfo),
     m_rustedTimeService(connection),
     m_playerActionService(connection, m_playerInfo, m_universe),
-    m_staticObjectService(connection, m_universe),
     m_objectService(connection, m_universe),
 
-    m_objectsView(m_staticObjectService, m_objectService, graphics, m_universe),
+    m_objectsView(m_objectService, graphics, m_universe),
     m_pilotView(graphics, input, m_playerActionService, m_objectService, gui),
 
     m_pilotState(m_stateManager, graphics, gui, m_playerActionService, m_objectsView, m_pilotView),
@@ -48,7 +47,6 @@ void StateDeployment::deployAuthorizedConnection()
 
     m_connection.addListener(m_rustedTimeService);
     m_connection.addListener(m_playerActionService);
-    m_connection.addListener(m_staticObjectService);
     m_connection.addListener(m_objectService);
 }
 

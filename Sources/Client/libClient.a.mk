@@ -16,7 +16,6 @@ SOURCES+=States/PilotState.cpp
 SOURCES+=Services/RustedTimeService.cpp
 SOURCES+=Services/AuthorizationService.cpp
 SOURCES+=Services/PlayerActionService.cpp
-SOURCES+=Services/StaticObjectService.cpp
 SOURCES+=Services/ObjectService.cpp
 SOURCES+=Views/ObjectsView.cpp
 SOURCES+=Views/Object.cpp

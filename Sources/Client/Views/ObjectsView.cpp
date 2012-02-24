@@ -8,11 +8,9 @@
 
 using namespace Client::Views;
 
-ObjectsView::ObjectsView(Services::StaticObjectService & staticObjectService,
-                         Services::ObjectService & objectService,
+ObjectsView::ObjectsView(Services::ObjectService & objectService,
                          Graphics::IGraphics & graphics,
                          Common::Game::Universe & universe) :
-    m_staticObjectService(staticObjectService),
     m_objectService(objectService),
     m_graphics(graphics),
     m_universe(universe)
