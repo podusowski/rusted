@@ -12,12 +12,14 @@ EntitySelectState::EntitySelectState(IStateManagerStack & stateManagerStack,
                                      Gui::Gui & gui, 
                                      Network::Connection & connection,
                                      Services::EntityService & entityService,
+                                     Services::ObjectService & objectService,
                                      States::PilotState & pilotState,
                                      Common::Game::Universe & universe,
                                      Client::Game::PlayerInfo & playerInfo) :
     m_stateManagerStack(stateManagerStack),
     m_gui(gui),
     m_entityService(entityService),
+    m_objectService(objectService),
     m_pilotState(pilotState),
     m_universe(universe),
     m_playerInfo(playerInfo)
@@ -30,7 +32,7 @@ void EntitySelectState::activate()
     CEGUI::System::getSingleton().setGUISheet(m_layout);
     m_layout->activate();
 
-    m_entityService.fetchMyEntitiesInfo(boost::bind(&EntitySelectState::myEntitiesFetched, this));
+    m_objectService.fetchPlayerShips(boost::bind(&EntitySelectState::myEntitiesFetched, this));
 }
 
 void EntitySelectState::deactivate()

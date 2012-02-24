@@ -14,13 +14,6 @@ EntityService::EntityService(Network::IConnection & connection,
 {
 }
 
-void EntityService::fetchMyEntitiesInfo(MyEntitiesFetchedCallback callback)
-{
-    m_myEntitiesFetchedCallback = callback;
-    Common::Messages::PlayerEntitiesStatusReq entitiesStatusReq;
-    m_connection.send(entitiesStatusReq);
-}
-
 void EntityService::setCurrentEntity(Common::Game::Object::Ship & ship)
 {
     m_currentShip = &ship;
@@ -45,45 +38,3 @@ void EntityService::setCourse(Common::Game::Position course)
     m_connection.send(req);
 }
 
-void EntityService::handle(const Common::Messages::PlayerEntitiesStatusResp & entitiesStatusResp)
-{
-    LOG_DEBUG << "Own units info received";
-
-    BOOST_FOREACH(boost::tuple<int> entity, entitiesStatusResp.entities)
-    {
-       LOG_DEBUG << "  Entity (id: " << entity.get<0>() << ")";
-
-       Common::Messages::EntityGetInfoReq entityGetInfoReq;
-       entityGetInfoReq.id = entity.get<0>();
-       m_connection.send(entityGetInfoReq);
-       m_myEntities.insert(entity.get<0>());
-    }
-}
-
-void EntityService::handle(const Common::Messages::ShipInfo & entityGetInfoResp)
-{
-    // are we waiting for this entity info?
-    std::set<int>::iterator it = m_myEntities.find(entityGetInfoResp.id);
-    if (it != m_myEntities.end())
-    {
-       LOG_DEBUG << "Ship is from player's ship list and we were expected this info";
-       m_myEntities.erase(it); 
-
-       if (m_myEntities.empty())
-       {
-          LOG_DEBUG << "And this was the last one";
-          m_myEntitiesFetchedCallback();
-       }
-    }
-}
-
-void EntityService::handle(const Common::Messages::EntityChangeCourseReq & entityChangeCourse)
-{
-    LOG_DEBUG << "Ship " << entityChangeCourse.entityId << " changed course";
-
-    Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(entityChangeCourse.entityId);
-    ship.setCourse(Common::Game::Position(
-        entityChangeCourse.courseX,
-        entityChangeCourse.courseY,
-        entityChangeCourse.courseZ));
-}

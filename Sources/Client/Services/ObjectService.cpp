@@ -18,6 +18,13 @@ void ObjectService::fetchVisibleObjects()
     m_connection.send(getVisibleObjects);
 }
 
+void ObjectService::fetchPlayerShips(PlayerShipsFetchedCallback callback)
+{
+    m_playerShipsFetchedCallback = callback;
+    Common::Messages::PlayerEntitiesStatusReq playerEntitiesStatusReq;
+    m_connection.send(playerEntitiesStatusReq);
+}
+
 void ObjectService::handle(const Common::Messages::VisibleObjects & visibleObjects)
 {
     LOG_DEBUG << "Got visible objects";
@@ -34,6 +41,24 @@ void ObjectService::handle(const Common::Messages::VisibleObjects & visibleObjec
     }
 }
 
+void ObjectService::handle(const Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp)
+{
+    LOG_DEBUG << "Got player ships";
+
+    for (auto ship: playerEntitiesStatusResp.entities)
+    {
+        int shipId = ship.get<0>();
+
+        LOG_DEBUG << "  id: " << shipId;
+
+        m_playerShips.insert(shipId);
+
+        Common::Messages::GetObjectInfo getObjectInfo;
+        getObjectInfo.id = shipId;
+        m_connection.send(getObjectInfo);
+    }
+}
+
 // TODO: if object is present, we need to update it
 void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
 {
@@ -45,6 +70,8 @@ void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
         ship.setOwnerId(shipInfo.player_id);
         ship.setPosition(Common::Game::Position(shipInfo.x, shipInfo.y, shipInfo.z));
         m_universe.add(object);
+
+        tryCallPlayerShipsFetchedCallback(object->getId());
 
         LOG_DEBUG << "New ship visible (id: " << shipInfo.id << ")";
     }
@@ -69,5 +96,35 @@ void ObjectService::handle(const Common::Messages::StaticObjectInfoResp & messag
     catch (std::exception & ex)
     {
         LOG_WARN << "Can't insert object, reason: " << ex.what();
+    }
+}
+
+void ObjectService::handle(const Common::Messages::EntityChangeCourseReq & entityChangeCourse)
+{
+    LOG_DEBUG << "Ship (id: " << entityChangeCourse.entityId << ") changed course";
+
+    Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(entityChangeCourse.entityId);
+
+    ship.setCourse(Common::Game::Position(
+        entityChangeCourse.courseX,
+        entityChangeCourse.courseY,
+        entityChangeCourse.courseZ));
+}
+
+void ObjectService::tryCallPlayerShipsFetchedCallback(int shipId)
+{
+    auto it = m_playerShips.find(shipId);
+    if (it != m_playerShips.end())
+    {
+        LOG_DEBUG << "Received player's ship info (id: " << shipId << ") which was expected";
+
+        m_playerShips.erase(it);
+
+        if (m_playerShips.empty())
+        {
+            LOG_DEBUG << "All player ships are known, calling PlayerShipsFetchedCallback";
+
+            m_playerShipsFetchedCallback();
+        }
     }
 }

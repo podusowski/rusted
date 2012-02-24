@@ -30,6 +30,7 @@ public:
                       Gui::Gui &, 
                       Network::Connection &,
                       Services::EntityService &,
+                      Services::ObjectService &,
                       States::PilotState &,
                       Common::Game::Universe &,
                       Client::Game::PlayerInfo &);
@@ -44,6 +45,7 @@ private:
     States::IStateManagerStack & m_stateManagerStack;
     Gui::Gui & m_gui;
     Services::EntityService & m_entityService;
+    Services::ObjectService & m_objectService;
     CEGUI::Window * m_layout;
     States::PilotState & m_pilotState;
     Common::Game::Universe & m_universe;

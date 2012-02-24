@@ -23,18 +23,12 @@ namespace Services
 class EntityService : public AbstractService<EntityService> 
 {
 public:
-    typedef boost::function<void()> MyEntitiesFetchedCallback;
-
     EntityService(Network::IConnection &, Game::PlayerInfo &, Common::Game::Universe &);
 
-    void fetchMyEntitiesInfo(MyEntitiesFetchedCallback);
     void setCurrentEntity(Common::Game::Object::Ship &);
     Common::Game::Object::Ship & getCurrentEntity();
     void setCourse(Common::Game::Position);
 
-    void handle(const Common::Messages::PlayerEntitiesStatusResp &);
-    void handle(const Common::Messages::ShipInfo &);
-    void handle(const Common::Messages::EntityChangeCourseReq &);
     void handle(const Common::Messages::AbstractMessage &) {}
 
 private:
@@ -43,10 +37,7 @@ private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     Common::Game::Universe & m_universe;
 
-    std::set<int> m_myEntities;
     boost::optional<Common::Game::Object::Ship *> m_currentShip;
-
-    MyEntitiesFetchedCallback m_myEntitiesFetchedCallback;
 };
 
 }
