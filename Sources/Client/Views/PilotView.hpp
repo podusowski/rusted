@@ -42,8 +42,6 @@ private:
     Services::PlayerActionService & m_playerActionService;
     Services::ObjectService & m_objectService;
     Gui::Gui & m_gui;
-    boost::scoped_ptr<Graphics::OgreObject> m_entityObject;
-    boost::scoped_ptr<Graphics::OgreObject> m_navigatorPlaneObject;
 };
 
 }
