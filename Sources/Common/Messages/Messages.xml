@@ -37,7 +37,7 @@ player specific
 </message>
 
 <!--
-entity
+Ship
 -->
 
 <message id="PlayerEntitiesStatusReq" />
@@ -64,6 +64,11 @@ entity
 	<param type="int32" name="courseX" />
 	<param type="int32" name="courseY" />
 	<param type="int32" name="courseZ" />
+</message>
+
+<message id="AttackObject">
+    <param type="int32" name="attackerId" />
+    <param type="int32" name="attackedId" />
 </message>
 
 <!--

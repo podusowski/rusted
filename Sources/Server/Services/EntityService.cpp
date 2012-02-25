@@ -92,3 +92,11 @@ void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo
     }
 }
 
+void EntityService::handle(const Common::Messages::AttackObject & attackObject, Network::IConnection & connection)
+{
+    auto connections = m_playerContainer.getAllConnections();
+    for (auto connection: connections)
+    {
+        connection->send(attackObject);
+    }
+}
