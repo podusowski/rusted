@@ -7,7 +7,7 @@ $(1)/%.o: $(2)/%.cpp
 	@mkdir -p `dirname $$@`
 	@echo "$(FONT_BOLD)$(CC)$(FONT_RESET) $$(subst $(PWD)/,,$$<) "
 	@$$(CC) $$(CFLAGS) -c $$< -o $$@
-	@$$(CC) -MM $$(CFLAGS) $$< | sed 's!$$(notdir $$@):!$$@:!' > $$@.d
+	@$$(CC) -MM $$(CFLAGS) $$< | sed 's!$$(notdir $$@):!$$@ $$@.d:!' | sed 's#/[^/]*/\.\./#/#' > $$@.d
 
 endef
 
