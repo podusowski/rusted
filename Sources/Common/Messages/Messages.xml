@@ -70,18 +70,6 @@ entity
 static objects
 -->
 
-<message id="StaticObjectStatusReq" />
-
-<message id="StaticObjectStatusResp">
-    <list name="objects">
-        <listparam type="int32" name="id" />
-    </list>
-</message>
-
-<message id="StaticObjectInfoReq">
-    <param type="int32" name="staticObjectId" />
-</message>
-
 <message id="StaticObjectInfoResp">
     <param type="int32" name="staticObjectId" />
 	<param type="int32" name="x" />
