@@ -1,12 +1,9 @@
 #pragma once
 
-#include <boost/scoped_ptr.hpp>
-
 #include "Client/Views/IView.hpp"
 #include "Client/Graphics/IGraphics.hpp"
 #include "Client/Input/IInput.hpp"
 #include "Gui/Gui.hpp" 
-#include "Client/Graphics/OgreObject.hpp"
 #include "Client/Services/PlayerActionService.hpp"
 #include "Client/Services/ObjectService.hpp"
 
