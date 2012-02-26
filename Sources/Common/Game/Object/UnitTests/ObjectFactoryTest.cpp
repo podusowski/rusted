@@ -30,6 +30,7 @@ TEST_F(ObjectFactoryTest, TestLoadShip)
     node.setValue("x", 3);
     node.setValue("y", 4);
     node.setValue("z", 5);
+    node.setValue("integrity", 100);
     Common::Game::Object::ObjectFactory factory;
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
@@ -42,6 +43,8 @@ TEST_F(ObjectFactoryTest, TestLoadShip)
     ASSERT_EQ(3, position.getX());
     ASSERT_EQ(4, position.getY());
     ASSERT_EQ(5, position.getZ());
+
+    ASSERT_EQ(100, object->getIntegrity());
 }
 
 TEST_F(ObjectFactoryTest, LoadStaticObject)
@@ -52,6 +55,7 @@ TEST_F(ObjectFactoryTest, LoadStaticObject)
     node.setValue("x", 3);
     node.setValue("y", 4);
     node.setValue("z", 5);
+    node.setValue("integrity", 100);
     Common::Game::Object::ObjectFactory factory;
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
@@ -61,4 +65,6 @@ TEST_F(ObjectFactoryTest, LoadStaticObject)
     ASSERT_EQ(3, position.getX());
     ASSERT_EQ(4, position.getY());
     ASSERT_EQ(5, position.getZ());
+
+    ASSERT_EQ(100, object->getIntegrity());
 }

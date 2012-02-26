@@ -19,6 +19,7 @@ TEST(UniverseLoaderTest, LoadShip)
     ship1.setValue("x", 1);
     ship1.setValue("y", 1);
     ship1.setValue("z", 1);
+    ship1.setValue("integrity", 100);
 
     Common::Game::Universe universe;
 

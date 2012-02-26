@@ -15,6 +15,7 @@ boost::shared_ptr<ObjectBase> ObjectFactory::create(Common::DataBase::DataBaseNo
         object->setId(data.getValue<unsigned>("id"));
         dynamic_cast<Ship&>(*object).setOwnerId(data.getValue<unsigned>("owner"));
         object->setPosition(extractPosition(data));
+        object->setIntegrity(data.getValue<unsigned>("integrity"));
 
         return object;
     }
@@ -24,6 +25,7 @@ boost::shared_ptr<ObjectBase> ObjectFactory::create(Common::DataBase::DataBaseNo
 
         object->setId(data.getValue<unsigned>("id"));
         object->setPosition(extractPosition(data));
+        object->setIntegrity(data.getValue<unsigned>("integrity"));
 
         return object;
     }
