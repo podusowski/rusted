@@ -47,7 +47,7 @@ function run_test()
         if [ $verbose != "1" ]; then
             cat $stdout $stderr
         fi
-        echo "no further tests will be executed"
+        echo -e "${FONT_COLOR_RED}no further tests will be executed${FONT_RESET}"
         exit 1
     fi
     echo 
