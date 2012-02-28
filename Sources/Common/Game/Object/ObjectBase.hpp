@@ -22,8 +22,8 @@ public:
     virtual Position getPosition() = 0;
     virtual void setPosition(const Position &) = 0;
 
-    unsigned getIntegrity() { return m_integrity; }
-    void setIntegrity(unsigned integrity) { m_integrity = integrity; }
+    virtual unsigned getIntegrity() { return m_integrity; }
+    virtual void setIntegrity(unsigned integrity) { m_integrity = integrity; }
 
     virtual ~ObjectBase() {}
 
