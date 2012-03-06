@@ -39,11 +39,6 @@ unsigned Graphics::getHeight()
     return m_ogreRenderWindow->getHeight();
 }
 
-OgreObject & Graphics::createOgreObject()
-{
-    LOG_ERR << "Not implemented";
-}
-
 void Graphics::initOgre()
 {
     m_ogreRoot = new Ogre::Root("", "");

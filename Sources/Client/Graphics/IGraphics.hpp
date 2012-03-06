@@ -17,7 +17,7 @@ public:
     virtual Ogre::Camera & getCamera() = 0;
     virtual unsigned getWidth() = 0;
     virtual unsigned getHeight() = 0;
-    virtual OgreObject & createOgreObject() = 0;
+
     virtual ~IGraphics() {}
 };
 

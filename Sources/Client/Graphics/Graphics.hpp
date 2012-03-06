@@ -20,7 +20,6 @@ public:
     Ogre::Camera & getCamera();
     unsigned getWidth();
     unsigned getHeight();
-    OgreObject & createOgreObject();
 
 private:
     void initOgre();
