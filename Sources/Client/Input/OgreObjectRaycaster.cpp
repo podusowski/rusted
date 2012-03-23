@@ -14,6 +14,8 @@ OgreObjectRaycaster::OgreObjectRaycaster(Ogre::SceneManager & ogreSceneManager, 
 
 void OgreObjectRaycaster::addObjectRightClickCallback(Ogre::Entity & entity, std::function<void()> callback)
 {
+    LOG_DEBUG << "Adding right click callback for &Entity: " << &entity;
+
     m_rightClickCallbacks.insert(std::make_pair(&entity, callback));
 }
 
@@ -42,7 +44,7 @@ void OgreObjectRaycaster::mousePressed(const OIS::MouseButtonID &, const OIS::Mo
 
         if (entity)
         {
-            LOG_DEBUG << "Entity clicked (name: " << it->movable->getName() << ")";
+            LOG_DEBUG << "Entity clicked (name: " << it->movable->getName() << ", &: " << entity << ")";
 
             auto it = m_rightClickCallbacks.find(entity);
 

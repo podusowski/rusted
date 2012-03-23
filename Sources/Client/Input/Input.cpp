@@ -129,9 +129,9 @@ void Input::addMouseListener(IMouseListener & listener)
     m_mouseListeners.push_back(&listener);
 }
 
-void Input::addObjectRightClickCallback(Ogre::Entity &, std::function<void()>)
+void Input::addObjectRightClickCallback(Ogre::Entity & entity, std::function<void()> callback)
 {
-
+    m_ogreObjectRaycaster.addObjectRightClickCallback(entity, callback);
 }
 
 CEGUI::MouseButton Input::toCeguiMouseButton(OIS::MouseButtonID oisMouseButton)

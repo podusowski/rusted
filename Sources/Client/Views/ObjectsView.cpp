@@ -10,9 +10,11 @@ using namespace Client::Views;
 
 ObjectsView::ObjectsView(Services::ObjectService & objectService,
                          Graphics::IGraphics & graphics,
+                         Input::IInput & input,
                          Common::Game::Universe & universe) :
     m_objectService(objectService),
     m_graphics(graphics),
+    m_input(input),
     m_universe(universe)
 {
 }
@@ -45,6 +47,6 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
 {
     LOG_DEBUG << "New object:" << object;
 
-    boost::shared_ptr<Object> obj(new Object(m_graphics, object));
+    boost::shared_ptr<Object> obj(new Object(m_graphics, m_input, object));
     m_objects.push_back(obj);
 }

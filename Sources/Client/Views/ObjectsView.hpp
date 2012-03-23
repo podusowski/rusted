@@ -16,6 +16,7 @@ class ObjectsView : public IView
 public:
     ObjectsView(Services::ObjectService &,
                 Graphics::IGraphics &,
+                Input::IInput &,
                 Common::Game::Universe &);
 
     void activate();
@@ -27,6 +28,7 @@ public:
 private:
     Services::ObjectService & m_objectService;
     Graphics::IGraphics & m_graphics;
+    Input::IInput & m_input;
     Common::Game::Universe & m_universe;
     std::vector<boost::shared_ptr<Object> > m_objects;
 };
