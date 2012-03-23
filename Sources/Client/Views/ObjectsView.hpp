@@ -26,6 +26,8 @@ public:
     void objectAdded(Common::Game::Object::ObjectBase &);
 
 private:
+    void objectClicked(Object * object);
+
     Services::ObjectService & m_objectService;
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;

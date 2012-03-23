@@ -17,6 +17,8 @@ public:
     Object(Client::Graphics::IGraphics &, Client::Input::IInput &, Common::Game::Object::ObjectBase &);
 
     void setRightClickCallback(std::function<void()>);
+    void setSelected(bool);
+
     void update();
 
 private:
@@ -24,6 +26,7 @@ private:
 
     Client::Graphics::IGraphics & m_graphics;
     Common::Game::Object::ObjectBase & m_object;
+    Ogre::Entity * m_entity;
     Ogre::SceneNode * m_node;
     std::function<void()> m_rightClickCallback;
 };

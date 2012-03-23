@@ -10,11 +10,11 @@ Object::Object(Client::Graphics::IGraphics & graphics, Client::Input::IInput & i
 {
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
 
-    Ogre::Entity * mesh = scene.createEntity("Cube.mesh");
+    m_entity = scene.createEntity("Cube.mesh");
     m_node = scene.getRootSceneNode()->createChildSceneNode();
-    m_node->attachObject(mesh);
+    m_node->attachObject(m_entity);
 
-    input.addObjectRightClickCallback(*mesh, std::bind(&Object::rightClickedCallback, this));
+    input.addObjectRightClickCallback(*m_entity, std::bind(&Object::rightClickedCallback, this));
     
     update();
 }
@@ -22,6 +22,11 @@ Object::Object(Client::Graphics::IGraphics & graphics, Client::Input::IInput & i
 void Object::setRightClickCallback(std::function<void()> callback)
 {
     m_rightClickCallback = callback;
+}
+
+void Object::setSelected(bool selected)
+{
+    m_node->showBoundingBox(true);
 }
 
 void Object::update()
@@ -33,4 +38,7 @@ void Object::update()
 void Object::rightClickedCallback()
 {
     LOG_DEBUG << "Object clicked";
+
+    if (m_rightClickCallback)
+        m_rightClickCallback();
 }
