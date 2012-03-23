@@ -30,7 +30,7 @@ public:
     void updateCameraPosition();
 
     void mouseMoved(const OIS::MouseState &);
-    void mousePressed(const OIS::MouseButtonID &, unsigned x, unsigned y);
+    void mousePressed(const OIS::MouseButtonID &, const OIS::MouseEvent &, unsigned x, unsigned y);
     void mouseReleased(const OIS::MouseButtonID &, unsigned x, unsigned y);
 
 private:

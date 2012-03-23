@@ -10,6 +10,7 @@
 #include "Gui/Gui.hpp"
 #include "Input/IMouseListener.hpp"
 #include "IInput.hpp"
+#include "OgreObjectRaycaster.hpp"
 
 namespace Client
 {
@@ -19,7 +20,7 @@ namespace Input
 class Input : public IInput, public OIS::MouseListener, public OIS::KeyListener
 {
 public:
-    Input(Ogre::RenderWindow &, Client::Gui::Gui &);
+    Input(Ogre::RenderWindow &, Ogre::SceneManager &, Ogre::Camera &, Client::Gui::Gui &);
 
     virtual bool mouseMoved( const OIS::MouseEvent &arg );
     virtual bool mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id );
@@ -28,7 +29,9 @@ public:
     virtual bool keyReleased( const OIS::KeyEvent &arg );
 
     void frameStarted();
+
     void addMouseListener(IMouseListener &);
+    void addObjectRightClickCallback(Ogre::Entity &, std::function<void()>);
 
 private:
     CEGUI::MouseButton toCeguiMouseButton(OIS::MouseButtonID oisMouseButton);
@@ -43,6 +46,8 @@ private:
 
     int mouseX;
     int mouseY;
+
+    OgreObjectRaycaster m_ogreObjectRaycaster;
 };
 
 }

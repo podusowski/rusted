@@ -9,8 +9,9 @@
 
 using namespace Client::Input;
 
-Input::Input(Ogre::RenderWindow & window, Client::Gui::Gui &) : 
-    m_ogreRenderWindow(window)
+Input::Input(Ogre::RenderWindow & window, Ogre::SceneManager & ogreSceneManager, Ogre::Camera & ogreCamera, Client::Gui::Gui &) : 
+    m_ogreRenderWindow(window),
+    m_ogreObjectRaycaster(ogreSceneManager, ogreCamera)
 {
     LOG_INFO << "Initializing input subsystem";
 
@@ -46,6 +47,8 @@ Input::Input(Ogre::RenderWindow & window, Client::Gui::Gui &) :
 
     m_oisKeyboard = static_cast<OIS::Keyboard *>(m_oisInputManager->createInputObject(OIS::OISKeyboard, true));
     m_oisKeyboard->setEventCallback(this);
+
+    addMouseListener(m_ogreObjectRaycaster);
 }
 
 // TODO: remove depencency from CEGUI here
@@ -78,7 +81,7 @@ bool Input::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
     LOG_INFO << "Mouse pressed (x: " << mouseX << ", y: " << mouseY << ")"; 
     BOOST_FOREACH(IMouseListener * listener, m_mouseListeners)
     {
-        listener->mousePressed(id, mouseX, mouseY);
+        listener->mousePressed(id, arg, mouseX, mouseY);
     }
 
     CEGUI::System::getSingleton().injectMouseButtonDown(toCeguiMouseButton(id));
@@ -124,6 +127,11 @@ void Input::frameStarted()
 void Input::addMouseListener(IMouseListener & listener)
 {
     m_mouseListeners.push_back(&listener);
+}
+
+void Input::addObjectRightClickCallback(Ogre::Entity &, std::function<void()>)
+{
+
 }
 
 CEGUI::MouseButton Input::toCeguiMouseButton(OIS::MouseButtonID oisMouseButton)

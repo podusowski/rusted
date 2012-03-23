@@ -63,7 +63,7 @@ void PilotView::mouseMoved(const OIS::MouseState & state)
 {
 }
 
-void PilotView::mousePressed(const OIS::MouseButtonID &, unsigned x, unsigned y)
+void PilotView::mousePressed(const OIS::MouseButtonID &, const OIS::MouseEvent &, unsigned x, unsigned y)
 {
 }
 
