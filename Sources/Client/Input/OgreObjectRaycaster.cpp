@@ -38,7 +38,21 @@ void OgreObjectRaycaster::mousePressed(const OIS::MouseButtonID &, const OIS::Mo
 
     if (it != result.end() && it->movable)
     {
-        LOG_DEBUG << "Object clicked";
+        Ogre::Entity * entity = dynamic_cast<Ogre::Entity *>(it->movable);
+
+        if (entity)
+        {
+            LOG_DEBUG << "Entity clicked (name: " << it->movable->getName() << ")";
+
+            auto it = m_rightClickCallbacks.find(entity);
+
+            if (it != m_rightClickCallbacks.end())
+            {
+                LOG_DEBUG << "Found callback for it";
+
+                it->second();
+            }
+        }
     }
 }
 
