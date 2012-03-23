@@ -37,8 +37,6 @@ void Object::update()
 
 void Object::rightClickedCallback()
 {
-    LOG_DEBUG << "Object clicked";
-
     if (m_rightClickCallback)
         m_rightClickCallback();
 }
