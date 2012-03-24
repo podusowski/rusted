@@ -18,6 +18,7 @@ public:
 
     void setRightClickCallback(std::function<void()>);
     void setSelected(bool);
+    Common::Game::Object::ObjectBase & getGameObject();
 
     void update();
 

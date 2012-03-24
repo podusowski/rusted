@@ -29,6 +29,11 @@ void Object::setSelected(bool selected)
     m_node->showBoundingBox(true);
 }
 
+Common::Game::Object::ObjectBase & Object::getGameObject()
+{
+    return m_object;
+}
+
 void Object::update()
 {
     Common::Game::Position position = m_object.getPosition();

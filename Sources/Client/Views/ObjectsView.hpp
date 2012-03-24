@@ -3,6 +3,7 @@
 #include "Common/Game/Object/StaticObject.hpp"
 #include "Client/Views/IView.hpp"
 #include "Client/Services/ObjectService.hpp"
+#include "Client/Services/PlayerActionService.hpp"
 #include "Client/Graphics/IGraphics.hpp"
 #include "Object.hpp"
 
@@ -15,6 +16,7 @@ class ObjectsView : public IView
 {
 public:
     ObjectsView(Services::ObjectService &,
+                Services::PlayerActionService &,
                 Graphics::IGraphics &,
                 Input::IInput &,
                 Common::Game::Universe &);
@@ -29,6 +31,7 @@ private:
     void objectClicked(Object * object);
 
     Services::ObjectService & m_objectService;
+    Services::PlayerActionService & m_playerActionService;
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;
     Common::Game::Universe & m_universe;

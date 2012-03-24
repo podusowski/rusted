@@ -9,10 +9,12 @@
 using namespace Client::Views;
 
 ObjectsView::ObjectsView(Services::ObjectService & objectService,
+                         Services::PlayerActionService & playerActionService,
                          Graphics::IGraphics & graphics,
                          Input::IInput & input,
                          Common::Game::Universe & universe) :
     m_objectService(objectService),
+    m_playerActionService(playerActionService),
     m_graphics(graphics),
     m_input(input),
     m_universe(universe)
@@ -54,6 +56,8 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
 
 void ObjectsView::objectClicked(Object * object)
 {
+    LOG_DEBUG << "Object selected, id:" << object->getGameObject().getId();
+
     object->setSelected(true);
 }
 
