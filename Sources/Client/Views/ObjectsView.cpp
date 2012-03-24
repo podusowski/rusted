@@ -12,11 +12,13 @@ ObjectsView::ObjectsView(Services::ObjectService & objectService,
                          Services::PlayerActionService & playerActionService,
                          Graphics::IGraphics & graphics,
                          Input::IInput & input,
+                         Gui::Gui & gui,
                          Common::Game::Universe & universe) :
     m_objectService(objectService),
     m_playerActionService(playerActionService),
     m_graphics(graphics),
     m_input(input),
+    m_gui(gui),
     m_universe(universe)
 {
 }

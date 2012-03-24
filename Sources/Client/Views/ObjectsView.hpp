@@ -5,6 +5,7 @@
 #include "Client/Services/ObjectService.hpp"
 #include "Client/Services/PlayerActionService.hpp"
 #include "Client/Graphics/IGraphics.hpp"
+#include "Client/Gui/Gui.hpp"
 #include "Object.hpp"
 
 namespace Client
@@ -19,6 +20,7 @@ public:
                 Services::PlayerActionService &,
                 Graphics::IGraphics &,
                 Input::IInput &,
+                Gui::Gui &,
                 Common::Game::Universe &);
 
     void activate();
@@ -34,6 +36,7 @@ private:
     Services::PlayerActionService & m_playerActionService;
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;
+    Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;
     std::vector<boost::shared_ptr<Object> > m_objects;
     boost::optional<Object *> m_selectedObject;
