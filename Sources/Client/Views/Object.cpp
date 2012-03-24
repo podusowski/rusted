@@ -26,7 +26,7 @@ void Object::setRightClickCallback(std::function<void()> callback)
 
 void Object::setSelected(bool selected)
 {
-    m_node->showBoundingBox(true);
+    m_node->showBoundingBox(selected);
 }
 
 Common::Game::Object::ObjectBase & Object::getGameObject()
