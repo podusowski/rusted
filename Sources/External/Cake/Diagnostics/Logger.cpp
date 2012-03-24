@@ -45,7 +45,7 @@ LogMessage Logger::log(LogLevel level,
 std::string Logger::generateHeader(LogLevel level, const std::string & file, unsigned line)
 {
     std::string file2 = file;
-    const unsigned max_file_length = 20;
+    const unsigned max_file_length = 30;
 
     if (file.length() > max_file_length)
     {
