@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <GUILayout>
+    <Window Type="DefaultGUISheet" Name="root">
+        <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+
     <Window Type="TaharezLook/FrameWindow" Name="Navigation" >
         <Property Name="Text" Value="Navigation" />
         <Property Name="CloseButtonEnabled" Value="False" />
@@ -10,5 +13,18 @@
             <Property Name="UnifiedAreaRect" Value="{{0.1,0},{0.3,0},{0.9,0},{0.6,0}}" />
             <Property Name="Text" Value="ship position" />
         </Window> 
+    </Window>
+
+    <Window Type="TaharezLook/FrameWindow" Name="SelectedObject" >
+        <Property Name="Text" Value="Target" />
+        <Property Name="CloseButtonEnabled" Value="False" />
+		<Property Name="SizingEnabled" Value="False" />
+        <Property Name="UnifiedAreaRect" Value="{{0.5,0},{0.01,0},{0.9,0},{0.2,0}}" />
+        <Window Type="TaharezLook/StaticText" Name="SelectedObjectName" >
+            <Property Name="UnifiedAreaRect" Value="{{0.1,0},{0.3,0},{0.9,0},{0.6,0}}" />
+            <Property Name="Text" Value="no target" />
+        </Window> 
+    </Window>
+
     </Window>
 </GUILayout>
