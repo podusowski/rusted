@@ -36,6 +36,7 @@ private:
     Input::IInput & m_input;
     Common::Game::Universe & m_universe;
     std::vector<boost::shared_ptr<Object> > m_objects;
+    boost::optional<Object *> m_selectedObject;
 };
 
 }

@@ -27,6 +27,8 @@ public:
     Common::Game::Object::ObjectBase & getFocusedObject();
     void setFocusedObjectCourse(Common::Game::Position);
 
+    void selectObject(Common::Game::Object::ObjectBase &);
+
     void handle(const Common::Messages::AbstractMessage &) {}
 
 private:
@@ -36,6 +38,7 @@ private:
     Common::Game::Universe & m_universe;
 
     boost::optional<Common::Game::Object::ObjectBase *> m_focusedObject;
+    boost::optional<Common::Game::Object::ObjectBase *> m_selectedObject;
 };
 
 }

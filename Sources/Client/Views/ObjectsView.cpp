@@ -58,6 +58,13 @@ void ObjectsView::objectClicked(Object * object)
 {
     LOG_DEBUG << "Object selected, id:" << object->getGameObject().getId();
 
+    if (m_selectedObject)
+    {
+        (*m_selectedObject)->setSelected(false);
+    }
+
+    m_selectedObject = object;
     object->setSelected(true);
+    m_playerActionService.selectObject(object->getGameObject());
 }
 

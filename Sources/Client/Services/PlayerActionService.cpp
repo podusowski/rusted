@@ -14,9 +14,11 @@ PlayerActionService::PlayerActionService(Network::IConnection & connection,
 {
 }
 
-void PlayerActionService::focusObject(Common::Game::Object::ObjectBase & ship)
+void PlayerActionService::focusObject(Common::Game::Object::ObjectBase & object)
 {
-    m_focusedObject = &ship;
+    LOG_DEBUG << "Object focused: " << object.getId();
+
+    m_focusedObject = &object;
 }
 
 Common::Game::Object::ObjectBase & PlayerActionService::getFocusedObject()
@@ -40,5 +42,12 @@ void PlayerActionService::setFocusedObjectCourse(Common::Game::Position course)
     req.courseZ = course.getZ();
 
     m_connection.send(req);
+}
+
+void PlayerActionService::selectObject(Common::Game::Object::ObjectBase & object)
+{
+    LOG_DEBUG << "Object selected: " << object.getId();
+
+    m_selectedObject = &object;
 }
 
