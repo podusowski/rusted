@@ -31,6 +31,7 @@ public:
 
 private:
     void objectClicked(Object * object);
+    void updateSelectedObjectWindow();
 
     Services::ObjectService & m_objectService;
     Services::PlayerActionService & m_playerActionService;

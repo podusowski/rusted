@@ -45,6 +45,8 @@ void ObjectsView::frameStarted()
     {
         object->update();
     }
+
+    updateSelectedObjectWindow();
 }
 
 void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
@@ -68,5 +70,16 @@ void ObjectsView::objectClicked(Object * object)
     m_selectedObject = object;
     object->setSelected(true);
     m_playerActionService.selectObject(object->getGameObject());
+}
+
+void ObjectsView::updateSelectedObjectWindow()
+{
+    if (m_selectedObject)
+    {
+        CEGUI::Window * selectedObjectName = m_gui.getLayoutWindow().getChildRecursive("SelectedObjectName");
+        std::stringstream ss;
+        ss << (*m_selectedObject)->getGameObject().getId();
+        selectedObjectName->setText(ss.str());
+    }
 }
 
