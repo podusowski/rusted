@@ -13,6 +13,7 @@ class IConnection
 {
 public:
     virtual void send(Common::Messages::AbstractMessage &) = 0;
+    virtual ~IConnection() {}
 };
 
 }

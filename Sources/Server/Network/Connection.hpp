@@ -16,6 +16,7 @@ class Connection : public Cake::Threading::IRunnable, public Server::Network::IC
 {
 public:
 	Connection(int id, Cake::Networking::Socket & socket, Services::IServiceDeployment & serviceDeployment);
+	~Connection();
 	void run();
 	void addListener(IConnectionListener & listener);
 	void send(const Common::Messages::AbstractMessage & message);

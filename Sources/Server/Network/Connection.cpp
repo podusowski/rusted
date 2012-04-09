@@ -19,6 +19,11 @@ Connection::Connection(int id, Cake::Networking::Socket & socket, Services::ISer
     serviceDeployment.deployNewConnection(*this);
 }
 
+Connection::~Connection()
+{
+    LOG_DEBUG << "Connection " << m_id << " destroyed";
+}
+
 void Connection::addListener(IConnectionListener & listener)
 {
     LOG_DEBUG << "Adding " << TYPENAME(listener) << " as message handler for connection: " << m_id;

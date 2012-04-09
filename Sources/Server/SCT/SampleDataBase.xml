@@ -2,6 +2,7 @@
     <users>
         <user id="1" login="user1" password="passwordhash" />
         <user id="2" login="user2" password="passwordhash" />
+        <user id="3" login="user3" password="passwordhash" />
     </users>
     <objects>
         <object type="Ship" id="1" owner="1" x="1" y="1" z="1" integrity="100" />

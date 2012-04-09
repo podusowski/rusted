@@ -66,13 +66,17 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerWasConnectedEarlier)
     component.setConfigValue("--database.xml.filename", dbFile);
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
-
     {
-        boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+        auto connection2 = authorizeUser(component, "user1", "password"); 
+        procedureEntityChangeCourse(*connection2, 1, 10, 1, 1);
     }
 
-    procedureEntityChangeCourse(*connection1, 1, 2, 1, 1);
+    // flush previous connection
+    Cake::Threading::Thread::wait(3);
+
+    boost::shared_ptr<SCT::Connection> connection = authorizeUser(component, "user1", "password"); 
+
+    procedureEntityChangeCourse(*connection, 1, 2, 1, 1);
 
     Cake::Threading::Thread::wait(0, 500);
 }
