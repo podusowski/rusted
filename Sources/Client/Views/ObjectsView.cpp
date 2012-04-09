@@ -78,7 +78,17 @@ void ObjectsView::updateSelectedObjectWindow()
     {
         CEGUI::Window * selectedObjectName = m_gui.getLayoutWindow().getChildRecursive("SelectedObjectName");
         std::stringstream ss;
-        ss << (*m_selectedObject)->getGameObject().getId();
+
+        if (typeid((*m_selectedObject)->getGameObject()) == typeid(Common::Game::Object::Ship))
+        {
+            Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>((*m_selectedObject)->getGameObject());
+            ss << "Ship" << ship.getId() << " integrity: " << ship.getIntegrity();
+        }
+        else
+        {
+            ss << (*m_selectedObject)->getGameObject().getId();
+        }
+
         selectedObjectName->setText(ss.str());
     }
 }
