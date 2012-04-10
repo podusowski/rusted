@@ -8,21 +8,6 @@
 
 using namespace Server::Network;
 
-ConnectionDeployment::ConnectionDeployment(unsigned id, 
-                                           boost::shared_ptr<Cake::Networking::Socket> socket, 
-                                           Services::IServiceDeployment & serviceDeployment) :
-    m_id(id),
-    m_socket(socket),
-    m_connection(id, *socket, serviceDeployment),
-    m_thread(m_connection)
-{
-}
-
-Cake::Threading::Thread & ConnectionDeployment::getThread()
-{
-    return m_thread;
-}
-
 ServerController::ServerController(int argc, const char * argv[]) :
     m_lastConnectionId(1),
     m_cfg(argc, argv),
@@ -53,9 +38,9 @@ int ServerController::start()
 
             LOG_DEBUG << "New connection established";
 
-            boost::shared_ptr<ConnectionDeployment> connection(new ConnectionDeployment(m_lastConnectionId++, socket, m_serviceDeployment));
-            m_connections.push_back(connection);
-            connection->getThread().start();
+            boost::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(m_lastConnectionId++, socket, m_serviceDeployment));
+            m_connections.push_back(connectionContext);
+            connectionContext->getThread().start();
         }
     }
     catch (std::exception & ex)
@@ -70,8 +55,7 @@ int ServerController::start()
 
 void ServerController::gc()
 {
-    for (std::vector<boost::shared_ptr<ConnectionDeployment> >::iterator it = m_connections.begin(); 
-         it != m_connections.end(); it++)
+    for (auto it = m_connections.begin(); it != m_connections.end(); it++)
     {
         if (not (*it)->getThread().isRunning())
         {

@@ -3,6 +3,7 @@ TYPE:=static_library
 
 SOURCES:=main.cpp
 SOURCES+=Network/Connection.cpp
+SOURCES+=Network/ConnectionContext.cpp
 SOURCES+=Network/ServerController.cpp
 SOURCES+=Services/ServerInfoService.cpp
 SOURCES+=Services/AuthorizationService.cpp
