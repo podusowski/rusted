@@ -17,3 +17,8 @@ Cake::Threading::Thread & ConnectionContext::getThread()
     return m_thread;
 }
 
+IConnection & ConnectionContext::getConnection()
+{
+    return m_connection;
+}
+

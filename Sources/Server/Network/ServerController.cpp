@@ -11,7 +11,10 @@ using namespace Server::Network;
 ServerController::ServerController(int argc, const char * argv[]) :
     m_lastConnectionId(1),
     m_cfg(argc, argv),
-    m_serviceDeployment(m_cfg)
+    m_dbFactory(m_cfg),
+    m_db(m_dbFactory.create()),
+    m_playerContainer(m_db),
+    m_serviceDeployment(m_cfg, m_db, m_playerContainer)
 {
 	struct sigaction sigact;
 	memset(&sigact, 0, sizeof(sigact));
@@ -40,6 +43,7 @@ int ServerController::start()
 
             boost::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(m_lastConnectionId++, socket, m_serviceDeployment));
             m_connections.push_back(connectionContext);
+            m_playerContainer.add(connectionContext->getConnection());
             connectionContext->getThread().start();
         }
     }
@@ -61,6 +65,7 @@ void ServerController::gc()
         {
             LOG_DEBUG << "Collecting innactive connection: " << (*it)->getId();
 
+            m_playerContainer.remove((*it)->getConnection());
             it = m_connections.erase(it);
         }
     }

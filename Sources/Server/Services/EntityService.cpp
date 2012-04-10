@@ -32,7 +32,7 @@ void EntityService::handle(const Common::Messages::EntityChangeCourseReq & chang
                                     changeCourseReq.courseZ);
     ship.setCourse(destination);
 
-    std::vector<Network::IConnection *> connections = m_playerContainer.getAllConnections();
+    std::vector<Network::IConnection *> connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
     for (std::vector<Network::IConnection *>::iterator it = connections.begin(); it != connections.end(); it++)
     {
         if (*it != &connection)
@@ -94,7 +94,7 @@ void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo
 
 void EntityService::handle(const Common::Messages::AttackObject & attackObject, Network::IConnection & connection)
 {
-    auto connections = m_playerContainer.getAllConnections();
+    auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
         connection->send(attackObject);

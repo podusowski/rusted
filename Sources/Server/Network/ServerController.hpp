@@ -29,9 +29,10 @@ private:
     int m_lastConnectionId;
 
     Common::Configuration::Configuration m_cfg;
+    Common::DataBase::DataBaseFactory m_dbFactory;
+    Common::DataBase::DataBase & m_db;
+    Server::Game::PlayerContainer m_playerContainer;
     Server::Services::ServiceDeployment m_serviceDeployment;
-    boost::function<void(ConnectionContext&)> m_connectionAddedCallback;
-    boost::function<void(ConnectionContext&)> m_connectionRemovedCallback;
 };
 
 }

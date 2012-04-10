@@ -17,16 +17,21 @@ class PlayerContainer
 public:
     PlayerContainer(Common::DataBase::DataBase & db);
 
-    Player & create(const std::string & login,
-                    const std::string & password, 
-                    Network::IConnection & connection);
+    int authorize(const std::string & login,
+                   const std::string & password, 
+                   Network::IConnection & connection);
+
+    void add(Network::IConnection &);
+    void remove(Network::IConnection &);
 
     Server::Game::Player & getBy(Network::IConnection & connection);
-    std::vector<Player*> getAll();
-    std::vector<Network::IConnection *> getAllConnections();
+    std::vector<boost::shared_ptr<Player> > getAll(PlayerState state);
+    std::vector<Network::IConnection *> getAllConnections(PlayerState state);
 
 private:
-    std::map<Network::IConnection *, Server::Game::Player *> m_connectionMap;
+    int checkCredentials(const std::string & login, const std::string & password);
+
+    std::map<Network::IConnection *, boost::shared_ptr<Server::Game::Player> > m_connectionMap;
     Common::DataBase::DataBase & m_db;
 };
 

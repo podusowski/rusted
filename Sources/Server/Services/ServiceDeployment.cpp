@@ -5,16 +5,13 @@
 
 using namespace Server::Services;
 
-ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg) :
-    m_dbFactory(cfg),
-    m_db(m_dbFactory.create()),
-
-    m_players(m_db),
+ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg, Common::DataBase::DataBase & db, Server::Game::PlayerContainer & playerContainer) :
+    m_db(db),
 
     m_rustedTimeService(*m_time),
-    m_authorizationService(m_players, *this),
-    m_playerService(m_universe, m_players),
-    m_entityService(m_universe, m_players)
+    m_authorizationService(playerContainer, *this),
+    m_playerService(m_universe, playerContainer),
+    m_entityService(m_universe, playerContainer)
 {
     Common::Game::UniverseLoader loader;
     loader.load(m_universe, m_db);

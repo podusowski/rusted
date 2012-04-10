@@ -22,6 +22,7 @@ public:
 
     unsigned getId() { return m_id; }
     Cake::Threading::Thread & getThread();
+    Network::IConnection & getConnection();
 
 private:
     unsigned m_id;

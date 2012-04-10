@@ -1,27 +1,15 @@
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include <gtest/gtest.h>
 
 #include "Common/Game/Utilities/PasswordHash.hpp"
 #include "DataBase/DataBase.hpp"
 #include "UnitTests/ConnectionStub.hpp"
 #include "Game/PlayerContainer.hpp"
 
+using namespace testing;
 using namespace Server::Game;
 using namespace Common;
 
-class PlayerContainerTest : public CPPUNIT_NS::TestFixture
-{
-    CPPUNIT_TEST_SUITE (PlayerContainerTest);
-    CPPUNIT_TEST(testAddPlayerAndReferenceByConnection);
-    CPPUNIT_TEST_SUITE_END ();
-
-public:
-    void testAddPlayerAndReferenceByConnection();
-};
-
-CPPUNIT_TEST_SUITE_REGISTRATION (PlayerContainerTest);
-
-void PlayerContainerTest::testAddPlayerAndReferenceByConnection()
+TEST(PlayerContainerTest, AddPlayerAndReferenceByConnection)
 {
     DataBase::DataBase db;
     DataBase::DataBaseNode & playersNode = db.getRoot().createChild("users");
@@ -34,10 +22,11 @@ void PlayerContainerTest::testAddPlayerAndReferenceByConnection()
     Server::Game::PlayerContainer container(db);
     ConnectionStub connection;
     
-    Player & player1 = container.create("someLogin", "passwordHash", connection);
+    container.add(connection);
+    int player1Id = container.authorize("someLogin", "passwordHash", connection);
     Player & player2 = container.getBy(connection);
 
-    CPPUNIT_ASSERT_EQUAL(1, player1.getId());
-    CPPUNIT_ASSERT_EQUAL(1, player2.getId());
+    ASSERT_EQ(1, player1Id);
+    ASSERT_EQ(1, player2.getId());
 }
 
