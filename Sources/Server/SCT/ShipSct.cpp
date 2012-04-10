@@ -72,9 +72,9 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerWasConnectedEarlier)
     }
 
     // flush previous connection
-    Cake::Threading::Thread::wait(3);
+    Cake::Threading::Thread::wait(1);
 
-    boost::shared_ptr<SCT::Connection> connection = authorizeUser(component, "user1", "password"); 
+    auto connection = authorizeUser(component, "user1", "password"); 
 
     procedureEntityChangeCourse(*connection, 1, 2, 1, 1);
 

@@ -21,7 +21,7 @@ Connection::Connection(int id, Cake::Networking::Socket & socket, Services::ISer
 
 Connection::~Connection()
 {
-    LOG_DEBUG << "Connection " << m_id << " destroyed";
+    LOG_DEBUG << "Connection: " << m_id << " destroyed";
 }
 
 void Connection::addListener(IConnectionListener & listener)
