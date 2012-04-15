@@ -3,13 +3,19 @@
 EXEC_DIRECTORY=`dirname $0`
 pushd $EXEC_DIRECTORY
 
+_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.:`dirname \`locate RenderSystem_GL.so\``
+echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+
 if [ -n "$DEBUG" ]; then
-    LD_LIBRARY_PATH=. gdb --args Client --network.port 1234 --network.address localhost $@
+    echo "executing with gdb"
+    gdb --args Client --network.port 1234 --network.address localhost $@
 elif [ -n "$VALGRIND" ]; then
-    echo "Executing with Vagrind"
-    LD_LIBRARY_PATH=. valgrind --leak-check=full ./Client --network.port 1234 --network.address localhost $@
+    echo "executing with vagrind"
+    valgrind --leak-check=full ./Client --network.port 1234 --network.address localhost $@
 else
-    LD_LIBRARY_PATH=. ./Client --network.port 1234 --network.address localhost $@
+    ./Client --network.port 1234 --network.address localhost $@
 fi
 
 xset r on
