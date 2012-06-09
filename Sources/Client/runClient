@@ -1,7 +1,11 @@
 #!/bin/bash
 
+OGRE_RENDERER=`find /usr/lib -name RenderSystem_GL.so`
+OGRE_RENDERER_DIR=`dirname $OGRE_RENDERER`
+echo "Ogre renderer: $OGRE_RENDERER"
+
 EXEC_DIRECTORY=`dirname $0`
 pushd $EXEC_DIRECTORY
-LD_LIBRARY_PATH=. ./Client $@
+LD_LIBRARY_PATH=.:$OGRE_RENDERER_DIR ./Client $@
 popd
 
