@@ -75,6 +75,7 @@ void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo
          shipInfo.x = position.getX();
          shipInfo.y = position.getY();
          shipInfo.z = position.getZ();
+         shipInfo.integrity = object.getIntegrity();
 
          connection.send(shipInfo);
     }
