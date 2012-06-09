@@ -32,7 +32,8 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
     getObjectInfo.id = 1;
     connection1->send(getObjectInfo);
 
-    connection1->receive<Common::Messages::ShipInfo>();
+    auto shipInfo = connection1->receive<Common::Messages::ShipInfo>();
+    EXPECT_EQ(100, shipInfo.integrity);
 }
 
 TEST(ObjectsSct, GetObjectInfo_StaticObject)

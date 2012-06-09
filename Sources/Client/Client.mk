@@ -26,7 +26,7 @@ CFLAGS+=-I/usr/include/OGRE
 CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/RendererModules/Ogre
 CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/
 
-DEPENDENCIES+=libClient.a libCommon.a libCake.a CEGUI
+DEPENDENCIES+=libClient.a libCommon.a libCake.a CEGUI Contents
 
 RESOURCES+=runClient
 RESOURCES+=runTestClient
