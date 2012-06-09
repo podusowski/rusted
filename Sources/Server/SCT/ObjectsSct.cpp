@@ -33,7 +33,7 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
     connection1->send(getObjectInfo);
 
     auto shipInfo = connection1->receive<Common::Messages::ShipInfo>();
-    EXPECT_EQ(100, shipInfo.integrity);
+    EXPECT_EQ(100, shipInfo->integrity);
 }
 
 TEST(ObjectsSct, GetObjectInfo_StaticObject)
