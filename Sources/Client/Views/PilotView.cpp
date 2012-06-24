@@ -71,7 +71,7 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
 {
     using namespace Common::Game;
 
-    if (button == OIS::MB_Left)
+    if (button == OIS::MB_Right)
     {
         Ogre::Camera & camera = m_graphics.getCamera();
         const Ogre::Vector3 ogreCameraPosition = camera.getPosition();
