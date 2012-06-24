@@ -6,6 +6,7 @@
 #include "Common/Game/Object/IFlyableObject.hpp"
 #include "Common/Game/Object/OwnedObjectBase.hpp"
 #include "Common/Game/IRustedTime.hpp"
+#include "Common/Game/Attack/IAttack.hpp"
 
 namespace Common
 {
@@ -28,6 +29,8 @@ public:
     void setPosition(const Position &);
     void setCourse(Position course);
     void setSpeed(unsigned speed);
+    void addAttack(boost::shared_ptr<Common::Game::Attack::IAttack>);
+    void attack(unsigned, ObjectBase &);
 
 private:
     Position calculatePosition(TimeValue time);
@@ -37,6 +40,7 @@ private:
     Position m_position;
     Course m_course;
     unsigned m_speed;
+    std::vector<boost::shared_ptr<Common::Game::Attack::IAttack> > m_attacks;
 };
 
 }

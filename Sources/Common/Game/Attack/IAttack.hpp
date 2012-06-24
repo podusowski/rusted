@@ -9,12 +9,13 @@ namespace Game
 namespace Attack
 {
 
-class Attack
+class IAttack
 {
 public:
-    void attack(Common::Game::Object::ObjectBase &);
+    virtual void attack(Common::Game::Object::ObjectBase &) = 0;
 };
 
 }
 }
 }
+

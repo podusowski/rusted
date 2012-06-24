@@ -2,6 +2,7 @@
 
 #include <typeinfo>
 
+#include "Cake/DependencyInjection/Inject.hpp"
 #include "Common/Game/Position.hpp"
 
 namespace Common
@@ -38,7 +39,7 @@ private:
 
 inline std::ostream & operator<<(std::ostream & os, Common::Game::Object::ObjectBase & object)
 {
-    os << typeid(object).name() << ", position: " << object.getPosition();
+    os << CAKE_DEPENDENCY_INJECTION_TYPENAME(object) << " " << object.getPosition();
     return os;
 }
 
