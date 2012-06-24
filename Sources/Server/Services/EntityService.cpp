@@ -61,25 +61,17 @@ void EntityService::handle(const Common::Messages::GetVisibleObjects &, Network:
 
 void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo, Network::IConnection & connection)
 {
-    Common::Game::Object::ObjectBase & object = m_universe.getById<Common::Game::Object::ObjectBase>(getObjectInfo.id);
+    using namespace Common::Game::Object;
+
+    ObjectBase & object = m_universe.getById<ObjectBase>(getObjectInfo.id);
 
     LOG_DEBUG << "Getting info about object id: " << getObjectInfo.id << ", type: " << TYPENAME(object);
 
-    if (typeid(object) == typeid(Common::Game::Object::Ship))
+    if (typeid(object) == typeid(Ship))
     {
-         Common::Messages::ShipInfo shipInfo;
-
-         Common::Game::Position position = object.getPosition();
-         shipInfo.id = getObjectInfo.id;
-         shipInfo.player_id = dynamic_cast<Common::Game::Object::Ship&>(object).getOwnerId();
-         shipInfo.x = position.getX();
-         shipInfo.y = position.getY();
-         shipInfo.z = position.getZ();
-         shipInfo.integrity = object.getIntegrity();
-
-         connection.send(shipInfo);
+         sendShipInfo(dynamic_cast<Ship&>(object), connection);
     }
-    else if (typeid(object) == typeid(Common::Game::Object::StaticObject))
+    else if (typeid(object) == typeid(StaticObject))
     {
         Common::Messages::StaticObjectInfoResp staticObjectInfo;
 
@@ -95,9 +87,34 @@ void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo
 
 void EntityService::handle(const Common::Messages::AttackObject & attackObject, Network::IConnection & connection)
 {
+    auto & attacker = m_universe.getById<Common::Game::Object::Ship>(attackObject.attackerId);
+    auto & attacked = m_universe.getById<Common::Game::Object::Ship>(attackObject.attackedId);
+
+    LOG_DEBUG << attacker << " is attacking " << attacked;
+
+    //TODO: select proper attack
+    attacker.attack(0, attacked);
+
     auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
         connection->send(attackObject);
+        sendShipInfo(attacked, *connection);
     }
 }
+
+void EntityService::sendShipInfo(Common::Game::Object::Ship & ship, Network::IConnection & connection)
+{
+    Common::Messages::ShipInfo shipInfo;
+
+    Common::Game::Position position = ship.getPosition();
+    shipInfo.id = ship.getId();
+    shipInfo.player_id = ship.getOwnerId();
+    shipInfo.x = position.getX();
+    shipInfo.y = position.getY();
+    shipInfo.z = position.getZ();
+    shipInfo.integrity = ship.getIntegrity();
+
+    connection.send(shipInfo);
+}
+

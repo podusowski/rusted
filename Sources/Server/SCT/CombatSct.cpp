@@ -24,4 +24,10 @@ TEST(CombatSct, Attack)
 
     connection1->receive<Common::Messages::AttackObject>();
     connection2->receive<Common::Messages::AttackObject>();
+
+    auto shipInfo1 = connection1->receive<Common::Messages::ShipInfo>();
+    auto shipInfo2 = connection2->receive<Common::Messages::ShipInfo>();
+
+    ASSERT_EQ(90, shipInfo1->integrity);
+    ASSERT_EQ(90, shipInfo2->integrity);
 }
