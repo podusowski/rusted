@@ -43,6 +43,16 @@ CEGUI::Window & Gui::getLayoutWindow()
     }
 }
 
+MyGUI::Gui & Gui::operator*()
+{
+    return m_myGui;
+}
+
+MyGUI::Gui * Gui::operator->()
+{
+    return &m_myGui;
+}
+
 void Gui::initResources()
 {
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/imagesets", "FileSystem", "General");

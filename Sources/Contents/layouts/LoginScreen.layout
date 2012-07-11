@@ -13,7 +13,7 @@
         </Widget>
         <Widget type="EditBox" skin="EditBox" position="95 55 300 40"/>
 
-        <Widget type="Button" skin="Button" position="375 105 190 30">
+        <Widget type="Button" name="LoginButton" skin="Button" position="375 105 190 30">
             <Property key="Caption" value="Enter the game"/>
         </Widget>
         <Widget type="Button" skin="Button" position="100 105 180 30">

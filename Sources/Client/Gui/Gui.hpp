@@ -20,6 +20,9 @@ public:
     CEGUI::WindowManager & getCeguiWindowManager();
     void setLayout(const std::string &);
     CEGUI::Window & getLayoutWindow();
+
+    MyGUI::Gui & operator*();
+    MyGUI::Gui * operator->();
 private:
     void initResources();
     void initRenderer();

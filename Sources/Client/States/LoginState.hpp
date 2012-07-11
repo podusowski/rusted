@@ -27,7 +27,7 @@ public:
     void frameStarted();
 
 private:
-    bool loginButtonClicked(const CEGUI::EventArgs &);
+    void loginButtonClicked(MyGUI::WidgetPtr);
     void loggedIn(bool success);
 
     Gui::Gui & m_gui;

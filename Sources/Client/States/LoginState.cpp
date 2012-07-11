@@ -27,9 +27,8 @@ void LoginState::activate()
 {
     m_gui.setLayout("LoginScreen.layout");
 
-    CEGUI::Window * loginButton = m_gui.getLayoutWindow().getChildRecursive("LoginButton");
-    loginButton->subscribeEvent(CEGUI::PushButton::EventClicked, 
-        CEGUI::Event::Subscriber(&LoginState::loginButtonClicked, this));
+    MyGUI::ButtonPtr loginButton = m_gui->findWidget<MyGUI::Button>("LoginButton");
+    loginButton->eventMouseButtonClick += MyGUI::newDelegate(this, &LoginState::loginButtonClicked);
 }
 
 void LoginState::deactivate()
@@ -40,7 +39,7 @@ void LoginState::frameStarted()
 {
 }
 
-bool LoginState::loginButtonClicked(const CEGUI::EventArgs &)
+void LoginState::loginButtonClicked(MyGUI::WidgetPtr)
 {
     LOG_INFO << "Login button clicked, let's make the connection!";
     try
@@ -61,7 +60,6 @@ bool LoginState::loginButtonClicked(const CEGUI::EventArgs &)
     {
         LOG_ERR << "Can't connect";
     }
-    return true;
 }
 
 void LoginState::loggedIn(bool success)
