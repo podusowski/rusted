@@ -3,7 +3,9 @@
 
 using namespace Client::Gui;
 
-Gui::Gui(Ogre::RenderWindow & ogreRenderWindow) : m_ogreRenderWindow(ogreRenderWindow)
+Gui::Gui(Ogre::RenderWindow & ogreRenderWindow, Ogre::SceneManager & ogreSceneManager) : 
+    m_ogreRenderWindow(ogreRenderWindow),
+    m_ogreSceneManager(ogreSceneManager)
 {
     LOG_INFO << "Initializing GUI subsystem";
     try
@@ -58,5 +60,7 @@ void Gui::initRenderer()
 {
     CEGUI::OgreRenderer::bootstrapSystem(m_ogreRenderWindow);
     CEGUI::Logger::getSingleton().setLoggingLevel(CEGUI::Insane);
+
+    m_myGuiOgrePlatform.initialise(&m_ogreRenderWindow, &m_ogreSceneManager);
 }
 

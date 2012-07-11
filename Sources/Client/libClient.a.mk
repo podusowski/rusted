@@ -31,6 +31,8 @@ CFLAGS+=-I/usr/include/libxml2
 CFLAGS+=-I/usr/include/OGRE
 CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/RendererModules/Ogre
 CFLAGS+=-I$(BUILD)/CEGUI-0.7.5/cegui/include/
+CFLAGS+=-I$(BUILD)/MyGUI/MyGUIEngine/include/
+CFLAGS+=-I$(BUILD)/MyGUI/Platforms/Ogre/OgrePlatform/include/
 
-DEPENDENCIES+=libCommon.a CEGUI
+DEPENDENCIES+=libCommon.a CEGUI MyGUI
 
