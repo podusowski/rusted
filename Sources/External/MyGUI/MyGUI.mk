@@ -14,4 +14,4 @@ $(BUILD)/MyGUI/lib/libMyGUIEngine.so:
 	cp $(TARGET_BASE)/$(PACKAGE_NAME) $(BUILD)/MyGUI
 	cd $(BUILD)/MyGUI && tar xf $(PACKAGE_NAME) && \
 		cmake . && \
-		make -j$(JOBS) MyGUI.OgrePlatform
+		make -j$(JOBS) MyGUIEngine MyGUI.OgrePlatform
