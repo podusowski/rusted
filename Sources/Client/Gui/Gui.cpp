@@ -10,8 +10,8 @@ Gui::Gui(Ogre::RenderWindow & ogreRenderWindow, Ogre::SceneManager & ogreSceneMa
     LOG_INFO << "Initializing GUI subsystem";
     try
     {
-        initRenderer();
         initResources();
+        initRenderer();
         CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
         CEGUI::System::getSingleton().setDefaultMouseCursor((CEGUI::utf8*)"TaharezLook", (CEGUI::utf8*)"MouseArrow");
     }
@@ -28,9 +28,7 @@ CEGUI::WindowManager & Gui::getCeguiWindowManager()
 
 void Gui::setLayout(const std::string & layout)
 {
-    m_layoutWindow = getCeguiWindowManager().loadWindowLayout(layout);
-    CEGUI::System::getSingleton().setGUISheet(m_layoutWindow);
-    m_layoutWindow->activate();
+    MyGUI::LayoutManager::getInstance().loadLayout(layout);
 }
 
 CEGUI::Window & Gui::getLayoutWindow()
@@ -53,6 +51,7 @@ void Gui::initResources()
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/layouts", "FileSystem", "General");
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/looknfeel", "FileSystem", "General");
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/xml_schemas", "FileSystem", "General");
+    Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/gui", "FileSystem", "General");
     Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
 
@@ -62,5 +61,6 @@ void Gui::initRenderer()
     CEGUI::Logger::getSingleton().setLoggingLevel(CEGUI::Insane);
 
     m_myGuiOgrePlatform.initialise(&m_ogreRenderWindow, &m_ogreSceneManager);
+    m_myGui.initialise();
 }
 
