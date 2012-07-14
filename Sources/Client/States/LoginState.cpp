@@ -46,15 +46,13 @@ void LoginState::loginButtonClicked(MyGUI::WidgetPtr)
     {
         m_stateDeployment.deployNewConnection();
 
-        CEGUI::Window * loginEditbox = m_gui.getLayoutWindow().getChildRecursive("LoginEditbox");
-        CEGUI::Window * passwordEditbox = m_gui.getLayoutWindow().getChildRecursive("PasswordEditbox");
+        auto loginEditBox = m_gui->findWidget<MyGUI::EditBox>("LoginEditBox");
+        auto passwordEditBox = m_gui->findWidget<MyGUI::EditBox>("PasswordEditBox");
 
-        assert(loginEditbox);
-        assert(passwordEditbox);
- 
-        m_authorizationService.login(boost::lexical_cast<std::string>(loginEditbox->getText()), 
-                                     boost::lexical_cast<std::string>(passwordEditbox->getText()),
-                                     boost::bind(&LoginState::loggedIn, this, _1));
+        auto login = boost::lexical_cast<std::string>(loginEditBox->getCaption());
+        auto password = boost::lexical_cast<std::string>(passwordEditBox->getCaption());
+
+        m_authorizationService.login(login, password, boost::bind(&LoginState::loggedIn, this, _1));
     }
     catch (...)
     {

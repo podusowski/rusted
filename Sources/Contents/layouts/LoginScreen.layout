@@ -6,12 +6,12 @@
         <Widget type="TextBox" skin="TextBox" position="20 15 60 30">
             <Property key="Caption" value="Login"/>
         </Widget>
-        <Widget type="EditBox" skin="EditBox" position="95 8 300 40"/>
+        <Widget type="EditBox" name="LoginEditBox" skin="EditBox" position="95 8 300 40"/>
 
         <Widget type="TextBox" skin="TextBox" position="20 60 65 25">
             <Property key="Caption" value="Password"/>
         </Widget>
-        <Widget type="EditBox" skin="EditBox" position="95 55 300 40"/>
+        <Widget type="EditBox" name="PasswordEditBox" skin="EditBox" position="95 55 300 40"/>
 
         <Widget type="Button" name="LoginButton" skin="Button" position="375 105 190 30">
             <Property key="Caption" value="Enter the game"/>
