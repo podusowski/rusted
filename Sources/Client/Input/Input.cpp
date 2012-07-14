@@ -64,57 +64,68 @@ bool Input::mouseMoved( const OIS::MouseEvent &arg )
 
     if (mouseX < 0)
         mouseX = 0;
-    if (mouseX > m_ogreRenderWindow.getWidth())
+    if (abs(mouseX) > m_ogreRenderWindow.getWidth())
         mouseX = m_ogreRenderWindow.getWidth();
 
     if (mouseY < 0)
         mouseY = 0;
-    if (mouseY > m_ogreRenderWindow.getHeight())
+    if (abs(mouseY) > m_ogreRenderWindow.getHeight())
         mouseY = m_ogreRenderWindow.getHeight();
 
     CEGUI::System::getSingleton().injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
+    MyGUI::InputManager::getInstance().injectMouseMove(arg.state.X.abs, arg.state.Y.abs, arg.state.Z.abs);
     return true;
 }
 
 bool Input::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-    LOG_INFO << "Mouse pressed (x: " << mouseX << ", y: " << mouseY << ")"; 
+    LOG_DEBUG << "Mouse pressed (x: " << mouseX << ", y: " << mouseY << ")"; 
+
     BOOST_FOREACH(IMouseListener * listener, m_mouseListeners)
     {
         listener->mousePressed(id, arg, mouseX, mouseY);
     }
 
     CEGUI::System::getSingleton().injectMouseButtonDown(toCeguiMouseButton(id));
+    MyGUI::InputManager::getInstance().injectMousePress(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
     return true;
 }
 
 bool Input::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-    LOG_INFO << "Mouse released (x: " << mouseX << ", y: " << mouseY << ")"; 
+    LOG_DEBUG << "Mouse released (x: " << mouseX << ", y: " << mouseY << ")"; 
+
     BOOST_FOREACH(IMouseListener * listener, m_mouseListeners)
     {
         listener->mouseReleased(id, mouseX, mouseY);
     }
 
     CEGUI::System::getSingleton().injectMouseButtonUp(toCeguiMouseButton(id));
+    MyGUI::InputManager::getInstance().injectMouseRelease(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
     return true;
 }
 
-bool Input::keyPressed( const OIS::KeyEvent &arg )
+bool Input::keyPressed(const OIS::KeyEvent & arg)
 {
     if (arg.key == OIS::KC_ESCAPE)
     {
-        LOG_WARN << "Emergency abort key - KC_ESCAPE";
+        LOG_WARN << "KC_ESCAPE, abort";
         ::abort();
     }
+
     CEGUI::System::getSingleton().injectKeyDown(arg.key);
     CEGUI::System::getSingleton().injectChar(arg.text);
+
+    MyGUI::InputManager::getInstance().injectKeyPress(MyGUI::KeyCode::Enum(arg.key), arg.text);
+
     return true;
 }
 
-bool Input::keyReleased( const OIS::KeyEvent &arg )
+bool Input::keyReleased(const OIS::KeyEvent & arg)
 {
     CEGUI::System::getSingleton().injectKeyUp(arg.key);
+
+    MyGUI::InputManager::getInstance().injectKeyRelease(MyGUI::KeyCode::Enum(arg.key));
     return true;
 }
 
