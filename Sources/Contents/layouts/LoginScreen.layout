@@ -16,7 +16,7 @@
         <Widget type="Button" name="LoginButton" skin="Button" position="375 105 190 30">
             <Property key="Caption" value="Enter the game"/>
         </Widget>
-        <Widget type="Button" skin="Button" position="100 105 180 30">
+        <Widget type="Button" name="QuitButton" skin="Button" position="100 105 180 30">
             <Property key="Caption" value="Quit"/>
         </Widget>
     </Widget>

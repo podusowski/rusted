@@ -27,8 +27,8 @@ void LoginState::activate()
 {
     m_gui.setLayout("LoginScreen.layout");
 
-    MyGUI::ButtonPtr loginButton = m_gui->findWidget<MyGUI::Button>("LoginButton");
-    loginButton->eventMouseButtonClick += MyGUI::newDelegate(this, &LoginState::loginButtonClicked);
+    m_gui->findWidget<MyGUI::Button>("LoginButton")->eventMouseButtonClick += MyGUI::newDelegate(this, &LoginState::loginButtonClicked);
+    m_gui->findWidget<MyGUI::Button>("QuitButton")->eventMouseButtonClick += MyGUI::newDelegate(this, &LoginState::quitButtonClicked);
 }
 
 void LoginState::deactivate()
@@ -41,7 +41,7 @@ void LoginState::frameStarted()
 
 void LoginState::loginButtonClicked(MyGUI::WidgetPtr)
 {
-    LOG_INFO << "Login button clicked, let's make the connection!";
+    LOG_DEBUG << "Login button clicked, let's make the connection!";
     try
     {
         m_stateDeployment.deployNewConnection();
@@ -60,6 +60,11 @@ void LoginState::loginButtonClicked(MyGUI::WidgetPtr)
     {
         LOG_ERR << "Can't connect";
     }
+}
+
+void LoginState::quitButtonClicked(MyGUI::WidgetPtr)
+{
+    ::exit(0);
 }
 
 void LoginState::loggedIn(bool success)

@@ -28,6 +28,8 @@ public:
 
 private:
     void loginButtonClicked(MyGUI::WidgetPtr);
+    void quitButtonClicked(MyGUI::WidgetPtr);
+
     void loggedIn(bool success);
 
     Gui::Gui & m_gui;
