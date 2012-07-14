@@ -20,7 +20,7 @@ PilotState::PilotState(IStateManagerStack &,
 
 void PilotState::activate()
 {
-    m_gui.setLayout("PilotScreen.layout");
+    m_gui.loadLayout("PilotScreen.layout");
 
     m_objectsView.activate();
     m_pilotView.activate();

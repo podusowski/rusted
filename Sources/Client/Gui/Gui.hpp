@@ -18,7 +18,7 @@ public:
     Gui(Ogre::RenderWindow &, Ogre::SceneManager &);
 
     CEGUI::WindowManager & getCeguiWindowManager();
-    void setLayout(const std::string &);
+    void loadLayout(const std::string &);
     CEGUI::Window & getLayoutWindow();
 
     MyGUI::Gui & operator*();

@@ -25,7 +25,7 @@ LoginState::LoginState(IStateManagerStack & stateManagerStack,
 
 void LoginState::activate()
 {
-    m_gui.setLayout("LoginScreen.layout");
+    m_gui.loadLayout("LoginScreen.layout");
 
     m_gui->findWidget<MyGUI::Button>("LoginButton")->eventMouseButtonClick += MyGUI::newDelegate(this, &LoginState::loginButtonClicked);
     m_gui->findWidget<MyGUI::Button>("QuitButton")->eventMouseButtonClick += MyGUI::newDelegate(this, &LoginState::quitButtonClicked);

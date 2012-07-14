@@ -28,9 +28,7 @@ EntitySelectState::EntitySelectState(IStateManagerStack & stateManagerStack,
 
 void EntitySelectState::activate()
 {
-    m_layout = m_gui.getCeguiWindowManager().loadWindowLayout("EntitySelectScreen.layout");
-    CEGUI::System::getSingleton().setGUISheet(m_layout);
-    m_layout->activate();
+    m_gui.loadLayout("EntitySelectScreen.layout");
 
     m_objectService.fetchPlayerShips(boost::bind(&EntitySelectState::myEntitiesFetched, this));
 }
