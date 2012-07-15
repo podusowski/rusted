@@ -33,6 +33,7 @@ private:
 
     MyGUI::Gui m_myGui;
     MyGUI::OgrePlatform m_myGuiOgrePlatform;
+    MyGUI::VectorWidgetPtr m_myGuiLoadedLayout;
 };
 
 }

@@ -30,7 +30,8 @@ void Gui::loadLayout(const std::string & layout)
 {
     LOG_DEBUG << "Loading GUI layout: " << layout;
 
-    MyGUI::LayoutManager::getInstance().loadLayout(layout);
+    MyGUI::LayoutManager::getInstance().unloadLayout(m_myGuiLoadedLayout);
+    m_myGuiLoadedLayout = MyGUI::LayoutManager::getInstance().loadLayout(layout);
 }
 
 CEGUI::Window & Gui::getLayoutWindow()
