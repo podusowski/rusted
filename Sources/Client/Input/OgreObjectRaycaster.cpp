@@ -1,5 +1,6 @@
+#include "MyGUI.h"
+
 #include "Cake/Diagnostics/Logger.hpp"
-#include "Gui/CEGUIIncludes.hpp"
 #include "Client/Graphics/IGraphics.hpp"
 
 #include "OgreObjectRaycaster.hpp"
@@ -27,11 +28,11 @@ void OgreObjectRaycaster::mousePressed(const OIS::MouseButtonID &, const OIS::Mo
 {
     LOG_DEBUG << "Casting for clicked objects";
 
-    CEGUI::Point mousePos = CEGUI::MouseCursor::getSingleton().getPosition();
+    auto mousePos = MyGUI::InputManager::getInstance().getMousePosition();
  
     Ogre::Ray mouseRay = m_camera.getCameraToViewportRay(
-                            mousePos.d_x / float(arg.state.width), 
-                            mousePos.d_y / float(arg.state.height));
+                            mousePos.left / float(arg.state.width), 
+                            mousePos.top / float(arg.state.height));
 
     m_raySceneQuery->setRay(mouseRay);
 
@@ -46,13 +47,13 @@ void OgreObjectRaycaster::mousePressed(const OIS::MouseButtonID &, const OIS::Mo
         {
             LOG_DEBUG << "Entity clicked (name: " << it->movable->getName() << ", &: " << entity << ")";
 
-            auto it = m_rightClickCallbacks.find(entity);
+            auto rightClickCallbackIt = m_rightClickCallbacks.find(entity);
 
-            if (it != m_rightClickCallbacks.end())
+            if (rightClickCallbackIt != m_rightClickCallbacks.end())
             {
                 LOG_DEBUG << "Found callback for it";
 
-                it->second();
+                rightClickCallbackIt->second();
             }
         }
     }
