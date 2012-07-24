@@ -1,30 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
 
-<GUILayout>
-    <Window Type="DefaultGUISheet" Name="root">
-        <Property Name="UnifiedAreaRect" Value="{{0,0},{0,0},{1,0},{1,0}}" />
+    <Widget type="Widget" skin="PanelSkin" position_real="0.10 0.10 0.35 0.10" layer="Main">
+        <Property key="Caption" value="Navigation"/>
 
-    <Window Type="TaharezLook/FrameWindow" Name="Navigation" >
-        <Property Name="Text" Value="Navigation" />
-        <Property Name="CloseButtonEnabled" Value="False" />
-		<Property Name="SizingEnabled" Value="False" />
-        <Property Name="UnifiedAreaRect" Value="{{0.01,0},{0.01,0},{0.5,0},{0.2,0}}" />
-        <Window Type="TaharezLook/StaticText" Name="ShipPosition" >
-            <Property Name="UnifiedAreaRect" Value="{{0.1,0},{0.3,0},{0.9,0},{0.6,0}}" />
-            <Property Name="Text" Value="ship position" />
-        </Window> 
-    </Window>
+        <Widget type="TextBox" skin="TextBox" position_real="0.10 0.10 0.80 0.80">
+            <Property key="Caption" value="Navigation"/>
+        </Widget>
+    </Widget>
 
-    <Window Type="TaharezLook/FrameWindow" Name="SelectedObject" >
-        <Property Name="Text" Value="Target" />
-        <Property Name="CloseButtonEnabled" Value="False" />
-		<Property Name="SizingEnabled" Value="False" />
-        <Property Name="UnifiedAreaRect" Value="{{0.5,0},{0.01,0},{0.9,0},{0.2,0}}" />
-        <Window Type="TaharezLook/StaticText" Name="SelectedObjectName" >
-            <Property Name="UnifiedAreaRect" Value="{{0.1,0},{0.3,0},{0.9,0},{0.6,0}}" />
-            <Property Name="Text" Value="no target" />
-        </Window> 
-    </Window>
+    <Widget type="Widget" skin="PanelSkin" position_real="0.55 0.10 0.35 0.10" layer="Main">
+        <Property key="Caption" value="Target"/>
 
-    </Window>
-</GUILayout>
+        <Widget type="TextBox" skin="TextBox" position_real="0.10 0.10 0.80 0.80">
+            <Property key="Caption" value="Target"/>
+        </Widget>
+    </Widget>
+
+</MyGUI>
+
