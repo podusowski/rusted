@@ -43,6 +43,7 @@ void EntitySelectState::frameStarted()
 
 void EntitySelectState::myEntitiesFetched()
 {
+    #if 0
     CEGUI::Listbox * entitiesListbox = dynamic_cast<CEGUI::Listbox*>(m_layout->getChildRecursive("EntitiesListbox"));
 
     std::vector<boost::shared_ptr<Common::Game::Object::ObjectBase> > myEntities
@@ -60,6 +61,7 @@ void EntitySelectState::myEntitiesFetched()
     CEGUI::Window * flyButton = m_layout->getChildRecursive("FlyButton");
     flyButton->subscribeEvent(CEGUI::PushButton::EventClicked,
         CEGUI::Event::Subscriber(&EntitySelectState::flyButtonClicked, this));
+    #endif
 }
 
 bool EntitySelectState::flyButtonClicked(const CEGUI::EventArgs &)
