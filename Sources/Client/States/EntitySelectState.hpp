@@ -13,16 +13,6 @@ namespace Client
 namespace States
 {
 
-class MyListItem : public CEGUI::ListboxTextItem
-{
-public:
-    MyListItem (const std::string & text, CEGUI::uint item_id = 0) :
-        ListboxTextItem(text, item_id)
-    {
-        setSelectionBrushImage("TaharezLook", "MultiListSelectionBrush");
-    }
-};
-
 class EntitySelectState : public IState
 {
 public:
@@ -40,7 +30,7 @@ public:
 
 private:
     void myEntitiesFetched();
-    bool flyButtonClicked(const CEGUI::EventArgs &);
+    void flyButtonClicked(MyGUI::WidgetPtr);
 
     States::IStateManagerStack & m_stateManagerStack;
     Gui::Gui & m_gui;

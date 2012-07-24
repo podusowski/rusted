@@ -43,35 +43,29 @@ void EntitySelectState::frameStarted()
 
 void EntitySelectState::myEntitiesFetched()
 {
-    #if 0
-    CEGUI::Listbox * entitiesListbox = dynamic_cast<CEGUI::Listbox*>(m_layout->getChildRecursive("EntitiesListbox"));
+    MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
 
-    std::vector<boost::shared_ptr<Common::Game::Object::ObjectBase> > myEntities
-        = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_playerInfo.getId());
-
-    BOOST_FOREACH(boost::shared_ptr<Common::Game::Object::ObjectBase> ship, myEntities)
+    auto ships = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_playerInfo.getId());
+    for (auto ship: ships)
     {
         std::stringstream ss;
-        ss << "My ship " << ship->getId() << "\n";
-        entitiesListbox->addItem(new MyListItem(ss.str(), ship->getId()));
-        
-        LOG_INFO << ss.str();
+        ss << "My ship " << ship->getId();
+        shipListBox->addItem(ss.str(), MyGUI::Any(ship->getId()));
     }
 
-    CEGUI::Window * flyButton = m_layout->getChildRecursive("FlyButton");
-    flyButton->subscribeEvent(CEGUI::PushButton::EventClicked,
-        CEGUI::Event::Subscriber(&EntitySelectState::flyButtonClicked, this));
-    #endif
+    m_gui->findWidget<MyGUI::Button>("FlyButton")->eventMouseButtonClick += MyGUI::newDelegate(this, &EntitySelectState::flyButtonClicked);
 }
 
-bool EntitySelectState::flyButtonClicked(const CEGUI::EventArgs &)
+void EntitySelectState::flyButtonClicked(MyGUI::WidgetPtr)
 {
-    CEGUI::Listbox * entitiesListbox = dynamic_cast<CEGUI::Listbox*>(m_layout->getChildRecursive("EntitiesListbox"));
-    Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(entitiesListbox->getFirstSelectedItem()->getID());
+    MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
+    size_t idx = shipListBox->getIndexSelected();
+    unsigned * shipId = shipListBox->getItemDataAt<unsigned>(idx);
+    
+    LOG_INFO << "Ship selected (id: " << *shipId << ")";
 
-    LOG_INFO << "Ship selected (id: " << ship.getId() << ")";
+    Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(*shipId);
 
     m_playerActionService.focusObject(ship);
     m_stateManagerStack.pushState(m_pilotState);
-    return true;
 }
