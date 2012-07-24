@@ -35,12 +35,9 @@ void PilotView::frameStarted()
 
 void PilotView::updateShipPosition()
 {
-    #if 0
-    CEGUI::Window * shipPosition = m_gui.getLayoutWindow().getChildRecursive("ShipPosition");
     std::stringstream ss;
     ss << m_playerActionService.getFocusedObject().getPosition();
-    shipPosition->setText(ss.str());
-    #endif
+    m_gui->findWidget<MyGUI::TextBox>("NavigationTextBox")->setCaption(ss.str());
 }
 
 void PilotView::updateCameraPosition()

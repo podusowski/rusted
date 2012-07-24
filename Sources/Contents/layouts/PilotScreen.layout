@@ -4,7 +4,7 @@
     <Widget type="Widget" skin="PanelSkin" position_real="0.10 0.10 0.35 0.10" layer="Main">
         <Property key="Caption" value="Navigation"/>
 
-        <Widget type="TextBox" skin="TextBox" position_real="0.10 0.10 0.80 0.80">
+        <Widget type="TextBox" skin="TextBox" name="NavigationTextBox" position_real="0.10 0.10 0.80 0.80">
             <Property key="Caption" value="Navigation"/>
         </Widget>
     </Widget>
@@ -12,7 +12,7 @@
     <Widget type="Widget" skin="PanelSkin" position_real="0.55 0.10 0.35 0.10" layer="Main">
         <Property key="Caption" value="Target"/>
 
-        <Widget type="TextBox" skin="TextBox" position_real="0.10 0.10 0.80 0.80">
+        <Widget type="TextBox" skin="TextBox" name="TargetTextBox" position_real="0.10 0.10 0.80 0.80">
             <Property key="Caption" value="Target"/>
         </Widget>
     </Widget>
