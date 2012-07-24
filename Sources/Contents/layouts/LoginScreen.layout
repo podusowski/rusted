@@ -1,23 +1,24 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <MyGUI type="Layout" version="3.2.0">
-    <Widget type="Window" skin="Window" position_real="0.20 0.40 0.60 0.30" layer="Main">
+    <Widget type="Window" skin="Window" position_real="0.20 0.20 0.60 0.60" layer="Main">
         <Property key="Caption" value="Welcome to Rusted"/>
 
-        <Widget type="TextBox" skin="TextBox" position="20 15 60 30">
+        <Widget type="TextBox" skin="TextBox" position_real="0.10 0.10 0.40 0.10">
             <Property key="Caption" value="Login"/>
         </Widget>
-        <Widget type="EditBox" name="LoginEditBox" skin="EditBox" position="95 8 300 40"/>
+        <Widget type="EditBox" name="LoginEditBox" skin="EditBox" position_real="0.50 0.10 0.40 0.10"/>
 
-        <Widget type="TextBox" skin="TextBox" position="20 60 65 25">
+        <Widget type="TextBox" skin="TextBox" position_real="0.10 0.30 0.40 0.10">
             <Property key="Caption" value="Password"/>
         </Widget>
-        <Widget type="EditBox" name="PasswordEditBox" skin="EditBox" position="95 55 300 40"/>
+        <Widget type="EditBox" name="PasswordEditBox" skin="EditBox" position_real="0.50 0.30 0.40 0.10"/>
 
-        <Widget type="Button" name="LoginButton" skin="Button" position="375 105 190 30">
-            <Property key="Caption" value="Enter the game"/>
-        </Widget>
-        <Widget type="Button" name="QuitButton" skin="Button" position="100 105 180 30">
+        <Widget type="Button" name="QuitButton" skin="Button" position_real="0.55 0.80 0.35 0.10">
             <Property key="Caption" value="Quit"/>
+        </Widget>
+
+        <Widget type="Button" name="LoginButton" skin="Button" position_real="0.10 0.80 0.35 0.10">
+            <Property key="Caption" value="Enter the game"/>
         </Widget>
     </Widget>
 </MyGUI>
