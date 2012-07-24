@@ -1,18 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<MyGUI type="Layout" version="3.2.0">
+    <Widget type="Window" skin="Window" position_real="0.20 0.20 0.60 0.60" layer="Main">
+        <Property key="Caption" value="Select ship to fly"/>
 
-<GUILayout>
-    <Window Type="TaharezLook/FrameWindow" Name="EntitySelectWindow" >
-        <Property Name="Text" Value="Select your entity" />
-        <Property Name="CloseButtonEnabled" Value="False" />
-		<Property Name="SizingEnabled" Value="False" />
-        <Property Name="UnifiedAreaRect" Value="{{0.1,0},{0.1,0},{0.9,0},{0.9,0}}" />
-        <Window Type="TaharezLook/Listbox" Name="EntitiesListbox">
-            <Property Name="UnifiedAreaRect" Value="{{0.05,0},{0.05,0},{0.95,0},{0.9,0}}" />
-		</Window>
-        <Window Type="TaharezLook/Button" Name="FlyButton" >
-            <Property Name="Text" Value="Fly" />
-            <Property Name="UnifiedMaxSize" Value="{{1,0},{1,0}}" />
-            <Property Name="UnifiedAreaRect" Value="{{0.5,0},{0.95,0},{0.6,0},{0.99,0}}" />
-        </Window>
-    </Window>
-</GUILayout>
+        <Widget type="ListBox" name="ShipListBox" skin="ListBox" position_real="0.10 0.10 0.80 0.60"/>
+
+        <Widget type="Button" name="FlyButton" skin="Button" position_real="0.10 0.80 0.80 0.10">
+            <Property key="Caption" value="Fly"/>
+        </Widget>
+    </Widget>
+</MyGUI>
