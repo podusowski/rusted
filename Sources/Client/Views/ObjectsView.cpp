@@ -76,7 +76,6 @@ void ObjectsView::updateSelectedObjectWindow()
 {
     if (m_selectedObject)
     {
-        CEGUI::Window * selectedObjectName = m_gui.getLayoutWindow().getChildRecursive("SelectedObjectName");
         std::stringstream ss;
 
         if (typeid((*m_selectedObject)->getGameObject()) == typeid(Common::Game::Object::Ship))
@@ -89,7 +88,7 @@ void ObjectsView::updateSelectedObjectWindow()
             ss << (*m_selectedObject)->getGameObject().getId();
         }
 
-        selectedObjectName->setText(ss.str());
+        m_gui->findWidget<MyGUI::TextBox>("TargetTextBox")->setCaption(ss.str());
     }
 }
 
