@@ -69,6 +69,7 @@ void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
         ship.setId(shipInfo.id);
         ship.setOwnerId(shipInfo.player_id);
         ship.setPosition(Common::Game::Position(shipInfo.x, shipInfo.y, shipInfo.z));
+        ship.setIntegrity(shipInfo.integrity);
         m_universe.add(object);
 
         tryCallPlayerShipsFetchedCallback(object->getId());
