@@ -14,6 +14,7 @@ class Gui
 {
 public:
     Gui(Ogre::RenderWindow &, Ogre::SceneManager &);
+    ~Gui();
 
     void loadLayout(const std::string &);
 

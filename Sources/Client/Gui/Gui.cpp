@@ -13,6 +13,12 @@ Gui::Gui(Ogre::RenderWindow & ogreRenderWindow, Ogre::SceneManager & ogreSceneMa
     initRenderer();
 }
 
+Gui::~Gui()
+{
+    m_myGui.shutdown();
+    m_myGuiOgrePlatform.shutdown();
+}
+
 void Gui::loadLayout(const std::string & layout)
 {
     LOG_DEBUG << "Loading GUI layout: " << layout;
