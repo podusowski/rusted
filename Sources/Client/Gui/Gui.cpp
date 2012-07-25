@@ -23,8 +23,20 @@ void Gui::loadLayout(const std::string & layout)
 {
     LOG_DEBUG << "Loading GUI layout: " << layout;
 
-    MyGUI::LayoutManager::getInstance().unloadLayout(m_myGuiLoadedLayout);
-    m_myGuiLoadedLayout = MyGUI::LayoutManager::getInstance().loadLayout(layout);
+    unloadAllLayouts();
+    auto l = MyGUI::LayoutManager::getInstance().loadLayout(layout);
+    m_myGuiLoadedLayouts.push_back(l);
+}
+
+void Gui::unloadAllLayouts()
+{
+    LOG_DEBUG << "Unloading all layouts";
+
+    for (auto layout: m_myGuiLoadedLayouts)
+    {
+        MyGUI::LayoutManager::getInstance().unloadLayout(layout);
+    }
+    m_myGuiLoadedLayouts.clear();
 }
 
 MyGUI::Gui & Gui::operator*()

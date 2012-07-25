@@ -48,7 +48,7 @@ void PilotView::updateCameraPosition()
 
     // some nasty dbg 
     static int counter = 0;
-    if (counter++ % 100 == 0)
+    if (counter++ % 1000 == 0)
     {
         LOG_DEBUG << "camera posistion: " << camPosition;
     }

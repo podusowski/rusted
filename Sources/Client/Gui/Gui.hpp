@@ -17,6 +17,7 @@ public:
     ~Gui();
 
     void loadLayout(const std::string &);
+    void unloadAllLayouts();
 
     MyGUI::Gui & operator*();
     MyGUI::Gui * operator->();
@@ -29,7 +30,7 @@ private:
 
     MyGUI::Gui m_myGui;
     MyGUI::OgrePlatform m_myGuiOgrePlatform;
-    MyGUI::VectorWidgetPtr m_myGuiLoadedLayout;
+    std::vector<MyGUI::VectorWidgetPtr> m_myGuiLoadedLayouts;
 };
 
 }
