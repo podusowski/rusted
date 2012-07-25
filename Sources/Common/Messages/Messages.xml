@@ -99,4 +99,16 @@ objects
     <param type="int32" name="id" />
 </message>
 
+<!--
+actions
+-->
+<message id="FetchAvailableActions" />
+
+<message id="AvailableActions">
+    <list name="actions">
+        <listparam type="int32" name="id" />
+        <listparam type="string" name="name" />
+    </list>
+</message>
+
 </messages>

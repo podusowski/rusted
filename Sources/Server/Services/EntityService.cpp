@@ -103,6 +103,13 @@ void EntityService::handle(const Common::Messages::AttackObject & attackObject, 
     }
 }
 
+void EntityService::handle(const Common::Messages::FetchAvailableActions &, Network::IConnection & connection)
+{
+    Common::Messages::AvailableActions availableActions;
+    availableActions.actions.push_back(boost::make_tuple<int, std::string>(1, "attack"));
+    connection.send(availableActions);
+}
+
 void EntityService::sendShipInfo(Common::Game::Object::Ship & ship, Network::IConnection & connection)
 {
     Common::Messages::ShipInfo shipInfo;

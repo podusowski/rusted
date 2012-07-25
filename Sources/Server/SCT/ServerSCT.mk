@@ -10,6 +10,7 @@ SOURCES+=UserSct.cpp
 SOURCES+=ShipSct.cpp
 SOURCES+=ObjectsSct.cpp
 SOURCES+=CombatSct.cpp
+SOURCES+=ActionsSct.cpp
 
 CFLAGS+=-Wall -pedantic -g 
 CFLAGS+=-I$(TARGET_BASE)
