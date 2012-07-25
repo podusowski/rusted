@@ -33,3 +33,17 @@ TEST(ActionsSct, FetchAvailableActions)
     EXPECT_EQ("attack", availableActions->actions[0].get<1>());
 }
 
+TEST(ActionsSct, AttackObject)
+{
+    SCT::Component component("SampleDataBase.xml");
+    component.start();
+
+    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+
+    // client have to focus the object first
+    Common::Messages::FocusObject focusObject;
+    focusObject.id = 2;
+    connection1->send(focusObject);
+
+    // TODO
+}

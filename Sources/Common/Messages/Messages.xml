@@ -99,6 +99,10 @@ objects
     <param type="int32" name="id" />
 </message>
 
+<message id="FocusObject">
+    <param type="int32" name="id" />
+</message>
+
 <!--
 actions
 -->
@@ -109,6 +113,10 @@ actions
         <listparam type="int32" name="id" />
         <listparam type="string" name="name" />
     </list>
+</message>
+
+<message id="ExecuteAction">
+    <param type="int32" name="id" />
 </message>
 
 </messages>
