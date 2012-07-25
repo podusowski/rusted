@@ -26,8 +26,10 @@ public:
     void focusObject(Common::Game::Object::ObjectBase &);
     Common::Game::Object::ObjectBase & getFocusedObject();
     void setFocusedObjectCourse(Common::Game::Position);
-
     void selectObject(Common::Game::Object::ObjectBase &);
+    void fetchAvailableActions();
+
+    void handle(const Common::Messages::AvailableActions &);
 
     void handle(const Common::Messages::AbstractMessage &) {}
 

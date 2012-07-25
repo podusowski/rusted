@@ -51,3 +51,15 @@ void PlayerActionService::selectObject(Common::Game::Object::ObjectBase & object
     m_selectedObject = &object;
 }
 
+void PlayerActionService::fetchAvailableActions()
+{
+    LOG_DEBUG << "Fetching available actions";
+
+    Common::Messages::FetchAvailableActions fetchAvailableActions;
+    m_connection.send(fetchAvailableActions);
+}
+
+void PlayerActionService::handle(const Common::Messages::AvailableActions & availableActions)
+{
+    LOG_DEBUG << "Got available actions";
+}
