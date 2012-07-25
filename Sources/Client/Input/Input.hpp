@@ -34,8 +34,6 @@ public:
     void addObjectRightClickCallback(Ogre::Entity &, std::function<void()>);
 
 private:
-    CEGUI::MouseButton toCeguiMouseButton(OIS::MouseButtonID oisMouseButton);
-
     OIS::InputManager * m_oisInputManager; 
     OIS::Mouse * m_oisMouse;
     OIS::Keyboard * m_oisKeyboard;

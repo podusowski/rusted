@@ -51,8 +51,6 @@ Input::Input(Ogre::RenderWindow & window, Ogre::SceneManager & ogreSceneManager,
     addMouseListener(m_ogreObjectRaycaster);
 }
 
-// TODO: remove depencency from CEGUI here
-
 bool Input::mouseMoved( const OIS::MouseEvent &arg )
 {
     BOOST_FOREACH(IMouseListener * listener, m_mouseListeners)
@@ -72,7 +70,6 @@ bool Input::mouseMoved( const OIS::MouseEvent &arg )
     if (abs(mouseY) > m_ogreRenderWindow.getHeight())
         mouseY = m_ogreRenderWindow.getHeight();
 
-    CEGUI::System::getSingleton().injectMouseMove(arg.state.X.rel, arg.state.Y.rel);
     MyGUI::InputManager::getInstance().injectMouseMove(arg.state.X.abs, arg.state.Y.abs, arg.state.Z.abs);
     return true;
 }
@@ -86,7 +83,6 @@ bool Input::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
         listener->mousePressed(id, arg, mouseX, mouseY);
     }
 
-    CEGUI::System::getSingleton().injectMouseButtonDown(toCeguiMouseButton(id));
     MyGUI::InputManager::getInstance().injectMousePress(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
     return true;
 }
@@ -100,7 +96,6 @@ bool Input::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
         listener->mouseReleased(id, mouseX, mouseY);
     }
 
-    CEGUI::System::getSingleton().injectMouseButtonUp(toCeguiMouseButton(id));
     MyGUI::InputManager::getInstance().injectMouseRelease(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
     return true;
 }
@@ -113,9 +108,6 @@ bool Input::keyPressed(const OIS::KeyEvent & arg)
         ::abort();
     }
 
-    CEGUI::System::getSingleton().injectKeyDown(arg.key);
-    CEGUI::System::getSingleton().injectChar(arg.text);
-
     MyGUI::InputManager::getInstance().injectKeyPress(MyGUI::KeyCode::Enum(arg.key), arg.text);
 
     return true;
@@ -123,8 +115,6 @@ bool Input::keyPressed(const OIS::KeyEvent & arg)
 
 bool Input::keyReleased(const OIS::KeyEvent & arg)
 {
-    CEGUI::System::getSingleton().injectKeyUp(arg.key);
-
     MyGUI::InputManager::getInstance().injectKeyRelease(MyGUI::KeyCode::Enum(arg.key));
     return true;
 }
@@ -143,24 +133,5 @@ void Input::addMouseListener(IMouseListener & listener)
 void Input::addObjectRightClickCallback(Ogre::Entity & entity, std::function<void()> callback)
 {
     m_ogreObjectRaycaster.addObjectRightClickCallback(entity, callback);
-}
-
-CEGUI::MouseButton Input::toCeguiMouseButton(OIS::MouseButtonID oisMouseButton)
-{
-    switch (oisMouseButton)
-    {
-    case OIS::MB_Left:
-        return CEGUI::LeftButton;
- 
-    case OIS::MB_Right:
-        return CEGUI::RightButton;
- 
-    case OIS::MB_Middle:
-        return CEGUI::MiddleButton;
- 
-    default:
-        LOG_WARN << "Wrong OIS::MouseButtonID, LeftButton assumed.";
-        return CEGUI::LeftButton;
-    }
 }
 

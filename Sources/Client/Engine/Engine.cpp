@@ -2,7 +2,6 @@
 
 #include "Cake/Diagnostics/Logger.hpp"
 
-#include "Client/Gui/CEGUIIncludes.hpp"
 #include "Client/Engine/Engine.hpp"
 
 using namespace Client::Engine;
@@ -38,10 +37,6 @@ void Engine::start()
             if (!m_graphics->getOgreRoot().renderOneFrame()) break;
         }
         LOG_INFO << "No further state to execute, application is going to shut down";
-    }
-    catch (CEGUI::Exception & ex)
-    {
-        LOG_ERR << "Exception of type " << TYPENAME(ex) << " thrown, reason: " << ex.getMessage();
     }
     catch (std::exception & ex)
     {

@@ -8,22 +8,9 @@ Gui::Gui(Ogre::RenderWindow & ogreRenderWindow, Ogre::SceneManager & ogreSceneMa
     m_ogreSceneManager(ogreSceneManager)
 {
     LOG_INFO << "Initializing GUI subsystem";
-    try
-    {
-        initResources();
-        initRenderer();
-        CEGUI::SchemeManager::getSingleton().create("TaharezLook.scheme");
-        CEGUI::System::getSingleton().setDefaultMouseCursor((CEGUI::utf8*)"TaharezLook", (CEGUI::utf8*)"MouseArrow");
-    }
-    catch (CEGUI::Exception & ex)
-    {
-        LOG_ERR << "CEGUI dropped an exception of type " << TYPENAME(ex) << ", reason: " << ex.getMessage();
-    }
-}
 
-CEGUI::WindowManager & Gui::getCeguiWindowManager()
-{
-    return CEGUI::WindowManager::getSingleton();
+    initResources();
+    initRenderer();
 }
 
 void Gui::loadLayout(const std::string & layout)
@@ -32,18 +19,6 @@ void Gui::loadLayout(const std::string & layout)
 
     MyGUI::LayoutManager::getInstance().unloadLayout(m_myGuiLoadedLayout);
     m_myGuiLoadedLayout = MyGUI::LayoutManager::getInstance().loadLayout(layout);
-}
-
-CEGUI::Window & Gui::getLayoutWindow()
-{
-    if (m_layoutWindow)
-    {
-        return *m_layoutWindow;
-    }
-    else
-    {
-        throw std::exception();
-    }
 }
 
 MyGUI::Gui & Gui::operator*()
@@ -70,9 +45,6 @@ void Gui::initResources()
 
 void Gui::initRenderer()
 {
-    CEGUI::OgreRenderer::bootstrapSystem(m_ogreRenderWindow);
-    CEGUI::Logger::getSingleton().setLoggingLevel(CEGUI::Insane);
-
     m_myGuiOgrePlatform.initialise(&m_ogreRenderWindow, &m_ogreSceneManager);
     m_myGui.initialise();
 }

@@ -69,3 +69,4 @@ void EntitySelectState::flyButtonClicked(MyGUI::WidgetPtr)
     m_playerActionService.focusObject(ship);
     m_stateManagerStack.pushState(m_pilotState);
 }
+
