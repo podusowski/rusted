@@ -21,6 +21,8 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
 void PilotView::activate()
 {
     m_input.addMouseListener(*this);
+
+    m_gui->findWidget<MyGUI::Widget>("Action1Button")->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
 }
 
 void PilotView::deactivate()
@@ -83,3 +85,9 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
         m_playerActionService.setFocusedObjectCourse(cameraPosition + delta);
     }
 }
+
+void PilotView::actionClicked(MyGUI::Widget *)
+{
+    LOG_DEBUG << "Action clicked";
+}
+

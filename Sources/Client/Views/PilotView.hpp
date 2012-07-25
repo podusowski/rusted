@@ -34,6 +34,8 @@ public:
     void mouseReleased(const OIS::MouseButtonID &, unsigned x, unsigned y);
 
 private:
+    void actionClicked(MyGUI::Widget *);
+
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;
     Services::PlayerActionService & m_playerActionService;

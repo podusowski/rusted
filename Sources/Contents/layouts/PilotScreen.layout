@@ -14,10 +14,8 @@
     </Widget>
 
     <Widget type="Widget" skin="PanelSkin" position_real="0.10 0.80 0.80 0.10" layer="Main">
-        <Widget type="Widget" skin="PanelSkin" position_real="0.10 0.10 0.10 0.80" layer="Main">
-            <Widget type="TextBox" skin="TextBox" name="TargetTextBox" position_real="0.10 0.10 0.80 0.80">
-                <Property key="Caption" value="action1"/>
-            </Widget>
+        <Widget name="Action1Button" type="Button" skin="Button" position_real="0.10 0.10 0.10 0.80" layer="Main">
+            <Property key="Caption" value="action1"/>
         </Widget>
     </Widget>
 </MyGUI>
