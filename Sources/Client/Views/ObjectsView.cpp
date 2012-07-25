@@ -83,6 +83,10 @@ void ObjectsView::updateSelectedObjectWindow()
             Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>((*m_selectedObject)->getGameObject());
             ss << "Ship" << ship.getId() << " integrity: " << ship.getIntegrity();
         }
+        else if (typeid((*m_selectedObject)->getGameObject()) == typeid(Common::Game::Object::StaticObject))
+        {
+            ss << "Asteroid";
+        }
         else
         {
             ss << (*m_selectedObject)->getGameObject().getId();
