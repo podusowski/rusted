@@ -18,8 +18,6 @@ LDFLAGS+=-lCake
 LDFLAGS+=-lgtest
 LDFLAGS+=-lgmock
 LDFLAGS+=-lOgreMain
-LDFLAGS+=-lCEGUIBase
-LDFLAGS+=-lCEGUIOgreRenderer
 LDFLAGS+=-lOIS
 LDFLAGS+=-lboost_system
 
