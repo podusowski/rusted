@@ -4,8 +4,6 @@ TYPE:=application
 SOURCES+=main.cpp
 
 LDFLAGS+=-L$(BUILD)
-LDFLAGS+=-L$(TARGET_BASE)/../External/CEGUI-0.7.5/cegui/src/.libs/
-LDFLAGS+=-L../External/CEGUI-0.7.5/cegui/src/RendererModules/Ogre/.libs/
 LDFLAGS+=-lClient
 LDFLAGS+=-lOgreMain
 LDFLAGS+=-lOIS
