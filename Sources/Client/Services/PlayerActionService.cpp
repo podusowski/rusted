@@ -18,6 +18,10 @@ void PlayerActionService::focusObject(Common::Game::Object::ObjectBase & object)
 {
     LOG_DEBUG << "Object focused: " << object.getId();
 
+    Common::Messages::FocusObject focusObject;
+    focusObject.id = object.getId();
+    m_connection.send(focusObject);
+
     m_focusedObject = &object;
 }
 
