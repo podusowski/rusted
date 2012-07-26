@@ -55,7 +55,7 @@ TEST(ActionsSct, AttackObject)
     executeAction.id = 1;
     connection1->send(executeAction);
 
-    // user1 should also receive AttackObject to know what he was done
+    // user1 should also receive AttackObject to know what he has done
     connection1->receive<Common::Messages::AttackObject>();
 
     // we should also receive shipinfo with condition after the attack
