@@ -85,24 +85,6 @@ void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo
     }
 }
 
-void EntityService::handle(const Common::Messages::AttackObject & attackObject, Network::IConnection & connection)
-{
-    auto & attacker = m_universe.getById<Common::Game::Object::Ship>(attackObject.attackerId);
-    auto & attacked = m_universe.getById<Common::Game::Object::Ship>(attackObject.attackedId);
-
-    LOG_DEBUG << attacker << " is attacking " << attacked;
-
-    //TODO: select proper attack
-    attacker.attack(0, attacked);
-
-    auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
-    for (auto connection: connections)
-    {
-        connection->send(attackObject);
-        sendShipInfo(attacked, *connection);
-    }
-}
-
 void EntityService::handle(const Common::Messages::SelectObject & selectObject, Network::IConnection & connection)
 {
     auto & player = m_playerContainer.getBy(connection);
