@@ -40,15 +40,15 @@ TEST(ActionsSct, AttackObject)
 
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
 
-    // client has to select its own object
-    Common::Messages::SelectObject selectObject;
-    selectObject.id = 1;
-    connection1->send(selectObject);
-
-    // client has to focus the object 
+    // client has to focus its own object 
     Common::Messages::FocusObject focusObject;
-    focusObject.id = 2;
+    focusObject.id = 1;
     connection1->send(focusObject);
+
+    // client has to select some object
+    Common::Messages::SelectObject selectObject;
+    selectObject.id = 2;
+    connection1->send(selectObject);
 
     // execute hardcoded action 1 - attack 
     Common::Messages::ExecuteAction executeAction;
@@ -60,6 +60,7 @@ TEST(ActionsSct, AttackObject)
 
     // we should also receive shipinfo with condition after the attack
     auto shipInfo1 = connection1->receive<Common::Messages::ShipInfo>();
+    ASSERT_EQ(2, shipInfo1->id);
     ASSERT_EQ(90, shipInfo1->integrity);
 }
 

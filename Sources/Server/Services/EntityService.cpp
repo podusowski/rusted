@@ -115,30 +115,29 @@ void EntityService::handle(const Common::Messages::FetchAvailableActions &, Netw
 void EntityService::handle(const Common::Messages::ExecuteAction & executeAction, Network::IConnection & connection)
 {
     auto & player = m_playerContainer.getBy(connection);
-    auto & selectedObject = player.getSelectedObject();
     auto & focusedObject = player.getFocusedObject();
+    auto & selectedObject = player.getSelectedObject();
 
-    LOG_DEBUG << "Player " << player.getId() << " is executing action " << executeAction.id << " with " << selectedObject << " on " << focusedObject;
+    LOG_DEBUG << "Player " << player.getId() << " is executing action " << executeAction.id << " with " << focusedObject << " on " << selectedObject;
 
     if (executeAction.id == 1)
     {
+        auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(focusedObject);
+        // TODO: this can be generic - no need to cast to Ship
         auto & selectedShip = dynamic_cast<Common::Game::Object::Ship&>(selectedObject);
 
-        // TODO: this can be generic - no need to cast to Ship
-        auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(focusedObject);
-
         //TODO: select proper attack
-        selectedShip.attack(0, focusedShip);
+        focusedShip.attack(0, selectedShip);
 
         Common::Messages::AttackObject attackObject;
-        attackObject.attackerId = selectedObject.getId();
-        attackObject.attackedId = focusedObject.getId();
+        attackObject.attackerId = focusedObject.getId();
+        attackObject.attackedId = selectedObject.getId();
 
         auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
         for (auto connection: connections)
         {
             connection->send(attackObject);
-            sendShipInfo(focusedShip, *connection);
+            sendShipInfo(selectedShip, *connection);
         }
     }
 }
