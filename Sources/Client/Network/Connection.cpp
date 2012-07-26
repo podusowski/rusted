@@ -20,7 +20,7 @@ Connection::Connection(Common::Configuration::Configuration & cfg) :
 
 void Connection::run()
 {
-    LOG_INFO << "Connection service is in loop";
+    LOG_DEBUG << "Connection service is in loop";
     while (true)
     {
         using namespace Common::Messages;
@@ -28,7 +28,7 @@ void Connection::run()
         Common::RustedCodec::AsioReadBuffer buffer(m_socket);
         boost::shared_ptr<AbstractMessage> message = MessageFactory::create(buffer);
         
-        LOG_INFO << "Message received, " << TYPENAME(*message) << ", putting it on the queue";
+        LOG_DEBUG << "Message received, " << TYPENAME(*message) << ", putting it on the queue";
         m_messages.push(message);
         //FIXME: make a lock here
     }
@@ -71,13 +71,13 @@ void Connection::connect()
 
 void Connection::addListener(IConnectionListener & listener)
 {
-    LOG_INFO << "Adding listener (name: " << TYPENAME(listener) << ")";
+    LOG_DEBUG << "Adding listener (name: " << TYPENAME(listener) << ")";
     m_listeners.push_back(&listener);
 }
 
 void Connection::send(Common::Messages::AbstractMessage & message)
 {
-    LOG_INFO << "Sending " << TYPENAME(message);
+    LOG_DEBUG << "Sending " << TYPENAME(message);
     Common::RustedCodec::AsioWriteBuffer buffer(m_socket);
     message.serialize(buffer);
 }
@@ -86,7 +86,7 @@ void Connection::yield()
 {
     if (!m_messages.empty())
     {
-        LOG_INFO << "Yielded while message queue is not empty (messages waiting: " << m_messages.size() << ")";
+        LOG_DEBUG << "Yielded while message queue is not empty (messages waiting: " << m_messages.size() << ")";
 
         auto message = m_messages.front();
         m_messages.pop();
