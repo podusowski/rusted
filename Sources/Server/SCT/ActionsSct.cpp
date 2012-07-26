@@ -7,12 +7,12 @@
 
 using namespace Common::Messages;
 
-/* Actions are all things you can do with selected object (the one you're controlling) on focused object.
+/* Actions are all things you can do with focused object (the one you're controlling) on selected object.
  * For example, attack other ship is an action. Client should fetch the actions and display they as
  * action buttons.
  *
- * To perform an action, client have to focus some object first (it's not nessesary to do this just
- * before performing the action - it can be done when player focus object by mouse).
+ * To perform an action, client have to select some object first (it's not nessesary to do this just
+ * before performing the action - it can be done when player select object by mouse).
  */
 
 TEST(ActionsSct, FetchAvailableActions)
