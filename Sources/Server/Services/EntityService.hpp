@@ -21,7 +21,10 @@ public:
     void handle(const Common::Messages::GetVisibleObjects &, Network::IConnection &);
     void handle(const Common::Messages::GetObjectInfo &, Network::IConnection &);
     void handle(const Common::Messages::AttackObject &, Network::IConnection &);
+    void handle(const Common::Messages::SelectObject &, Network::IConnection &);
+    void handle(const Common::Messages::FocusObject &, Network::IConnection &);
     void handle(const Common::Messages::FetchAvailableActions &, Network::IConnection &);
+    void handle(const Common::Messages::ExecuteAction &, Network::IConnection &);
 
     void handle(const Common::Messages::AbstractMessage &, Network::IConnection &) {}
 

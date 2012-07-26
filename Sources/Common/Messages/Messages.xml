@@ -103,6 +103,10 @@ objects
     <param type="int32" name="id" />
 </message>
 
+<message id="SelectObject">
+    <param type="int32" name="id" />
+</message>
+
 <!--
 actions
 -->

@@ -8,7 +8,7 @@
 using namespace Common::Messages;
 
 /* Actions are all things you can do with selected object (the one you're controlling) on focused object.
- * For example, attack other ship is a action. Client should fetch the actions and display they as
+ * For example, attack other ship is an action. Client should fetch the actions and display they as
  * action buttons.
  *
  * To perform an action, client have to focus some object first (it's not nessesary to do this just
@@ -40,10 +40,26 @@ TEST(ActionsSct, AttackObject)
 
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
 
-    // client have to focus the object first
+    // client has to select its own object
+    Common::Messages::SelectObject selectObject;
+    selectObject.id = 1;
+    connection1->send(selectObject);
+
+    // client has to focus the object 
     Common::Messages::FocusObject focusObject;
     focusObject.id = 2;
     connection1->send(focusObject);
 
-    // TODO
+    // execute hardcoded action 1 - attack 
+    Common::Messages::ExecuteAction executeAction;
+    executeAction.id = 1;
+    connection1->send(executeAction);
+
+    // user1 should also receive AttackObject to know what he was done
+    connection1->receive<Common::Messages::AttackObject>();
+
+    // we should also receive shipinfo with condition after the attack
+    auto shipInfo1 = connection1->receive<Common::Messages::ShipInfo>();
+    ASSERT_EQ(90, shipInfo1->integrity);
 }
+
