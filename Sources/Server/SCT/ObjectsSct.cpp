@@ -7,6 +7,8 @@
 
 using namespace Common::Messages;
 
+/* This flows represents the way client is aware of various object present in the game */
+
 TEST(ObjectsSct, FetchVisibleObjects)
 {
 	SCT::Component component("SampleDataBase.xml");
@@ -16,6 +18,9 @@ TEST(ObjectsSct, FetchVisibleObjects)
 
     Common::Messages::GetVisibleObjects getVisibleObjects;
     connection1->send(getVisibleObjects);
+
+    // VisibleObjects contains only ids of the objects that are visible by the client, to get
+    // more information, GetObjectInfo should be used for each of them
 
     boost::shared_ptr<Common::Messages::VisibleObjects> visibleObjects = connection1->receive<Common::Messages::VisibleObjects>();
     EXPECT_EQ(4, visibleObjects->objects.size());
