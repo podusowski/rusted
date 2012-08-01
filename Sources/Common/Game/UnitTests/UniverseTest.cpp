@@ -164,3 +164,15 @@ TEST_F(UniverseTest, GetByOwnerId)
     auto objects = universe.getByOwnerId<Common::Game::Object::Ship>(2);
     ASSERT_EQ(1, objects.size());
 }
+
+TEST_F(UniverseTest, Has)
+{
+    Common::Game::Universe universe;
+    boost::shared_ptr<Common::Game::Object::ObjectBase> ship(new Common::Game::Object::Ship());
+    ship->setId(1);
+    dynamic_cast<Common::Game::Object::Ship&>(*ship).setOwnerId(2);
+    universe.add(ship);
+
+    ASSERT_TRUE(universe.has(1));
+    ASSERT_FALSE(universe.has(2));
+}

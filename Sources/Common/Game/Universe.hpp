@@ -24,6 +24,8 @@ public:
 
     void add(boost::shared_ptr<Object::ObjectBase> object);
 
+    bool has(unsigned id);
+
     template<class ObjectType> ObjectType & getById(unsigned id)
     {
         std::map<unsigned, boost::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.find(id);

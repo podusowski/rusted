@@ -21,6 +21,12 @@ void Universe::add(boost::shared_ptr<Object::ObjectBase> object)
         m_objectAddedCallback(*object);
 }
 
+bool Universe::has(unsigned id)
+{
+    auto it = m_objects.find(id);
+    return it != m_objects.end();
+}
+
 void Universe::setObjectAddedCallback(ObjectAddedCallback callback)
 {
     LOG_DEBUG << "Setting ObjectAddedCallback";
