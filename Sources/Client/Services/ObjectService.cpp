@@ -59,11 +59,19 @@ void ObjectService::handle(const Common::Messages::PlayerEntitiesStatusResp & pl
     }
 }
 
-// TODO: if object is present, we need to update it
 void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
 {
-    try
+    if (m_universe.has(shipInfo.id))
     {
+        auto & ship = m_universe.getById<Common::Game::Object::Ship>(shipInfo.id);
+        ship.setOwnerId(shipInfo.player_id);
+        ship.setPosition(Common::Game::Position(shipInfo.x, shipInfo.y, shipInfo.z));
+        ship.setIntegrity(shipInfo.integrity);
+    }
+    else
+    {
+        LOG_DEBUG << "New ship visible (id: " << shipInfo.id << ")";
+
         boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
         Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
         ship.setId(shipInfo.id);
@@ -73,12 +81,6 @@ void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
         m_universe.add(object);
 
         tryCallPlayerShipsFetchedCallback(object->getId());
-
-        LOG_DEBUG << "New ship visible (id: " << shipInfo.id << ")";
-    }
-    catch (std::exception & ex)
-    {
-        LOG_WARN << "Can't insert object, reason: " << ex.what();
     }
 }
 
