@@ -89,5 +89,7 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
 void PilotView::actionClicked(MyGUI::Widget *)
 {
     LOG_DEBUG << "Action clicked";
+
+    m_playerActionService.executeAction(1);
 }
 

@@ -52,6 +52,10 @@ void PlayerActionService::selectObject(Common::Game::Object::ObjectBase & object
 {
     LOG_DEBUG << "Object selected: " << object.getId();
 
+    Common::Messages::SelectObject selectObject;
+    selectObject.id = object.getId();
+    m_connection.send(selectObject);
+
     m_selectedObject = &object;
 }
 
@@ -61,6 +65,18 @@ void PlayerActionService::fetchAvailableActions()
 
     Common::Messages::FetchAvailableActions fetchAvailableActions;
     m_connection.send(fetchAvailableActions);
+}
+
+void PlayerActionService::executeAction(unsigned actionId)
+{
+    assert(m_focusedObject);
+
+    LOG_DEBUG << "Performing action: " << actionId;
+
+    Common::Messages::ExecuteAction executeAction;
+    executeAction.id = actionId;
+
+    m_connection.send(executeAction);
 }
 
 void PlayerActionService::handle(const Common::Messages::AvailableActions & availableActions)
