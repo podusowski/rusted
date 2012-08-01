@@ -52,7 +52,7 @@ void Ship::attack(unsigned attackId, ObjectBase & other)
 
 void Ship::addAction(boost::shared_ptr<Common::Game::Actions::IAction> action)
 {
-    LOG_DEBUG << "Adding action: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(*action) << " with id:" << m_actions.size();
+    LOG_DEBUG << "Adding IAction: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(*action) << " with id:" << m_actions.size();
 
     m_actions.push_back(action);
 }
@@ -61,9 +61,25 @@ void Ship::executeAction(unsigned id)
 {
     Common::Game::Actions::IAction & action = *m_actions.at(id);
 
-    LOG_DEBUG << "Executing action: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(action) << " with id:" << id;
+    LOG_DEBUG << "Executing IAction: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(action) << " with id:" << id;
 
     action.execute();
+}
+
+void Ship::addActionOnAnotherObject(boost::shared_ptr<Common::Game::Actions::IActionOnAnotherObject> action)
+{
+    LOG_DEBUG << "Adding IActionOnAnotherObject: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(*action) << " with id:" << m_actionsOnAnotherObject.size();
+
+    m_actionsOnAnotherObject.push_back(action);
+}
+
+void Ship::executeActionOnAnotherObject(unsigned id, Common::Game::Object::ObjectBase & object)
+{
+    Common::Game::Actions::IActionOnAnotherObject & action = *m_actionsOnAnotherObject.at(id);
+
+    LOG_DEBUG << "Executing IActionOnAnotherObject: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(action) << " with id:" << id;
+
+    action.execute(object);
 }
 
 Position Ship::calculatePosition(TimeValue time)

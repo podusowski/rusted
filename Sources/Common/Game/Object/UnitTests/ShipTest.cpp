@@ -7,6 +7,7 @@
 #include "Game/Object/UnitTests/ShipMock.hpp"
 #include "Game/Attack/UnitTests/AttackMock.hpp"
 #include "Game/Actions/UnitTests/ActionMock.hpp"
+#include "Game/Actions/UnitTests/ActionOnAnotherObjectMock.hpp"
 
 using namespace testing;
 using namespace Common::Game;
@@ -126,3 +127,16 @@ TEST_F(ShipTest, ExecuteAction)
     ship.executeAction(0);
 }
 
+TEST_F(ShipTest, ExecuteActionOnAnotherObject)
+{
+    boost::shared_ptr<Common::Game::Actions::ActionOnAnotherObjectMock> actionMock(new Common::Game::Actions::ActionOnAnotherObjectMock);
+
+    Common::Game::Object::Ship ship1;
+    ship1.addActionOnAnotherObject(actionMock);
+
+    Common::Game::Object::Ship ship2;
+
+    EXPECT_CALL(dynamic_cast<Common::Game::Actions::ActionOnAnotherObjectMock&>(*actionMock), execute(Ref(ship2))).Times(1);
+
+    ship1.executeActionOnAnotherObject(0, ship2);
+}
