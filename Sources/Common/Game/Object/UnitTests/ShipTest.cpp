@@ -5,7 +5,6 @@
 #include "Game/Object/Ship.hpp"
 #include "Game/UnitTests/RustedTimeStub.hpp"
 #include "Game/Object/UnitTests/ShipMock.hpp"
-#include "Game/Attack/UnitTests/AttackMock.hpp"
 #include "Game/Actions/UnitTests/ActionMock.hpp"
 #include "Game/Actions/UnitTests/ActionOnAnotherObjectMock.hpp"
 
@@ -97,22 +96,6 @@ TEST_F(ShipTest, MoveToTheSamePosition)
     EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
     ASSERT_EQ(Common::Game::Position(1, 2, 3), ship.getPosition());
     Mock::VerifyAndClear(&getRustedTimeStub());
-}
-
-TEST_F(ShipTest, Attack)
-{
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(0, 0)));
-
-    boost::shared_ptr<Common::Game::Attack::IAttack> attackMock(new Common::Game::Attack::AttackMock);
-
-    Common::Game::Object::Ship ship1;
-    ship1.addAttack(attackMock);
-
-    Common::Game::Object::ShipMock ship2;
-
-    EXPECT_CALL(dynamic_cast<Common::Game::Attack::AttackMock&>(*attackMock), attack(Ref(ship2))).Times(1);
-
-    ship1.attack(0, ship2);
 }
 
 TEST_F(ShipTest, ExecuteAction)

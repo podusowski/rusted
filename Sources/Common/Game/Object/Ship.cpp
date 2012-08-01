@@ -36,20 +36,6 @@ void Ship::setSpeed(unsigned speed)
     m_speed = speed;
 }
 
-void Ship::addAttack(boost::shared_ptr<Common::Game::Attack::IAttack> attack)
-{
-    LOG_DEBUG << "Adding attack: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(*attack);
-    m_attacks.push_back(attack);
-}
-
-void Ship::attack(unsigned attackId, ObjectBase & other)
-{
-    LOG_DEBUG << *this << " is attacking " << other << " with attack id:" << attackId;
-
-    auto & attack = *m_attacks.at(attackId);
-    attack.attack(other);
-}
-
 void Ship::addAction(boost::shared_ptr<Common::Game::Actions::IAction> action)
 {
     LOG_DEBUG << "Adding IAction: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(*action) << " with id:" << m_actions.size();

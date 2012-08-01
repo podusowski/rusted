@@ -5,7 +5,6 @@ SOURCES+=UnitTests/mainGoogleTestUT.cpp
 SOURCES+=Game/UnitTests/UniverseTest.cpp
 SOURCES+=Game/Object/UnitTests/ShipTest.cpp
 SOURCES+=Game/Object/UnitTests/ObjectFactoryTest.cpp
-SOURCES+=Game/Attack/UnitTests/AttackTest.cpp
 SOURCES+=Game/UnitTests/UniverseLoaderTest.cpp
 SOURCES+=Game/UnitTests/RustedTimeTest.cpp
 SOURCES+=Game/UnitTests/TimeValueTest.cpp

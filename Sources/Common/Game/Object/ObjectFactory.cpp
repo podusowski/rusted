@@ -1,7 +1,6 @@
 #include "ObjectFactory.hpp"
 #include "Ship.hpp"
 #include "StaticObject.hpp"
-#include "Common/Game/Attack/Attack.hpp"
 
 using namespace Common::Game::Object;
 
@@ -17,9 +16,6 @@ boost::shared_ptr<ObjectBase> ObjectFactory::create(Common::DataBase::DataBaseNo
         dynamic_cast<Ship&>(*object).setOwnerId(data.getValue<unsigned>("owner"));
         object->setPosition(extractPosition(data));
         object->setIntegrity(data.getValue<unsigned>("integrity"));
-
-        boost::shared_ptr<Common::Game::Attack::IAttack> attack(new Common::Game::Attack::Attack);
-        dynamic_cast<Ship&>(*object).addAttack(attack);
 
         return object;
     }

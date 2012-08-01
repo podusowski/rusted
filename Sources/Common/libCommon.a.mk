@@ -20,7 +20,6 @@ SOURCES+=Game/Universe.cpp
 SOURCES+=Game/Object/ObjectFactory.cpp
 SOURCES+=Game/Object/Ship.cpp
 SOURCES+=Game/Object/StaticObject.cpp
-SOURCES+=Game/Attack/Attack.cpp
 SOURCES+=Game/UniverseLoader.cpp
 
 CFLAGS+=-Wall -pedantic -g 
