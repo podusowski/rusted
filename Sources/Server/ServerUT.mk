@@ -3,6 +3,7 @@ TYPE:=application
 
 SOURCES+=../Common/UnitTests/mainGoogleTestUT.cpp
 SOURCES+=Game/UnitTests/PlayerContainerTest.cpp
+SOURCES+=Game/Actions/UnitTests/AttackTest.cpp
 SOURCES+=UnitTests/ConnectionStub.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
