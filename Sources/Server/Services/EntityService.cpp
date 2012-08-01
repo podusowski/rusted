@@ -1,6 +1,7 @@
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/StaticObject.hpp"
 
+#include "Game/Actions/Attack.hpp"
 #include "Server/Services/EntityService.hpp"
 
 using namespace Server::Services;
@@ -120,6 +121,7 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
 
     LOG_DEBUG << "Player " << player.getId() << " is executing action " << executeAction.id << " with " << focusedObject << " on " << selectedObject;
 
+    // TODO: move all this to attack action
     if (executeAction.id == 1)
     {
         auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(focusedObject);
@@ -127,7 +129,8 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
         auto & selectedShip = dynamic_cast<Common::Game::Object::Ship&>(selectedObject);
 
         //TODO: select proper attack
-        focusedShip.attack(0, selectedShip);
+        Server::Game::Actions::Attack attack;
+        attack.execute(selectedShip);
 
         Common::Messages::AttackObject attackObject;
         attackObject.attackerId = focusedObject.getId();
