@@ -50,6 +50,22 @@ void Ship::attack(unsigned attackId, ObjectBase & other)
     attack.attack(other);
 }
 
+void Ship::addAction(boost::shared_ptr<Common::Game::Actions::IAction> action)
+{
+    LOG_DEBUG << "Adding action: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(*action) << " with id:" << m_actions.size();
+
+    m_actions.push_back(action);
+}
+
+void Ship::executeAction(unsigned id)
+{
+    Common::Game::Actions::IAction & action = *m_actions.at(id);
+
+    LOG_DEBUG << "Executing action: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(action) << " with id:" << id;
+
+    action.execute();
+}
+
 Position Ship::calculatePosition(TimeValue time)
 {
     if (m_course.course == m_position)

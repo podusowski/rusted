@@ -7,6 +7,8 @@
 #include "Common/Game/Object/OwnedObjectBase.hpp"
 #include "Common/Game/IRustedTime.hpp"
 #include "Common/Game/Attack/IAttack.hpp"
+#include "Common/Game/Actions/IAction.hpp"
+#include "Common/Game/Actions/IActionOnAnotherObject.hpp"
 
 namespace Common
 {
@@ -32,6 +34,11 @@ public:
     void addAttack(boost::shared_ptr<Common::Game::Attack::IAttack>);
     void attack(unsigned, ObjectBase &);
 
+    void addAction(boost::shared_ptr<Common::Game::Actions::IAction>);
+    void executeAction(unsigned id);
+
+    void addActionOnAnotherObject(boost::shared_ptr<Common::Game::Actions::IActionOnAnotherObject>);
+
 private:
     Position calculatePosition(TimeValue time);
 
@@ -41,6 +48,7 @@ private:
     Course m_course;
     unsigned m_speed;
     std::vector<boost::shared_ptr<Common::Game::Attack::IAttack> > m_attacks;
+    std::vector<boost::shared_ptr<Common::Game::Actions::IAction> > m_actions;
 };
 
 }

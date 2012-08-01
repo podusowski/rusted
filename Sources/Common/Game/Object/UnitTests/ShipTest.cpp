@@ -6,6 +6,7 @@
 #include "Game/UnitTests/RustedTimeStub.hpp"
 #include "Game/Object/UnitTests/ShipMock.hpp"
 #include "Game/Attack/UnitTests/AttackMock.hpp"
+#include "Game/Actions/UnitTests/ActionMock.hpp"
 
 using namespace testing;
 using namespace Common::Game;
@@ -111,5 +112,17 @@ TEST_F(ShipTest, Attack)
     EXPECT_CALL(dynamic_cast<Common::Game::Attack::AttackMock&>(*attackMock), attack(Ref(ship2))).Times(1);
 
     ship1.attack(0, ship2);
+}
+
+TEST_F(ShipTest, ExecuteAction)
+{
+    boost::shared_ptr<Common::Game::Actions::ActionMock> actionMock(new Common::Game::Actions::ActionMock);
+
+    Common::Game::Object::Ship ship;
+    ship.addAction(actionMock);
+
+    EXPECT_CALL(dynamic_cast<Common::Game::Actions::ActionMock&>(*actionMock), execute()).Times(1);
+
+    ship.executeAction(0);
 }
 
