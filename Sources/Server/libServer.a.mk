@@ -13,6 +13,7 @@ SOURCES+=Services/RustedTimeService.cpp
 SOURCES+=Services/ServiceDeployment.cpp
 SOURCES+=Game/Player.cpp
 SOURCES+=Game/PlayerContainer.cpp
+SOURCES+=Game/Actions/Attack.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/..

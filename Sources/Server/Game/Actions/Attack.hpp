@@ -12,11 +12,7 @@ namespace Actions
 class Attack
 {
 public:
-    void execute(Common::Game::Object::ObjectBase & object)
-    {
-        unsigned integrity = object.getIntegrity();
-        object.setIntegrity(integrity - 10);
-    }
+    void execute(Common::Game::Object::ObjectBase & object);
 };
 
 }
