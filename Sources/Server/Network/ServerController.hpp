@@ -2,7 +2,6 @@
 
 #include <vector>
 #include <boost/shared_ptr.hpp>
-#include <boost/function.hpp>
 
 #include "Cake/Networking/Socket.hpp"
 
