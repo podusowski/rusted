@@ -1,5 +1,4 @@
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include <gtest/gtest.h>
 
 #include <stdexcept>
 
@@ -7,63 +6,44 @@
 
 using namespace Common::DataBase;
 
-class DataBaseNodeTest : public CPPUNIT_NS::TestFixture
-{
-    CPPUNIT_TEST_SUITE (DataBaseNodeTest);
-    CPPUNIT_TEST (testBasicTree);
-    CPPUNIT_TEST (testNonExistingNode);
-    CPPUNIT_TEST (testIterators);
-    //CPPUNIT_TEST (testNodeLink);
-    CPPUNIT_TEST_SUITE_END ();
-
-public:
-    void testBasicTree();
-    void testNonExistingNode();
-    void testIterators();
-    //void testNodeLink();
-
-};
-
-CPPUNIT_TEST_SUITE_REGISTRATION (DataBaseNodeTest);
-
-void DataBaseNodeTest::testBasicTree()
+TEST(DataBaseNodeTest, BasicTree)
 {
     DataBaseNode root("root");
     DataBaseNode & entities = root.createChild("entities");
 
-    CPPUNIT_ASSERT(1 == root.getChildCount());
+    EXPECT_EQ(1, root.getChildCount());
 
     DataBaseNode & entity1 = entities.createChild("entity");
     entity1.setValue("id", 1);
 
-    CPPUNIT_ASSERT_EQUAL(1, root.getFirstChild("entities").getFirstChild("entity").getValue<int>("id"));
+    EXPECT_EQ(1, root.getFirstChild("entities").getFirstChild("entity").getValue<int>("id"));
 }
 
-void DataBaseNodeTest::testNonExistingNode()
+TEST(DataBaseNodeTest, NonExistingNode)
 {
     DataBaseNode node("node");
-    CPPUNIT_ASSERT_THROW(node.getFirstChild("nonExistingChild"), std::out_of_range);
+    EXPECT_THROW(node.getFirstChild("nonExistingChild"), std::out_of_range);
 }
 
-void DataBaseNodeTest::testIterators()
+TEST(DataBaseNodeTest, Iterators)
 {
     DataBaseNode node("node");
     node.createChild("child").setValue("id", 1);
     node.createChild("child").setValue("id", 2);
 
-    CPPUNIT_ASSERT(node.getChilds().begin() != node.getChilds().end());
+    EXPECT_TRUE(node.getChilds().begin() != node.getChilds().end());
 
     DataBaseNode::iterator it = node.getChilds().begin();
 
-    CPPUNIT_ASSERT_EQUAL(1, (*it)->getValue<int>("id"));
+    EXPECT_EQ(1, (*it)->getValue<int>("id"));
 
     it++;
 
-    CPPUNIT_ASSERT_EQUAL(2, (*it)->getValue<int>("id"));
+    EXPECT_EQ(2, (*it)->getValue<int>("id"));
 
     it++;
 
-    CPPUNIT_ASSERT(it == node.getChilds().end());
+    EXPECT_TRUE(it == node.getChilds().end());
 }
 
 /*

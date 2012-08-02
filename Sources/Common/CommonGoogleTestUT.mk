@@ -8,6 +8,9 @@ SOURCES+=Game/Object/UnitTests/ObjectFactoryTest.cpp
 SOURCES+=Game/UnitTests/UniverseLoaderTest.cpp
 SOURCES+=Game/UnitTests/RustedTimeTest.cpp
 SOURCES+=Game/UnitTests/TimeValueTest.cpp
+SOURCES+=DataBase/UnitTests/DataBaseModuleTest.cpp
+SOURCES+=DataBase/UnitTests/DataBaseNodeTest.cpp
+SOURCES+=DataBase/UnitTests/XmlDataProviderTest.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../

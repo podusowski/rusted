@@ -9,9 +9,6 @@ SOURCES=UnitTests/mainUT.cpp \
 		Messages/UnitTests/MessagesTest.cpp \
 		RustedCodec/UnitTests/AsioBufferTest.cpp \
 		Configuration/UnitTests/ConfigurationTest.cpp \
-        DataBase/UnitTests/DataBaseNodeTest.cpp \
-        DataBase/UnitTests/XmlDataProviderTest.cpp \
-        DataBase/UnitTests/DataBaseModuleTest.cpp \
 		Game/Utilities/UnitTests/PasswordHashTest.cpp \
 
 CFLAGS+=-Wall -pedantic -g

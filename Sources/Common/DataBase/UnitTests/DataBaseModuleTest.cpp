@@ -1,5 +1,6 @@
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include <gtest/gtest.h>
+
+#include <fstream>
 
 #include "Common/Configuration/Configuration.hpp"
 #include "DataBase/DataBase.hpp"
@@ -7,19 +8,7 @@
 
 using namespace Common;
 
-class DataBaseModuleTest : public CPPUNIT_NS::TestFixture
-{
-    CPPUNIT_TEST_SUITE (DataBaseModuleTest);
-    CPPUNIT_TEST(testXmlDataBaseRead);
-    CPPUNIT_TEST_SUITE_END ();
-
-public:
-    void testXmlDataBaseRead();
-};
-
-CPPUNIT_TEST_SUITE_REGISTRATION (DataBaseModuleTest);
-
-void DataBaseModuleTest::testXmlDataBaseRead()
+TEST(DataBaseModuleTest, XmlDataBaseRead)
 {
     std::ofstream db1("/var/tmp/database.xml");
     db1 <<
@@ -38,9 +27,9 @@ void DataBaseModuleTest::testXmlDataBaseRead()
 
     Common::DataBase::DataBase & db = factory.create();
 
-    CPPUNIT_ASSERT_EQUAL(1, db.getRoot()
-                              .getFirstChild("entities")
-                              .getFirstChild("entity")
-                              .getValue<int>("id"));
+    EXPECT_EQ(1, db.getRoot()
+                 .getFirstChild("entities")
+                 .getFirstChild("entity")
+                 .getValue<int>("id"));
 }
 
