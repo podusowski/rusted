@@ -7,7 +7,7 @@
 
 #include <boost/lexical_cast.hpp>
 
-namespace Common 
+namespace Server 
 {
 namespace DataBase
 {

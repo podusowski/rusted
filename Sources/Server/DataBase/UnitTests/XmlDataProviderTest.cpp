@@ -6,7 +6,7 @@
 #include "DataBase/XmlDataProvider.hpp"
 
 using namespace testing;
-using namespace Common::DataBase;
+using namespace Server::DataBase;
 
 class XmlDataProviderTest : public Test
 {

@@ -9,10 +9,10 @@ using namespace testing;
 
 TEST(UniverseLoaderTest, LoadShip)
 {
-    Common::DataBase::DataBase db;
-    Common::DataBase::DataBaseNode & objects = db.getRoot().createChild("objects");
+    Server::DataBase::DataBase db;
+    auto & objects = db.getRoot().createChild("objects");
 
-    Common::DataBase::DataBaseNode & ship1 = objects.createChild("object");
+    auto & ship1 = objects.createChild("object");
     ship1.setValue("id", 1);
     ship1.setValue("type", "Ship");
     ship1.setValue("owner", 2);
@@ -23,7 +23,7 @@ TEST(UniverseLoaderTest, LoadShip)
 
     Common::Game::Universe universe;
 
-    Common::Game::UniverseLoader loader;
+    Server::Game::UniverseLoader loader;
     loader.load(universe, db);
 
     Common::Game::Object::ObjectBase & object = universe.getById<Common::Game::Object::Ship>(1);

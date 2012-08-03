@@ -24,13 +24,13 @@ namespace Services
 class ServiceDeployment : public IServiceDeployment
 {
 public:
-    ServiceDeployment(Common::Configuration::Configuration &, Common::DataBase::DataBase &, Server::Game::PlayerContainer &);
+    ServiceDeployment(Common::Configuration::Configuration &, Server::DataBase::DataBase &, Server::Game::PlayerContainer &);
     void deployNewConnection(Server::Network::IConnection &);
     void deployAuthorizedConnection(Server::Network::IConnection &);
 
 private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
-    Common::DataBase::DataBase & m_db;
+    Server::DataBase::DataBase & m_db;
     Common::Game::Universe m_universe;
 
     Server::Services::ServerInfoService m_serverInfoService;

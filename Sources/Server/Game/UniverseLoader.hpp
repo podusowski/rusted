@@ -3,7 +3,7 @@
 #include "Game/Universe.hpp"
 #include "DataBase/DataBase.hpp"
 
-namespace Common
+namespace Server
 {
 namespace Game
 {
@@ -11,7 +11,7 @@ namespace Game
 class UniverseLoader
 {
 public:
-    void load(Common::Game::Universe &, Common::DataBase::DataBase &);
+    void load(Common::Game::Universe &, Server::DataBase::DataBase &);
 };
 
 }

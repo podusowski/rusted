@@ -2,18 +2,18 @@
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/StaticObject.hpp"
 
-using namespace Common::Game::Object;
+using namespace Server::Game;
 
-boost::shared_ptr<ObjectBase> ObjectFactory::create(Common::DataBase::DataBaseNode & data)
+boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server::DataBase::DataBaseNode & data)
 {
     std::string type = data.getValue<std::string>("type");
 
     if (type == "Ship")
     {
-        boost::shared_ptr<ObjectBase> object(new Ship);
+        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
 
         object->setId(data.getValue<unsigned>("id"));
-        dynamic_cast<Ship&>(*object).setOwnerId(data.getValue<unsigned>("owner"));
+        dynamic_cast<Common::Game::Object::Ship&>(*object).setOwnerId(data.getValue<unsigned>("owner"));
         object->setPosition(extractPosition(data));
         object->setIntegrity(data.getValue<unsigned>("integrity"));
 
@@ -21,7 +21,7 @@ boost::shared_ptr<ObjectBase> ObjectFactory::create(Common::DataBase::DataBaseNo
     }
     else if (type == "StaticObject")
     {
-        boost::shared_ptr<ObjectBase> object(new StaticObject);
+        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::StaticObject);
 
         object->setId(data.getValue<unsigned>("id"));
         object->setPosition(extractPosition(data));
@@ -30,10 +30,10 @@ boost::shared_ptr<ObjectBase> ObjectFactory::create(Common::DataBase::DataBaseNo
         return object;
     }
 
-    return boost::shared_ptr<ObjectBase>();
+    return boost::shared_ptr<Common::Game::Object::ObjectBase>();
 }
 
-Common::Game::Position ObjectFactory::extractPosition(Common::DataBase::DataBaseNode & data)
+Common::Game::Position ObjectFactory::extractPosition(Server::DataBase::DataBaseNode & data)
 {
     Common::Game::Position position;
     position.setX(data.getValue<int>("x"));

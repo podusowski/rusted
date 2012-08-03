@@ -1,17 +1,16 @@
 #include "UniverseLoader.hpp"
 #include "Game/ObjectFactory.hpp"
 
-using namespace Common::Game;
+using namespace Server::Game;
 
-void UniverseLoader::load(Common::Game::Universe & universe, Common::DataBase::DataBase & db)
+void UniverseLoader::load(Common::Game::Universe & universe, Server::DataBase::DataBase & db)
 {
-    Common::DataBase::DataBaseNode & objects = db.getRoot().getFirstChild("objects");
-    Common::Game::Object::ObjectFactory factory;
+    auto & objects = db.getRoot().getFirstChild("objects");
+    Server::Game::ObjectFactory factory;
 
-    for (Common::DataBase::DataBaseNode::iterator it = objects.getChilds().begin();  
-         it != objects.getChilds().end(); it++)
+    for (auto it = objects.getChilds().begin(); it != objects.getChilds().end(); it++)
     {
-        Common::DataBase::DataBaseNode & node = **it;
+        Server::DataBase::DataBaseNode & node = **it;
         universe.add(factory.create(node));
     }
 }

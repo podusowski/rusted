@@ -3,7 +3,7 @@
 
 #include "DataBase/DataBaseNode.hpp"
 
-using namespace Common::DataBase;
+using namespace Server::DataBase;
 
 DataBaseNode::DataBaseNode(const std::string & name) : m_name(name)
 {

@@ -5,7 +5,7 @@
 #include "DataBase/XmlDataProvider.hpp"
 #include "DataBase/DataBaseFactory.hpp"
 
-using namespace Common::DataBase;
+using namespace Server::DataBase;
 
 DataBaseFactory::DataBaseFactory(Common::Configuration::Configuration & cfg) : m_cfg(cfg)
 {

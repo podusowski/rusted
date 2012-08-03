@@ -1,12 +1,11 @@
-#ifndef DATABASE_FACTORY_HPP
-#define DATABASE_FACTORY_HPP
+#pragma once
 
 #include <memory>
 
 #include "DataBase/DataBase.hpp"
 #include "Common/Configuration/Configuration.hpp"
 
-namespace Common 
+namespace Server 
 {
 namespace DataBase
 {
@@ -24,6 +23,4 @@ private:
 
 }
 }
-
-#endif
 

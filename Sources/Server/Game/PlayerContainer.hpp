@@ -15,7 +15,7 @@ namespace Game
 class PlayerContainer
 {
 public:
-    PlayerContainer(Common::DataBase::DataBase & db);
+    PlayerContainer(Server::DataBase::DataBase & db);
 
     int authorize(const std::string & login,
                    const std::string & password, 
@@ -32,7 +32,7 @@ private:
     int checkCredentials(const std::string & login, const std::string & password);
 
     std::map<Network::IConnection *, boost::shared_ptr<Server::Game::Player> > m_connectionMap;
-    Common::DataBase::DataBase & m_db;
+    Server::DataBase::DataBase & m_db;
 };
 
 }

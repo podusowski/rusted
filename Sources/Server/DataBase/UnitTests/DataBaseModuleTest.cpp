@@ -20,12 +20,12 @@ TEST(DataBaseModuleTest, XmlDataBaseRead)
     db1.flush();
 
     Common::Configuration::Configuration cfg;
-    Common::DataBase::DataBaseFactory factory(cfg); 
+    Server::DataBase::DataBaseFactory factory(cfg); 
 
     cfg.setValue("database.provider", "xml");
     cfg.setValue("database.xml.filename", "/var/tmp/database.xml");
 
-    Common::DataBase::DataBase & db = factory.create();
+    Server::DataBase::DataBase & db = factory.create();
 
     EXPECT_EQ(1, db.getRoot()
                  .getFirstChild("entities")

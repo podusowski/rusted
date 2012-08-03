@@ -5,22 +5,19 @@
 #include "Common/Game/Object/ObjectBase.hpp"
 #include "DataBase/DataBaseNode.hpp"
 
-namespace Common
+namespace Server
 {
 namespace Game
-{
-namespace Object
 {
 
 class ObjectFactory
 {
 public:
-	boost::shared_ptr<ObjectBase> create(DataBase::DataBaseNode & data);
+	boost::shared_ptr<Common::Game::Object::ObjectBase> create(Server::DataBase::DataBaseNode & data);
 
 private:
-    Common::Game::Position extractPosition(DataBase::DataBaseNode & data);
+    Common::Game::Position extractPosition(Server::DataBase::DataBaseNode & data);
 };
 
-}
 }
 }

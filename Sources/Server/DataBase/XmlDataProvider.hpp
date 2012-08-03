@@ -1,5 +1,4 @@
-#ifndef XML_DATA_PROVIDER_HPP
-#define XML_DATA_PROVIDER_HPP
+#pragma once
 
 #include <string>
 #include <stack>
@@ -8,7 +7,7 @@
 
 #include "DataBase/DataBase.hpp"
 
-namespace Common 
+namespace Server 
 {
 namespace DataBase
 {
@@ -29,6 +28,4 @@ private:
 
 }
 }
-
-#endif
 

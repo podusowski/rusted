@@ -5,7 +5,7 @@
 
 using namespace Server::Services;
 
-ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg, Common::DataBase::DataBase & db, Server::Game::PlayerContainer & playerContainer) :
+ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg, Server::DataBase::DataBase & db, Server::Game::PlayerContainer & playerContainer) :
     m_db(db),
 
     m_rustedTimeService(*m_time),
@@ -13,7 +13,7 @@ ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg,
     m_playerService(m_universe, playerContainer),
     m_entityService(m_universe, playerContainer)
 {
-    Common::Game::UniverseLoader loader;
+    Server::Game::UniverseLoader loader;
     loader.load(m_universe, m_db);
 }
 

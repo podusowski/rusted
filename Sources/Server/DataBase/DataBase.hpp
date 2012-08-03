@@ -1,11 +1,10 @@
-#ifndef DATABASE_HPP
-#define DATABASE_HPP
+#pragma once
 
 #include <memory>
 
 #include "DataBase/DataBaseNode.hpp"
 
-namespace Common 
+namespace Server
 {
 namespace DataBase
 {
@@ -23,6 +22,4 @@ private:
 
 }
 }
-
-#endif
 

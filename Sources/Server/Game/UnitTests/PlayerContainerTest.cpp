@@ -11,9 +11,9 @@ using namespace Common;
 
 TEST(PlayerContainerTest, AddPlayerAndReferenceByConnection)
 {
-    DataBase::DataBase db;
-    DataBase::DataBaseNode & playersNode = db.getRoot().createChild("users");
-    DataBase::DataBaseNode & playerNode = playersNode.createChild("1");
+    Server::DataBase::DataBase db;
+    Server::DataBase::DataBaseNode & playersNode = db.getRoot().createChild("users");
+    auto & playerNode = playersNode.createChild("1");
     playerNode.setValue("login", "someLogin");
     Common::Game::Utilities::PasswordHash hash;
     playerNode.setValue("password", hash.generate("passwordHash"));

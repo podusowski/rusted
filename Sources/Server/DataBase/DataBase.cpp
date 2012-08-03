@@ -1,6 +1,6 @@
 #include "DataBase/DataBase.hpp"
 
-using namespace Common::DataBase;
+using namespace Server::DataBase;
 
 DataBase::DataBase()
 {

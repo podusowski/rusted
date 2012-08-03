@@ -23,7 +23,7 @@ public:
 
 TEST_F(ObjectFactoryTest, TestLoadShip)
 {
-    Common::DataBase::DataBaseNode node("object");
+    Server::DataBase::DataBaseNode node("object");
     node.setValue("type", "Ship");
     node.setValue("id", 1);
     node.setValue("owner", 2);
@@ -31,7 +31,7 @@ TEST_F(ObjectFactoryTest, TestLoadShip)
     node.setValue("y", 4);
     node.setValue("z", 5);
     node.setValue("integrity", 100);
-    Common::Game::Object::ObjectFactory factory;
+    Server::Game::ObjectFactory factory;
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
 
@@ -49,14 +49,14 @@ TEST_F(ObjectFactoryTest, TestLoadShip)
 
 TEST_F(ObjectFactoryTest, LoadStaticObject)
 {
-    Common::DataBase::DataBaseNode node("object");
+    Server::DataBase::DataBaseNode node("object");
     node.setValue("type", "StaticObject");
     node.setValue("id", 1);
     node.setValue("x", 3);
     node.setValue("y", 4);
     node.setValue("z", 5);
     node.setValue("integrity", 100);
-    Common::Game::Object::ObjectFactory factory;
+    Server::Game::ObjectFactory factory;
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
 

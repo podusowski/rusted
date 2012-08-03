@@ -4,7 +4,7 @@
 
 #include "DataBase/DataBaseNode.hpp"
 
-using namespace Common::DataBase;
+using namespace Server::DataBase;
 
 TEST(DataBaseNodeTest, BasicTree)
 {

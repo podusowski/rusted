@@ -5,7 +5,7 @@
 
 #include "DataBase/XmlDataProvider.hpp"
 
-using namespace Common::DataBase;
+using namespace Server::DataBase;
 
 XmlDataProvider::XmlDataProvider(DataBase & db, const std::string & xmlFile) : m_db(db)
 {
