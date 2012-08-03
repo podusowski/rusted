@@ -1,6 +1,9 @@
+#include <boost/make_shared.hpp>
+
 #include "ObjectFactory.hpp"
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/StaticObject.hpp"
+#include "Server/Game/Actions/Attack.hpp"
 
 using namespace Server::Game;
 
@@ -12,10 +15,15 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
     {
         boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
 
+        Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
+
         object->setId(data.getValue<unsigned>("id"));
-        dynamic_cast<Common::Game::Object::Ship&>(*object).setOwnerId(data.getValue<unsigned>("owner"));
+        ship.setOwnerId(data.getValue<unsigned>("owner"));
         object->setPosition(extractPosition(data));
         object->setIntegrity(data.getValue<unsigned>("integrity"));
+
+        auto attackAction = boost::make_shared<Server::Game::Actions::Attack>();
+        ship.addActionOnAnotherObject(attackAction);
 
         return object;
     }
