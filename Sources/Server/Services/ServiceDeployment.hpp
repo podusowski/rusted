@@ -4,7 +4,6 @@
 
 #include "Common/Configuration/Configuration.hpp"
 #include "Common/Game/RustedTime.hpp"
-#include "Common/DataBase/DataBaseFactory.hpp"
 #include "Server/Network/IConnection.hpp"
 
 #include "Server/Services/IServiceDeployment.hpp"
@@ -13,6 +12,7 @@
 #include "Server/Services/AuthorizationService.hpp"
 #include "Server/Services/PlayerService.hpp"
 #include "Server/Services/EntityService.hpp"
+#include "DataBase/DataBaseFactory.hpp"
 
 #include "Common/Game/Universe.hpp"
 

@@ -1,5 +1,5 @@
 #include "UniverseLoader.hpp"
-#include "Object/ObjectFactory.hpp"
+#include "Game/ObjectFactory.hpp"
 
 using namespace Common::Game;
 

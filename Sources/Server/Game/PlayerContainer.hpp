@@ -3,7 +3,7 @@
 #include <map>
 #include <string>
 
-#include "Common/DataBase/DataBase.hpp"
+#include "DataBase/DataBase.hpp"
 #include "Server/Game/Player.hpp"
 #include "Server/Network/IConnection.hpp"
 

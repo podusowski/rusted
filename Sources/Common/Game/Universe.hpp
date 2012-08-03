@@ -6,10 +6,8 @@
 
 #include "Cake/Diagnostics/Logger.hpp"
 
-#include "Object/ObjectFactory.hpp"
 #include "Game/Object/ObjectBase.hpp"
 #include "Game/Object/OwnedObjectBase.hpp"
-#include "DataBase/DataBase.hpp"
 
 namespace Common
 {

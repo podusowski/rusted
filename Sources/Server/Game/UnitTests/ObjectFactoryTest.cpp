@@ -1,8 +1,8 @@
 #include <gtest/gtest.h>
 
-#include "Game/Object/ObjectFactory.hpp"
-#include "Game/Object/Ship.hpp"
-#include "Game/Object/StaticObject.hpp"
+#include "Game/ObjectFactory.hpp"
+#include "Common/Game/Object/Ship.hpp"
+#include "Common/Game/Object/StaticObject.hpp"
 #include "DataBase/DataBaseNode.hpp"
 #include "Game/UnitTests/RustedTimeStub.hpp"
 

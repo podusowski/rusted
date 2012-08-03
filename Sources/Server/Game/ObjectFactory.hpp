@@ -2,7 +2,7 @@
 
 #include <boost/shared_ptr.hpp>
 
-#include "ObjectBase.hpp"
+#include "Common/Game/Object/ObjectBase.hpp"
 #include "DataBase/DataBaseNode.hpp"
 
 namespace Common

@@ -1,6 +1,6 @@
 #include "ObjectFactory.hpp"
-#include "Ship.hpp"
-#include "StaticObject.hpp"
+#include "Common/Game/Object/Ship.hpp"
+#include "Common/Game/Object/StaticObject.hpp"
 
 using namespace Common::Game::Object;
 

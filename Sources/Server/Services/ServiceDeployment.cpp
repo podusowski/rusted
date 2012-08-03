@@ -1,7 +1,7 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
 #include "Server/Services/ServiceDeployment.hpp"
-#include "Common/Game/UniverseLoader.hpp"
+#include "Game/UniverseLoader.hpp"
 
 using namespace Server::Services;
 

@@ -2,6 +2,7 @@
 #include "Cake/Configuration/Configuration.hpp"
 #include "Cake/Diagnostics/Logger.hpp"
 
+#include "Game/ObjectFactory.hpp"
 #include "Network/ServerController.hpp"
 
 void initDependencies(int argc, const char * argv[])
