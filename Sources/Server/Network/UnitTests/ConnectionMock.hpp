@@ -11,6 +11,7 @@ namespace Network
 
 class ConnectionMock : public IConnection
 {
+public:
     MOCK_METHOD1(send, void(const Common::Messages::AbstractMessage &));
     MOCK_METHOD1(addListener, void(IConnectionListener &));
     MOCK_METHOD0(getId, int());
