@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Game/Actions/IActionOnAnotherObject.hpp"
+#include "Server/Game/Actions/IActionOnAnotherObject.hpp"
 
 namespace Server
 {
@@ -9,7 +9,7 @@ namespace Game
 namespace Actions
 {
 
-class Attack : public Common::Game::Actions::IActionOnAnotherObject
+class Attack : public IActionOnAnotherObject
 {
 public:
     void execute(Common::Game::Object::ObjectBase & object);

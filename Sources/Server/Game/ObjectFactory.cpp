@@ -22,9 +22,6 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
         object->setPosition(extractPosition(data));
         object->setIntegrity(data.getValue<unsigned>("integrity"));
 
-        auto attackAction = boost::make_shared<Server::Game::Actions::Attack>();
-        ship.addAction(attackAction);
-
         return object;
     }
     else if (type == "StaticObject")

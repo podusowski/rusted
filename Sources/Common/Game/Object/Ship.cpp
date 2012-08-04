@@ -1,14 +1,11 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
-#include "Common/Game/Actions/ISimpleAction.hpp"
-#include "Common/Game/Actions/IActionOnAnotherObject.hpp"
-
 #include "Ship.hpp"
 
 using namespace Common::Game::Object;
 using namespace Common::Game;
 
-Ship::Ship() : m_speed(1), m_selectedObject(nullptr)
+Ship::Ship() : m_speed(1)
 {
 }
 
@@ -37,48 +34,6 @@ void Ship::setCourse(Position position)
 void Ship::setSpeed(unsigned speed)
 {
     m_speed = speed;
-}
-
-void Ship::addAction(boost::shared_ptr<Common::Game::Actions::IAction> action)
-{
-    LOG_DEBUG << "Adding IAction: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(*action) << " with id:" << m_actions.size();
-
-    m_actions.push_back(action);
-}
-
-void Ship::executeAction(unsigned id)
-{
-    Common::Game::Actions::IAction & action = *m_actions.at(id);
-
-    LOG_DEBUG << "Executing IAction: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(action) << " with id:" << id;
-
-    Common::Game::Actions::ISimpleAction * simpleAction = dynamic_cast<Common::Game::Actions::ISimpleAction*>(&action);
-    Common::Game::Actions::IActionOnAnotherObject * actionOnAnotherObject = dynamic_cast<Common::Game::Actions::IActionOnAnotherObject*>(&action);
-
-    if (simpleAction)
-    {
-        simpleAction->execute();
-    }
-    else if (actionOnAnotherObject)
-    {
-        if (m_selectedObject)
-        {
-            actionOnAnotherObject->execute(*m_selectedObject);
-        }
-        else
-        {
-            throw std::runtime_error("no selected object while trying to execute IActionOnAnotherObject");
-        }
-    }
-    else
-    {
-        throw std::runtime_error("unkown type of action");
-    }
-}
-
-void Ship::selectObject(Common::Game::Object::ObjectBase & object)
-{
-    m_selectedObject = &object;
 }
 
 Position Ship::calculatePosition(TimeValue time)

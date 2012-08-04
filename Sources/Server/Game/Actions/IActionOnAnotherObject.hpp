@@ -1,9 +1,9 @@
 #pragma once
 
 #include "Common/Game/Object/ObjectBase.hpp"
-#include "Common/Game/Actions/IAction.hpp"
+#include "IAction.hpp"
 
-namespace Common
+namespace Server 
 {
 namespace Game
 {
