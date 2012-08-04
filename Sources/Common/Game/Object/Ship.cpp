@@ -1,11 +1,14 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
+#include "Common/Game/Actions/ISimpleAction.hpp"
+#include "Common/Game/Actions/IActionOnAnotherObject.hpp"
+
 #include "Ship.hpp"
 
 using namespace Common::Game::Object;
 using namespace Common::Game;
 
-Ship::Ship() : m_speed(1)
+Ship::Ship() : m_speed(1), m_selectedObject(nullptr)
 {
 }
 
@@ -49,23 +52,33 @@ void Ship::executeAction(unsigned id)
 
     LOG_DEBUG << "Executing IAction: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(action) << " with id:" << id;
 
-    action.execute();
+    Common::Game::Actions::ISimpleAction * simpleAction = dynamic_cast<Common::Game::Actions::ISimpleAction*>(&action);
+    Common::Game::Actions::IActionOnAnotherObject * actionOnAnotherObject = dynamic_cast<Common::Game::Actions::IActionOnAnotherObject*>(&action);
+
+    if (simpleAction)
+    {
+        simpleAction->execute();
+    }
+    else if (actionOnAnotherObject)
+    {
+        if (m_selectedObject)
+        {
+            actionOnAnotherObject->execute(*m_selectedObject);
+        }
+        else
+        {
+            throw std::runtime_error("no selected object while trying to execute IActionOnAnotherObject");
+        }
+    }
+    else
+    {
+        throw std::runtime_error("unkown type of action");
+    }
 }
 
-void Ship::addActionOnAnotherObject(boost::shared_ptr<Common::Game::Actions::IActionOnAnotherObject> action)
+void Ship::selectObject(Common::Game::Object::ObjectBase & object)
 {
-    LOG_DEBUG << "Adding IActionOnAnotherObject: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(*action) << " with id:" << m_actionsOnAnotherObject.size();
-
-    m_actionsOnAnotherObject.push_back(action);
-}
-
-void Ship::executeActionOnAnotherObject(unsigned id, Common::Game::Object::ObjectBase & object)
-{
-    Common::Game::Actions::IActionOnAnotherObject & action = *m_actionsOnAnotherObject.at(id);
-
-    LOG_DEBUG << "Executing IActionOnAnotherObject: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(action) << " with id:" << id;
-
-    action.execute(object);
+    m_selectedObject = &object;
 }
 
 Position Ship::calculatePosition(TimeValue time)

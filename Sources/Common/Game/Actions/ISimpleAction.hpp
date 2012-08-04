@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Common/Game/Actions/IAction.hpp"
+
 namespace Common
 {
 namespace Game
@@ -7,7 +9,7 @@ namespace Game
 namespace Actions
 {
 
-class IAction
+class ISimpleAction : public IAction
 {
 public:
     virtual void execute() = 0;

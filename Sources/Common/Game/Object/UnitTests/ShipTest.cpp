@@ -5,7 +5,7 @@
 #include "Game/Object/Ship.hpp"
 #include "Game/UnitTests/RustedTimeStub.hpp"
 #include "Game/Object/UnitTests/ShipMock.hpp"
-#include "Game/Actions/UnitTests/ActionMock.hpp"
+#include "Game/Actions/UnitTests/SimpleActionMock.hpp"
 #include "Game/Actions/UnitTests/ActionOnAnotherObjectMock.hpp"
 
 using namespace testing;
@@ -100,12 +100,12 @@ TEST_F(ShipTest, MoveToTheSamePosition)
 
 TEST_F(ShipTest, ExecuteAction)
 {
-    boost::shared_ptr<Common::Game::Actions::ActionMock> actionMock(new Common::Game::Actions::ActionMock);
+    boost::shared_ptr<Common::Game::Actions::SimpleActionMock> actionMock(new Common::Game::Actions::SimpleActionMock);
 
     Common::Game::Object::Ship ship;
     ship.addAction(actionMock);
 
-    EXPECT_CALL(dynamic_cast<Common::Game::Actions::ActionMock&>(*actionMock), execute()).Times(1);
+    EXPECT_CALL(dynamic_cast<Common::Game::Actions::SimpleActionMock&>(*actionMock), execute()).Times(1);
 
     ship.executeAction(0);
 }
@@ -115,11 +115,13 @@ TEST_F(ShipTest, ExecuteActionOnAnotherObject)
     boost::shared_ptr<Common::Game::Actions::ActionOnAnotherObjectMock> actionMock(new Common::Game::Actions::ActionOnAnotherObjectMock);
 
     Common::Game::Object::Ship ship1;
-    ship1.addActionOnAnotherObject(actionMock);
+    ship1.addAction(actionMock);
 
     Common::Game::Object::Ship ship2;
 
     EXPECT_CALL(dynamic_cast<Common::Game::Actions::ActionOnAnotherObjectMock&>(*actionMock), execute(Ref(ship2))).Times(1);
 
-    ship1.executeActionOnAnotherObject(0, ship2);
+    ship1.selectObject(ship2);
+    ship1.executeAction(0);
 }
+

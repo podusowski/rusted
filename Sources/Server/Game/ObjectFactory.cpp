@@ -23,7 +23,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
         object->setIntegrity(data.getValue<unsigned>("integrity"));
 
         auto attackAction = boost::make_shared<Server::Game::Actions::Attack>();
-        ship.addActionOnAnotherObject(attackAction);
+        ship.addAction(attackAction);
 
         return object;
     }

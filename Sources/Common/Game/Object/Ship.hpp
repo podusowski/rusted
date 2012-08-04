@@ -34,8 +34,7 @@ public:
     void addAction(boost::shared_ptr<Common::Game::Actions::IAction>);
     void executeAction(unsigned id);
 
-    void addActionOnAnotherObject(boost::shared_ptr<Common::Game::Actions::IActionOnAnotherObject>);
-    void executeActionOnAnotherObject(unsigned id, Common::Game::Object::ObjectBase &);
+    void selectObject(Common::Game::Object::ObjectBase & object);
 
 private:
     Position calculatePosition(TimeValue time);
@@ -46,7 +45,7 @@ private:
     Course m_course;
     unsigned m_speed;
     std::vector<boost::shared_ptr<Common::Game::Actions::IAction> > m_actions;
-    std::vector<boost::shared_ptr<Common::Game::Actions::IActionOnAnotherObject> > m_actionsOnAnotherObject;
+    Common::Game::Object::ObjectBase * m_selectedObject;
 };
 
 }
