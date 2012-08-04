@@ -13,7 +13,7 @@ class PlayerContainerMock : public IPlayerContainer
 {
 public:
     MOCK_METHOD3(authorize, int(const std::string & login,
-                                const std::string & password, 
+                                const std::string & password,
                                 Network::IConnection & connection));
 
     MOCK_METHOD1(add, void(Network::IConnection &));
