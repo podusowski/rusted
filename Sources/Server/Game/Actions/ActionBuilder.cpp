@@ -5,7 +5,7 @@ using namespace Server::Game::Actions;
 
 boost::shared_ptr<IAction> ActionBuilder::build(
         Server::Network::IConnection & connection,
-        Server::Game::IPlayerContainer & players,
+        Server::Game::IPlayerContainer & playerContainer,
         Common::Game::Universe & universe,
         unsigned id, 
         Common::Game::Object::Ship & focusedShip,
@@ -16,7 +16,8 @@ boost::shared_ptr<IAction> ActionBuilder::build(
     switch (id)
     {
     case 1:
-        ret = boost::shared_ptr<IAction>(new Attack);
+        assert(selectedObject);
+        ret = boost::shared_ptr<IAction>(new Attack(playerContainer, focusedShip, *selectedObject));
         break;
 
     default:
