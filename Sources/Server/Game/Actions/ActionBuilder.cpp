@@ -25,7 +25,7 @@ boost::shared_ptr<IAction> ActionBuilder::build(
 
     if (ret)
     {
-        LOG_DEBUG << "Constructed action: " << CAKE_DEPENDENCY_INJECTION_TYPENAME(*ret);
+        LOG_DEBUG << "Constructed action: " << id << "/" << CAKE_DEPENDENCY_INJECTION_TYPENAME(*ret);
     }
 
     return ret;
