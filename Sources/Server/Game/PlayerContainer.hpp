@@ -4,15 +4,14 @@
 #include <string>
 
 #include "DataBase/DataBase.hpp"
-#include "Server/Game/Player.hpp"
-#include "Server/Network/IConnection.hpp"
+#include "IPlayerContainer.hpp"
 
 namespace Server
 {
 namespace Game
 {
 
-class PlayerContainer
+class PlayerContainer : public IPlayerContainer
 {
 public:
     PlayerContainer(Server::DataBase::DataBase & db);
