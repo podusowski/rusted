@@ -41,10 +41,6 @@ private:
     std::vector<IMouseListener *> m_mouseListeners;
 
     Ogre::RenderWindow & m_ogreRenderWindow;
-
-    int mouseX;
-    int mouseY;
-
     OgreObjectRaycaster m_ogreObjectRaycaster;
 };
 

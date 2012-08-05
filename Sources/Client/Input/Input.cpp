@@ -41,8 +41,6 @@ Input::Input(Ogre::RenderWindow & window, Ogre::SceneManager & ogreSceneManager,
     const OIS::MouseState & mouseState = m_oisMouse->getMouseState();
     mouseState.width = window.getWidth();
     mouseState.height = window.getHeight();
-    mouseX = window.getWidth() / 2;
-    mouseY = window.getHeight() / 2;
     m_oisMouse->setEventCallback(this);
 
     m_oisKeyboard = static_cast<OIS::Keyboard *>(m_oisInputManager->createInputObject(OIS::OISKeyboard, true));
@@ -57,18 +55,6 @@ bool Input::mouseMoved( const OIS::MouseEvent &arg )
     {
         listener->mouseMoved(arg.state);
     }
-    mouseX += arg.state.X.rel;
-    mouseY += arg.state.Y.rel;
-
-    if (mouseX < 0)
-        mouseX = 0;
-    if (abs(mouseX) > m_ogreRenderWindow.getWidth())
-        mouseX = m_ogreRenderWindow.getWidth();
-
-    if (mouseY < 0)
-        mouseY = 0;
-    if (abs(mouseY) > m_ogreRenderWindow.getHeight())
-        mouseY = m_ogreRenderWindow.getHeight();
 
     MyGUI::InputManager::getInstance().injectMouseMove(arg.state.X.abs, arg.state.Y.abs, arg.state.Z.abs);
     return true;
@@ -76,11 +62,11 @@ bool Input::mouseMoved( const OIS::MouseEvent &arg )
 
 bool Input::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-    LOG_DEBUG << "Mouse pressed (x: " << mouseX << ", y: " << mouseY << ")"; 
+    LOG_DEBUG << "Mouse pressed (x: " << arg.state.X.abs << ", y: " << arg.state.Y.abs << ")"; 
 
     BOOST_FOREACH(IMouseListener * listener, m_mouseListeners)
     {
-        listener->mousePressed(id, arg, mouseX, mouseY);
+        listener->mousePressed(id, arg, arg.state.X.abs, arg.state.Y.abs);
     }
 
     MyGUI::InputManager::getInstance().injectMousePress(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
@@ -89,11 +75,11 @@ bool Input::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 
 bool Input::mouseReleased( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
-    LOG_DEBUG << "Mouse released (x: " << mouseX << ", y: " << mouseY << ")"; 
+    LOG_DEBUG << "Mouse released (x: " << arg.state.X.abs << ", y: " << arg.state.Y.abs << ")"; 
 
     BOOST_FOREACH(IMouseListener * listener, m_mouseListeners)
     {
-        listener->mouseReleased(id, mouseX, mouseY);
+        listener->mouseReleased(id, arg.state.X.abs, arg.state.Y.abs);
     }
 
     MyGUI::InputManager::getInstance().injectMouseRelease(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));

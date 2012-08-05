@@ -7,7 +7,7 @@
         <object id="1" type="Ship" x="1" y="1" z="1" owner="1" integrity="100" />
         <object id="2" type="Ship" x="100" y="1" z="1" owner="1" integrity="100" />
         <object id="3" type="Ship" x="200" y="1" z="1" owner="1" integrity="100" />
-        <object id="6" type="Ship" x="200" y="1" z="1" owner="2" integrity="100" />
+        <object id="6" type="Ship" x="150" y="1" z="1" owner="2" integrity="100" />
 
         <object id="4" type="StaticObject" x="1" y="10" z="1" integrity="100" />
         <object id="5" type="StaticObject" x="10" y="10" z="1" integrity="100" />
