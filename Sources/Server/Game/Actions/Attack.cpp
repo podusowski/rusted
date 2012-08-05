@@ -1,3 +1,4 @@
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Attack.hpp"
 
 using namespace Server::Game::Actions;
@@ -12,6 +13,13 @@ Attack::Attack(IPlayerContainer & playerContainer, Common::Game::Object::Ship & 
 void Attack::execute()
 {
     unsigned integrity = m_selectedObject.getIntegrity();
+
+    if (integrity == 0)
+    {
+        LOG_DEBUG << "Tried to attack destroyed object";
+        return;
+    }
+
     m_selectedObject.setIntegrity(integrity - 10);
 
     Common::Messages::AttackObject attackObject;

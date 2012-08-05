@@ -48,3 +48,23 @@ TEST_F(AttackTest, AttackOtherShip)
     Server::Game::Actions::Attack attack(playerContainer, focusedShip, selectedShip);
     attack.execute();
 }
+
+TEST_F(AttackTest, AttackDestroyedShip)
+{
+    Server::Network::ConnectionMock connection;
+    Server::Game::PlayerContainerMock playerContainer;
+    Common::Game::Object::ShipMock focusedShip;
+    Common::Game::Object::ShipMock selectedShip;
+
+    std::vector<Server::Network::IConnection *> allConnections{&connection};
+    ON_CALL(playerContainer, getAllConnections(_)).WillByDefault(Return(allConnections));
+
+    EXPECT_CALL(connection, send(_)).Times(0);
+
+    ON_CALL(selectedShip, getIntegrity()).WillByDefault(Return(0));
+
+    EXPECT_CALL(selectedShip, setIntegrity(_)).Times(0);
+
+    Server::Game::Actions::Attack attack(playerContainer, focusedShip, selectedShip);
+    attack.execute();
+}
