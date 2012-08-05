@@ -1,5 +1,4 @@
 #include <stdexcept>
-#include <boost/foreach.hpp>
 
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Common/Game/Utilities/PasswordHash.hpp"
