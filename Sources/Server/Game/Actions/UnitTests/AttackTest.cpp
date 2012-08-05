@@ -21,7 +21,7 @@ public:
     }
 };
 
-TEST_F(AttackTest, JustAttack)
+TEST_F(AttackTest, AttackOtherShip)
 {
     Server::Network::ConnectionMock connection;
     Server::Game::PlayerContainerMock playerContainer;
