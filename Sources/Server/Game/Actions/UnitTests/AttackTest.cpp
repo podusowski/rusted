@@ -31,8 +31,13 @@ TEST_F(AttackTest, JustAttack)
     std::vector<Server::Network::IConnection *> allConnections{&connection};
     ON_CALL(playerContainer, getAllConnections(_)).WillByDefault(Return(allConnections));
 
-    // AttackObject, ShipInfo
-    EXPECT_CALL(connection, send(_)).Times(2);
+    EXPECT_CALL(connection, send(
+                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::AttackObject))
+                )).Times(1);
+
+    EXPECT_CALL(connection, send(
+                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipInfo))
+                )).Times(1);
 
     // doesn't matter if this is called, might be cached or something
     // the thing is what to return if it's called
