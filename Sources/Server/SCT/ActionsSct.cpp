@@ -39,6 +39,7 @@ TEST(ActionsSct, AttackObject)
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
 
     // client has to focus its own object 
     Common::Messages::FocusObject focusObject;
@@ -56,11 +57,17 @@ TEST(ActionsSct, AttackObject)
     connection1->send(executeAction);
 
     // user1 should also receive AttackObject to know what he has done
-    connection1->receive<Common::Messages::AttackObject>();
+    auto attackObject1 = connection1->receive<Common::Messages::AttackObject>();
+    ASSERT_EQ(1, attackObject1->attackerId);
+    ASSERT_EQ(2, attackObject1->attackedId);
 
     // we should also receive shipinfo with condition after the attack
     auto shipInfo1 = connection1->receive<Common::Messages::ShipInfo>();
     ASSERT_EQ(2, shipInfo1->id);
     ASSERT_EQ(90, shipInfo1->integrity);
+
+    // other player should also get this stuff
+    connection2->receive<Common::Messages::AttackObject>();
+    connection2->receive<Common::Messages::ShipInfo>();
 }
 
