@@ -24,7 +24,7 @@ public:
 	RustedAbstractCoder(IWriteBuffer & p_buffer);
 	RustedAbstractCoder & operator << (const int p_int);
 	RustedAbstractCoder & operator << (const bool p_value);
-	RustedAbstractCoder & operator << (const std::string p_str);
+	RustedAbstractCoder & operator << (const std::string & p_str);
 
         template <class A>
         RustedAbstractCoder & operator << (const std::vector<boost::tuple<A> > & vector)

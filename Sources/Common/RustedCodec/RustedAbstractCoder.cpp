@@ -21,7 +21,7 @@ RustedAbstractCoder & RustedAbstractCoder::operator << (const bool p_value)
 	return *this;
 }
 
-RustedAbstractCoder & RustedAbstractCoder::operator << (const std::string p_str)
+RustedAbstractCoder & RustedAbstractCoder::operator << (const std::string & p_str)
 {
 	*this << p_str.length();
 
