@@ -62,28 +62,7 @@ void EntityService::handle(const Common::Messages::GetVisibleObjects &, Network:
 
 void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo, Network::IConnection & connection)
 {
-    using namespace Common::Game::Object;
-
-    ObjectBase & object = m_universe.getById<ObjectBase>(getObjectInfo.id);
-
-    LOG_DEBUG << "Getting info about object id: " << getObjectInfo.id << ", type: " << TYPENAME(object);
-
-    if (typeid(object) == typeid(Ship))
-    {
-         sendShipInfo(dynamic_cast<Ship&>(object), connection);
-    }
-    else if (typeid(object) == typeid(StaticObject))
-    {
-        Common::Messages::StaticObjectInfoResp staticObjectInfo;
-
-        Common::Game::Position position = object.getPosition();
-        staticObjectInfo.staticObjectId = getObjectInfo.id;
-        staticObjectInfo.x = position.getX();
-        staticObjectInfo.y = position.getY();
-        staticObjectInfo.z = position.getZ();
-
-        connection.send(staticObjectInfo);
-    }
+    m_utils.sendObjectInfo(getObjectInfo.id, m_universe, connection);
 }
 
 void EntityService::handle(const Common::Messages::SelectObject & selectObject, Network::IConnection & connection)
@@ -125,20 +104,5 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
     Server::Game::Actions::ActionBuilder actionBuilder;
     auto action = actionBuilder.build(connection, m_playerContainer, m_universe, executeAction.id, focusedShip, &selectedObject);
     action->execute();
-}
-
-void EntityService::sendShipInfo(Common::Game::Object::Ship & ship, Network::IConnection & connection)
-{
-    Common::Messages::ShipInfo shipInfo;
-
-    Common::Game::Position position = ship.getPosition();
-    shipInfo.id = ship.getId();
-    shipInfo.player_id = ship.getOwnerId();
-    shipInfo.x = position.getX();
-    shipInfo.y = position.getY();
-    shipInfo.z = position.getZ();
-    shipInfo.integrity = ship.getIntegrity();
-
-    connection.send(shipInfo);
 }
 

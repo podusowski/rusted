@@ -30,25 +30,7 @@ void Attack::execute()
     for (auto connection: connections)
     {
         connection->send(attackObject);
-
-        // FIXME: this might not be Ship - create and use some API to sending objectInfo
-        sendShipInfo(dynamic_cast<Common::Game::Object::Ship&>(m_selectedObject), *connection);
+        m_servicesUtils.sendObjectInfo(m_selectedObject, *connection);
     }
-}
-
-// FIXME: duplicated in EntityService
-void Attack::sendShipInfo(Common::Game::Object::Ship & ship, Network::IConnection & connection)
-{
-    Common::Messages::ShipInfo shipInfo;
-
-    Common::Game::Position position = ship.getPosition();
-    shipInfo.id = ship.getId();
-    shipInfo.player_id = ship.getOwnerId();
-    shipInfo.x = position.getX();
-    shipInfo.y = position.getY();
-    shipInfo.z = position.getZ();
-    shipInfo.integrity = ship.getIntegrity();
-
-    connection.send(shipInfo);
 }
 

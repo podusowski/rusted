@@ -11,6 +11,7 @@ SOURCES+=Services/EntityService.cpp
 SOURCES+=Services/PlayerService.cpp
 SOURCES+=Services/RustedTimeService.cpp
 SOURCES+=Services/ServiceDeployment.cpp
+SOURCES+=Services/Utils.cpp
 SOURCES+=Game/ObjectFactory.cpp
 SOURCES+=Game/UniverseLoader.cpp
 SOURCES+=Game/Player.cpp

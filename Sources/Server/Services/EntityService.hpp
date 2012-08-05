@@ -5,6 +5,7 @@
 #include "Services/AbstractService.hpp"
 #include "Game/PlayerContainer.hpp"
 #include "Common/Game/Object/Ship.hpp"
+#include "Utils.hpp"
 
 namespace Server
 {
@@ -28,10 +29,9 @@ public:
     void handle(const Common::Messages::AbstractMessage &, Network::IConnection &) {}
 
 private:
-    void sendShipInfo(Common::Game::Object::Ship &, Network::IConnection &);
-
     Common::Game::Universe & m_universe;
     Game::PlayerContainer & m_playerContainer;
+    Utils m_utils;
 };
 
 }
