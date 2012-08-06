@@ -45,7 +45,7 @@ void Connection::run()
 {
     using namespace ::Common::Messages;
 
-    Common::RustedCodec::IReadBuffer * buffer = new Common::RustedCodec::CakeReadBuffer(m_socket);
+    Common::RustedCodec::CakeReadBuffer buffer(m_socket);
 
     try
     {
@@ -59,7 +59,7 @@ void Connection::run()
             m_listenersToAdd.clear();
 
             // receive message
-            boost::shared_ptr<AbstractMessage> message = MessageFactory::create(*buffer);
+            boost::shared_ptr<AbstractMessage> message = MessageFactory::create(buffer);
 
             LOG_DEBUG << "<connection:" << m_id << "> Received: " << *message;
 
