@@ -28,6 +28,7 @@ public:
     void setPosition(const Position &);
     void setCourse(Position course);
     void setSpeed(unsigned speed);
+    void setIntegrity(unsigned); //override;
 
 private:
     Position calculatePosition(TimeValue time);

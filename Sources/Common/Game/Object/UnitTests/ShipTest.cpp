@@ -96,3 +96,47 @@ TEST_F(ShipTest, MoveToTheSamePosition)
     Mock::VerifyAndClear(&getRustedTimeStub());
 }
 
+/* When ship is destroyed somewhere, it should stop moving and stay in place where it
+ * was when it happened. 
+ */
+TEST_F(ShipTest, ShipDestroyedDuringFlight)
+{
+    Common::Game::Object::Ship ship;
+
+    ship.setPosition(Common::Game::Position(0, 0, 0));
+
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
+    ship.setCourse(Common::Game::Position(100, 0, 0));
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
+    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
+    ship.setIntegrity(0);
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(100, 0)));
+    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
+}
+
+/* Now, damaging ship doesn't affect anything 
+ */
+TEST_F(ShipTest, ShipDamagedDuringFlight)
+{
+    Common::Game::Object::Ship ship;
+
+    ship.setPosition(Common::Game::Position(0, 0, 0));
+
+    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
+    ship.setCourse(Common::Game::Position(100, 0, 0));
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
+    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
+    ship.setIntegrity(10);
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(100, 0)));
+    ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
+}

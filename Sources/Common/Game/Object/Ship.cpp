@@ -36,6 +36,20 @@ void Ship::setSpeed(unsigned speed)
     m_speed = speed;
 }
 
+void Ship::setIntegrity(unsigned integrity)
+{
+    ObjectBase::setIntegrity(integrity);
+
+    if (getIntegrity() == 0)
+    {
+        TimeValue time = m_time->getCurrentTime();
+        m_position = calculatePosition(time);
+        m_course.course = m_position;
+
+        LOG_DEBUG << "Ship destroyed, leaving it at " << m_position;
+    }
+}
+
 Position Ship::calculatePosition(TimeValue time)
 {
     if (m_course.course == m_position)
