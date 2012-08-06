@@ -140,3 +140,56 @@ TEST_F(ShipTest, ShipDamagedDuringFlight)
     ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
     Mock::VerifyAndClear(&getRustedTimeStub());
 }
+
+/* Yeah, blame me for not doing OOP but we need internal course representation to send it over
+ * the network
+ */
+TEST_F(ShipTest, CourseObjectAccess)
+{
+    Common::Game::Object::Ship ship;
+
+    ship.setPosition(Common::Game::Position(10, 20, 30));
+
+    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(10, 20)));
+    ship.setCourse(Common::Game::Position(100, 200, 300));
+ 
+    auto course = ship.getCourse();
+
+    EXPECT_EQ(10, course.start.getX());
+    EXPECT_EQ(20, course.start.getY());
+    EXPECT_EQ(30, course.start.getZ());
+
+    EXPECT_EQ(100, course.destination.getX());
+    EXPECT_EQ(200, course.destination.getY());
+    EXPECT_EQ(300, course.destination.getZ());
+}
+
+TEST_F(ShipTest, MakeCourseFromCourseObject)
+{
+    Common::Game::Object::Ship ship;
+
+    ship.setPosition(Common::Game::Position(0, 0, 0));
+
+    Common::Game::Object::Course course;
+    course.start.setX(0);
+    course.start.setY(0);
+    course.start.setZ(0);
+
+    course.destination.setX(100);
+    course.destination.setY(0);
+    course.destination.setZ(0);
+
+    course.startTime = TimeValue(0, 0);
+
+    ship.setCourse(course);
+
+    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
+    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(100, 0)));
+    ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
+}
+
+

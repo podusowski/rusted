@@ -16,7 +16,7 @@ Position Ship::getPosition()
 
 void Ship::setPosition(const Position & position)
 {
-    m_course.course = position;
+    m_course.destination= position;
     m_position = position;
 }
 
@@ -25,10 +25,17 @@ void Ship::setCourse(Position position)
     TimeValue time = m_time->getCurrentTime();
 
     m_position = calculatePosition(time);
-    m_course.course = position;
+    m_course.start = m_position;
+    m_course.destination = position;
     m_course.startTime = time;
 
     LOG_DEBUG << "Setting course from " << m_position << " to " << position << ", start time: " << time << ", speed: " << m_speed;
+}
+
+void Ship::setCourse(Course course)
+{
+    m_course = course;
+    m_position = course.start;
 }
 
 void Ship::setSpeed(unsigned speed)
@@ -44,18 +51,23 @@ void Ship::setIntegrity(unsigned integrity)
     {
         TimeValue time = m_time->getCurrentTime();
         m_position = calculatePosition(time);
-        m_course.course = m_position;
+        m_course.destination = m_position;
 
         LOG_DEBUG << "Ship destroyed, leaving it at " << m_position;
     }
 }
 
+Course Ship::getCourse()
+{
+    return m_course;
+}
+
 Position Ship::calculatePosition(TimeValue time)
 {
-    if (m_course.course == m_position)
+    if (m_course.destination == m_position)
         return m_position;
 
-    unsigned distance = Position::distance(m_course.course, m_position);
+    unsigned distance = Position::distance(m_course.destination, m_position);
     unsigned totalTripTime = distance / m_speed;
     TimeValue timeTakenSoFar = time - m_course.startTime;
     float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
@@ -68,7 +80,7 @@ Position Ship::calculatePosition(TimeValue time)
 
     if (tripProgress >= 1.0)
     {
-        m_position = m_course.course;
+        m_position = m_course.destination;
 
         LOG_DEBUG << "Ship arrived at " << m_position;
 
@@ -76,7 +88,7 @@ Position Ship::calculatePosition(TimeValue time)
     }
     else
     {
-        Position tripVector = m_course.course - m_position;
+        Position tripVector = m_course.destination - m_position;
         return m_position + (tripVector * tripProgress);
     }
 }

@@ -16,7 +16,8 @@ namespace Object
 
 struct Course
 {
-    Position course;
+    Position start;
+    Position destination;
     TimeValue startTime;
 };
 
@@ -27,8 +28,11 @@ public:
     Position getPosition();
     void setPosition(const Position &);
     void setCourse(Position course);
+    void setCourse(Course course);
     void setSpeed(unsigned speed);
     void setIntegrity(unsigned); //override;
+
+    Course getCourse();
 
 private:
     Position calculatePosition(TimeValue time);
