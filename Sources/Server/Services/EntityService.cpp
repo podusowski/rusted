@@ -28,17 +28,31 @@ void EntityService::handle(const Common::Messages::EntityGetInfoReq & getInfoReq
 void EntityService::handle(const Common::Messages::EntityChangeCourseReq & changeCourseReq, Network::IConnection & connection)
 {
     Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(changeCourseReq.entityId);
-    Common::Point3<int> destination(changeCourseReq.courseX,
-                                    changeCourseReq.courseY,
-                                    changeCourseReq.courseZ);
+
+    Common::Game::Position destination(changeCourseReq.courseX,
+                                       changeCourseReq.courseY,
+                                       changeCourseReq.courseZ);
     ship.setCourse(destination);
+
+    auto course = ship.getCourse();
+
+    Common::Messages::ShipCourseInfo shipCourseInfo;
+    shipCourseInfo.objectId = ship.getId();
+
+    shipCourseInfo.positionX = course.start.getX();
+    shipCourseInfo.positionY = course.start.getY();
+    shipCourseInfo.positionZ = course.start.getZ();
+
+    shipCourseInfo.destinationX = course.destination.getX();
+    shipCourseInfo.destinationY = course.destination.getY();
+    shipCourseInfo.destinationZ = course.destination.getZ();
 
     std::vector<Network::IConnection *> connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
     for (std::vector<Network::IConnection *>::iterator it = connections.begin(); it != connections.end(); it++)
     {
         if (*it != &connection)
         {
-            (*it)->send(changeCourseReq);
+            (*it)->send(shipCourseInfo);
         }
     }
 }

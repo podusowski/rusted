@@ -116,6 +116,18 @@ void ObjectService::handle(const Common::Messages::EntityChangeCourseReq & entit
         entityChangeCourse.courseZ));
 }
 
+void ObjectService::handle(const Common::Messages::ShipCourseInfo & shipCourseInfo)
+{
+    LOG_DEBUG << "Ship (id: " << shipCourseInfo.objectId << ") changed course";
+
+    Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(shipCourseInfo.objectId);
+
+    ship.setCourse(Common::Game::Position(
+        shipCourseInfo.destinationX,
+        shipCourseInfo.destinationY,
+        shipCourseInfo.destinationZ));
+}
+
 void ObjectService::tryCallPlayerShipsFetchedCallback(int shipId)
 {
     auto it = m_playerShips.find(shipId);

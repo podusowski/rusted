@@ -68,7 +68,14 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
     procedureEntityChangeCourse(*connection1, 1, 2, 1, 1);
 
     // second player gets notified
-    connection2->receive<Common::Messages::EntityChangeCourseReq>();
+    auto shipCourseInfo = connection2->receive<Common::Messages::ShipCourseInfo>();
+    EXPECT_EQ(1, shipCourseInfo->objectId);
+    EXPECT_EQ(1, shipCourseInfo->positionX);
+    EXPECT_EQ(1, shipCourseInfo->positionY);
+    EXPECT_EQ(1, shipCourseInfo->positionZ);
+    EXPECT_EQ(2, shipCourseInfo->destinationX);
+    EXPECT_EQ(1, shipCourseInfo->destinationY);
+    EXPECT_EQ(1, shipCourseInfo->destinationZ);
 }
 
 TEST_F(ShipSct, ChangeShipCourseAnotherPlayerWasConnectedEarlier)
