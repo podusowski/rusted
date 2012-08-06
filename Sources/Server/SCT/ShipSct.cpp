@@ -16,23 +16,37 @@ public:
     void procedureEntityChangeCourse(SCT::Connection & connection, int entityId, int x, int y, int z);
 };
 
-TEST_F(ShipSct, testEntityChangeCourseReq)
+TEST_F(ShipSct, ChangeShipCourse)
 {
-    SCT::PreconditionPlayerLoggedIn precondition;
-    SCT::Connection & connection = precondition.getConnection();
+	SCT::Component component("SampleDataBase.xml");
+    component.start();
 
-    auto entityGetInfoRespA = procedureEntityGetInfo(connection, 1);
-    Common::Messages::ShipInfo & entitiesGetInfoResp = dynamic_cast<Common::Messages::ShipInfo&>(*entityGetInfoRespA);
-    EXPECT_TRUE(1 == entitiesGetInfoResp.player_id);
-    EXPECT_TRUE(1 == entitiesGetInfoResp.x);
-    EXPECT_TRUE(1 == entitiesGetInfoResp.y);
-    EXPECT_TRUE(1 == entitiesGetInfoResp.z);
+    auto connection = authorizeUser(component, "user1", "password");
 
-    procedureEntityChangeCourse(connection, 1, 2, 1, 1);
+    // make sure the ships is where we want it to be
+    Common::Messages::GetObjectInfo getObjectInfo;
+    getObjectInfo.id = 1;
+
+    connection->send(getObjectInfo);
+
+    auto shipInfo = connection->receive<Common::Messages::ShipInfo>();
+    EXPECT_EQ(1, shipInfo->player_id);
+    EXPECT_EQ(1, shipInfo->x);
+    EXPECT_EQ(1, shipInfo->y);
+    EXPECT_EQ(1, shipInfo->z);
+
+    // change course
+    Common::Messages::EntityChangeCourseReq entityChangeCourseReq;
+    entityChangeCourseReq.entityId = 1;
+    entityChangeCourseReq.courseX = 2;
+    entityChangeCourseReq.courseY = 1;
+    entityChangeCourseReq.courseZ = 1;
+    connection->send(entityChangeCourseReq);
 
     Cake::Threading::Thread::wait(2.0);
 
-    auto shipInfo2 = procedureEntityGetInfo(connection, 1);
+    connection->send(getObjectInfo);
+    auto shipInfo2 = connection->receive<Common::Messages::ShipInfo>();
     EXPECT_TRUE(1 == shipInfo2->player_id);
     EXPECT_TRUE(2 == shipInfo2->x);
     EXPECT_TRUE(1 == shipInfo2->y);

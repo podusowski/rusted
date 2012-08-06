@@ -72,6 +72,20 @@ Ship
     <param type="int32" name="attackedId" />
 </message>
 
+<message id="ShipCourseInfo">
+    <param type="int32" name="objectId" />
+
+    <param type="int32" name="positionX" />
+    <param type="int32" name="positionY" />
+    <param type="int32" name="positionZ" />
+
+    <param type="int32" name="destinationX" />
+    <param type="int32" name="destinationY" />
+    <param type="int32" name="destinationZ" />
+
+    <param type="int32" name="startTimeSeconds" />
+</message>
+
 <!--
 static objects
 -->
