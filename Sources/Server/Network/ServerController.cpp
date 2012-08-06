@@ -59,7 +59,8 @@ int ServerController::start()
 
 void ServerController::gc()
 {
-    for (auto it = m_connections.begin(); it != m_connections.end(); it++)
+    auto it = m_connections.begin();
+    while (it != m_connections.end())
     {
         if (not (*it)->getThread().isRunning())
         {
@@ -67,6 +68,10 @@ void ServerController::gc()
 
             m_playerContainer.remove((*it)->getConnection());
             it = m_connections.erase(it);
+        }
+        else
+        {
+            ++it;
         }
     }
 }
