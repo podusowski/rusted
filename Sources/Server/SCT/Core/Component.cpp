@@ -85,7 +85,16 @@ void Component::start()
         LOG_INFO << "Running \"" << filename << "\", pid: " << m_pid;
     }
 
-    Cake::Threading::Thread::wait(0, 500);
+    // usefull for valgrind
+    if (getenv("SERVER_SCT_WAIT_FOR_APP_TIME"))
+    {
+        unsigned seconds = boost::lexical_cast<unsigned>(getenv("SERVER_SCT_WAIT_FOR_APP_TIME"));
+        Cake::Threading::Thread::wait(seconds);
+    }
+    else
+    {
+        Cake::Threading::Thread::wait(0, 500);
+    }
 
     #if 0
     for (int i = 0; i < 100; i++)
