@@ -59,6 +59,8 @@ void ObjectService::handle(const Common::Messages::PlayerEntitiesStatusResp & pl
     }
 }
 
+// FIXME: when ship is currently on some course and we update it with ShipInfo,
+//        it will stop at currect position
 void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
 {
     if (m_universe.has(shipInfo.id))
