@@ -47,10 +47,6 @@ Ship
 	</list>
 </message>
 
-<message id="EntityGetInfoReq">
-	<param type="int32" name="id" />
-</message>
-
 <message id="ShipInfo">
 	<param type="int32" name="id" />
 	<param type="int32" name="player_id" description="id of the player owning this entity" />
