@@ -39,6 +39,9 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
 
     auto shipInfo = connection1->receive<Common::Messages::ShipInfo>();
     EXPECT_EQ(100, shipInfo->integrity);
+
+    // client should receive info about ship's course
+    auto shipCourseInfo = connection1->receive<Common::Messages::ShipCourseInfo>();
 }
 
 TEST(ObjectsSct, GetObjectInfo_StaticObject)

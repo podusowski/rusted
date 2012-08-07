@@ -39,6 +39,11 @@ TEST_F(AttackTest, AttackOtherShip)
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipInfo))
                 )).Times(1);
 
+    // this might be a little overhead but it's simple and might be useful later
+    EXPECT_CALL(connection, send(
+                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipCourseInfo))
+                )).Times(1);
+
     // doesn't matter if this is called, might be cached or something
     // the thing is what to return if it's called
     ON_CALL(selectedShip, getIntegrity()).WillByDefault(Return(100));

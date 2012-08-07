@@ -34,6 +34,7 @@ TEST_F(ShipSct, ChangeShipCourse)
     EXPECT_EQ(1, shipInfo->x);
     EXPECT_EQ(1, shipInfo->y);
     EXPECT_EQ(1, shipInfo->z);
+    connection->receive<Common::Messages::ShipCourseInfo>();
 
     // change course
     Common::Messages::EntityChangeCourseReq entityChangeCourseReq;

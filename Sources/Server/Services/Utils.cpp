@@ -20,7 +20,9 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
 
     if (IS(object, Ship))
     {
-         sendShipInfo(dynamic_cast<Ship&>(object), connection);
+        auto & ship = dynamic_cast<Ship&>(object);
+        sendShipInfo(ship, connection);
+        sendShipCourseInfo(ship, connection);
     }
     else if (IS(object, StaticObject))
     {
@@ -36,6 +38,26 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
     }
 
     #undef IS
+}
+
+void Utils::sendShipCourseInfo(Common::Game::Object::Ship & ship, Network::IConnection & connection)
+{
+    auto course = ship.getCourse();
+
+    Common::Messages::ShipCourseInfo shipCourseInfo;
+    shipCourseInfo.objectId = ship.getId();
+
+    shipCourseInfo.positionX = course.start.getX();
+    shipCourseInfo.positionY = course.start.getY();
+    shipCourseInfo.positionZ = course.start.getZ();
+
+    shipCourseInfo.destinationX = course.destination.getX();
+    shipCourseInfo.destinationY = course.destination.getY();
+    shipCourseInfo.destinationZ = course.destination.getZ();
+
+    shipCourseInfo.startTimeSeconds = course.startTime.getSeconds();
+
+    connection.send(shipCourseInfo);
 }
 
 void Utils::sendShipInfo(Common::Game::Object::Ship & ship, Network::IConnection & connection)
