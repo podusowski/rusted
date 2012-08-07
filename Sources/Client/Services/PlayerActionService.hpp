@@ -21,13 +21,15 @@ namespace Services
 class PlayerActionService : public AbstractService<PlayerActionService> 
 {
 public:
+    typedef boost::function<void(std::vector<boost::tuple<int, std::string> >)> AvailableActionsFetchedCallback;
+
     PlayerActionService(Network::IConnection &, Game::PlayerInfo &, Common::Game::Universe &);
 
     void focusObject(Common::Game::Object::ObjectBase &);
     Common::Game::Object::ObjectBase & getFocusedObject();
     void setFocusedObjectCourse(Common::Game::Position);
     void selectObject(Common::Game::Object::ObjectBase &);
-    void fetchAvailableActions();
+    void fetchAvailableActions(AvailableActionsFetchedCallback);
     void executeAction(unsigned actionId);
 
     void handle(const Common::Messages::AvailableActions &);
@@ -42,6 +44,8 @@ private:
 
     boost::optional<Common::Game::Object::ObjectBase *> m_focusedObject;
     boost::optional<Common::Game::Object::ObjectBase *> m_selectedObject;
+
+    AvailableActionsFetchedCallback m_availableActionsFetchedCallback;
 };
 
 }
