@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MyGUI type="Layout" version="3.2.0">
 
-    <Widget type="Widget" skin="PanelSkin" position_real="0.10 0.10 0.35 0.10" layer="Main">
+    <Widget type="Widget" skin="PanelSkin" position_real="0.01 0.01 0.29 0.10" layer="Main">
         <Widget type="TextBox" skin="TextBox" name="NavigationTextBox" position_real="0.10 0.10 0.80 0.80">
             <Property key="Caption" value="Navigation"/>
         </Widget>
     </Widget>
 
-    <Widget type="Widget" skin="PanelSkin" position_real="0.55 0.10 0.35 0.10" layer="Main">
+    <Widget type="Widget" skin="PanelSkin" position_real="0.70 0.01 0.29 0.10" layer="Main">
         <Widget type="TextBox" skin="TextBox" name="TargetTextBox" position_real="0.10 0.10 0.80 0.80">
             <Property key="Caption" value="<no target>"/>
         </Widget>
     </Widget>
 
-    <Widget type="Widget" skin="PanelSkin" position_real="0.10 0.80 0.80 0.10" layer="Main">
-        <Widget name="Action1Button" type="Button" skin="Button" position_real="0.10 0.10 0.10 0.80" layer="Main">
+    <Widget type="Widget" position_real="0.01 0.11 0.10 0.88" layer="Main">
+        <Widget name="Action1Button" type="Button" skin="Button" position_real="0.01 0.01 0.98 0.10" layer="Main">
             <Property key="Caption" value="action1"/>
         </Widget>
     </Widget>
