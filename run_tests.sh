@@ -6,14 +6,18 @@ FONT_RESET="\033[0;m"
 
 verbose=0
 compile=0
+memcheck=0
 
-while getopts 'vc' opt; do
+while getopts 'vcm' opt; do
     case $opt in
         v)
             verbose=1
             ;;
         c)
             compile=1
+            ;;
+        m)
+            memcheck=1
             ;;
     esac
 done
@@ -34,10 +38,15 @@ function run_test()
     stdout=`tempfile`
     stderr=`tempfile`
 
+    if [ $memcheck = "1" ]; then
+        valgrind_log_file="valgrind-memcheck-$test_name.log"
+        binary_wrapper="valgrind --tool=memcheck --log-file=$valgrind_log_file"
+    fi
+
     if [ $verbose = "1" ]; then
-        LD_LIBRARY_PATH=. ./$test_name
+        LD_LIBRARY_PATH=. $binary_wrapper ./$test_name
     else
-        LD_LIBRARY_PATH=. ./$test_name > $stdout 2> $stderr
+        LD_LIBRARY_PATH=. $binary_wrapper ./$test_name > $stdout 2> $stderr
     fi
 
     if [ "$?" = "0" ]; then
