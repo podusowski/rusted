@@ -25,7 +25,6 @@ public:
     void handle(const Common::Messages::PlayerEntitiesStatusResp &);
     void handle(const Common::Messages::ShipInfo &);
     void handle(const Common::Messages::StaticObjectInfoResp &);
-    void handle(const Common::Messages::EntityChangeCourseReq &);
     void handle(const Common::Messages::ShipCourseInfo &);
 
     void handle(const Common::Messages::AbstractMessage &) {}
