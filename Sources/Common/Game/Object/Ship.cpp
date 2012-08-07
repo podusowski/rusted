@@ -16,7 +16,8 @@ Position Ship::getPosition()
 
 void Ship::setPosition(const Position & position)
 {
-    m_course.destination= position;
+    m_course.start = position;
+    m_course.destination = position;
     m_position = position;
 }
 

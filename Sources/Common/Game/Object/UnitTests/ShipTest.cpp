@@ -192,4 +192,20 @@ TEST_F(ShipTest, MakeCourseFromCourseObject)
     Mock::VerifyAndClear(&getRustedTimeStub());
 }
 
+TEST_F(ShipTest, SetPositionIsResetingTheCourse)
+{
+    Common::Game::Object::Ship ship;
+    ship.setPosition(Common::Game::Position(10, 20, 30));
+
+    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
+    auto course = ship.getCourse();
+
+    EXPECT_EQ(10, course.start.getX());
+    EXPECT_EQ(20, course.start.getY());
+    EXPECT_EQ(30, course.start.getZ());
+
+    EXPECT_EQ(10, course.destination.getX());
+    EXPECT_EQ(20, course.destination.getY());
+    EXPECT_EQ(30, course.destination.getZ());
+}
 
