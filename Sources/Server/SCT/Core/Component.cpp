@@ -34,6 +34,7 @@ Component::~Component()
     LOG_INFO << "Killing application, pid: " << m_pid;
 
     ::kill(m_pid, 15);
+    Cake::Threading::Thread::wait(0, 500);
 }
 
 void Component::setConfigValue(const std::string & name, const std::string & value)
