@@ -12,7 +12,6 @@ using namespace Common::Messages;
 class ShipSct : public testing::Test 
 {
 public:
-    boost::shared_ptr<Common::Messages::ShipInfo> procedureEntityGetInfo(SCT::Connection & connection, int entityId);
     void procedureEntityChangeCourse(SCT::Connection & connection, int entityId, int x, int y, int z);
 };
 
@@ -112,20 +111,6 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerWasConnectedEarlier)
     procedureEntityChangeCourse(*connection, 1, 2, 1, 1);
 
     Cake::Threading::Thread::wait(0, 500);
-}
-
-boost::shared_ptr<Common::Messages::ShipInfo> ShipSct::procedureEntityGetInfo(
-    SCT::Connection & connection, 
-    int entityId)
-{
-    Common::Messages::EntityGetInfoReq entityGetInfoReq;
-    entityGetInfoReq.id = entityId;
-
-    connection.send(entityGetInfoReq);
-
-    auto shipInfo = connection.receive<Common::Messages::ShipInfo>();
-
-    return shipInfo;
 }
 
 void ShipSct::procedureEntityChangeCourse(
