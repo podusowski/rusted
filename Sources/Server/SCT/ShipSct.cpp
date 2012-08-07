@@ -65,6 +65,11 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
     boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
 
+    // we will need this later
+    Common::Messages::RustedTimeEpochReq rustedTimeEpochReq;
+    connection1->send(rustedTimeEpochReq);
+    auto rustedTimeEpochResp = connection1->receive<Common::Messages::RustedTimeEpochResp>();
+
     procedureEntityChangeCourse(*connection1, 1, 2, 1, 1);
 
     // second player gets notified
@@ -76,6 +81,12 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
     EXPECT_EQ(2, shipCourseInfo->destinationX);
     EXPECT_EQ(1, shipCourseInfo->destinationY);
     EXPECT_EQ(1, shipCourseInfo->destinationZ);
+
+    // start time should be more or less (1 seconds) equal to epoch received earlier
+    EXPECT_TRUE(
+        rustedTimeEpochResp->time <= shipCourseInfo->startTimeSeconds && 
+        rustedTimeEpochResp->time + 1 >= shipCourseInfo->startTimeSeconds
+    );
 }
 
 TEST_F(ShipSct, ChangeShipCourseAnotherPlayerWasConnectedEarlier)

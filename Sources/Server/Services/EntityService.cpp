@@ -47,6 +47,8 @@ void EntityService::handle(const Common::Messages::EntityChangeCourseReq & chang
     shipCourseInfo.destinationY = course.destination.getY();
     shipCourseInfo.destinationZ = course.destination.getZ();
 
+    shipCourseInfo.startTimeSeconds = course.startTime.getSeconds();
+
     std::vector<Network::IConnection *> connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
     for (std::vector<Network::IConnection *>::iterator it = connections.begin(); it != connections.end(); it++)
     {
