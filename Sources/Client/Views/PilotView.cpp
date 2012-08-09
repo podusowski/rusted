@@ -21,7 +21,7 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
 void PilotView::activate()
 {
     m_input.addMouseListener(*this);
-
+    m_playerActionService.fetchAvailableActions(boost::bind(&PilotView::availableActionsFetched, this, _1));
     m_gui->findWidget<MyGUI::Widget>("Action1Button")->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
 }
 
@@ -91,5 +91,14 @@ void PilotView::actionClicked(MyGUI::Widget *)
     LOG_DEBUG << "Action clicked";
 
     m_playerActionService.executeAction(1);
+}
+
+void PilotView::availableActionsFetched(std::vector<boost::tuple<int, std::string> > actions)
+{
+    LOG_DEBUG << "Got actions";
+    for (auto & action: actions)
+    {
+        LOG_DEBUG << "  " << action.get<0>() << "/" << action.get<1>();
+    }
 }
 

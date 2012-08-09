@@ -35,6 +35,7 @@ public:
 
 private:
     void actionClicked(MyGUI::Widget *);
+    void availableActionsFetched(std::vector<boost::tuple<int, std::string> >);
 
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;

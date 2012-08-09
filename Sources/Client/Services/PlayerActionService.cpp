@@ -84,4 +84,9 @@ void PlayerActionService::executeAction(unsigned actionId)
 void PlayerActionService::handle(const Common::Messages::AvailableActions & availableActions)
 {
     LOG_DEBUG << "Got available actions";
+
+    if (m_availableActionsFetchedCallback)
+    {
+        m_availableActionsFetchedCallback(availableActions.actions);
+    }
 }
