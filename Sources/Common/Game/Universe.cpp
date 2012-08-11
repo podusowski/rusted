@@ -10,6 +10,8 @@ void Universe::add(boost::shared_ptr<Object::ObjectBase> object)
 {
     LOG_DEBUG << "Adding " << TYPENAME(*object) << " with id: " << object->getId();
 
+    m_idGenerator.reserve(object->getId());
+
     auto ret = m_objects.insert(std::make_pair(object->getId(), object));
 
     if (not ret.second)
@@ -19,6 +21,11 @@ void Universe::add(boost::shared_ptr<Object::ObjectBase> object)
 
     if (m_objectAddedCallback)
         m_objectAddedCallback(*object);
+}
+
+unsigned Universe::reserveId()
+{
+    return m_idGenerator.generate();
 }
 
 bool Universe::has(unsigned id)

@@ -8,6 +8,7 @@
 
 #include "Game/Object/ObjectBase.hpp"
 #include "Game/Object/OwnedObjectBase.hpp"
+#include "Game/Utilities/IdGenerator.hpp"
 
 namespace Common
 {
@@ -21,6 +22,8 @@ public:
     typedef boost::function<void(Common::Game::Object::ObjectBase &)> ObjectAddedCallback;
 
     void add(boost::shared_ptr<Object::ObjectBase> object);
+
+    unsigned reserveId();
 
     bool has(unsigned id);
 
@@ -101,6 +104,7 @@ public:
 private:
     std::map<unsigned, boost::shared_ptr<Object::ObjectBase> > m_objects;
     ObjectAddedCallback m_objectAddedCallback;
+    Common::Game::Utilities::IdGenerator m_idGenerator;
 };
 
 }
