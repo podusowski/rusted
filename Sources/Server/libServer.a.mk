@@ -17,6 +17,7 @@ SOURCES+=Game/UniverseLoader.cpp
 SOURCES+=Game/Player.cpp
 SOURCES+=Game/PlayerContainer.cpp
 SOURCES+=Game/Actions/Attack.cpp
+SOURCES+=Game/Actions/BuildShip.cpp
 SOURCES+=Game/Actions/ActionBuilder.cpp
 SOURCES+=DataBase/DataBase.cpp
 SOURCES+=DataBase/DataBaseNode.cpp
