@@ -209,3 +209,8 @@ TEST_F(ShipTest, SetPositionIsResetingTheCourse)
     EXPECT_EQ(30, course.destination.getZ());
 }
 
+TEST_F(ShipTest, DefaultIntegrity)
+{
+    Common::Game::Object::Ship ship;
+    EXPECT_EQ(100, ship.getIntegrity());
+}

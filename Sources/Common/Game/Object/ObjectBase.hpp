@@ -15,7 +15,7 @@ namespace Object
 class ObjectBase
 {
 public:
-    ObjectBase() : m_id(0), m_integrity(0) {}
+    ObjectBase() : m_id(0), m_integrity(100) {}
 
     unsigned getId() { return m_id; }
     void setId(unsigned id) { m_id = id; }
