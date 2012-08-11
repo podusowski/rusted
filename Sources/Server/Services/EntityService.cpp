@@ -85,12 +85,22 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
     auto & player = m_playerContainer.getBy(connection);
     auto & focusedObject = player.getFocusedObject();
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(focusedObject);
-    auto & selectedObject = player.getSelectedObject();
+
+    Common::Game::Object::ObjectBase * selectedObject = nullptr;
+
+    // FIXME: you know what :)
+    try
+    {
+        selectedObject = &(player.getSelectedObject());
+    }
+    catch (...)
+    {
+    }
 
     LOG_DEBUG << "Player " << player.getId() << " is executing action " << executeAction.id << " with " << focusedObject << " on " << selectedObject;
 
     Server::Game::Actions::ActionBuilder actionBuilder;
-    auto action = actionBuilder.build(connection, m_playerContainer, m_universe, executeAction.id, focusedShip, &selectedObject);
+    auto action = actionBuilder.build(connection, m_playerContainer, m_universe, executeAction.id, focusedShip, selectedObject);
     action->execute();
 }
 

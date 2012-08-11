@@ -26,12 +26,12 @@ void BuildShip::execute()
     ship.setPosition(focusedObjectPosition);
     ship.setCourse(focusedObjectPosition + Common::Game::Position(10, 10, 0));
 
+    m_universe.add(object);
+
     auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
         m_servicesUtils.sendObjectInfo(ship, *connection);
     }
-
-    m_universe.add(object);
 }
 

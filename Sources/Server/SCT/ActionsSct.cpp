@@ -26,7 +26,7 @@ TEST(ActionsSct, FetchAvailableActions)
     Common::Messages::FetchAvailableActions fetchAvailableActions;
     connection1->send(fetchAvailableActions);
 
-    // currently there is one hardcoded action
+    // currently actions are hardcoded
     auto availableActions = connection1->receive<Common::Messages::AvailableActions>();
     EXPECT_EQ(1, availableActions->actions.size());
     EXPECT_EQ(1, availableActions->actions[0].get<0>());
@@ -69,5 +69,30 @@ TEST(ActionsSct, AttackObject)
     // other player should also get this stuff
     connection2->receive<Common::Messages::AttackObject>();
     connection2->receive<Common::Messages::ShipInfo>();
+}
+
+TEST(ActionsSct, BuildShip)
+{
+    SCT::Component component("SampleDataBase.xml");
+    component.start();
+
+    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+
+    // client has to focus its own object 
+    Common::Messages::FocusObject focusObject;
+    focusObject.id = 1;
+    connection1->send(focusObject);
+
+    // execute hardcoded action 2 - buildship
+    Common::Messages::ExecuteAction executeAction;
+    executeAction.id = 2;
+    connection1->send(executeAction);
+
+    connection1->receive<Common::Messages::ShipInfo>();
+    connection1->receive<Common::Messages::ShipCourseInfo>();
+
+    connection2->receive<Common::Messages::ShipInfo>();
+    connection2->receive<Common::Messages::ShipCourseInfo>();
 }
 

@@ -1,5 +1,6 @@
 #include "ActionBuilder.hpp"
 #include "Attack.hpp"
+#include "BuildShip.hpp"
 
 using namespace Server::Game::Actions;
 
@@ -15,13 +16,22 @@ boost::shared_ptr<IAction> ActionBuilder::build(
 
     switch (id)
     {
-    case 1:
-        assert(selectedObject);
-        ret = boost::shared_ptr<IAction>(new Attack(playerContainer, focusedShip, *selectedObject));
-        break;
+        case 1:
+        {
+            assert(selectedObject);
+            ret = boost::shared_ptr<IAction>(new Attack(playerContainer, focusedShip, *selectedObject));
+            break;
+        }
 
-    default:
-        LOG_WARN << "Unknown action: " << id;
+        case 2:
+        {
+            auto & player = playerContainer.getBy(connection);
+            ret = boost::shared_ptr<IAction>(new BuildShip(universe, player, playerContainer));
+            break;
+        }
+
+        default:
+            throw std::runtime_error("unknown action");
     }
 
     if (ret)
