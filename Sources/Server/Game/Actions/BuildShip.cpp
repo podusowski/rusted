@@ -5,9 +5,10 @@
 
 using namespace Server::Game::Actions;
 
-BuildShip::BuildShip(Common::Game::Universe & universe, Server::Game::IPlayer & player) : 
+BuildShip::BuildShip(Common::Game::Universe & universe, Server::Game::IPlayer & player, Server::Game::IPlayerContainer & playerContainer) : 
     m_universe(universe),
-    m_player(player)
+    m_player(player),
+    m_playerContainer(playerContainer)
 {
 }
 
@@ -16,7 +17,15 @@ void BuildShip::execute()
     boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
     Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship &>(*object);
 
+    ship.setId(0);
     ship.setOwnerId(m_player.getId());
+
+    auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
+    for (auto connection: connections)
+    {
+        m_servicesUtils.sendObjectInfo(ship, *connection);
+    }
 
     m_universe.add(object);
 }
+

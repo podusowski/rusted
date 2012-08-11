@@ -32,7 +32,7 @@ public:
     void setSpeed(unsigned speed);
     void setIntegrity(unsigned); //override;
 
-    Course getCourse();
+    virtual Course getCourse();
 
 private:
     Position calculatePosition(TimeValue time);

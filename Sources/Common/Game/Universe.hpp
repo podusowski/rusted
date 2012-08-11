@@ -23,8 +23,6 @@ public:
 
     void add(boost::shared_ptr<Object::ObjectBase> object);
 
-    unsigned reserveId();
-
     bool has(unsigned id);
 
     template<class ObjectType> ObjectType & getById(unsigned id)
