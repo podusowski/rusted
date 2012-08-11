@@ -98,11 +98,15 @@ void PilotView::availableActionsFetched(std::vector<boost::tuple<int, std::strin
     auto * actionsPanel = m_gui->findWidget<MyGUI::Widget>("ActionsPanel");
 
     LOG_DEBUG << "Got actions";
+
+    int buttonTop = 0;
     for (auto & action: actions)
     {
         LOG_DEBUG << "  " << action.get<0>() << "/" << action.get<1>();
 
-        auto * actionButton = actionsPanel->createWidget<MyGUI::Button>("Button", MyGUI::IntCoord(0, 0, 50, 50), MyGUI::Align::Default);
+        auto * actionButton = actionsPanel->createWidget<MyGUI::Button>("Button", MyGUI::IntCoord(0, buttonTop, 50, 50), MyGUI::Align::Default);
+        buttonTop += 50;
+
         actionButton->setCaption(action.get<1>());
         actionButton->setUserData(action.get<0>());
         actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
