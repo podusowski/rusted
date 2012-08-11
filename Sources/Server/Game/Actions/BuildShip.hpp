@@ -12,7 +12,7 @@ namespace Actions
 class BuildShip : public IAction
 {
 public:
-    BuildShip(Player &);
+    BuildShip();
     void execute();
 };
 
