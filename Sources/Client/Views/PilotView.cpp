@@ -22,7 +22,6 @@ void PilotView::activate()
 {
     m_input.addMouseListener(*this);
     m_playerActionService.fetchAvailableActions(boost::bind(&PilotView::availableActionsFetched, this, _1));
-    m_gui->findWidget<MyGUI::Widget>("Action1Button")->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
 }
 
 void PilotView::deactivate()
@@ -86,19 +85,27 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
     }
 }
 
-void PilotView::actionClicked(MyGUI::Widget *)
+void PilotView::actionClicked(MyGUI::Widget * widget)
 {
     LOG_DEBUG << "Action clicked";
 
-    m_playerActionService.executeAction(1);
+    int * actionId = widget->getUserData<int>();
+    m_playerActionService.executeAction(*actionId);
 }
 
 void PilotView::availableActionsFetched(std::vector<boost::tuple<int, std::string> > actions)
 {
+    auto * actionsPanel = m_gui->findWidget<MyGUI::Widget>("ActionsPanel");
+
     LOG_DEBUG << "Got actions";
     for (auto & action: actions)
     {
         LOG_DEBUG << "  " << action.get<0>() << "/" << action.get<1>();
+
+        auto * actionButton = actionsPanel->createWidget<MyGUI::Button>("Button", MyGUI::IntCoord(0, 0, 50, 50), MyGUI::Align::Default);
+        actionButton->setCaption(action.get<1>());
+        actionButton->setUserData(action.get<0>());
+        actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
     }
 }
 

@@ -13,10 +13,7 @@
         </Widget>
     </Widget>
 
-    <Widget type="Widget" position_real="0.01 0.11 0.10 0.88" layer="Main">
-        <Widget name="Action1Button" type="Button" skin="Button" position_real="0.01 0.01 0.98 0.10" layer="Main">
-            <Property key="Caption" value="action1"/>
-        </Widget>
+    <Widget type="Widget" position_real="0.01 0.11 0.10 0.88" layer="Main" name="ActionsPanel">
     </Widget>
 </MyGUI>
 
