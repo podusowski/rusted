@@ -11,6 +11,7 @@ SOURCES+=RustedCodec/CakeWriteBuffer.cpp
 SOURCES+=RustedCodec/CakeReadBuffer.cpp
 SOURCES+=Game/RustedTime.cpp
 SOURCES+=Game/Utilities/PasswordHash.cpp
+SOURCES+=Game/Utilities/IdGenerator.cpp
 SOURCES+=Game/Universe.cpp
 SOURCES+=Game/Object/Ship.cpp
 SOURCES+=Game/Object/StaticObject.cpp
