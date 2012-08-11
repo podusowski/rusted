@@ -24,6 +24,7 @@ void BuildShip::execute()
 
     Common::Game::Position focusedObjectPosition = focusedShip.getPosition();
     ship.setPosition(focusedObjectPosition);
+    ship.setCourse(focusedObjectPosition + Common::Game::Position(10, 10, 0));
 
     auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)

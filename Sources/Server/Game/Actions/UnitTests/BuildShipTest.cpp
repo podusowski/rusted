@@ -52,5 +52,6 @@ TEST(BuildShipTest, Build)
 
     // FIXME: this would be cleaner if we mock some factory which creates shipMock
     EXPECT_EQ(focusedShipPosition, newShipCourse.start);
+    EXPECT_EQ(focusedShipPosition + Common::Game::Position(10, 10, 0), newShipCourse.destination);
 }
 
