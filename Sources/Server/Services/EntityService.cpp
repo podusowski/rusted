@@ -77,6 +77,7 @@ void EntityService::handle(const Common::Messages::FetchAvailableActions &, Netw
 {
     Common::Messages::AvailableActions availableActions;
     availableActions.actions.push_back(boost::make_tuple<int, std::string>(1, "attack"));
+    availableActions.actions.push_back(boost::make_tuple<int, std::string>(2, "buildShip"));
     connection.send(availableActions);
 }
 
