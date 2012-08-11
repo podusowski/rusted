@@ -1,19 +1,14 @@
 #pragma once
 
 #include "Common/Game/Object/ObjectBase.hpp"
+#include "IPlayer.hpp"
 
 namespace Server
 {
 namespace Game
 {
 
-enum PlayerState
-{
-    PLAYER_STATE_NEW,
-    PLAYER_STATE_AUTHORIZED
-};
-
-class Player
+class Player : public IPlayer
 {
 public:
     Player();
