@@ -13,6 +13,9 @@ void Universe::add(boost::shared_ptr<Object::ObjectBase> object)
     if (object->getId() == 0)
     {
         unsigned id = m_idGenerator.generate();
+
+        LOG_DEBUG << "Object has invalid id, assigning new one: " << id;
+
         object->setId(id);
     }
     else
