@@ -17,6 +17,7 @@ void BuildShip::execute()
     boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
     Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship &>(*object);
 
+    // FIXME: this is "invalid id", Universe will generate one when this object is added
     ship.setId(0);
     ship.setOwnerId(m_player.getId());
 
