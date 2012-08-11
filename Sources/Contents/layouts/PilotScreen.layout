@@ -21,6 +21,7 @@
 
     <Widget type="Window" skin="Window" position_real="0.90 0.11 0.09 0.60" layer="Main">
         <Property key="Caption" value="My ships"/>
+        <Widget type="ListBox" name="ShipListBox" skin="ListBox" position_real="0 0 1 1"/>
     </Widget>
 </MyGUI>
 

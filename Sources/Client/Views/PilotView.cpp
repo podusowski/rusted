@@ -9,12 +9,16 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
                      Input::IInput & input, 
                      Services::PlayerActionService & playerActionService,
                      Services::ObjectService & objectService,
-                     Client::Gui::Gui & gui) :
+                     Client::Gui::Gui & gui,
+                     Common::Game::Universe & universe,
+                     Game::PlayerInfo & playerInfo) :
     m_graphics(graphics),
     m_input(input),
     m_playerActionService(playerActionService),
     m_objectService(objectService),
-    m_gui(gui)
+    m_gui(gui),
+    m_universe(universe),
+    m_playerInfo(playerInfo)
 {
 }
 
@@ -22,6 +26,7 @@ void PilotView::activate()
 {
     m_input.addMouseListener(*this);
     m_playerActionService.fetchAvailableActions(boost::bind(&PilotView::availableActionsFetched, this, _1));
+    m_objectService.fetchPlayerShips(boost::bind(&PilotView::playerShipsFetched, this));
 }
 
 void PilotView::deactivate()
@@ -110,6 +115,21 @@ void PilotView::availableActionsFetched(std::vector<boost::tuple<int, std::strin
         actionButton->setCaption(action.get<1>());
         actionButton->setUserData(action.get<0>());
         actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
+    }
+}
+
+void PilotView::playerShipsFetched()
+{
+    LOG_DEBUG << "Got player ships";
+
+    MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
+
+    auto ships = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_playerInfo.getId());
+    for (auto ship: ships)
+    {
+        std::stringstream ss;
+        ss << "My ship " << ship->getId();
+        shipListBox->addItem(ss.str(), MyGUI::Any(ship->getId()));
     }
 }
 

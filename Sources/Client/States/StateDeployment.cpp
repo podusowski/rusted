@@ -18,7 +18,7 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
     m_objectService(connection, m_universe),
 
     m_objectsView(m_objectService, m_playerActionService, graphics, input, gui, m_universe),
-    m_pilotView(graphics, input, m_playerActionService, m_objectService, gui),
+    m_pilotView(graphics, input, m_playerActionService, m_objectService, gui, m_universe, m_playerInfo),
 
     m_pilotState(m_stateManager, graphics, gui, m_playerActionService, m_objectsView, m_pilotView),
     m_entitySelect(m_stateManager, gui, connection, m_playerActionService, m_objectService, m_pilotState, m_universe, m_playerInfo),

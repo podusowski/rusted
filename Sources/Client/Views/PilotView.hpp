@@ -20,7 +20,9 @@ public:
               Input::IInput &, 
               Services::PlayerActionService &,
               Services::ObjectService &,
-              Gui::Gui &);
+              Gui::Gui &,
+              Common::Game::Universe &,
+              Client::Game::PlayerInfo &);
 
     void activate();
     void deactivate();
@@ -36,12 +38,15 @@ public:
 private:
     void actionClicked(MyGUI::Widget *);
     void availableActionsFetched(std::vector<boost::tuple<int, std::string> >);
+    void playerShipsFetched();
 
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;
     Services::PlayerActionService & m_playerActionService;
     Services::ObjectService & m_objectService;
     Gui::Gui & m_gui;
+    Common::Game::Universe & m_universe;
+    Game::PlayerInfo & m_playerInfo;
 };
 
 }
