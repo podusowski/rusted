@@ -30,6 +30,7 @@ TEST_F(AttackTest, AttackOtherShip)
 
     ON_CALL(focusedShip, getCourse()).WillByDefault(Return(Common::Game::Object::Course()));
     ON_CALL(selectedShip, getCourse()).WillByDefault(Return(Common::Game::Object::Course()));
+    ON_CALL(selectedShip, getPosition()).WillByDefault(Return(Common::Game::Position()));
 
     std::vector<Server::Network::IConnection *> allConnections{&connection};
     ON_CALL(playerContainer, getAllConnections(_)).WillByDefault(Return(allConnections));

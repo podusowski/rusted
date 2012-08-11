@@ -16,10 +16,14 @@ void BuildShip::execute()
 {
     boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
     Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship &>(*object);
+    Common::Game::Object::Ship & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
 
     // FIXME: this is "invalid id", Universe will generate one when this object is added
     ship.setId(0);
     ship.setOwnerId(m_player.getId());
+
+    Common::Game::Position focusedObjectPosition = focusedShip.getPosition();
+    ship.setPosition(focusedObjectPosition);
 
     auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)

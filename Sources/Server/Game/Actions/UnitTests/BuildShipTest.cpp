@@ -19,8 +19,10 @@ TEST(BuildShipTest, Build)
     Server::Network::ConnectionMock connection;
     Server::Game::PlayerContainerMock playerContainer;
 
-    Common::Game::Object::Course focusedShipCourse;
-    ON_CALL(focusedShip, getCourse()).WillByDefault(Return(focusedShipCourse));
+    Common::Game::Position focusedShipPosition(10, 20, 30);
+    ON_CALL(focusedShip, getPosition()).WillByDefault(Return(focusedShipPosition));
+
+    ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(focusedShip));
 
     std::vector<Server::Network::IConnection *> allConnections{&connection};
     ON_CALL(playerContainer, getAllConnections(_)).WillByDefault(Return(allConnections));
@@ -48,6 +50,7 @@ TEST(BuildShipTest, Build)
     // we want new ship to fly a bit further from focused ship
     Common::Game::Object::Course newShipCourse = ship.getCourse();
 
-    EXPECT_EQ(focusedShipCourse.start.getX(), newShipCourse.start.getX());
+    // FIXME: this would be cleaner if we mock some factory which creates shipMock
+    EXPECT_EQ(focusedShipPosition, newShipCourse.start);
 }
 

@@ -25,7 +25,7 @@ class Ship : public ObjectBase, public IFlyableObject, public OwnedObjectBase
 {
 public:
     Ship();
-    Position getPosition();
+    virtual Position getPosition();
     void setPosition(const Position &);
     void setCourse(Position course);
     void setCourse(Course course);

@@ -14,6 +14,7 @@ namespace Object
 class ShipMock : public Ship
 {
 public:
+    MOCK_METHOD0(getPosition, Position());
     MOCK_METHOD0(getIntegrity, unsigned());
     MOCK_METHOD1(setIntegrity, void(unsigned));
     MOCK_METHOD0(getCourse, Course());
