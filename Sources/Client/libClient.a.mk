@@ -1,7 +1,6 @@
 TARGET:=libClient.a
 TYPE:=static_library
 
-SOURCES+=Engine/Application.cpp
 SOURCES+=Engine/Engine.cpp
 SOURCES+=Graphics/Graphics.cpp
 SOURCES+=Gui/Gui.cpp

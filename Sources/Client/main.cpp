@@ -2,7 +2,7 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
 #include "Common/Game/RustedTime.hpp"
-#include "Engine/Application.hpp"
+#include "Engine/Engine.hpp"
 
 void initDependencies(int argc, const char * argv[])
 {
@@ -21,6 +21,6 @@ int main(int argc, const char * argv[])
 
     LOG_INFO << "This SW version was build on " << __DATE__ << " " << __TIME__;
 
-    Client::Engine::Application application(argc, argv);
-    application.start();
+    Client::Engine::Engine e;
+    e.start();
 }
