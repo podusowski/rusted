@@ -27,6 +27,9 @@ void PilotView::activate()
     m_input.addMouseListener(*this);
     m_playerActionService.fetchAvailableActions(boost::bind(&PilotView::availableActionsFetched, this, _1));
     m_objectService.fetchPlayerShips(boost::bind(&PilotView::playerShipsFetched, this));
+
+    MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
+    shipListBox->eventListChangePosition += MyGUI::newDelegate(this, &PilotView::shipListBoxSelected);
 }
 
 void PilotView::deactivate()
@@ -116,6 +119,16 @@ void PilotView::availableActionsFetched(std::vector<boost::tuple<int, std::strin
         actionButton->setUserData(action.get<0>());
         actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
     }
+}
+
+void PilotView::shipListBoxSelected(MyGUI::ListBox * listBox, size_t index)
+{
+    unsigned * id = listBox->getItemDataAt<unsigned>(index);
+
+    LOG_DEBUG << "Changing focus to: " << *id;
+
+    auto & ship = m_universe.getById<Common::Game::Object::Ship>(*id);
+    m_playerActionService.focusObject(ship);
 }
 
 void PilotView::playerShipsFetched()

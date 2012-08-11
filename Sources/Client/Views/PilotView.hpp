@@ -38,6 +38,7 @@ public:
 private:
     void actionClicked(MyGUI::Widget *);
     void availableActionsFetched(std::vector<boost::tuple<int, std::string> >);
+    void shipListBoxSelected(MyGUI::ListBox *, size_t);
     void playerShipsFetched();
 
     Graphics::IGraphics & m_graphics;
