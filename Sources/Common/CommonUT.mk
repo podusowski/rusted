@@ -8,7 +8,6 @@ SOURCES=UnitTests/mainUT.cpp \
         RustedCodec/UnitTests/RustedAbstractCodecTest.cpp \
 		Messages/UnitTests/MessagesTest.cpp \
 		RustedCodec/UnitTests/AsioBufferTest.cpp \
-		Configuration/UnitTests/ConfigurationTest.cpp \
 		Game/Utilities/UnitTests/PasswordHashTest.cpp \
 
 CFLAGS+=-Wall -pedantic -g

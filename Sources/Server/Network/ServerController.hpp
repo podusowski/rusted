@@ -27,7 +27,7 @@ private:
     std::vector<boost::shared_ptr<ConnectionContext> > m_connections;
     int m_lastConnectionId;
 
-    Common::Configuration::Configuration m_cfg;
+    Cake::Configuration::Configuration m_cfg;
     Server::DataBase::DataBaseFactory m_dbFactory;
     Server::DataBase::DataBase & m_db;
     Server::Game::PlayerContainer m_playerContainer;

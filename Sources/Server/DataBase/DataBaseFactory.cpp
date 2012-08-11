@@ -7,7 +7,7 @@
 
 using namespace Server::DataBase;
 
-DataBaseFactory::DataBaseFactory(Common::Configuration::Configuration & cfg) : m_cfg(cfg)
+DataBaseFactory::DataBaseFactory(Cake::Configuration::Configuration & cfg) : m_cfg(cfg)
 {
 }
 

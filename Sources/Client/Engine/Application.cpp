@@ -2,9 +2,7 @@
 
 using namespace Client::Engine;
 
-Application::Application(int argc, const char * argv[]) :
-    m_cfg(argc, argv),
-    m_engine(m_cfg)
+Application::Application(int argc, const char * argv[])
 {
 }
 

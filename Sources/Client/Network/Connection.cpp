@@ -9,7 +9,7 @@
 using namespace boost::asio;
 using namespace Client::Network;
 
-Connection::Connection(Common::Configuration::Configuration & cfg) : 
+Connection::Connection(Cake::Configuration::Configuration & cfg) : 
     m_cfg(cfg),
     m_socket(io_service)
 {

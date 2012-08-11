@@ -2,11 +2,9 @@
 
 #include <fstream>
 
-#include "Common/Configuration/Configuration.hpp"
+#include "Cake/Configuration/Configuration.hpp"
 #include "DataBase/DataBase.hpp"
 #include "DataBase/DataBaseFactory.hpp"
-
-using namespace Common;
 
 TEST(DataBaseModuleTest, XmlDataBaseRead)
 {
@@ -19,7 +17,7 @@ TEST(DataBaseModuleTest, XmlDataBaseRead)
             "</root>\n";
     db1.flush();
 
-    Common::Configuration::Configuration cfg;
+    Cake::Configuration::Configuration cfg;
     Server::DataBase::DataBaseFactory factory(cfg); 
 
     cfg.setValue("database.provider", "xml");

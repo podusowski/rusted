@@ -6,10 +6,9 @@
 
 using namespace Client::Engine;
 
-Engine::Engine(Common::Configuration::Configuration & cfg) : 
-    m_connection(cfg),
-    m_connectionThread(m_connection),
-    m_cfg(cfg)
+Engine::Engine() : 
+    m_connection(*m_cfg),
+    m_connectionThread(m_connection)
 {
 }
 

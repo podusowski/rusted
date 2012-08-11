@@ -4,8 +4,8 @@
 #include <boost/asio.hpp>
 #include <boost/shared_ptr.hpp>
 
+#include "Cake/Configuration/Configuration.hpp"
 #include "Cake/Threading/IRunnable.hpp"
-#include "Common/Configuration/Configuration.hpp"
 #include "IConnection.hpp"
 #include "IConnectionListener.hpp"
 
@@ -24,7 +24,7 @@ namespace Network
 class Connection : public IConnection, public Cake::Threading::IRunnable
 {
 public:
-    Connection(Common::Configuration::Configuration & cfg);
+    Connection(Cake::Configuration::Configuration & cfg);
 	void run();
     void connect();
     void addListener(IConnectionListener &);
@@ -32,7 +32,7 @@ public:
     void yield();
 
 private:
-    Common::Configuration::Configuration & m_cfg;
+    Cake::Configuration::Configuration & m_cfg;
     boost::asio::io_service io_service;
     tcp::socket m_socket;
     std::vector<IConnectionListener *> m_listeners;

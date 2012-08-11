@@ -1,8 +1,8 @@
 #pragma once
 
 #include "Cake/DependencyInjection/Inject.hpp"
+#include "Cake/Configuration/Configuration.hpp"
 
-#include "Common/Configuration/Configuration.hpp"
 #include "Common/Game/RustedTime.hpp"
 #include "Server/Network/IConnection.hpp"
 
@@ -24,7 +24,7 @@ namespace Services
 class ServiceDeployment : public IServiceDeployment
 {
 public:
-    ServiceDeployment(Common::Configuration::Configuration &, Server::DataBase::DataBase &, Server::Game::PlayerContainer &);
+    ServiceDeployment(Cake::Configuration::Configuration &, Server::DataBase::DataBase &, Server::Game::PlayerContainer &);
     void deployNewConnection(Server::Network::IConnection &);
     void deployAuthorizedConnection(Server::Network::IConnection &);
 

@@ -5,7 +5,7 @@
 
 using namespace Server::Services;
 
-ServiceDeployment::ServiceDeployment(Common::Configuration::Configuration & cfg, Server::DataBase::DataBase & db, Server::Game::PlayerContainer & playerContainer) :
+ServiceDeployment::ServiceDeployment(Cake::Configuration::Configuration & cfg, Server::DataBase::DataBase & db, Server::Game::PlayerContainer & playerContainer) :
     m_db(db),
 
     m_rustedTimeService(*m_time),
