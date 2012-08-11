@@ -17,7 +17,7 @@ namespace Network
 class ServerController
 {
 public:
-    ServerController(int argc, const char * argv[]);
+    ServerController();
     int start();
 	
 private:
@@ -27,7 +27,7 @@ private:
     std::vector<boost::shared_ptr<ConnectionContext> > m_connections;
     int m_lastConnectionId;
 
-    Cake::Configuration::Configuration m_cfg;
+    Cake::DependencyInjection::Inject<Cake::Configuration::Configuration> m_cfg;
     Server::DataBase::DataBaseFactory m_dbFactory;
     Server::DataBase::DataBase & m_db;
     Server::Game::PlayerContainer m_playerContainer;

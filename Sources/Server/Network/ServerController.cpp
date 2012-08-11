@@ -8,13 +8,12 @@
 
 using namespace Server::Network;
 
-ServerController::ServerController(int argc, const char * argv[]) :
+ServerController::ServerController() :
     m_lastConnectionId(1),
-    m_cfg(argc, argv),
-    m_dbFactory(m_cfg),
+    m_dbFactory(*m_cfg),
     m_db(m_dbFactory.create()),
     m_playerContainer(m_db),
-    m_serviceDeployment(m_cfg, m_db, m_playerContainer)
+    m_serviceDeployment(*m_cfg, m_db, m_playerContainer)
 {
 	struct sigaction sigact;
 	memset(&sigact, 0, sizeof(sigact));
@@ -25,12 +24,14 @@ ServerController::ServerController(int argc, const char * argv[]) :
 
 int ServerController::start()
 {
-    int tcpPort = m_cfg.getValue<int>("network.port");
+    int tcpPort = m_cfg->getValue<int>("network.port");
 
     LOG_INFO << "I will listen on TCP/" << tcpPort;
 
     boost::shared_ptr<Cake::Networking::ServerSocket> server =
         Cake::Networking::ServerSocket::createTcpServer(tcpPort);
+
+    LOG_INFO << "Server is up and running";
 
     try
     {

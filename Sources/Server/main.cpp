@@ -25,7 +25,7 @@ int main(int argc, const char * argv[])
 
     LOG_INFO << "This SW version was build on " << __DATE__ << " " << __TIME__;
 
-    Server::Network::ServerController controller(argc, argv);
+    Server::Network::ServerController controller;
     return controller.start();
 }
 
