@@ -24,7 +24,7 @@ public:
     {
         LOG_INFO << "Waiting for " << TYPENAME(T);
 
-        Common::RustedCodec::AsioReadBuffer buffer(*m_socket);
+        Common::RustedCodec::AsioReadBuffer buffer(m_socket);
         boost::shared_ptr<T> message;
 
         try
@@ -50,8 +50,8 @@ public:
     }
 
 private:
-	::boost::asio::ip::tcp::socket * m_socket;
 	::boost::asio::io_service io_service;
+	::boost::asio::ip::tcp::socket m_socket;
     static int s_port;
 };
 
