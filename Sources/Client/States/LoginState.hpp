@@ -2,6 +2,7 @@
 
 #include "Client/States/IState.hpp"
 #include "Client/States/IStateManagerStack.hpp"
+#include "Client/Graphics/IGraphics.hpp"
 #include "Client/Gui/Gui.hpp"
 #include "Client/Network/Connection.hpp"
 #include "Client/Services/AuthorizationService.hpp"
@@ -17,6 +18,7 @@ class LoginState : public IState
 {
 public:
     LoginState(IStateManagerStack &,
+               Graphics::IGraphics &,
                Gui::Gui &,
                IState & entitySelectState,
                Services::AuthorizationService &,
@@ -32,6 +34,7 @@ private:
 
     void loggedIn(bool success);
 
+    Graphics::IGraphics & m_graphics;
     Gui::Gui & m_gui;
     Services::AuthorizationService & m_authorizationService;
     Services::RustedTimeService & m_rustedTimeService;

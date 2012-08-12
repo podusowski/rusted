@@ -9,11 +9,13 @@
 using namespace Client::States;
 
 LoginState::LoginState(IStateManagerStack & stateManagerStack,
+                       Graphics::IGraphics & graphics,
                        Gui::Gui & gui, 
                        IState & entitySelect,
                        Services::AuthorizationService & authorizationService,
                        Services::RustedTimeService & rustedTimeService,
                        States::IStateDeployment & stateDeployment) : 
+    m_graphics(graphics),
     m_gui(gui),
     m_authorizationService(authorizationService),
     m_rustedTimeService(rustedTimeService),
@@ -26,6 +28,7 @@ LoginState::LoginState(IStateManagerStack & stateManagerStack,
 void LoginState::activate()
 {
     m_gui.loadLayout("LoginScreen.layout");
+    m_graphics.getSceneManager().setSkyBox(true, "SkyBox1", 30000);
 
     m_gui->findWidget<MyGUI::Button>("LoginButton")->eventMouseButtonClick += MyGUI::newDelegate(this, &LoginState::loginButtonClicked);
     m_gui->findWidget<MyGUI::Button>("QuitButton")->eventMouseButtonClick += MyGUI::newDelegate(this, &LoginState::quitButtonClicked);
