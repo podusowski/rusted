@@ -63,7 +63,7 @@ void PilotView::updateCameraPosition()
 {
     // camera motion
     Common::Game::Position position = m_playerActionService.getFocusedObject().getPosition();
-    Common::Game::Position camPosition = position + Common::Game::Position(0, 0, 150);
+    Common::Game::Position camPosition = position + Common::Game::Position(0, 0, 1000);
 
     // some nasty dbg 
     static int counter = 0;

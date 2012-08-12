@@ -21,6 +21,7 @@ Object::Object(Client::Graphics::IGraphics & graphics, Client::Input::IInput & i
     m_entity = scene.createEntity(mesh);
     m_node = scene.getRootSceneNode()->createChildSceneNode();
     m_node->attachObject(m_entity);
+    m_node->setScale(10.0, 10.0, 10.0);
 
     input.addObjectRightClickCallback(*m_entity, std::bind(&Object::rightClickedCallback, this));
     
