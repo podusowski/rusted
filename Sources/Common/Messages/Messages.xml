@@ -51,6 +51,7 @@ Ship
 	<param type="int32" name="id" />
 	<param type="int32" name="player_id" description="id of the player owning this entity" />
 	<param type="int32" name="integrity" />
+	<param type="int32" name="speed" />
 	<param type="int32" name="x" />
 	<param type="int32" name="y" />
 	<param type="int32" name="z" />
