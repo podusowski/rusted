@@ -23,6 +23,12 @@ void Ship::setPosition(const Position & position)
 
 void Ship::setCourse(Position position)
 {
+    if (getIntegrity() == 0)
+    {
+        LOG_DEBUG << "Ship is destroyed and can't go anywhere";
+        return;
+    }
+
     TimeValue time = m_time->getCurrentTime();
 
     m_position = calculatePosition(time);

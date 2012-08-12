@@ -114,7 +114,19 @@ TEST_F(ShipTest, ShipDestroyedDuringFlight)
     ship.setIntegrity(0);
     Mock::VerifyAndClear(&getRustedTimeStub());
 
+    // ship should stop
+
     ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(100, 0)));
+    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    // cant fly anymore
+
+    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(200, 0)));
+    ship.setCourse(Common::Game::Position(300, 0, 0));
+    Mock::VerifyAndClear(&getRustedTimeStub());
+
+    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(300, 0)));
     ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
     Mock::VerifyAndClear(&getRustedTimeStub());
 }
