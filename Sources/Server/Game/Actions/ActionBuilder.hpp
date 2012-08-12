@@ -18,12 +18,16 @@ namespace Actions
 class ActionBuilder
 {
 public:
+    ActionBuilder(Common::Game::Universe &, Server::Game::IPlayerContainer &);
+
     boost::shared_ptr<Server::Game::Actions::IAction> build(
         Server::Network::IConnection & connection,
-        Server::Game::IPlayerContainer &,
         Server::Game::IPlayer &,
-        Common::Game::Universe &,
         unsigned id);
+
+private:
+    Common::Game::Universe & m_universe;
+    Server::Game::IPlayerContainer & m_playerContainer;
 };
 
 }

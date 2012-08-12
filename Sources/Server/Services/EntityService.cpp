@@ -87,8 +87,8 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
 
     LOG_DEBUG << "Player " << player.getId() << " is executing action " << executeAction.id;
 
-    Server::Game::Actions::ActionBuilder actionBuilder;
-    auto action = actionBuilder.build(connection, m_playerContainer, player, m_universe, executeAction.id);
+    Server::Game::Actions::ActionBuilder actionBuilder(m_universe, m_playerContainer);
+    auto action = actionBuilder.build(connection, player, executeAction.id);
     action->execute();
 }
 

@@ -23,8 +23,8 @@ TEST(ActionBuilderTest, BuildAttack)
     ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(ship1));
     ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(ship2));
 
-    Server::Game::Actions::ActionBuilder builder;
-    auto attackAction = builder.build(connection, playerContainer, player, universe, ATTACK_ID);
+    Server::Game::Actions::ActionBuilder builder(universe, playerContainer);
+    auto attackAction = builder.build(connection, player, ATTACK_ID);
 
     ASSERT_EQ(typeid(Server::Game::Actions::Attack), typeid(*attackAction));
 }

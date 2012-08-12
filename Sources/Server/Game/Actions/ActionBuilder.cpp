@@ -4,11 +4,15 @@
 
 using namespace Server::Game::Actions;
 
+ActionBuilder::ActionBuilder(Common::Game::Universe & universe, Server::Game::IPlayerContainer & playerContainer) :
+    m_universe(universe),
+    m_playerContainer(playerContainer)
+{
+}
+
 boost::shared_ptr<IAction> ActionBuilder::build(
         Server::Network::IConnection & connection,
-        Server::Game::IPlayerContainer & playerContainer,
         Server::Game::IPlayer & player,
-        Common::Game::Universe & universe,
         unsigned id)
 {
     boost::shared_ptr<IAction> ret;
@@ -33,14 +37,14 @@ boost::shared_ptr<IAction> ActionBuilder::build(
         case 1:
         {
             assert(selectedObject);
-            ret = boost::shared_ptr<IAction>(new Attack(playerContainer, focusedShip, *selectedObject));
+            ret = boost::shared_ptr<IAction>(new Attack(m_playerContainer, focusedShip, *selectedObject));
             break;
         }
 
         case 2:
         {
-            auto & player = playerContainer.getBy(connection);
-            ret = boost::shared_ptr<IAction>(new BuildShip(universe, player, playerContainer));
+            auto & player = m_playerContainer.getBy(connection);
+            ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer));
             break;
         }
 
