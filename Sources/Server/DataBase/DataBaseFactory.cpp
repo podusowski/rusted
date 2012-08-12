@@ -11,16 +11,16 @@ DataBaseFactory::DataBaseFactory(Cake::Configuration::Configuration & cfg) : m_c
 {
 }
 
-DataBase & DataBaseFactory::create()
+boost::shared_ptr<DataBase> DataBaseFactory::create()
 {
-    m_db.reset(new DataBase());
+    boost::shared_ptr<DataBase> ret(new DataBase);
 
     try
     {        
         if (m_cfg.getValue<std::string>("database.provider") == "xml")
         {
             LOG_INFO << "XmlDataProvider will be used as DB storage";
-            XmlDataProvider provider(*m_db, m_cfg.getValue<std::string>("database.xml.filename"));
+            XmlDataProvider provider(*ret, m_cfg.getValue<std::string>("database.xml.filename"));
         }
         else
         {
@@ -32,5 +32,5 @@ DataBase & DataBaseFactory::create()
         LOG_WARN << "DataBase provider is not configured, clean DB will be created which won't do much good";
     }
 
-    return *m_db;
+    return ret;
 }

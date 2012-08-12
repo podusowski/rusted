@@ -7,6 +7,10 @@
 
 using namespace Server::Game;
 
+ObjectFactory::ObjectFactory(DataBase::DataBase & db) : m_db(db)
+{
+}
+
 boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server::DataBase::DataBaseNode & data)
 {
     std::string type = data.getValue<std::string>("type");

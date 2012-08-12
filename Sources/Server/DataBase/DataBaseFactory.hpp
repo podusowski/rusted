@@ -14,10 +14,9 @@ class DataBaseFactory
 {
 public:
     DataBaseFactory(Cake::Configuration::Configuration & cfg);
-    DataBase & create();
+    boost::shared_ptr<DataBase> create();
 
 private:
-    std::auto_ptr<DataBase> m_db;
     Cake::Configuration::Configuration & m_cfg;
 };
 

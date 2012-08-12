@@ -10,10 +10,8 @@ using namespace Server::Network;
 
 ServerController::ServerController() :
     m_lastConnectionId(1),
-    m_dbFactory(*m_cfg),
-    m_db(m_dbFactory.create()),
-    m_playerContainer(m_db),
-    m_serviceDeployment(*m_cfg, m_db, m_playerContainer)
+    m_playerContainer(*m_db),
+    m_serviceDeployment(*m_cfg, *m_db, m_playerContainer)
 {
 	struct sigaction sigact;
 	memset(&sigact, 0, sizeof(sigact));

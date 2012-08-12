@@ -6,7 +6,7 @@ using namespace Server::Game;
 void UniverseLoader::load(Common::Game::Universe & universe, Server::DataBase::DataBase & db)
 {
     auto & objects = db.getRoot().getFirstChild("objects");
-    Server::Game::ObjectFactory factory;
+    Server::Game::ObjectFactory factory(db);
 
     for (auto it = objects.getChilds().begin(); it != objects.getChilds().end(); it++)
     {
