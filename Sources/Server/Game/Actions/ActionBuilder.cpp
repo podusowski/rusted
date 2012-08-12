@@ -7,12 +7,25 @@ using namespace Server::Game::Actions;
 boost::shared_ptr<IAction> ActionBuilder::build(
         Server::Network::IConnection & connection,
         Server::Game::IPlayerContainer & playerContainer,
+        Server::Game::IPlayer & player,
         Common::Game::Universe & universe,
-        unsigned id, 
-        Common::Game::Object::Ship & focusedShip,
-        Common::Game::Object::ObjectBase * selectedObject)
+        unsigned id)
 {
     boost::shared_ptr<IAction> ret;
+
+    auto & focusedObject = player.getFocusedObject();
+    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(focusedObject);
+
+    Common::Game::Object::ObjectBase * selectedObject = nullptr;
+
+    // FIXME: you know what :)
+    try
+    {
+        selectedObject = &(player.getSelectedObject());
+    }
+    catch (...)
+    {
+    }
 
     switch (id)
     {

@@ -20,11 +20,10 @@ class ActionBuilder
 public:
     boost::shared_ptr<Server::Game::Actions::IAction> build(
         Server::Network::IConnection & connection,
-        Server::Game::IPlayerContainer & players,
-        Common::Game::Universe & universe,
-        unsigned id, 
-        Common::Game::Object::Ship & focusedShip,
-        Common::Game::Object::ObjectBase * selectedObject);
+        Server::Game::IPlayerContainer &,
+        Server::Game::IPlayer &,
+        Common::Game::Universe &,
+        unsigned id);
 };
 
 }
