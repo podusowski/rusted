@@ -26,6 +26,11 @@ public:
     virtual unsigned getIntegrity() { return m_integrity; }
     virtual void setIntegrity(unsigned integrity) { m_integrity = integrity; }
 
+    template <class ObjectType> bool is()
+    {
+        return dynamic_cast<ObjectType*>(this) != nullptr;
+    }
+
     virtual ~ObjectBase() {}
 
 private:

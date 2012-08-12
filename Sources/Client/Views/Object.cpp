@@ -1,5 +1,6 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
+#include "Common/Game/Object/StaticObject.hpp"
 #include "Object.hpp"
 
 using namespace Client::Views;
@@ -10,7 +11,14 @@ Object::Object(Client::Graphics::IGraphics & graphics, Client::Input::IInput & i
 {
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
 
-    m_entity = scene.createEntity("Cube.mesh");
+    std::string mesh = "Cube.mesh";
+
+    if (object.is<Common::Game::Object::StaticObject>())
+    {
+        mesh = "Asteroid.mesh";
+    }
+
+    m_entity = scene.createEntity(mesh);
     m_node = scene.getRootSceneNode()->createChildSceneNode();
     m_node->attachObject(m_entity);
 
