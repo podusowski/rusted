@@ -18,7 +18,8 @@ boost::shared_ptr<IAction> ActionBuilder::build(
 
     Common::Game::Object::ObjectBase * selectedObject = nullptr;
 
-    // FIXME: you know what :)
+    // FIXME: you know what - but not now, when we're going to develop object deletion, it
+    //        will most likely be weak_ptr anyway
     try
     {
         selectedObject = &(player.getSelectedObject());
