@@ -24,7 +24,10 @@ public:
 
 TEST_F(ObjectFactoryTest, TestLoadShip)
 {
-    Server::DataBase::DataBaseNode node("object");
+    Server::DataBase::DataBase db;
+
+    auto & node = db.getRoot().createChild("object");
+
     node.setValue("type", "Ship");
     node.setValue("id", 1);
     node.setValue("owner", 2);
@@ -32,8 +35,14 @@ TEST_F(ObjectFactoryTest, TestLoadShip)
     node.setValue("y", 4);
     node.setValue("z", 5);
     node.setValue("integrity", 100);
+    node.setValue("class", 1);
 
-    Server::DataBase::DataBase db;
+    auto & shipClasses = db.getRoot().createChild("ship_classes");
+    auto & shipClass = shipClasses.createChild("ship_class");
+
+    shipClass.setValue("id", 1);
+    shipClass.setValue("speed", 10);
+
     Server::Game::ObjectFactory factory(db);
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
@@ -48,6 +57,9 @@ TEST_F(ObjectFactoryTest, TestLoadShip)
     ASSERT_EQ(5, position.getZ());
 
     ASSERT_EQ(100, object->getIntegrity());
+
+    auto & ship = dynamic_cast<Common::Game::Object::Ship &>(*object);
+    ASSERT_EQ(10, ship.getSpeed());
 }
 
 TEST_F(ObjectFactoryTest, LoadStaticObject)

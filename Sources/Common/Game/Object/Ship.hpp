@@ -30,6 +30,7 @@ public:
     void setCourse(Position course);
     void setCourse(Course course);
     void setSpeed(unsigned speed);
+    unsigned getSpeed();
     void setIntegrity(unsigned); //override;
 
     virtual Course getCourse();

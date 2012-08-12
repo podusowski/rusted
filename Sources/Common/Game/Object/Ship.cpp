@@ -44,6 +44,11 @@ void Ship::setSpeed(unsigned speed)
     m_speed = speed;
 }
 
+unsigned Ship::getSpeed()
+{
+    return m_speed;
+}
+
 void Ship::setIntegrity(unsigned integrity)
 {
     ObjectBase::setIntegrity(integrity);

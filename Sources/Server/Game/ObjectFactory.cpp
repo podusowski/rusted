@@ -25,6 +25,18 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
         ship.setOwnerId(data.getValue<unsigned>("owner"));
         object->setPosition(extractPosition(data));
         object->setIntegrity(data.getValue<unsigned>("integrity"));
+        
+        try
+        {
+            unsigned shipClass = data.getValue<unsigned>("class");
+            auto & shipClassNode = getShipClass(shipClass);
+
+            ship.setSpeed(shipClassNode.getValue<unsigned>("speed"));
+        }
+        catch (...)
+        {
+            LOG_WARN << "Exception thrown while applying ship's class, the ship will be created with default values";
+        }
 
         return object;
     }
@@ -50,3 +62,17 @@ Common::Game::Position ObjectFactory::extractPosition(Server::DataBase::DataBase
     position.setZ(data.getValue<int>("z"));
     return position;
 }
+
+Server::DataBase::DataBaseNode & ObjectFactory::getShipClass(unsigned id)
+{
+    auto & shipClasses = m_db.getRoot().getFirstChild("ship_classes");
+    for (auto it = shipClasses.getChilds().begin(); it != shipClasses.getChilds().end(); it++)
+    {
+        if ((*it)->getValue<unsigned>("id") == id)
+        {
+            return **it;
+        }
+    }
+    throw std::out_of_range("no such ship class");
+}
+
