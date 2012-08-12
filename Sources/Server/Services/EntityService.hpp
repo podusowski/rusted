@@ -1,11 +1,13 @@
 #pragma once
 
 #include "Common/Game/Universe.hpp"
+#include "Common/Game/Object/Ship.hpp"
+
+#include "Game/Actions/ActionBuilder.hpp"
+#include "Game/PlayerContainer.hpp"
+#include "Utils.hpp"
 
 #include "Services/AbstractService.hpp"
-#include "Game/PlayerContainer.hpp"
-#include "Common/Game/Object/Ship.hpp"
-#include "Utils.hpp"
 
 namespace Server
 {
@@ -30,6 +32,7 @@ public:
 private:
     Common::Game::Universe & m_universe;
     Game::PlayerContainer & m_playerContainer;
+    Server::Game::Actions::ActionBuilder m_actionBuilder;
     Utils m_utils;
 };
 

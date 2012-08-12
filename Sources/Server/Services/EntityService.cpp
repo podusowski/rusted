@@ -1,14 +1,14 @@
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/StaticObject.hpp"
 
-#include "Server/Game/Actions/ActionBuilder.hpp"
 #include "Server/Services/EntityService.hpp"
 
 using namespace Server::Services;
 
 EntityService::EntityService(Common::Game::Universe & universe, Server::Game::PlayerContainer & playerContainer) :
     m_universe(universe),
-    m_playerContainer(playerContainer)
+    m_playerContainer(playerContainer),
+    m_actionBuilder(universe, playerContainer)
 {
 }
 
@@ -87,8 +87,7 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
 
     LOG_DEBUG << "Player " << player.getId() << " is executing action " << executeAction.id;
 
-    Server::Game::Actions::ActionBuilder actionBuilder(m_universe, m_playerContainer);
-    auto action = actionBuilder.build(connection, player, executeAction.id);
+    auto action = m_actionBuilder.build(connection, player, executeAction.id);
     action->execute();
 }
 
