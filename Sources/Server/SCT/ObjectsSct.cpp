@@ -34,11 +34,12 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
 
     Common::Messages::GetObjectInfo getObjectInfo;
-    getObjectInfo.id = 1;
+    getObjectInfo.id = 2;
     connection1->send(getObjectInfo);
 
     auto shipInfo = connection1->receive<Common::Messages::ShipInfo>();
     EXPECT_EQ(100, shipInfo->integrity);
+    EXPECT_EQ(10, shipInfo->speed);
 
     // client should receive info about ship's course
     auto shipCourseInfo = connection1->receive<Common::Messages::ShipCourseInfo>();

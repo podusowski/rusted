@@ -6,8 +6,11 @@
     </users>
     <objects>
         <object type="Ship" id="1" owner="1" x="1" y="1" z="1" integrity="100" />
-        <object type="Ship" id="2" owner="2" x="1" y="1" z="1" integrity="100" />
+        <object type="Ship" id="2" class="1" owner="2" x="1" y="1" z="1" integrity="100" />
         <object type="Ship" id="4" owner="2" x="1" y="1" z="1" integrity="100" />
         <object type="StaticObject" id="3" x="100" y="100" z="100" integrity="100" />
     </objects>
+    <ship_classes>
+        <ship_class id="1" speed="10" />
+    </ship_classes>
 </root>

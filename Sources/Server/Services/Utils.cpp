@@ -71,6 +71,7 @@ void Utils::sendShipInfo(Common::Game::Object::Ship & ship, Network::IConnection
     shipInfo.y = position.getY();
     shipInfo.z = position.getZ();
     shipInfo.integrity = ship.getIntegrity();
+    shipInfo.speed = ship.getSpeed();
 
     connection.send(shipInfo);
 }
