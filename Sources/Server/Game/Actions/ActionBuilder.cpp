@@ -32,6 +32,8 @@ boost::shared_ptr<IAction> ActionBuilder::build(
     {
     }
 
+    aquireGlobalCooldown(player.getId());
+
     switch (id)
     {
         case 1:
@@ -58,5 +60,20 @@ boost::shared_ptr<IAction> ActionBuilder::build(
     }
 
     return ret;
+}
+
+void ActionBuilder::aquireGlobalCooldown(unsigned playerId)
+{
+    auto ret = m_playerGlobalCooldowns.insert(playerId);
+    if (ret.second)
+    {
+        LOG_DEBUG << "Global cooldown activated on player: " << playerId;
+        // TODO: set the timer
+    }
+    else
+    {
+        LOG_DEBUG << "Global cooldown is already active on player: " << playerId;
+        throw std::runtime_error("global cooldown is already active");
+    }
 }
 

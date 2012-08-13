@@ -1,5 +1,6 @@
 #pragma once
 
+#include <set>
 #include <boost/shared_ptr.hpp>
 
 #include "Server/Game/Actions/IAction.hpp"
@@ -26,8 +27,11 @@ public:
         unsigned id);
 
 private:
+    void aquireGlobalCooldown(unsigned playerId);
+
     Common::Game::Universe & m_universe;
     Server::Game::IPlayerContainer & m_playerContainer;
+    std::set<unsigned> m_playerGlobalCooldowns;
 };
 
 }
