@@ -3,6 +3,7 @@
 #include <pthread.h>
 
 #include "IRunnable.hpp"
+#include "Mutex.hpp"
 
 namespace Cake 
 {
@@ -32,6 +33,7 @@ private:
     bool m_isRunning;
 	IRunnable & m_runnable;
 	pthread_t m_thread;
+	Mutex m_isRunningLock;
 };
 
 }

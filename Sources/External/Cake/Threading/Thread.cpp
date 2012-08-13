@@ -4,6 +4,7 @@
 #include <sstream>
 
 #include "Thread.hpp"
+#include "ScopedLock.hpp"
 
 using namespace Cake::Threading;
 
@@ -60,7 +61,12 @@ void * Thread::m_run(void * threadCtx)
     Thread & thread = *static_cast<Thread *>(threadCtx);
 
 	thread.m_runnable.run();
+
+    // basically bool should be atomic but we'll be valgrind clean
+	thread.m_isRunningLock.aquire();
 	thread.m_isRunning = false;
+	thread.m_isRunningLock.release();
+
 	pthread_detach(pthread_self());
 
 	return 0;
@@ -68,5 +74,6 @@ void * Thread::m_run(void * threadCtx)
 
 bool Thread::isRunning()
 {
+    ScopedLock lock(m_isRunningLock);
     return m_isRunning;
 }
