@@ -1,3 +1,5 @@
+#include <boost/bind.hpp>
+
 #include "ActionBuilder.hpp"
 #include "Attack.hpp"
 #include "BuildShip.hpp"
@@ -68,12 +70,22 @@ void ActionBuilder::aquireGlobalCooldown(unsigned playerId)
     if (ret.second)
     {
         LOG_DEBUG << "Global cooldown activated on player: " << playerId;
-        // TODO: set the timer
+        m_time->createTimer(Common::Game::TimeValue(1, 0), boost::bind(&ActionBuilder::globalCooldownExpired, this, playerId));
     }
     else
     {
         LOG_DEBUG << "Global cooldown is already active on player: " << playerId;
-        throw std::runtime_error("global cooldown is already active");
+        throw std::runtime_error("global cooldown is active");
+    }
+}
+
+void ActionBuilder::globalCooldownExpired(unsigned playerId)
+{
+    LOG_DEBUG << "Global cooldown expired for player: " << playerId;
+    size_t elementsErased = m_playerGlobalCooldowns.erase(playerId);
+    if (elementsErased == 0)
+    {
+        throw std::runtime_error("expired nonexisting global cooldown");
     }
 }
 

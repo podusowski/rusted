@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "Common/Game/UnitTests/RustedTimeStub.hpp"
 #include "Server/Game/Actions/ActionBuilder.hpp"
 #include "Server/Network/UnitTests/ConnectionMock.hpp"
 #include "Server/Game/UnitTests/PlayerContainerMock.hpp"
@@ -9,7 +10,27 @@
 
 using namespace testing;
 
-TEST(ActionBuilderTest, BuildAttack)
+class ActionBuilderTest : public Test
+{
+public:
+    void SetUp()
+    {
+        Cake::DependencyInjection::clear();
+
+        m_rustedTime = boost::shared_ptr<Common::Game::IRustedTime>(new RustedTimeStub);
+        Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_rustedTime);
+    }
+
+    RustedTimeStub & getTimeMock()
+    {
+        return dynamic_cast<RustedTimeStub&>(*m_rustedTime);
+    }
+
+private:
+    boost::shared_ptr<Common::Game::IRustedTime> m_rustedTime;
+};
+
+TEST_F(ActionBuilderTest, BuildAttack)
 {
     const int ATTACK_ID = 1;
 
@@ -29,7 +50,7 @@ TEST(ActionBuilderTest, BuildAttack)
     ASSERT_EQ(typeid(Server::Game::Actions::Attack), typeid(*attackAction));
 }
 
-TEST(ActionBuilderTest, GlobalCooldown)
+TEST_F(ActionBuilderTest, GlobalCooldown)
 {
     const int ATTACK_ID = 1;
 
@@ -43,10 +64,18 @@ TEST(ActionBuilderTest, GlobalCooldown)
     ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(ship1));
     ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(ship2));
 
+    boost::function<void()> timerCallback;
+    EXPECT_CALL(getTimeMock(), createTimer(_, _)).Times(2).WillRepeatedly(SaveArg<1>(&timerCallback));
+
     Server::Game::Actions::ActionBuilder builder(universe, playerContainer);
     builder.build(connection, player, ATTACK_ID);
 
     // global cooldown timer is not expired yet
     EXPECT_ANY_THROW(builder.build(connection, player, ATTACK_ID));
+
+    timerCallback();
+
+    // global cooldown has passed so we can do some action again
+    builder.build(connection, player, ATTACK_ID);
 }
 
