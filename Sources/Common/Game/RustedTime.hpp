@@ -17,6 +17,7 @@ public:
     unsigned getSeconds();
     void setReferenceTime(unsigned);
     TimeValue getCurrentTime();
+    void createTimer(TimeValue, boost::function<void()>);
 
 private:
     boost::posix_time::ptime now();

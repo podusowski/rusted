@@ -29,6 +29,12 @@ void RustedTime::setReferenceTime(unsigned reference)
     LOG_INFO << "New epoch set to " << m_epoch;
 }
 
+void RustedTime::createTimer(TimeValue, boost::function<void()> callback)
+{
+    // TODO: implement timers
+    callback();
+}
+
 TimeValue RustedTime::getCurrentTime()
 {
     boost::posix_time::ptime t = now();
