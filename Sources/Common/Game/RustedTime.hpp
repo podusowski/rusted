@@ -5,6 +5,8 @@
 
 #include "Common/Game/IRustedTime.hpp"
 #include "Cake/Threading/Thread.hpp"
+#include "Cake/Threading/Mutex.hpp"
+#include "Cake/Threading/ConditionVariable.hpp"
 
 namespace Common 
 {
@@ -28,7 +30,7 @@ private:
         boost::function<void()> callback;
         TimeValue expiration;
 
-        bool operator<(const Timer & t)
+        bool operator<(const Timer & t) const
         {
             return expiration < t.expiration;
         }
@@ -39,8 +41,9 @@ private:
     boost::posix_time::ptime m_epoch;
     Cake::Threading::Thread m_timerThread;
     std::set<Timer> m_timers;
+    Cake::Threading::Mutex m_timersMutex;
+    Cake::Threading::ConditionVariable m_timersCondition;
 };
-
 
 }
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include "Cake/Diagnostics/Logger.hpp"
+#include "Cake/Threading/ScopedLock.hpp"
 #include "Common/Game/RustedTime.hpp"
 
 using namespace Common::Game;
@@ -29,10 +30,24 @@ void RustedTime::setReferenceTime(unsigned reference)
     LOG_INFO << "New epoch set to " << m_epoch;
 }
 
-void RustedTime::createTimer(TimeValue, boost::function<void()> callback)
+void RustedTime::createTimer(TimeValue time, boost::function<void()> callback)
 {
-    // TODO: implement timers
-    callback();
+    LOG_DEBUG << "Starting timer: " << time;
+
+    Timer t;
+    t.callback = callback;
+    t.expiration = getCurrentTime() + time;
+
+    Cake::Threading::ScopedLock lock(m_timersMutex);
+    m_timers.insert(t);
+
+    if (!m_timerThread.isRunning())
+    {
+        LOG_DEBUG << "Starting timer thread";
+        m_timerThread.start();
+    }
+
+    m_timersCondition.signal();
 }
 
 TimeValue RustedTime::getCurrentTime()
@@ -47,9 +62,7 @@ TimeValue RustedTime::getCurrentTime()
     unsigned seconds = duration.total_seconds();
     unsigned miliseconds = duration.fractional_seconds() / 1000;
 
-    TimeValue ret(seconds, miliseconds);
-
-    return ret;
+    return TimeValue(seconds, miliseconds);
 }
 
 boost::posix_time::ptime RustedTime::now()
@@ -59,5 +72,30 @@ boost::posix_time::ptime RustedTime::now()
 
 void RustedTime::run()
 {
+    while (true)
+    {
+        //TODO: mutexes
+        auto it = m_timers.begin();
+
+        if (it == m_timers.end())
+        {
+            m_timersCondition.wait();
+        }
+
+        TimeValue t = getCurrentTime();
+
+        if (t < it->expiration)
+        {
+            LOG_DEBUG << "Timer expired";
+            it->callback();
+            m_timers.erase(it++);
+        }
+        else
+        {
+            TimeValue timeToWait = it->expiration - t;
+            // lock condition
+            break;
+        }
+    }
 }
 
