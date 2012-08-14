@@ -4,6 +4,13 @@
 
 using namespace Common::Game;
 
+TEST(TimeValueTest, Add)
+{
+    EXPECT_EQ(TimeValue(2, 0), TimeValue(1, 0) + TimeValue(1, 0));
+    EXPECT_EQ(TimeValue(2, 0), TimeValue(1, 500) + TimeValue(0, 500));
+    EXPECT_EQ(TimeValue(3, 0), TimeValue(1, 500) + TimeValue(1, 500));
+}
+
 TEST(TimeValueTest, Substract1)
 {
     ASSERT_EQ(TimeValue(1, 0), TimeValue(2, 0) - TimeValue(1, 0));

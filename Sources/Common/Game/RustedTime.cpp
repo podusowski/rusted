@@ -75,16 +75,16 @@ void RustedTime::run()
     while (true)
     {
         //TODO: mutexes
-        auto it = m_timers.begin();
 
-        if (it == m_timers.end())
+        while (m_timers.empty())
         {
             m_timersCondition.wait();
         }
+        auto it = m_timers.begin();
 
         TimeValue t = getCurrentTime();
 
-        if (t < it->expiration)
+        if (it->expiration < t)
         {
             LOG_DEBUG << "Timer expired";
             it->callback();
@@ -94,7 +94,6 @@ void RustedTime::run()
         {
             TimeValue timeToWait = it->expiration - t;
             // lock condition
-            break;
         }
     }
 }

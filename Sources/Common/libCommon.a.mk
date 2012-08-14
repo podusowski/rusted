@@ -10,6 +10,7 @@ SOURCES+=RustedCodec/AsioWriteBuffer.cpp
 SOURCES+=RustedCodec/CakeWriteBuffer.cpp
 SOURCES+=RustedCodec/CakeReadBuffer.cpp
 SOURCES+=Game/RustedTime.cpp
+SOURCES+=Game/TimeValue.cpp
 SOURCES+=Game/Utilities/PasswordHash.cpp
 SOURCES+=Game/Utilities/IdGenerator.cpp
 SOURCES+=Game/Universe.cpp
