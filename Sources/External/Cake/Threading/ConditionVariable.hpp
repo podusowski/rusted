@@ -13,6 +13,7 @@ public:
     ConditionVariable(); 
     ~ConditionVariable();
     void wait();
+    void timedWait(unsigned seconds);
     void signal();
     void broadcast();
 
