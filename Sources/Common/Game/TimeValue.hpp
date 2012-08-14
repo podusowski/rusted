@@ -44,6 +44,15 @@ public:
 
     }
 
+    bool operator<(const TimeValue & val) const
+    {
+        if (m_seconds == val.m_seconds)
+        {
+            return m_miliseconds < val.m_miliseconds;
+        }
+        return m_seconds < val.m_seconds;
+    }
+
 private:
     unsigned m_seconds;
     unsigned m_miliseconds;

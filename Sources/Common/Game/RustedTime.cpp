@@ -5,7 +5,7 @@
 
 using namespace Common::Game;
 
-RustedTime::RustedTime() : m_epoch(now())
+RustedTime::RustedTime() : m_epoch(now()), m_timerThread(*this)
 {
     LOG_INFO << "Rusted epoch set to " << m_epoch;
 }
@@ -56,3 +56,8 @@ boost::posix_time::ptime RustedTime::now()
 {
     return boost::date_time::microsec_clock<boost::posix_time::ptime>::local_time();
 }
+
+void RustedTime::run()
+{
+}
+
