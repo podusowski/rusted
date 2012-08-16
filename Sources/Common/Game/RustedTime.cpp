@@ -74,8 +74,7 @@ void RustedTime::run()
 {
     while (true)
     {
-        //TODO: mutexes
-
+        m_timersMutex.aquire();
         while (m_timers.empty())
         {
             m_timersCondition.wait();
@@ -87,13 +86,17 @@ void RustedTime::run()
         if (it->expiration < t)
         {
             LOG_DEBUG << "Timer expired";
+            m_timersMutex.release();
             it->callback();
+            m_timersMutex.aquire();
             m_timers.erase(it++);
+            m_timersMutex.release();
         }
         else
         {
+            m_timersMutex.release();
             TimeValue timeToWait = it->expiration - t;
-            // lock condition
+            // TODO: lock condition
         }
     }
 }

@@ -74,7 +74,7 @@ void ActionBuilder::aquireGlobalCooldown(unsigned playerId)
     }
     else
     {
-        LOG_DEBUG << "Global cooldown is already active on player: " << playerId;
+        LOG_WARN << "Global cooldown is already active on player: " << playerId << ", this might suggest hack attempt";
         throw std::runtime_error("global cooldown is active");
     }
 }

@@ -87,7 +87,14 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
 
     LOG_DEBUG << "Player " << player.getId() << " is executing action " << executeAction.id;
 
-    auto action = m_actionBuilder.build(connection, player, executeAction.id);
-    action->execute();
+    try
+    {
+        auto action = m_actionBuilder.build(connection, player, executeAction.id);
+        action->execute();
+    }
+    catch (std::exception ex)
+    {
+        LOG_DEBUG << "Can't build or execute action, reason: " << ex.what();
+    }
 }
 
