@@ -31,6 +31,8 @@ public:
     void frameStarted();
 
     void addMouseListener(IMouseListener &);
+
+    //TODO: add generinc click callback (it is not right click anyway)
     void addObjectRightClickCallback(Ogre::Entity &, std::function<void()>);
 
 private:
