@@ -1,6 +1,7 @@
 #pragma once
 
 #include <pthread.h>
+#include "Mutex.hpp"
 
 namespace Cake
 {
@@ -10,7 +11,7 @@ namespace Threading
 class ConditionVariable
 {
 public:
-    ConditionVariable(); 
+    ConditionVariable(Mutex &); 
     ~ConditionVariable();
     void wait();
     void timedWait(unsigned seconds);
@@ -19,7 +20,7 @@ public:
 
 private:
     pthread_cond_t m_condition;
-    pthread_mutex_t m_mutex;
+    Mutex & m_mutex;
 };
 
 }

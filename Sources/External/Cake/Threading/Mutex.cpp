@@ -22,3 +22,8 @@ void Mutex::release()
 {
     pthread_mutex_unlock(&m_mutex);
 }
+
+pthread_mutex_t * Mutex::getNativeHandle()
+{
+    return &m_mutex;
+}

@@ -6,7 +6,10 @@
 
 using namespace Common::Game;
 
-RustedTime::RustedTime() : m_epoch(now()), m_timerThread(*this)
+RustedTime::RustedTime() : 
+    m_epoch(now()), 
+    m_timerThread(*this), 
+    m_timersCondition(m_timersMutex)
 {
     LOG_INFO << "Rusted epoch set to " << m_epoch;
 }
@@ -38,15 +41,14 @@ void RustedTime::createTimer(TimeValue time, boost::function<void()> callback)
     t.callback = callback;
     t.expiration = getCurrentTime() + time;
 
-    Cake::Threading::ScopedLock lock(m_timersMutex);
-    m_timers.insert(t);
-
     if (!m_timerThread.isRunning())
     {
         LOG_DEBUG << "Starting timer thread";
         m_timerThread.start();
     }
 
+    Cake::Threading::ScopedLock lock(m_timersMutex);
+    m_timers.insert(t);
     m_timersCondition.signal();
 }
 
@@ -75,28 +77,43 @@ void RustedTime::run()
     while (true)
     {
         m_timersMutex.aquire();
-        while (m_timers.empty())
+        if (m_timers.empty())
         {
+            LOG_DEBUG << "Timer queue is empty, waiting";
             m_timersCondition.wait();
-        }
-        auto it = m_timers.begin();
-
-        TimeValue t = getCurrentTime();
-
-        if (it->expiration < t)
-        {
-            LOG_DEBUG << "Timer expired";
             m_timersMutex.release();
-            it->callback();
-            m_timersMutex.aquire();
-            m_timers.erase(it++);
-            m_timersMutex.release();
+            LOG_DEBUG << "New timer detected";
         }
         else
         {
+            LOG_DEBUG << "There are active timers";
             m_timersMutex.release();
-            TimeValue timeToWait = it->expiration - t;
-            // TODO: lock condition
+        }
+
+        Timer firstTimer;
+        {
+            Cake::Threading::ScopedLock lock(m_timersMutex);
+            LOG_DEBUG << "Getting the first timer";
+            firstTimer = *m_timers.begin();
+        }
+
+        TimeValue t = getCurrentTime();
+
+        if (firstTimer.expiration < t)
+        {
+            LOG_DEBUG << "Timer expired";
+            firstTimer.callback();
+
+            Cake::Threading::ScopedLock lock(m_timersMutex);
+            m_timers.erase(m_timers.begin());
+        }
+        else
+        {
+            LOG_DEBUG << "Timer is not expired yet";
+            TimeValue timeToWait = firstTimer.expiration - t;
+            
+            Cake::Threading::ScopedLock lock(m_timersMutex);
+            m_timersCondition.timedWait(timeToWait.getSeconds());
         }
     }
 }
