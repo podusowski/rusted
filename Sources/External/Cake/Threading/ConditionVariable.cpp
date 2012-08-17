@@ -18,14 +18,14 @@ void ConditionVariable::wait()
     pthread_cond_wait(&m_condition, m_mutex.getNativeHandle());
 }
 
-void ConditionVariable::timedWait(unsigned seconds)
+void ConditionVariable::timedWait(unsigned seconds, unsigned miliseconds)
 {
     timeval c;
     gettimeofday(&c, NULL);
 
     timespec t;
     t.tv_sec = c.tv_sec + seconds;
-    t.tv_nsec = 0;
+    t.tv_nsec = /* to nsec */(c.tv_usec * 1000) + /* to nsec */(1000000 * miliseconds);
 
     pthread_cond_timedwait(&m_condition, m_mutex.getNativeHandle(), &t);
 }

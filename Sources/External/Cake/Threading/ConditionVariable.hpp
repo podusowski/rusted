@@ -14,7 +14,7 @@ public:
     ConditionVariable(Mutex &); 
     ~ConditionVariable();
     void wait();
-    void timedWait(unsigned seconds);
+    void timedWait(unsigned seconds, unsigned miliseconds = 0);
     void signal();
     void broadcast();
 
