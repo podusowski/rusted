@@ -134,4 +134,6 @@ actions
     <param type="int32" name="id" />
 </message>
 
+<message id="GlobalCooldownExpired" />
+
 </messages>
