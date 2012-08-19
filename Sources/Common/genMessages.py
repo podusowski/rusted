@@ -257,6 +257,15 @@ class Param:
 class List:
     def __init__(self, xml_node):
         self.name = xml_node.getAttribute("name")
+        self.xml_node = xml_node
+        self.params = self.__parse_params()
+
+    def __parse_params(self):
+        params = []
+        for listparam_xml_node in self.xml_node.getElementsByTagName("listparam"):
+            param = Param(listparam_xml_node)
+            params.append(param)
+        return params
 
 class Message:
     def __init__(self, xml_node):
@@ -424,13 +433,18 @@ class CppMessageStruct:
             s = "\t// no list parameters\n"
 
         for list in self.message.lists:
-            print("\t\t" + list.name + ": <list>")
+            print("\t\t" + list.name + ": list of")
             s = s + (
                     "\tstd::vector<boost::tuple<"
                     )
 
-            for listparam in list.params:
+            for i, listparam in enumerate(list.params):
                 print("\t\t\t" + listparam.type)
+                if i > 0:
+                    s = s + ", "
+                s = s + listparam.cpp_type 
+
+            s = s + "> " + list.name + ";\n"
 
         s = s + "\n"
         return s
