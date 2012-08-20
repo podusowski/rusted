@@ -21,10 +21,10 @@ void StateManager::pushState(IState & state)
 {
     if (m_currentState)
     {
-        LOG_INFO << "Deactivating " << TYPENAME(*m_currentState) << "\n";
+        LOG_INFO << "Deactivating " << TYPENAME(*m_currentState);
         m_currentState->deactivate();
     }
-    LOG_INFO << "Pushing and activating " << TYPENAME(state) << "\n";
+    LOG_INFO << "Pushing and activating " << TYPENAME(state);
     m_stateStack.push(&state);
     m_currentState = m_stateStack.top();
     m_currentState->activate();
