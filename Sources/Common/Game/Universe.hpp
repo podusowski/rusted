@@ -97,11 +97,11 @@ public:
 
     }
 
-    void setObjectAddedCallback(ObjectAddedCallback);
+    void addObjectAddedCallback(ObjectAddedCallback);
 
 private:
     std::map<unsigned, boost::shared_ptr<Object::ObjectBase> > m_objects;
-    ObjectAddedCallback m_objectAddedCallback;
+    std::vector<ObjectAddedCallback> m_objectAddedCallbacks;
     Common::Game::Utilities::IdGenerator m_idGenerator;
 };
 

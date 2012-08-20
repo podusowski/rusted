@@ -124,7 +124,7 @@ TEST_F(UniverseTest, ObjectAddedCallback)
 
     EXPECT_CALL(universeCallbackMock, objectAdded(_)).Times(1);
 
-    universe.setObjectAddedCallback(boost::bind(&UniverseCallbackMock::objectAdded, &universeCallbackMock, _1));
+    universe.addObjectAddedCallback(boost::bind(&UniverseCallbackMock::objectAdded, &universeCallbackMock, _1));
 
     // add some object
     boost::shared_ptr<Common::Game::Object::ObjectBase> ship1(new Common::Game::Object::Ship());

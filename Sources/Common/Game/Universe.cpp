@@ -30,8 +30,8 @@ void Universe::add(boost::shared_ptr<Object::ObjectBase> object)
         throw std::runtime_error("element already exists");
     }
 
-    if (m_objectAddedCallback)
-        m_objectAddedCallback(*object);
+    for (auto callback: m_objectAddedCallbacks)
+        callback(*object);
 }
 
 bool Universe::has(unsigned id)
@@ -40,9 +40,9 @@ bool Universe::has(unsigned id)
     return it != m_objects.end();
 }
 
-void Universe::setObjectAddedCallback(ObjectAddedCallback callback)
+void Universe::addObjectAddedCallback(ObjectAddedCallback callback)
 {
-    LOG_DEBUG << "Setting ObjectAddedCallback";
+    LOG_DEBUG << "Adding ObjectAddedCallback: " << callback;
 
-    m_objectAddedCallback = callback;
+    m_objectAddedCallbacks.push_back(callback);
 }
