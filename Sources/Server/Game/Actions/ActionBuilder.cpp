@@ -82,6 +82,11 @@ void ActionBuilder::aquireGlobalCooldown(unsigned playerId)
 void ActionBuilder::globalCooldownExpired(unsigned playerId)
 {
     LOG_DEBUG << "Global cooldown expired for player: " << playerId;
+
+    auto & connection = m_playerContainer.getConnectionById(playerId);
+    Common::Messages::GlobalCooldownExpired globalCooldownExpired;
+    connection.send(globalCooldownExpired);
+
     size_t elementsErased = m_playerGlobalCooldowns.erase(playerId);
     if (elementsErased == 0)
     {
