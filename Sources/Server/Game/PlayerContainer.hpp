@@ -24,6 +24,8 @@ public:
     void remove(Network::IConnection &);
 
     Server::Game::Player & getBy(Network::IConnection & connection);
+    Network::IConnection & getConnectionById(int);
+    
     std::vector<boost::shared_ptr<Player> > getAll(PlayerState state);
     std::vector<Network::IConnection *> getAllConnections(PlayerState state);
 

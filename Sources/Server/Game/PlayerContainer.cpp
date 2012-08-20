@@ -67,6 +67,19 @@ Player & PlayerContainer::getBy(Network::IConnection & connection)
     return *m_connectionMap.at(&connection);
 }
 
+Server::Network::IConnection & PlayerContainer::getConnectionById(int playerId)
+{
+    // TODO: optimize this
+    for (auto & i: m_connectionMap)
+    {
+        if (i.second->getId() == playerId)
+        {
+            return *i.first;
+        }
+    }
+    throw std::out_of_range("player doesn't exist");
+}
+
 std::vector<boost::shared_ptr<Player> > PlayerContainer::getAll(PlayerState state)
 {
     std::vector<boost::shared_ptr<Player> > ret(m_connectionMap.size());
