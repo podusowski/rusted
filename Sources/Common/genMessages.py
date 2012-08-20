@@ -3,8 +3,6 @@
 import sys
 from xml.dom import minidom
 
-messages = minidom.parse('Messages/Messages.xml')
-
 def convertToCppType(xmlType):
 	if xmlType == "boolean":
 		return "bool"
@@ -404,11 +402,11 @@ class CppHandlerCaller:
         return s
 
 
+messages = minidom.parse('Messages/Messages.xml')
 msgs = []
 for message_xml_node in messages.childNodes[0].getElementsByTagName("message"):
     message = Message(message_xml_node) 
     msgs.append(message)
 hpp = CppOutput(msgs, "Messages/Messages.hpp")
 hpp.generate()
-
 
