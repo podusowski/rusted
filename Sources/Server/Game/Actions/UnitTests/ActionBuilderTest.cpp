@@ -53,6 +53,7 @@ TEST_F(ActionBuilderTest, BuildAttack)
 TEST_F(ActionBuilderTest, GlobalCooldown)
 {
     const int ATTACK_ID = 1;
+    const int PLAYER_ID = 2;
 
     Server::Network::ConnectionMock connection;
     Server::Game::PlayerContainerMock playerContainer;
@@ -63,9 +64,12 @@ TEST_F(ActionBuilderTest, GlobalCooldown)
 
     ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(ship1));
     ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(ship2));
+    ON_CALL(player, getId()).WillByDefault(Return(PLAYER_ID));
 
     boost::function<void()> timerCallback;
     EXPECT_CALL(getTimeMock(), createTimer(_, _)).Times(2).WillRepeatedly(SaveArg<1>(&timerCallback));
+
+    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(1).WillOnce(ReturnRef(connection));
 
     Server::Game::Actions::ActionBuilder builder(universe, playerContainer);
     builder.build(connection, player, ATTACK_ID);
