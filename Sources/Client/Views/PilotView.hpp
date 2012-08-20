@@ -42,6 +42,7 @@ private:
     void availableActionsFetched(std::vector<boost::tuple<int, std::string> >);
     void shipListBoxSelected(MyGUI::ListBox *, size_t);
     void playerShipsFetched();
+    void objectAdded(Common::Game::Object::ObjectBase &);
 
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;

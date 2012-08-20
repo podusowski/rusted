@@ -25,6 +25,8 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
 void PilotView::activate()
 {
     m_input.addMouseListener(*this);
+    m_universe.addObjectAddedCallback(boost::bind(&PilotView::objectAdded, this, _1));
+
     m_playerActionService.fetchAvailableActions(boost::bind(&PilotView::availableActionsFetched, this, _1));
     m_objectService.fetchPlayerShips(boost::bind(&PilotView::playerShipsFetched, this));
 
@@ -170,6 +172,21 @@ void PilotView::playerShipsFetched()
     {
         std::stringstream ss;
         ss << "My ship " << ship->getId();
+        shipListBox->addItem(ss.str(), MyGUI::Any(ship->getId()));
+    }
+}
+
+void PilotView::objectAdded(Common::Game::Object::ObjectBase & object)
+{
+    auto * ship = dynamic_cast<Common::Game::Object::Ship*>(&object);
+    if (ship && ship->getOwnerId() == m_playerInfo.getId())
+    {
+        LOG_DEBUG << "Player ship added";
+
+        MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
+
+        std::stringstream ss;
+        ss << "ship " << ship->getId();
         shipListBox->addItem(ss.str(), MyGUI::Any(ship->getId()));
     }
 }
