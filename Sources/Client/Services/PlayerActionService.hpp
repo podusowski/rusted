@@ -22,6 +22,7 @@ class PlayerActionService : public AbstractService<PlayerActionService>
 {
 public:
     typedef boost::function<void(std::vector<boost::tuple<int, std::string> >)> AvailableActionsFetchedCallback;
+    typedef boost::function<void()> GlobalCooldownExpiredCallback;
 
     PlayerActionService(Network::IConnection &, Game::PlayerInfo &, Common::Game::Universe &);
 
@@ -30,9 +31,10 @@ public:
     void setFocusedObjectCourse(Common::Game::Position);
     void selectObject(Common::Game::Object::ObjectBase &);
     void fetchAvailableActions(AvailableActionsFetchedCallback);
-    void executeAction(unsigned actionId);
+    void executeAction(unsigned actionId, GlobalCooldownExpiredCallback);
 
     void handle(const Common::Messages::AvailableActions &);
+    void handle(const Common::Messages::GlobalCooldownExpired &);
 
     void handle(const Common::Messages::AbstractMessage &) {}
 
@@ -46,6 +48,7 @@ private:
     boost::optional<Common::Game::Object::ObjectBase *> m_selectedObject;
 
     AvailableActionsFetchedCallback m_availableActionsFetchedCallback;
+    GlobalCooldownExpiredCallback m_globalCooldownExpiredCallback;
 };
 
 }

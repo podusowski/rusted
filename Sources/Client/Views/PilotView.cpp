@@ -108,7 +108,24 @@ void PilotView::actionClicked(MyGUI::Widget * widget)
     LOG_DEBUG << "Action clicked";
 
     int * actionId = widget->getUserData<int>();
-    m_playerActionService.executeAction(*actionId);
+    m_playerActionService.executeAction(*actionId, boost::bind(&PilotView::enableActionButtons, this));
+    disableActionButtons();
+}
+
+void PilotView::disableActionButtons()
+{
+    for (auto * button: m_actionButtons)
+    {
+        button->setEnabled(false);
+    }
+}
+
+void PilotView::enableActionButtons()
+{
+    for (auto * button: m_actionButtons)
+    {
+        button->setEnabled(true);
+    }
 }
 
 void PilotView::availableActionsFetched(std::vector<boost::tuple<int, std::string> > actions)
@@ -123,6 +140,7 @@ void PilotView::availableActionsFetched(std::vector<boost::tuple<int, std::strin
         LOG_DEBUG << "  " << action.get<0>() << "/" << action.get<1>();
 
         auto * actionButton = actionsPanel->createWidget<MyGUI::Button>("Button", MyGUI::IntCoord(0, buttonTop, 50, 50), MyGUI::Align::Default);
+        m_actionButtons.push_back(actionButton);
         buttonTop += 50;
 
         actionButton->setCaption(action.get<1>());

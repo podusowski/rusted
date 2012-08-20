@@ -69,11 +69,13 @@ void PlayerActionService::fetchAvailableActions(AvailableActionsFetchedCallback 
     m_connection.send(fetchAvailableActions);
 }
 
-void PlayerActionService::executeAction(unsigned actionId)
+void PlayerActionService::executeAction(unsigned actionId, GlobalCooldownExpiredCallback callback)
 {
     assert(m_focusedObject);
 
     LOG_DEBUG << "Performing action: " << actionId;
+
+    m_globalCooldownExpiredCallback = callback;
 
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = actionId;
@@ -90,3 +92,14 @@ void PlayerActionService::handle(const Common::Messages::AvailableActions & avai
         m_availableActionsFetchedCallback(availableActions.actions);
     }
 }
+
+void PlayerActionService::handle(const Common::Messages::GlobalCooldownExpired &)
+{
+    LOG_DEBUG << "Global cooldown expired";
+
+    if (m_globalCooldownExpiredCallback)
+    {
+        m_globalCooldownExpiredCallback();
+    }
+}
+

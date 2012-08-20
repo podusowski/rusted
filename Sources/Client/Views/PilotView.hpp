@@ -37,6 +37,8 @@ public:
 
 private:
     void actionClicked(MyGUI::Widget *);
+    void disableActionButtons();
+    void enableActionButtons();
     void availableActionsFetched(std::vector<boost::tuple<int, std::string> >);
     void shipListBoxSelected(MyGUI::ListBox *, size_t);
     void playerShipsFetched();
@@ -48,6 +50,7 @@ private:
     Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;
     Game::PlayerInfo & m_playerInfo;
+    std::vector<MyGUI::Button *> m_actionButtons;
 };
 
 }
