@@ -6,6 +6,7 @@ SOURCES+=Game/UnitTests/PlayerContainerTest.cpp
 SOURCES+=Game/Actions/UnitTests/AttackTest.cpp
 SOURCES+=Game/Actions/UnitTests/BuildShipTest.cpp
 SOURCES+=Game/Actions/UnitTests/ActionBuilderTest.cpp
+SOURCES+=Game/Actions/UnitTests/ActionPerformerTest.cpp
 SOURCES+=Game/UnitTests/UniverseLoaderTest.cpp
 SOURCES+=Game/UnitTests/ObjectFactoryTest.cpp
 SOURCES+=UnitTests/ConnectionStub.cpp
