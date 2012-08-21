@@ -165,15 +165,7 @@ void PilotView::playerShipsFetched()
 {
     LOG_DEBUG << "Got player ships";
 
-    MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
-
-    auto ships = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_playerInfo.getId());
-    for (auto ship: ships)
-    {
-        std::stringstream ss;
-        ss << "My ship " << ship->getId();
-        shipListBox->addItem(ss.str(), MyGUI::Any(ship->getId()));
-    }
+    updatePlayerShipsListBox();
 }
 
 void PilotView::objectAdded(Common::Game::Object::ObjectBase & object)
@@ -182,11 +174,21 @@ void PilotView::objectAdded(Common::Game::Object::ObjectBase & object)
     if (ship && ship->getOwnerId() == m_playerInfo.getId())
     {
         LOG_DEBUG << "Player ship added";
+        updatePlayerShipsListBox();
+    }
+}
 
-        MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
+void PilotView::updatePlayerShipsListBox()
+{
+    MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
 
+    shipListBox->removeAllItems();
+
+    auto ships = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_playerInfo.getId());
+    for (auto ship: ships)
+    {
         std::stringstream ss;
-        ss << "ship " << ship->getId();
+        ss << "Ship " << ship->getId();
         shipListBox->addItem(ss.str(), MyGUI::Any(ship->getId()));
     }
 }

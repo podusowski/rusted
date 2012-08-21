@@ -43,6 +43,7 @@ private:
     void shipListBoxSelected(MyGUI::ListBox *, size_t);
     void playerShipsFetched();
     void objectAdded(Common::Game::Object::ObjectBase &);
+    void updatePlayerShipsListBox();
 
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;
