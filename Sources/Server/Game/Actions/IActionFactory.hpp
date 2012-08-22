@@ -18,7 +18,7 @@ class IActionFactory
 public:
     virtual ~IActionFactory() {}
 
-    virtual boost::shared_ptr<Server::Game::Actions::IAction> build(
+    virtual boost::shared_ptr<Server::Game::Actions::IAction> create(
         Server::Network::IConnection &,
         Server::Game::IPlayer &,
         unsigned id) = 0;

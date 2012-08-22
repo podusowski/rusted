@@ -17,12 +17,12 @@ namespace Game
 namespace Actions
 {
 
-class ActionBuilder : public IActionFactory
+class ActionFactory : public IActionFactory
 {
 public:
-    ActionBuilder(Common::Game::Universe &, Server::Game::IPlayerContainer &);
+    ActionFactory(Common::Game::Universe &, Server::Game::IPlayerContainer &);
 
-    boost::shared_ptr<Server::Game::Actions::IAction> build(
+    boost::shared_ptr<Server::Game::Actions::IAction> create(
         Server::Network::IConnection & connection,
         Server::Game::IPlayer &,
         unsigned id);

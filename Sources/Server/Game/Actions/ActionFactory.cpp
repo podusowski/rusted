@@ -1,18 +1,18 @@
 #include <boost/bind.hpp>
 
-#include "ActionBuilder.hpp"
+#include "ActionFactory.hpp"
 #include "Attack.hpp"
 #include "BuildShip.hpp"
 
 using namespace Server::Game::Actions;
 
-ActionBuilder::ActionBuilder(Common::Game::Universe & universe, Server::Game::IPlayerContainer & playerContainer) :
+ActionFactory::ActionFactory(Common::Game::Universe & universe, Server::Game::IPlayerContainer & playerContainer) :
     m_universe(universe),
     m_playerContainer(playerContainer)
 {
 }
 
-boost::shared_ptr<IAction> ActionBuilder::build(
+boost::shared_ptr<IAction> ActionFactory::create(
         Server::Network::IConnection & connection,
         Server::Game::IPlayer & player,
         unsigned id)
