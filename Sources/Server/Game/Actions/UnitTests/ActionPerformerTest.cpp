@@ -57,7 +57,7 @@ TEST_F(ActionPerformerTest, Perform)
 TEST_F(ActionPerformerTest, GlobalCooldown)
 {
     boost::function<void()> timerCallback;
-    EXPECT_CALL(getTimeMock(), createTimer(_, _)).Times(2).WillRepeatedly(SaveArg<1>(&timerCallback));
+    EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(2).WillRepeatedly(SaveArg<1>(&timerCallback));
     EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(1).WillOnce(ReturnRef(connection));
     EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID)).Times(2).WillRepeatedly(Return(action));
 
