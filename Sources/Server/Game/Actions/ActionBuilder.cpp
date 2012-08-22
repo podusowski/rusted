@@ -34,8 +34,6 @@ boost::shared_ptr<IAction> ActionBuilder::build(
     {
     }
 
-    aquireGlobalCooldown(player.getId());
-
     switch (id)
     {
         case 1:
@@ -62,35 +60,5 @@ boost::shared_ptr<IAction> ActionBuilder::build(
     }
 
     return ret;
-}
-
-void ActionBuilder::aquireGlobalCooldown(unsigned playerId)
-{
-    auto ret = m_playerGlobalCooldowns.insert(playerId);
-    if (ret.second)
-    {
-        LOG_DEBUG << "Global cooldown activated on player: " << playerId;
-        m_time->createTimer(Common::Game::TimeValue(1, 0), boost::bind(&ActionBuilder::globalCooldownExpired, this, playerId));
-    }
-    else
-    {
-        LOG_WARN << "Global cooldown is already active on player: " << playerId << ", this might suggest hack attempt";
-        throw std::runtime_error("global cooldown is active");
-    }
-}
-
-void ActionBuilder::globalCooldownExpired(unsigned playerId)
-{
-    LOG_DEBUG << "Global cooldown expired for player: " << playerId;
-
-    auto & connection = m_playerContainer.getConnectionById(playerId);
-    Common::Messages::GlobalCooldownExpired globalCooldownExpired;
-    connection.send(globalCooldownExpired);
-
-    size_t elementsErased = m_playerGlobalCooldowns.erase(playerId);
-    if (elementsErased == 0)
-    {
-        throw std::runtime_error("expired nonexisting global cooldown");
-    }
 }
 

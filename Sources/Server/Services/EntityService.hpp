@@ -4,6 +4,7 @@
 #include "Common/Game/Object/Ship.hpp"
 
 #include "Game/Actions/ActionBuilder.hpp"
+#include "Game/Actions/ActionPerformer.hpp"
 #include "Game/PlayerContainer.hpp"
 #include "Utils.hpp"
 
@@ -32,7 +33,8 @@ public:
 private:
     Common::Game::Universe & m_universe;
     Game::PlayerContainer & m_playerContainer;
-    Server::Game::Actions::ActionBuilder m_actionBuilder;
+    Server::Game::Actions::ActionBuilder m_actionFactory;
+    Server::Game::Actions::ActionPerformer m_actionPerformer;
     Utils m_utils;
 };
 

@@ -8,7 +8,8 @@ using namespace Server::Services;
 EntityService::EntityService(Common::Game::Universe & universe, Server::Game::PlayerContainer & playerContainer) :
     m_universe(universe),
     m_playerContainer(playerContainer),
-    m_actionBuilder(universe, playerContainer)
+    m_actionFactory(universe, playerContainer),
+    m_actionPerformer(m_actionFactory, m_universe, playerContainer)
 {
 }
 
@@ -89,12 +90,11 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
 
     try
     {
-        auto action = m_actionBuilder.build(connection, player, executeAction.id);
-        action->execute();
+        m_actionPerformer.perform(connection, player, executeAction.id);
     }
     catch (std::exception ex)
     {
-        LOG_DEBUG << "Can't build or execute action, reason: " << ex.what();
+        LOG_DEBUG << "Can't execute action, reason: " << ex.what();
     }
 }
 

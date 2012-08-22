@@ -28,13 +28,9 @@ public:
         unsigned id);
 
 private:
-    void aquireGlobalCooldown(unsigned playerId);
-    void globalCooldownExpired(unsigned playerId);
-
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     Common::Game::Universe & m_universe;
     Server::Game::IPlayerContainer & m_playerContainer;
-    std::set<unsigned> m_playerGlobalCooldowns;
 };
 
 }
