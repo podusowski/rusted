@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
-#include "Common/Game/UnitTests/RustedTimeStub.hpp"
+#include "Server/UnitTests/AbstractTest.hpp"
+
 #include "Server/Game/Actions/ActionPerformer.hpp"
 #include "Server/Network/UnitTests/ConnectionMock.hpp"
 #include "Server/Game/UnitTests/PlayerContainerMock.hpp"
@@ -12,30 +13,8 @@
 
 using namespace testing;
 
-class ActionPerformerTest : public Test
+class ActionPerformerTest : public Server::AbstractTest
 {
-public:
-    void SetUp()
-    {
-        Cake::DependencyInjection::clear();
-
-        m_rustedTime = boost::shared_ptr<Common::Game::IRustedTime>(new RustedTimeStub);
-        Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_rustedTime);
-
-    }
-
-    void TearDown()
-    {
-        Cake::DependencyInjection::clear();
-    }
-
-    RustedTimeStub & getTimeMock()
-    {
-        return dynamic_cast<RustedTimeStub&>(*m_rustedTime);
-    }
-
-private:
-    boost::shared_ptr<Common::Game::IRustedTime> m_rustedTime;
 };
 
 TEST_F(ActionPerformerTest, Perform)

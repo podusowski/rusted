@@ -1,7 +1,8 @@
 #include <gtest/gtest.h>
 #include <boost/shared_ptr.hpp>
 
-#include "Common/Game/UnitTests/RustedTimeStub.hpp"
+#include "Server/UnitTests/AbstractTest.hpp"
+
 #include "DataBase/DataBase.hpp"
 #include "Game/UniverseLoader.hpp"
 #include "Game/Universe.hpp"
@@ -9,24 +10,8 @@
 
 using namespace testing;
 
-class UniverseLoaderTest : public Test
+class UniverseLoaderTest : public Server::AbstractTest
 {
-public:
-    UniverseLoaderTest()
-    {
-        Cake::DependencyInjection::clear();
-
-        m_rustedTime = boost::shared_ptr<Common::Game::IRustedTime>(new RustedTimeStub);
-        Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_rustedTime);
-    }
-
-    ~UniverseLoaderTest()
-    {
-        Cake::DependencyInjection::clear();
-    }
-
-private:
-    boost::shared_ptr<Common::Game::IRustedTime> m_rustedTime;
 };
 
 TEST_F(UniverseLoaderTest, LoadShip)

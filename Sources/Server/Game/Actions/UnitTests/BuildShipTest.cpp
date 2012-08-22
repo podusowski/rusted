@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include "Server/UnitTests/AbstractTest.hpp"
+
 #include "Server/Game/UnitTests/PlayerMock.hpp"
 #include "Server/Network/UnitTests/ConnectionMock.hpp"
 #include "Server/Game/UnitTests/PlayerContainerMock.hpp"
@@ -9,7 +11,11 @@
 
 using namespace testing;
 
-TEST(BuildShipTest, Build)
+class BuildShipTest : public Server::AbstractTest
+{
+};
+
+TEST_F(BuildShipTest, Build)
 {
     // TODO: since Universe is mostly templated, it's impossible to create nice mock for it
     //       and I'm unable to test reserveId() for example

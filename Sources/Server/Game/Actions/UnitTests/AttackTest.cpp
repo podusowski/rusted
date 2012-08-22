@@ -1,24 +1,16 @@
 #include <gtest/gtest.h>
 
+#include "Server/UnitTests/AbstractTest.hpp"
+
 #include "Common/Game/Object/UnitTests/ShipMock.hpp"
-#include "Common/Game/UnitTests/RustedTimeStub.hpp"
 #include "Server/Network/UnitTests/ConnectionMock.hpp"
 #include "Server/Game/UnitTests/PlayerContainerMock.hpp"
 #include "Game/Actions/Attack.hpp"
 
 using namespace testing;
 
-class AttackTest : public Test
+class AttackTest : public Server::AbstractTest
 {
-public:
-    void SetUp()
-    {
-        Cake::DependencyInjection::clear();
-        boost::shared_ptr<Common::Game::IRustedTime> time(new RustedTimeStub);
-        Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(time);
-
-        ON_CALL(dynamic_cast<RustedTimeStub&>(*time), getCurrentTime()).WillByDefault(Return(Common::Game::TimeValue()));
-    }
 };
 
 TEST_F(AttackTest, AttackOtherShip)

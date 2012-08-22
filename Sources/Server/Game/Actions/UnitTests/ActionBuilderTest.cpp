@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include "Server/UnitTests/AbstractTest.hpp"
+
 #include "Common/Game/UnitTests/RustedTimeStub.hpp"
 #include "Server/Game/Actions/ActionBuilder.hpp"
 #include "Server/Network/UnitTests/ConnectionMock.hpp"
@@ -10,24 +12,8 @@
 
 using namespace testing;
 
-class ActionBuilderTest : public Test
+class ActionBuilderTest : public Server::AbstractTest
 {
-public:
-    void SetUp()
-    {
-        Cake::DependencyInjection::clear();
-
-        m_rustedTime = boost::shared_ptr<Common::Game::IRustedTime>(new RustedTimeStub);
-        Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_rustedTime);
-    }
-
-    RustedTimeStub & getTimeMock()
-    {
-        return dynamic_cast<RustedTimeStub&>(*m_rustedTime);
-    }
-
-private:
-    boost::shared_ptr<Common::Game::IRustedTime> m_rustedTime;
 };
 
 TEST_F(ActionBuilderTest, BuildAttack)
