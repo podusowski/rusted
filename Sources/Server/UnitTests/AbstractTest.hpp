@@ -20,7 +20,7 @@ public:
         ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(testing::Return(Common::Game::TimeValue()));
     }
 
-    ~AbstractTest()
+    virtual ~AbstractTest()
     {
         Cake::DependencyInjection::clear();
     }

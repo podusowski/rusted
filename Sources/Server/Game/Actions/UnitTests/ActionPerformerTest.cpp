@@ -15,26 +15,30 @@ using namespace testing;
 
 class ActionPerformerTest : public Server::AbstractTest
 {
-};
-
-TEST_F(ActionPerformerTest, Perform)
-{
-    const int ATTACK_ID = 1;
-    const int PLAYER_ID = 2;
+public:
+    ActionPerformerTest() :
+        action(new Server::Game::Actions::ActionMock)
+    {
+        ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(ship1));
+        ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(ship2));
+        ON_CALL(player, getId()).WillByDefault(Return(PLAYER_ID));
+    }
 
     Server::Network::ConnectionMock connection;
     Server::Game::PlayerContainerMock playerContainer;
     Server::Game::PlayerMock player;
     Server::Game::Actions::ActionFactoryMock actionFactory;
-    boost::shared_ptr<Server::Game::Actions::IAction> action(new Server::Game::Actions::ActionMock);
+    boost::shared_ptr<Server::Game::Actions::IAction> action;
     Common::Game::Universe universe;
     Common::Game::Object::ShipMock ship1;
     Common::Game::Object::ShipMock ship2;
 
-    ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(ship1));
-    ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(ship2));
-    ON_CALL(player, getId()).WillByDefault(Return(PLAYER_ID));
+    static const int ATTACK_ID = 1;
+    static const int PLAYER_ID = 2;
+};
 
+TEST_F(ActionPerformerTest, Perform)
+{
     boost::function<void()> timerCallback;
     EXPECT_CALL(getTimeMock(), createTimer(_, _)).Times(1).WillRepeatedly(SaveArg<1>(&timerCallback));
     EXPECT_CALL(actionFactory, build(_, _, ATTACK_ID)).Times(1).WillRepeatedly(Return(action));
