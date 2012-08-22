@@ -42,7 +42,6 @@ TEST_F(ActionPerformerTest, Perform)
     boost::function<void()> timerCallback;
     EXPECT_CALL(getTimeMock(), createTimer(_, _)).Times(1).WillRepeatedly(SaveArg<1>(&timerCallback));
     EXPECT_CALL(actionFactory, build(_, _, ATTACK_ID)).Times(1).WillRepeatedly(Return(action));
-
     EXPECT_CALL(dynamic_cast<Server::Game::Actions::ActionMock&>(*action), execute()).Times(1);
 
     Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
