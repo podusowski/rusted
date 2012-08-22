@@ -52,25 +52,8 @@ TEST_F(ActionPerformerTest, Perform)
     Mock::VerifyAndClear(&actionFactory);
 }
 
-/*
 TEST_F(ActionPerformerTest, GlobalCooldown)
 {
-    const int ATTACK_ID = 1;
-    const int PLAYER_ID = 2;
-
-    Server::Network::ConnectionMock connection;
-    Server::Game::PlayerContainerMock playerContainer;
-    Server::Game::PlayerMock player;
-    Server::Game::Actions::ActionFactoryMock actionFactory;
-    boost::shared_ptr<Server::Game::Actions::IAction> action(new Server::Game::Actions::ActionMock);
-    Common::Game::Universe universe;
-    Common::Game::Object::ShipMock ship1;
-    Common::Game::Object::ShipMock ship2;
-
-    ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(ship1));
-    ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(ship2));
-    ON_CALL(player, getId()).WillByDefault(Return(PLAYER_ID));
-
     boost::function<void()> timerCallback;
     EXPECT_CALL(getTimeMock(), createTimer(_, _)).Times(2).WillRepeatedly(SaveArg<1>(&timerCallback));
     EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(1).WillOnce(ReturnRef(connection));
@@ -90,4 +73,3 @@ TEST_F(ActionPerformerTest, GlobalCooldown)
     // hack for gmock bug: http://code.google.com/p/googlemock/issues/detail?id=79
     Mock::VerifyAndClear(&actionFactory);
 }
-*/
