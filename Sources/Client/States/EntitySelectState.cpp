@@ -28,8 +28,6 @@ EntitySelectState::EntitySelectState(IStateManagerStack & stateManagerStack,
 
 void EntitySelectState::activate()
 {
-    m_gui.loadLayout("EntitySelectScreen.layout");
-
     m_objectService.fetchPlayerShips(boost::bind(&EntitySelectState::myEntitiesFetched, this));
 }
 
@@ -43,28 +41,14 @@ void EntitySelectState::frameStarted()
 
 void EntitySelectState::myEntitiesFetched()
 {
-    MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
-
     auto ships = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_playerInfo.getId());
-    for (auto ship: ships)
+
+    if (ships.empty())
     {
-        std::stringstream ss;
-        ss << "My ship " << ship->getId();
-        shipListBox->addItem(ss.str(), MyGUI::Any(ship->getId()));
+        throw std::runtime_error("player has no ships to fly with");
     }
 
-    m_gui->findWidget<MyGUI::Button>("FlyButton")->eventMouseButtonClick += MyGUI::newDelegate(this, &EntitySelectState::flyButtonClicked);
-}
-
-void EntitySelectState::flyButtonClicked(MyGUI::WidgetPtr)
-{
-    MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
-    size_t idx = shipListBox->getIndexSelected();
-    unsigned * shipId = shipListBox->getItemDataAt<unsigned>(idx);
-    
-    LOG_INFO << "Ship selected (id: " << *shipId << ")";
-
-    Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(*shipId);
+    Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(**ships.begin());
 
     m_playerActionService.focusObject(ship);
     m_stateManagerStack.pushState(m_pilotState);

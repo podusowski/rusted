@@ -30,7 +30,6 @@ public:
 
 private:
     void myEntitiesFetched();
-    void flyButtonClicked(MyGUI::WidgetPtr);
 
     States::IStateManagerStack & m_stateManagerStack;
     Gui::Gui & m_gui;
