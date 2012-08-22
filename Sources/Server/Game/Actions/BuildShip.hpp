@@ -17,7 +17,8 @@ class BuildShip : public IAction
 {
 public:
     BuildShip(Common::Game::Universe &, Server::Game::IPlayer &, Server::Game::IPlayerContainer &);
-    void execute();
+    Common::Game::TimeValue start();
+    void finish();
 
 private:
     Common::Game::Universe & m_universe;

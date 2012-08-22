@@ -47,7 +47,7 @@ TEST_F(AttackTest, AttackOtherShip)
     EXPECT_CALL(selectedShip, setIntegrity(90)).Times(1);
 
     Server::Game::Actions::Attack attack(playerContainer, focusedShip, selectedShip);
-    attack.execute();
+    attack.start();
 }
 
 TEST_F(AttackTest, AttackDestroyedShip)
@@ -67,5 +67,5 @@ TEST_F(AttackTest, AttackDestroyedShip)
     EXPECT_CALL(selectedShip, setIntegrity(_)).Times(0);
 
     Server::Game::Actions::Attack attack(playerContainer, focusedShip, selectedShip);
-    attack.execute();
+    attack.start();
 }

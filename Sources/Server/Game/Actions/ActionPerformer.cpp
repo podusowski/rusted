@@ -19,7 +19,8 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
 {
     aquireGlobalCooldown(player.getId());
     auto action = m_actionFactory.create(connection, player, id);
-    action->execute();
+    action->start();
+    action->finish();
 }
 
 void ActionPerformer::aquireGlobalCooldown(unsigned playerId)

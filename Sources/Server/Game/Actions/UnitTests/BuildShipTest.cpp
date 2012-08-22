@@ -44,7 +44,8 @@ TEST_F(BuildShipTest, Build)
     ON_CALL(player, getId()).WillByDefault(Return(1));
 
     Server::Game::Actions::BuildShip buildShip(universe, player, playerContainer);
-    buildShip.execute();
+    buildShip.start();
+    buildShip.finish();
 
     auto ships = universe.get<Common::Game::Object::Ship>();
 

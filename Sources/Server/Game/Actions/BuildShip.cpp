@@ -12,7 +12,12 @@ BuildShip::BuildShip(Common::Game::Universe & universe, Server::Game::IPlayer & 
 {
 }
 
-void BuildShip::execute()
+Common::Game::TimeValue BuildShip::start()
+{
+    return Common::Game::TimeValue();
+}
+
+void BuildShip::finish()
 {
     boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
     Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship &>(*object);
@@ -34,4 +39,3 @@ void BuildShip::execute()
         m_servicesUtils.sendObjectInfo(ship, *connection);
     }
 }
-

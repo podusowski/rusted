@@ -10,14 +10,14 @@ Attack::Attack(IPlayerContainer & playerContainer, Common::Game::Object::Ship & 
 {
 }
 
-void Attack::execute()
+Common::Game::TimeValue Attack::start()
 {
     unsigned integrity = m_selectedObject.getIntegrity();
 
     if (integrity == 0)
     {
         LOG_DEBUG << "Tried to attack destroyed object";
-        return;
+        return Common::Game::TimeValue(0, 0);
     }
 
     m_selectedObject.setIntegrity(integrity - 10);
@@ -32,5 +32,11 @@ void Attack::execute()
         connection->send(attackObject);
         m_servicesUtils.sendObjectInfo(m_selectedObject, *connection);
     }
+
+    return Common::Game::TimeValue(0, 0);
+}
+
+void Attack::finish()
+{
 }
 

@@ -16,7 +16,8 @@ class Attack : public IAction
 {
 public:
     Attack(IPlayerContainer &, Common::Game::Object::Ship & focusedShip, Common::Game::Object::ObjectBase & selectedObject);
-    void execute();
+    Common::Game::TimeValue start();
+    void finish();
 
 private:
     IPlayerContainer & m_playerContainer;
