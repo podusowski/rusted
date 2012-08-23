@@ -14,7 +14,7 @@ BuildShip::BuildShip(Common::Game::Universe & universe, Server::Game::IPlayer & 
 
 Common::Game::TimeValue BuildShip::start()
 {
-    return Common::Game::TimeValue();
+    return Common::Game::TimeValue(2, 0);
 }
 
 void BuildShip::finish()

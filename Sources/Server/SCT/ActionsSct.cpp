@@ -93,6 +93,10 @@ TEST(ActionsSct, BuildShip)
     executeAction.id = 2;
     connection1->send(executeAction);
 
+    connection1->receive<Common::Messages::ActionStarted>();
+    connection1->receive<Common::Messages::GlobalCooldownExpired>();
+    connection1->receive<Common::Messages::ActionFinished>();
+
     connection1->receive<Common::Messages::ShipInfo>();
     connection1->receive<Common::Messages::ShipCourseInfo>();
 
