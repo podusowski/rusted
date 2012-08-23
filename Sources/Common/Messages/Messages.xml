@@ -134,6 +134,16 @@ actions
     <param type="int32" name="id" />
 </message>
 
+<message id="ActionStarted">
+    <param type="int32" name="objectId" description="object which is executing the action" />
+    <param type="int32" name="actionId" />
+</message>
+
+<message id="ActionFinished">
+    <param type="int32" name="objectId" description="object which is executing the action" />
+    <param type="int32" name="actionId" />
+</message>
+
 <message id="GlobalCooldownExpired" />
 
 </messages>
