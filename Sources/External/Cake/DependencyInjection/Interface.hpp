@@ -55,7 +55,7 @@ public:
 
     template<typename Implementation> void use()
     {
-        m_factory.reset(new generic_factory0<InterfaceType, Implementation>());
+        m_factory.reset(new GenericFactory0<InterfaceType, Implementation>());
     }
 
     void use(boost::shared_ptr<InterfaceType> instance)

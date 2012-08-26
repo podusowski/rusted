@@ -11,7 +11,7 @@ namespace DependencyInjection
 {
 
 template<typename Interface, typename Implementation>
-class generic_factory0 : public Factory<Interface>
+class GenericFactory0 : public Factory<Interface>
 {
 public:
     virtual boost::shared_ptr<Interface> create()
@@ -21,7 +21,7 @@ public:
 };
 
 template<typename Interface, typename Implementation, typename Arg1>
-class generic_factory1 : public Factory<Interface, Arg1>
+class GenericFactory1 : public Factory<Interface, Arg1>
 {
 public:
     virtual boost::shared_ptr<Interface> create(Arg1 arg1)

@@ -32,7 +32,7 @@ private:
 int main()
 {
     Cake::DependencyInjection::forInterface<IUrlDownloader>().use_factory<
-        Cake::DependencyInjection::generic_factory1<IUrlDownloader, WinApiUrlDownloader, const std::string &> >();
+        Cake::DependencyInjection::GenericFactory1<IUrlDownloader, WinApiUrlDownloader, const std::string &> >();
 
     Application a("http://google.com");
 }
