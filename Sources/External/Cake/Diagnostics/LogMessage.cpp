@@ -48,6 +48,8 @@ void LogMessage::printMessage()
             out << *it;
         }
     }
-    std::cerr << out.str() << '\n';
+
+    out << "\n";
+    m_stream.flush(out.str());
 }
 
