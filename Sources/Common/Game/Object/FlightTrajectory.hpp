@@ -1,10 +1,7 @@
 #pragma once
 
 #include "Cake/DependencyInjection/Inject.hpp"
-
-#include "Common/Game/Position.hpp"
-#include "Common/Game/TimeValue.hpp"
-#include "Common/Game/IRustedTime.hpp"
+#include "IFlightTrajectory.hpp"
 
 namespace Common
 {
@@ -13,16 +10,9 @@ namespace Game
 namespace Object
 {
 
-class FlightTrajectory
+class FlightTrajectory : public IFlightTrajectory
 {
 public:
-    struct Description
-    {
-        Position start;
-        Position destination;
-        TimeValue startTime;
-    };
-
     FlightTrajectory();
 
     void fly(Position destination);
