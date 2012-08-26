@@ -45,7 +45,7 @@ struct Application
 TEST_F(FactoryInjectTest, SimpleInject)
 {
     forInterface<IService>()
-          .use_factory<ServiceFactory>();
+          .useFactory<ServiceFactory>();
 
     Application a(5);
 
@@ -63,7 +63,7 @@ struct ServiceFactoryWithBadType : public Factory<IService, const std::string &>
 TEST_F(FactoryInjectTest, FactoryHasDifferentType)
 {
     forInterface<IService>()
-          .use_factory<ServiceFactoryWithBadType>();
+          .useFactory<ServiceFactoryWithBadType>();
 
     EXPECT_ANY_THROW(Application a(5));
 }
@@ -71,7 +71,7 @@ TEST_F(FactoryInjectTest, FactoryHasDifferentType)
 TEST_F(FactoryInjectTest, DefaultFactory)
 {
     forInterface<IService>()
-          .use_factory<GenericFactory1<IService, Service, int> >();
+          .useFactory<GenericFactory1<IService, Service, int> >();
 
     Application a(5);
 
@@ -81,7 +81,7 @@ TEST_F(FactoryInjectTest, DefaultFactory)
 TEST_F(FactoryInjectTest, DefaultFactoryWithBadType)
 {
     forInterface<IService>()
-          .use_factory<GenericFactory1<IService, Service, float> >();
+          .useFactory<GenericFactory1<IService, Service, float> >();
 
     EXPECT_ANY_THROW(Application a(5));
 }

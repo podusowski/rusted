@@ -63,7 +63,7 @@ public:
         m_factory = boost::shared_ptr<IFactory>(new instance_factory<InterfaceType>(instance));
     }
 
-    template<typename Factory> void use_factory()
+    template<typename Factory> void useFactory()
     {
         // TODO: make it lazy, otherwise we can get troubles when factory is
         // using inject by itself
