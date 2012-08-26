@@ -71,7 +71,7 @@ TEST_F(FactoryInjectTest, FactoryHasDifferentType)
 TEST_F(FactoryInjectTest, DefaultFactory)
 {
     forInterface<IService>()
-          .use_factory<generic_factory1<IService, Service, int> >();
+          .use_factory<GenericFactory1<IService, Service, int> >();
 
     Application a(5);
 
@@ -81,7 +81,7 @@ TEST_F(FactoryInjectTest, DefaultFactory)
 TEST_F(FactoryInjectTest, DefaultFactoryWithBadType)
 {
     forInterface<IService>()
-          .use_factory<generic_factory1<IService, Service, float> >();
+          .use_factory<GenericFactory1<IService, Service, float> >();
 
     EXPECT_ANY_THROW(Application a(5));
 }
