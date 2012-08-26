@@ -5,6 +5,7 @@
 #include "Common/Game/Object/ObjectBase.hpp"
 #include "Common/Game/Object/OwnedObjectBase.hpp"
 #include "Common/Game/IRustedTime.hpp"
+#include "IFlightTrajectory.hpp"
 
 namespace Common
 {
@@ -38,6 +39,7 @@ private:
     Position calculatePosition(TimeValue time);
 
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
+    Cake::DependencyInjection::Inject<IFlightTrajectory> m_trajectory;
 
     Position m_position;
     Course m_course;

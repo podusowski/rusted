@@ -5,6 +5,7 @@
 #include "Game/Object/Ship.hpp"
 #include "Game/UnitTests/RustedTimeStub.hpp"
 #include "Game/Object/UnitTests/ShipMock.hpp"
+#include "Game/Object/FlightTrajectory.hpp"
 
 using namespace testing;
 using namespace Common::Game;
@@ -14,9 +15,14 @@ class ShipTest : public Test
 public:
     void SetUp()
     {
+        using namespace Cake::DependencyInjection;
+
         Cake::DependencyInjection::clear();
         m_time.reset(new RustedTimeStub);
         Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_time);
+
+        forInterface<Common::Game::Object::IFlightTrajectory>()
+            .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
     }
 
     RustedTimeStub & getRustedTimeStub()

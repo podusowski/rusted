@@ -3,14 +3,20 @@
 
 #include "Common/Game/RustedTime.hpp"
 #include "Engine/Engine.hpp"
+#include "Common/Game/Object/FlightTrajectory.hpp"
 
 void initDependencies(int argc, const char * argv[])
 {
+    using namespace Cake::DependencyInjection;
+
     boost::shared_ptr<Common::Game::IRustedTime> rustedTime(new Common::Game::RustedTime);
-    Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(rustedTime);
+    forInterface<Common::Game::IRustedTime>().use(rustedTime);
 
     boost::shared_ptr<Cake::Configuration::Configuration> configuration(new Cake::Configuration::Configuration(argc, argv));
-    Cake::DependencyInjection::forInterface<Cake::Configuration::Configuration>().use(configuration);
+    forInterface<Cake::Configuration::Configuration>().use(configuration);
+
+    forInterface<Common::Game::Object::IFlightTrajectory>()
+        .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
 }
 
 int main(int argc, const char * argv[])
@@ -24,3 +30,4 @@ int main(int argc, const char * argv[])
     Client::Engine::Engine e;
     e.start();
 }
+

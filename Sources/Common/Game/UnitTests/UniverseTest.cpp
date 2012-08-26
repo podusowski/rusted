@@ -9,6 +9,7 @@
 #include "Game/Object/Ship.hpp"
 #include "Game/Object/StaticObject.hpp"
 #include "Game/Universe.hpp"
+#include "Game/Object/FlightTrajectory.hpp"
 
 #include "Game/UnitTests/RustedTimeStub.hpp"
 
@@ -19,9 +20,14 @@ class UniverseTest : public Test
 public:
     void SetUp()
     {
+        using namespace Cake::DependencyInjection;
+
         Cake::DependencyInjection::clear();
         m_time.reset(new RustedTimeStub);
         Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_time);
+
+        forInterface<Common::Game::Object::IFlightTrajectory>()
+            .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
     }
 
 private:

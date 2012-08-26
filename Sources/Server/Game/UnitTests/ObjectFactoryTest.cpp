@@ -1,5 +1,7 @@
 #include <gtest/gtest.h>
 
+#include "Server/UnitTests/AbstractTest.hpp"
+
 #include "Game/ObjectFactory.hpp"
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/StaticObject.hpp"
@@ -9,16 +11,12 @@
 
 using namespace testing;
 
-class ObjectFactoryTest : public Test
+class ObjectFactoryTest : public Server::AbstractTest
 {
 public:
     void SetUp()
     {
-        Cake::DependencyInjection::clear();
-        boost::shared_ptr<Common::Game::IRustedTime> time(new RustedTimeStub);
-        Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(time);
-
-        ON_CALL(dynamic_cast<RustedTimeStub&>(*time), getCurrentTime()).WillByDefault(Return(Common::Game::TimeValue()));
+        ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(Common::Game::TimeValue()));
     }
 };
 
