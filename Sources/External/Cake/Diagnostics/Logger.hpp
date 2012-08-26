@@ -4,8 +4,10 @@
 #include <cstdlib>
 
 #include "LogMessage.hpp"
+#include "ILogStream.hpp"
 #include "Cake/DependencyInjection/Inject.hpp"
 #include "Cake/Configuration/Configuration.hpp"
+#include "Cake/Threading/Mutex.hpp"
 
 namespace Cake
 {
@@ -20,7 +22,7 @@ enum LogLevel
     ERROR
 };
 
-class Logger
+class Logger : public ILogStream
 {
 public:
     static Logger & getInstance();
@@ -31,6 +33,8 @@ public:
                        const std::string & file, 
                        unsigned line);
 
+    void flush(const std::string &);
+
 private:
     Logger();
     Logger(const Logger &) {}
@@ -39,6 +43,7 @@ private:
 
     std::map<LogLevel, std::string> m_banners;
     std::string m_appName;
+    Cake::Threading::Mutex m_mutex;
 };
 
 }

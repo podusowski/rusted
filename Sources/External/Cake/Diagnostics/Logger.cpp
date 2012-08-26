@@ -2,6 +2,7 @@
 #include <iomanip>
 
 #include "Cake/Threading/Thread.hpp"
+#include "Cake/Threading/ScopedLock.hpp"
 #include "Logger.hpp"
 
 using namespace Cake::Diagnostics;
@@ -39,7 +40,13 @@ LogMessage Logger::log(LogLevel level,
                        const std::string & file, 
                        unsigned line)
 {
-    return LogMessage(generateHeader(level, file, line));
+    return LogMessage(*this, generateHeader(level, file, line));
+}
+
+void Logger::flush(const std::string & s)
+{
+    Cake::Threading::ScopedLock lock(m_mutex);
+    std::cerr << s;
 }
 
 std::string Logger::generateHeader(LogLevel level, const std::string & file, unsigned line)
