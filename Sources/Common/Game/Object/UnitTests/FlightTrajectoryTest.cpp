@@ -103,10 +103,7 @@ TEST_F(FlightTrajectoryTest, MoveToTheSamePosition)
     Mock::VerifyAndClear(&getTimeMock());
 }
 
-/* When ship is destroyed somewhere, it should stop moving and stay in place where it
- * was when it happened. 
- */
-TEST_F(FlightTrajectoryTest, ShipDestroyedDuringFlight)
+TEST_F(FlightTrajectoryTest, Stop)
 {
     FlightTrajectory trajectory;
 
@@ -128,10 +125,7 @@ TEST_F(FlightTrajectoryTest, ShipDestroyedDuringFlight)
     Mock::VerifyAndClear(&getTimeMock());
 }
 
-/* Yeah, blame me for not doing OOP but we need internal course representation to send it over
- * the network
- *
- * Sort of memento pattern
+ /* Sort of memento pattern, we need to have a way to send FlightTrajectory through network
  */
 TEST_F(FlightTrajectoryTest, GetDescription)
 {
@@ -181,12 +175,13 @@ TEST_F(FlightTrajectoryTest, ApplyDescription)
     Mock::VerifyAndClear(&getTimeMock());
 }
 
-TEST_F(FlightTrajectoryTest, SetPositionIsResetingTheCourse)
+TEST_F(FlightTrajectoryTest, SetPositionResetsTheCourse)
 {
-    FlightTrajectory trajectory;
-    trajectory.fly(Position(10, 20, 30));
-
     ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
+
+    FlightTrajectory trajectory;
+    trajectory.setPosition(Position(10, 20, 30));
+
     auto description = trajectory.getDescription();
 
     EXPECT_EQ(10, description.start.getX());

@@ -10,33 +10,51 @@ FlightTrajectory::FlightTrajectory() : m_speed(1)
 
 void FlightTrajectory::fly(Common::Game::Position destination)
 {
+    TimeValue time = m_time->getCurrentTime();
+
+    auto position = calculatePosition(time);
+    m_description.start = position;
+    m_description.destination = destination;
+    m_description.startTime = time;
+
+    LOG_DEBUG << "New trajectory: from " << position << " to " << destination << ", start time: " << time << ", speed: " << m_speed;
 }
 
 void FlightTrajectory::stop()
 {
+    auto time = m_time->getCurrentTime();
+    auto position = calculatePosition(time);
+
+    m_description.start = position;
+    m_description.destination = position;
+
+    LOG_DEBUG << "Stoped at: " << position;
 }
 
 void FlightTrajectory::setPosition(Common::Game::Position position)
 {
+    m_description.start = position;
+    m_description.destination = position;
 }
 
 Common::Game::Position FlightTrajectory::getPosition()
 {
-    return Position();
+    return calculatePosition(m_time->getCurrentTime());
 }
 
 void FlightTrajectory::setSpeed(unsigned speed)
 {
+    m_speed = speed;
 }
 
 FlightTrajectory::Description FlightTrajectory::getDescription()
 {
-    FlightTrajectory::Description description;
-    return description;
+    return m_description;
 }
 
 void FlightTrajectory::applyDescription(FlightTrajectory::Description description)
 {
+    m_description = description;
 }
 
 Position FlightTrajectory::calculatePosition(TimeValue time)
