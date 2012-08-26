@@ -23,7 +23,7 @@ while getopts 'vcm' opt; do
 done
 
 if [ $compile = "1" ]; then
-    make all
+    make all || exit 1
 fi
 
 if [ ! -d _build ]; then 
