@@ -3,7 +3,6 @@
 #include "Cake/DependencyInjection/Inject.hpp"
 
 #include "Common/Game/Object/ObjectBase.hpp"
-#include "Common/Game/Object/IFlyableObject.hpp"
 #include "Common/Game/Object/OwnedObjectBase.hpp"
 #include "Common/Game/IRustedTime.hpp"
 
@@ -21,7 +20,7 @@ struct Course
     TimeValue startTime;
 };
 
-class Ship : public ObjectBase, public IFlyableObject, public OwnedObjectBase
+class Ship : public ObjectBase, public OwnedObjectBase
 {
 public:
     Ship();
