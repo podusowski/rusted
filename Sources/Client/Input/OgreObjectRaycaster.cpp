@@ -1,3 +1,4 @@
+#include <OgreEntity.h>
 #include "MyGUI.h"
 
 #include "Cake/Diagnostics/Logger.hpp"

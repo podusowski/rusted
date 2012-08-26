@@ -20,7 +20,6 @@ SOURCES+=Services/ObjectService.cpp
 SOURCES+=Views/ObjectsView.cpp
 SOURCES+=Views/Object.cpp
 SOURCES+=Views/PilotView.cpp
-SOURCES+=Graphics/OgreObject.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../ 

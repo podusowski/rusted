@@ -2,8 +2,6 @@
 
 #include <OgreRoot.h>
 
-#include "Client/Graphics/OgreObject.hpp"
-
 namespace Client
 {
 namespace Graphics 

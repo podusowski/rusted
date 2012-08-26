@@ -1,3 +1,6 @@
+#include <OgreSceneNode.h>
+#include <OgreEntity.h>
+
 #include "Cake/Diagnostics/Logger.hpp"
 
 #include "Common/Game/Object/StaticObject.hpp"
