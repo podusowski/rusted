@@ -1,6 +1,8 @@
+#include "Cake/Diagnostics/Logger.hpp"
 #include "FlightTrajectory.hpp"
 
 using namespace Common::Game::Object;
+using namespace Common::Game;
 
 FlightTrajectory::FlightTrajectory() : m_speed(1)
 {
@@ -37,36 +39,33 @@ void FlightTrajectory::applyDescription(FlightTrajectory::Description descriptio
 {
 }
 
-Common::Game::Position FlightTrajectory::calculatePosition(TimeValue time)
+Position FlightTrajectory::calculatePosition(TimeValue time)
 {
-#if 0
-    if (m_course.destination == m_position)
-        return m_position;
+    if (m_description.destination == m_description.start)
+        return m_description.start;
 
-    unsigned distance = Position::distance(m_course.destination, m_position);
+    unsigned distance = Position::distance(m_description.destination, m_description.start);
     unsigned totalTripTime = distance / m_speed;
-    TimeValue timeTakenSoFar = time - m_course.startTime;
+    TimeValue timeTakenSoFar = time - m_description.startTime;
     float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
 
-
     if (timeTakenSoFar == TimeValue(0, 0))
-        return m_position;
+        return m_description.start;
 
-    float tripProgress = float(secondsTakenSoFar) / float(totalTripTime);
+    float progress = float(secondsTakenSoFar) / float(totalTripTime);
 
-    if (tripProgress >= 1.0)
+    if (progress >= 1.0)
     {
-        m_position = m_course.destination;
+        m_description.start = m_description.destination;
 
-        LOG_DEBUG << "Ship arrived at " << m_position;
+        LOG_DEBUG << "Destination " << m_description.destination << " reached";
 
-        return m_position;
+        return m_description.destination;
     }
     else
     {
-        Position tripVector = m_course.destination - m_position;
-        return m_position + (tripVector * tripProgress);
+        Position trajectoryVector = m_description.destination - m_description.start;
+        return m_description.start + (trajectoryVector * progress);
     }
-    #endif
 }
 
