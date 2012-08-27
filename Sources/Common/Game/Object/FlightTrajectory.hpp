@@ -14,6 +14,7 @@ class FlightTrajectory : public IFlightTrajectory
 {
 public:
     FlightTrajectory();
+    ~FlightTrajectory();
 
     void fly(Position destination);
     void stop();
@@ -22,6 +23,7 @@ public:
     Position getPosition();
 
     void setSpeed(unsigned);
+    unsigned getSpeed();
 
     Description getDescription();
     void applyDescription(Description);

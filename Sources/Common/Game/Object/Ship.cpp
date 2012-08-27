@@ -39,6 +39,11 @@ void Ship::setSpeed(unsigned speed)
     m_trajectory->setSpeed(speed);
 }
 
+unsigned Ship::getSpeed()
+{
+    return m_trajectory->getSpeed();
+}
+
 void Ship::setIntegrity(unsigned integrity)
 {
     ObjectBase::setIntegrity(integrity);

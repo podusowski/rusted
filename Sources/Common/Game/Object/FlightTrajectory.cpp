@@ -8,6 +8,10 @@ FlightTrajectory::FlightTrajectory() : m_speed(1)
 {
 }
 
+FlightTrajectory::~FlightTrajectory()
+{
+}
+
 void FlightTrajectory::fly(Common::Game::Position destination)
 {
     TimeValue time = m_time->getCurrentTime();
@@ -45,6 +49,11 @@ Common::Game::Position FlightTrajectory::getPosition()
 void FlightTrajectory::setSpeed(unsigned speed)
 {
     m_speed = speed;
+}
+
+unsigned FlightTrajectory::getSpeed()
+{
+    return m_speed;
 }
 
 FlightTrajectory::Description FlightTrajectory::getDescription()

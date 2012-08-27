@@ -28,6 +28,7 @@ public:
     virtual Position getPosition() = 0;
 
     virtual void setSpeed(unsigned) = 0;
+    virtual unsigned getSpeed() = 0;
 
     virtual Description getDescription() = 0;
     virtual void applyDescription(Description) = 0;

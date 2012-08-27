@@ -42,20 +42,20 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
 
 void Utils::sendShipCourseInfo(Common::Game::Object::Ship & ship, Network::IConnection & connection)
 {
-    auto course = ship.getCourse();
+    auto description = ship.getTrajectoryDescription();
 
     Common::Messages::ShipCourseInfo shipCourseInfo;
     shipCourseInfo.objectId = ship.getId();
 
-    shipCourseInfo.positionX = course.start.getX();
-    shipCourseInfo.positionY = course.start.getY();
-    shipCourseInfo.positionZ = course.start.getZ();
+    shipCourseInfo.positionX = description.start.getX();
+    shipCourseInfo.positionY = description.start.getY();
+    shipCourseInfo.positionZ = description.start.getZ();
 
-    shipCourseInfo.destinationX = course.destination.getX();
-    shipCourseInfo.destinationY = course.destination.getY();
-    shipCourseInfo.destinationZ = course.destination.getZ();
+    shipCourseInfo.destinationX = description.destination.getX();
+    shipCourseInfo.destinationY = description.destination.getY();
+    shipCourseInfo.destinationZ = description.destination.getZ();
 
-    shipCourseInfo.startTimeSeconds = course.startTime.getSeconds();
+    shipCourseInfo.startTimeSeconds = description.startTime.getSeconds();
 
     connection.send(shipCourseInfo);
 }

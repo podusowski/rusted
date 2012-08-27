@@ -24,6 +24,8 @@ public:
               Common::Game::Universe &,
               Client::Game::PlayerInfo &);
 
+    ~PilotView();
+
     void activate();
     void deactivate();
     void frameStarted();

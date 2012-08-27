@@ -113,20 +113,20 @@ void ObjectService::handle(const Common::Messages::ShipCourseInfo & shipCourseIn
 
     Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(shipCourseInfo.objectId);
 
-    Common::Game::Object::Course course;
+    Common::Game::Object::IFlightTrajectory::Description description;
 
-    course.start.setX(shipCourseInfo.positionX);
-    course.start.setY(shipCourseInfo.positionY);
-    course.start.setZ(shipCourseInfo.positionZ);
+    description.start.setX(shipCourseInfo.positionX);
+    description.start.setY(shipCourseInfo.positionY);
+    description.start.setZ(shipCourseInfo.positionZ);
 
-    course.destination.setX(shipCourseInfo.destinationX);
-    course.destination.setY(shipCourseInfo.destinationY);
-    course.destination.setZ(shipCourseInfo.destinationZ);
+    description.destination.setX(shipCourseInfo.destinationX);
+    description.destination.setY(shipCourseInfo.destinationY);
+    description.destination.setZ(shipCourseInfo.destinationZ);
 
     // TODO: we should try to get higher presision
-    course.startTime = Common::Game::TimeValue(shipCourseInfo.startTimeSeconds, 0);
+    description.startTime = Common::Game::TimeValue(shipCourseInfo.startTimeSeconds, 0);
 
-    ship.setCourse(course);
+    ship.applyTrajectoryDescription(description);
 }
 
 void ObjectService::tryCallPlayerShipsFetchedCallback(int shipId)

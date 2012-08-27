@@ -22,6 +22,10 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
 {
 }
 
+PilotView::~PilotView()
+{
+}
+
 void PilotView::activate()
 {
     m_input.addMouseListener(*this);
@@ -51,11 +55,11 @@ void PilotView::updateShipPosition()
     std::stringstream ss;
     ss << "crt: " << focusedShip.getPosition();
 
-    Common::Game::Object::Course course = focusedShip.getCourse();
+    auto description = focusedShip.getTrajectoryDescription();
 
-    if (focusedShip.getPosition() != course.destination)
+    if (focusedShip.getPosition() != description.destination)
     {
-        ss << " | dst: " << course.destination;
+        ss << " | dst: " << description.destination;
     }
 
     m_gui->findWidget<MyGUI::TextBox>("NavigationTextBox")->setCaption(ss.str());
