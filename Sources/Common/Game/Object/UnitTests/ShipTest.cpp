@@ -4,8 +4,7 @@
 
 #include "Game/Object/Ship.hpp"
 #include "Game/UnitTests/RustedTimeStub.hpp"
-#include "Game/Object/UnitTests/ShipMock.hpp"
-#include "Game/Object/FlightTrajectory.hpp"
+#include "Game/Object/UnitTests/FlightTrajectoryMock.hpp"
 
 using namespace testing;
 using namespace Common::Game;
@@ -18,11 +17,12 @@ public:
         using namespace Cake::DependencyInjection;
 
         Cake::DependencyInjection::clear();
-        m_time.reset(new RustedTimeStub);
-        Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_time);
 
-        forInterface<Common::Game::Object::IFlightTrajectory>()
-            .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
+        m_time.reset(new RustedTimeStub);
+        forInterface<Common::Game::IRustedTime>().use(m_time);
+
+        m_trajectory.reset(new Common::Game::Object::FlightTrajectoryMock);
+        forInterface<Common::Game::Object::IFlightTrajectory>().use(m_trajectory);
     }
 
     RustedTimeStub & getRustedTimeStub()
@@ -30,8 +30,14 @@ public:
         return dynamic_cast<RustedTimeStub &>(*m_time);
     }
 
+    Common::Game::Object::FlightTrajectoryMock & getTrajectoryMock()
+    {
+        return dynamic_cast<Common::Game::Object::FlightTrajectoryMock&>(*m_trajectory);
+    }
+
 private:
     boost::shared_ptr<Common::Game::IRustedTime> m_time;
+    boost::shared_ptr<Common::Game::Object::IFlightTrajectory> m_trajectory;
 };
 
 TEST_F(ShipTest, TestMoveByVector)
