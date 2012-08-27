@@ -11,14 +11,12 @@ Ship::Ship() : m_speed(1)
 
 Position Ship::getPosition()
 {
-    return calculatePosition(m_time->getCurrentTime());
+    return m_trajectory->getPosition();
 }
 
 void Ship::setPosition(const Position & position)
 {
-    m_course.start = position;
-    m_course.destination = position;
-    m_position = position;
+    m_trajectory->setPosition(position);
 }
 
 void Ship::setCourse(Position position)
@@ -29,20 +27,7 @@ void Ship::setCourse(Position position)
         return;
     }
 
-    TimeValue time = m_time->getCurrentTime();
-
-    m_position = calculatePosition(time);
-    m_course.start = m_position;
-    m_course.destination = position;
-    m_course.startTime = time;
-
-    LOG_DEBUG << "Setting course from " << m_position << " to " << position << ", start time: " << time << ", speed: " << m_speed;
-}
-
-void Ship::setCourse(Course course)
-{
-    m_course = course;
-    m_position = course.start;
+    m_trajectory->fly(position);
 }
 
 void Ship::setSpeed(unsigned speed)
@@ -61,17 +46,18 @@ void Ship::setIntegrity(unsigned integrity)
 
     if (getIntegrity() == 0)
     {
-        TimeValue time = m_time->getCurrentTime();
-        m_position = calculatePosition(time);
-        m_course.destination = m_position;
-
-        LOG_DEBUG << "Ship destroyed, leaving it at " << m_position;
+        m_trajectory->stop();
     }
 }
 
-Course Ship::getCourse()
+IFlightTrajectory::Description Ship::getTrajectoryDescription()
 {
-    return m_course;
+    return m_trajectory->getDescription();
+}
+
+void Ship::applyTrajectoryDescription(IFlightTrajectory::Description description)
+{
+    m_trajectory->applyDescription(description);
 }
 
 Position Ship::calculatePosition(TimeValue time)

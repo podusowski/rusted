@@ -12,7 +12,7 @@ using namespace Common::Game;
 class ShipTest : public Test
 {
 public:
-    void SetUp()
+    ShipTest()
     {
         using namespace Cake::DependencyInjection;
 
@@ -23,6 +23,11 @@ public:
 
         m_trajectory.reset(new Common::Game::Object::FlightTrajectoryMock);
         forInterface<Common::Game::Object::IFlightTrajectory>().use(m_trajectory);
+    }
+
+    ~ShipTest()
+    {
+        Cake::DependencyInjection::clear();
     }
 
     RustedTimeStub & getRustedTimeStub()
@@ -40,72 +45,25 @@ private:
     boost::shared_ptr<Common::Game::Object::IFlightTrajectory> m_trajectory;
 };
 
-TEST_F(ShipTest, TestMoveByVector)
+TEST_F(ShipTest, SetCourse)
 {
     Common::Game::Object::Ship ship;
-
-    ship.setPosition(Common::Game::Position(0, 0, 0));
-
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
-    ship.setCourse(Common::Game::Position(100, 0, 0));
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(50, 0)));
-    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
-    ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
-    ship.setCourse(Common::Game::Position(100, 100, 0));
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    // still the same place
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
-    ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    // should be half the way
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(150, 0)));
-    ASSERT_EQ(Common::Game::Position(100, 50, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(200, 0)));
-    ASSERT_EQ(Common::Game::Position(100, 100, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
+    EXPECT_CALL(getTrajectoryMock(), fly(_)).Times(1);
+    ship.setCourse(Common::Game::Position(1, 1, 1));
 }
 
-TEST_F(ShipTest, HighPrecisionTimer)
+TEST_F(ShipTest, GetPosition)
 {
     Common::Game::Object::Ship ship;
-
-    ship.setPosition(Common::Game::Position(0, 0, 0));
-    ship.setSpeed(2);
-
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
-    ship.setCourse(Common::Game::Position(2, 0, 0));
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 500)));
-    ASSERT_EQ(Common::Game::Position(1, 0, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
+    EXPECT_CALL(getTrajectoryMock(), getPosition()).Times(1).WillRepeatedly(Return(Common::Game::Position(0, 0, 0)));
+    ship.getPosition();
 }
 
-TEST_F(ShipTest, MoveToTheSamePosition)
+TEST_F(ShipTest, SetPosition)
 {
     Common::Game::Object::Ship ship;
-
+    EXPECT_CALL(getTrajectoryMock(), setPosition(_)).Times(1);
     ship.setPosition(Common::Game::Position(1, 2, 3));
-
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
-    ship.setCourse(Common::Game::Position(1, 2, 3));
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
-    ASSERT_EQ(Common::Game::Position(1, 2, 3), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
 }
 
 /* When ship is destroyed somewhere, it should stop moving and stay in place where it
@@ -114,33 +72,12 @@ TEST_F(ShipTest, MoveToTheSamePosition)
 TEST_F(ShipTest, ShipDestroyedDuringFlight)
 {
     Common::Game::Object::Ship ship;
-
-    ship.setPosition(Common::Game::Position(0, 0, 0));
-
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
-    ship.setCourse(Common::Game::Position(100, 0, 0));
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
-    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
+    EXPECT_CALL(getTrajectoryMock(), stop()).Times(1);
+    EXPECT_CALL(getTrajectoryMock(), fly(_)).Times(0);
     ship.setIntegrity(0);
-    Mock::VerifyAndClear(&getRustedTimeStub());
 
-    // ship should stop
-
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(100, 0)));
-    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    // cant fly anymore
-
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(200, 0)));
-    ship.setCourse(Common::Game::Position(300, 0, 0));
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(300, 0)));
-    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
+    // shouldn't fly anymore
+    ship.setCourse(Common::Game::Position(200, 0, 0));
 }
 
 /* Now, damaging ship doesn't affect anything 
@@ -149,35 +86,27 @@ TEST_F(ShipTest, ShipDamagedDuringFlight)
 {
     Common::Game::Object::Ship ship;
 
-    ship.setPosition(Common::Game::Position(0, 0, 0));
+    EXPECT_CALL(getTrajectoryMock(), fly(_)).Times(1);
+    EXPECT_CALL(getTrajectoryMock(), stop()).Times(0);
 
-    EXPECT_CALL(getRustedTimeStub(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
     ship.setCourse(Common::Game::Position(100, 0, 0));
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
-    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
     ship.setIntegrity(10);
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(100, 0)));
-    ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
 }
 
 /* Yeah, blame me for not doing OOP but we need internal course representation to send it over
  * the network
  */
-TEST_F(ShipTest, CourseObjectAccess)
+TEST_F(ShipTest, GetTrajectoryDescription)
 {
     Common::Game::Object::Ship ship;
 
-    ship.setPosition(Common::Game::Position(10, 20, 30));
+    Common::Game::Object::IFlightTrajectory::Description description;
+    description.start = Position(10, 20, 30);
+    description.destination = Position(100, 200, 300);
 
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(10, 20)));
-    ship.setCourse(Common::Game::Position(100, 200, 300));
+    EXPECT_CALL(getTrajectoryMock(), getDescription()).Times(1).WillRepeatedly(Return(description));
  
-    auto course = ship.getCourse();
+    auto course = ship.getTrajectoryDescription();
 
     EXPECT_EQ(10, course.start.getX());
     EXPECT_EQ(20, course.start.getY());
@@ -188,49 +117,17 @@ TEST_F(ShipTest, CourseObjectAccess)
     EXPECT_EQ(300, course.destination.getZ());
 }
 
-TEST_F(ShipTest, MakeCourseFromCourseObject)
+TEST_F(ShipTest, ApplyTrajectoryDescription)
 {
     Common::Game::Object::Ship ship;
 
-    ship.setPosition(Common::Game::Position(0, 0, 0));
+    Common::Game::Object::IFlightTrajectory::Description description;
+    description.start = Position(10, 20, 30);
+    description.destination = Position(100, 200, 300);
 
-    Common::Game::Object::Course course;
-    course.start.setX(0);
-    course.start.setY(0);
-    course.start.setZ(0);
+    EXPECT_CALL(getTrajectoryMock(), applyDescription(_)).Times(1);
 
-    course.destination.setX(100);
-    course.destination.setY(0);
-    course.destination.setZ(0);
-
-    course.startTime = TimeValue(0, 0);
-
-    ship.setCourse(course);
-
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
-    ASSERT_EQ(Common::Game::Position(50, 0, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
-
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(100, 0)));
-    ASSERT_EQ(Common::Game::Position(100, 0, 0), ship.getPosition());
-    Mock::VerifyAndClear(&getRustedTimeStub());
-}
-
-TEST_F(ShipTest, SetPositionIsResetingTheCourse)
-{
-    Common::Game::Object::Ship ship;
-    ship.setPosition(Common::Game::Position(10, 20, 30));
-
-    ON_CALL(getRustedTimeStub(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
-    auto course = ship.getCourse();
-
-    EXPECT_EQ(10, course.start.getX());
-    EXPECT_EQ(20, course.start.getY());
-    EXPECT_EQ(30, course.start.getZ());
-
-    EXPECT_EQ(10, course.destination.getX());
-    EXPECT_EQ(20, course.destination.getY());
-    EXPECT_EQ(30, course.destination.getZ());
+    ship.applyTrajectoryDescription(description);
 }
 
 TEST_F(ShipTest, DefaultIntegrity)
