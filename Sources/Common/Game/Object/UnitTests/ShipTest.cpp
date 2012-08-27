@@ -66,6 +66,13 @@ TEST_F(ShipTest, SetPosition)
     ship.setPosition(Common::Game::Position(1, 2, 3));
 }
 
+TEST_F(ShipTest, SetSpeed)
+{
+    Common::Game::Object::Ship ship;
+    EXPECT_CALL(getTrajectoryMock(), setSpeed(5)).Times(1);
+    ship.setSpeed(5);
+}
+
 /* When ship is destroyed somewhere, it should stop moving and stay in place where it
  * was when it happened. 
  */

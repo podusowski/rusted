@@ -18,11 +18,12 @@ class Ship : public ObjectBase, public OwnedObjectBase
 {
 public:
     Ship();
+    ~Ship();
+
     virtual Position getPosition();
     void setPosition(const Position &);
     void setCourse(Position course);
     void setSpeed(unsigned speed);
-    unsigned getSpeed();
     void setIntegrity(unsigned); //override;
 
     virtual IFlightTrajectory::Description getTrajectoryDescription();
@@ -31,8 +32,6 @@ public:
 private:
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
     Cake::DependencyInjection::Inject<IFlightTrajectory> m_trajectory;
-
-    unsigned m_speed;
 };
 
 }

@@ -5,7 +5,11 @@
 using namespace Common::Game::Object;
 using namespace Common::Game;
 
-Ship::Ship() : m_speed(1)
+Ship::Ship()
+{
+}
+
+Ship::~Ship()
 {
 }
 
@@ -32,12 +36,7 @@ void Ship::setCourse(Position position)
 
 void Ship::setSpeed(unsigned speed)
 {
-    m_speed = speed;
-}
-
-unsigned Ship::getSpeed()
-{
-    return m_speed;
+    m_trajectory->setSpeed(speed);
 }
 
 void Ship::setIntegrity(unsigned integrity)
