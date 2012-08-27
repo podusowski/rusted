@@ -60,34 +60,3 @@ void Ship::applyTrajectoryDescription(IFlightTrajectory::Description description
     m_trajectory->applyDescription(description);
 }
 
-Position Ship::calculatePosition(TimeValue time)
-{
-    if (m_course.destination == m_position)
-        return m_position;
-
-    unsigned distance = Position::distance(m_course.destination, m_position);
-    unsigned totalTripTime = distance / m_speed;
-    TimeValue timeTakenSoFar = time - m_course.startTime;
-    float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
-
-
-    if (timeTakenSoFar == TimeValue(0, 0))
-        return m_position;
-
-    float tripProgress = float(secondsTakenSoFar) / float(totalTripTime);
-
-    if (tripProgress >= 1.0)
-    {
-        m_position = m_course.destination;
-
-        LOG_DEBUG << "Ship arrived at " << m_position;
-
-        return m_position;
-    }
-    else
-    {
-        Position tripVector = m_course.destination - m_position;
-        return m_position + (tripVector * tripProgress);
-    }
-}
-
