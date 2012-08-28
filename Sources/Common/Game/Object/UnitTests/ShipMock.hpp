@@ -17,7 +17,7 @@ public:
     MOCK_METHOD0(getPosition, Position());
     MOCK_METHOD0(getIntegrity, unsigned());
     MOCK_METHOD1(setIntegrity, void(unsigned));
-    MOCK_METHOD0(getCourse, Course());
+    MOCK_METHOD0(getTrajectoryDescription, IFlightTrajectory::Description());
 };
 
 }

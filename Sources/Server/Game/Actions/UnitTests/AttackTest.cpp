@@ -20,8 +20,8 @@ TEST_F(AttackTest, AttackOtherShip)
     Common::Game::Object::ShipMock focusedShip;
     Common::Game::Object::ShipMock selectedShip;
 
-    ON_CALL(focusedShip, getCourse()).WillByDefault(Return(Common::Game::Object::Course()));
-    ON_CALL(selectedShip, getCourse()).WillByDefault(Return(Common::Game::Object::Course()));
+    ON_CALL(focusedShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
+    ON_CALL(selectedShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
     ON_CALL(selectedShip, getPosition()).WillByDefault(Return(Common::Game::Position()));
 
     std::vector<Server::Network::IConnection *> allConnections{&connection};

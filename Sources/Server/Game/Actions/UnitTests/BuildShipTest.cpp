@@ -55,10 +55,10 @@ TEST_F(BuildShipTest, Build)
     EXPECT_EQ(player.getId(), ship.getOwnerId());
 
     // we want new ship to fly a bit further from focused ship
-    Common::Game::Object::Course newShipCourse = ship.getCourse();
+    Common::Game::Object::IFlightTrajectory::Description description = ship.getTrajectoryDescription();
 
     // FIXME: this would be cleaner if we mock some factory which creates shipMock
-    EXPECT_EQ(focusedShipPosition, newShipCourse.start);
-    EXPECT_EQ(focusedShipPosition + Common::Game::Position(10, 10, 0), newShipCourse.destination);
+    EXPECT_EQ(focusedShipPosition, description.start);
+    EXPECT_EQ(focusedShipPosition + Common::Game::Position(10, 10, 0), description.destination);
 }
 
