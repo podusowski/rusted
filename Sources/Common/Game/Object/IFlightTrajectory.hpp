@@ -27,6 +27,15 @@ public:
     virtual void setPosition(Position) = 0;
     virtual Position getPosition() = 0;
 
+    // angle around Y-axis in radians
+    virtual float getYaw() = 0;
+
+    // angle around X-axis in radians
+    virtual float getPitch() = 0;
+
+    // angle around Z-axis in radians
+    virtual float getRoll() = 0;
+
     virtual void setSpeed(unsigned) = 0;
     virtual unsigned getSpeed() = 0;
 

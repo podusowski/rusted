@@ -25,6 +25,12 @@ public:
         Cake::DependencyInjection::clear();
     }
 
+    unsigned radianToDegree(float radians)
+    {
+        const float C_180_DIV_PI = 57.2958;
+        return round(radians * C_180_DIV_PI);
+    }
+
     RustedTimeStub & getTimeMock()
     {
         return *dynamic_cast<RustedTimeStub*>(m_time.get());
@@ -191,5 +197,15 @@ TEST_F(FlightTrajectoryTest, SetPositionResetsTheCourse)
     EXPECT_EQ(10, description.destination.getX());
     EXPECT_EQ(20, description.destination.getY());
     EXPECT_EQ(30, description.destination.getZ());
+}
+
+TEST_F(FlightTrajectoryTest, Orientation)
+{
+    ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
+
+    FlightTrajectory trajectory;
+    trajectory.fly(Position(10, 10, 10));
+
+    EXPECT_EQ(45, radianToDegree(trajectory.getRoll()));
 }
 

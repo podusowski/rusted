@@ -18,6 +18,9 @@ public:
     MOCK_METHOD0(stop, void());
     MOCK_METHOD1(setPosition, void(Position));
     MOCK_METHOD0(getPosition, Position());
+    MOCK_METHOD0(getYaw, float());
+    MOCK_METHOD0(getPitch, float());
+    MOCK_METHOD0(getRoll, float());
     MOCK_METHOD1(setSpeed, void(unsigned));
     MOCK_METHOD0(getSpeed, unsigned());
     MOCK_METHOD0(getDescription, Description());

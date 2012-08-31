@@ -46,6 +46,25 @@ Common::Game::Position FlightTrajectory::getPosition()
     return calculatePosition(m_time->getCurrentTime());
 }
 
+float FlightTrajectory::getYaw()
+{
+    return 0;
+}
+
+float FlightTrajectory::getPitch()
+{
+    return 0;
+}
+
+float FlightTrajectory::getRoll()
+{
+    unsigned x = m_description.destination.getX() - m_description.start.getX();
+    unsigned y = m_description.destination.getY() - m_description.start.getY();
+    float ret = atan(float(x) / float(y));
+
+    return ret;
+}
+
 void FlightTrajectory::setSpeed(unsigned speed)
 {
     m_speed = speed;

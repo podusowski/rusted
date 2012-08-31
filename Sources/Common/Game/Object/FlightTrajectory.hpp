@@ -22,6 +22,10 @@ public:
     void setPosition(Position);
     Position getPosition();
 
+    float getYaw();
+    float getPitch();
+    float getRoll();
+
     void setSpeed(unsigned);
     unsigned getSpeed();
 
