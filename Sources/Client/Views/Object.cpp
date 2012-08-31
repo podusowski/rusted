@@ -54,6 +54,9 @@ void Object::update()
 {
     Common::Game::Position position = m_object.getPosition();
     m_node->setPosition(position.getX(), position.getY(), position.getZ());
+
+    Ogre::Quaternion rotation(Ogre::Radian(m_object.getRoll()), Ogre::Vector3::UNIT_Z);
+    m_node->setOrientation(rotation);
 }
 
 void Object::rightClickedCallback()

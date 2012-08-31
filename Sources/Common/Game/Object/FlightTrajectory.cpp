@@ -58,11 +58,34 @@ float FlightTrajectory::getPitch()
 
 float FlightTrajectory::getRoll()
 {
-    unsigned x = m_description.destination.getX() - m_description.start.getX();
-    unsigned y = m_description.destination.getY() - m_description.start.getY();
-    float ret = atan(float(x) / float(y));
+    const float HALF_PI = 1.57079633;
 
-    return ret;
+    int x = m_description.destination.getX() - m_description.start.getX();
+    int y = m_description.destination.getY() - m_description.start.getY();
+
+    // TODO: untested, stecify this situation
+    if (x == 0 || y == 0)
+    {
+        return 0;
+    }
+    if (x > 0 && y > 0)
+    {
+        return -atan(float(x) / float(y));
+    }
+    if (x > 0 && y < 0)
+    {
+        return -atan(float(x) / float(y));
+    }
+    if (x < 0 && y > 0)
+    {
+        return -atan(float(x) / float(y)) + HALF_PI;
+    }
+    if (x < 0 && y < 0)
+    {
+        return -atan(float(x) / float(y)) - HALF_PI;
+    }
+
+    throw std::runtime_error("dupa");
 }
 
 void FlightTrajectory::setSpeed(unsigned speed)

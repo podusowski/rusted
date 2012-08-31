@@ -26,6 +26,8 @@ public:
     virtual unsigned getIntegrity() { return m_integrity; }
     virtual void setIntegrity(unsigned integrity) { m_integrity = integrity; }
 
+    virtual float getRoll() { return 0.0; }
+
     template <class ObjectType> bool is()
     {
         return dynamic_cast<ObjectType*>(this) != nullptr;

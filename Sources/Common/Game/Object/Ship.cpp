@@ -54,6 +54,11 @@ void Ship::setIntegrity(unsigned integrity)
     }
 }
 
+float Ship::getRoll()
+{
+    return m_trajectory->getRoll();
+}
+
 IFlightTrajectory::Description Ship::getTrajectoryDescription()
 {
     return m_trajectory->getDescription();

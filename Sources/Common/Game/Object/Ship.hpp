@@ -27,6 +27,8 @@ public:
     unsigned getSpeed();
     void setIntegrity(unsigned); //override;
 
+    float getRoll();
+
     virtual IFlightTrajectory::Description getTrajectoryDescription();
     void applyTrajectoryDescription(IFlightTrajectory::Description);
 
