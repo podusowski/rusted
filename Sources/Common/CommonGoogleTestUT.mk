@@ -3,6 +3,7 @@ TYPE:=application
 		
 SOURCES+=UnitTests/mainGoogleTestUT.cpp
 SOURCES+=Game/UnitTests/UniverseTest.cpp
+SOURCES+=Game/UnitTests/PlayerTest.cpp
 SOURCES+=Game/Object/UnitTests/ShipTest.cpp
 SOURCES+=Game/Object/UnitTests/FlightTrajectoryTest.cpp
 SOURCES+=Game/UnitTests/RustedTimeTest.cpp
