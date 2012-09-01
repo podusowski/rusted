@@ -22,7 +22,7 @@ public:
               Services::ObjectService &,
               Gui::Gui &,
               Common::Game::Universe &,
-              Client::Game::PlayerInfo &);
+              Common::Game::Player &);
 
     ~PilotView();
 
@@ -53,7 +53,7 @@ private:
     Services::ObjectService & m_objectService;
     Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;
-    Game::PlayerInfo & m_playerInfo;
+    Common::Game::Player & m_player;
     std::vector<MyGUI::Button *> m_actionButtons;
 };
 

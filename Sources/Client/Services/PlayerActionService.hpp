@@ -7,10 +7,10 @@
 #include "Common/Game/IRustedTime.hpp"
 #include "Common/Game/Universe.hpp"
 #include "Common/Game/Object/Ship.hpp"
+#include "Common/Game/Player.hpp"
 
 #include "Client/Network/IConnectionListener.hpp"
 #include "Client/Network/IConnection.hpp"
-#include "Client/Game/PlayerInfo.hpp"
 #include "Client/Services/AbstractService.hpp"
 
 namespace Client
@@ -24,7 +24,7 @@ public:
     typedef boost::function<void(std::vector<boost::tuple<int, std::string> >)> AvailableActionsFetchedCallback;
     typedef boost::function<void()> GlobalCooldownExpiredCallback;
 
-    PlayerActionService(Network::IConnection &, Game::PlayerInfo &, Common::Game::Universe &);
+    PlayerActionService(Network::IConnection &, Common::Game::Player &, Common::Game::Universe &);
 
     void focusObject(Common::Game::Object::ObjectBase &);
     Common::Game::Object::ObjectBase & getFocusedObject();
@@ -39,7 +39,7 @@ public:
     void handle(const Common::Messages::AbstractMessage &) {}
 
 private:
-    Client::Game::PlayerInfo & m_playerInfo;
+    Common::Game::Player & m_player;
     Client::Network::IConnection & m_connection;
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     Common::Game::Universe & m_universe;

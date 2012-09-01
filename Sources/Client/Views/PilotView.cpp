@@ -11,14 +11,14 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
                      Services::ObjectService & objectService,
                      Client::Gui::Gui & gui,
                      Common::Game::Universe & universe,
-                     Game::PlayerInfo & playerInfo) :
+                     Common::Game::Player & player) :
     m_graphics(graphics),
     m_input(input),
     m_playerActionService(playerActionService),
     m_objectService(objectService),
     m_gui(gui),
     m_universe(universe),
-    m_playerInfo(playerInfo)
+    m_player(player)
 {
 }
 
@@ -175,7 +175,7 @@ void PilotView::playerShipsFetched()
 void PilotView::objectAdded(Common::Game::Object::ObjectBase & object)
 {
     auto * ship = dynamic_cast<Common::Game::Object::Ship*>(&object);
-    if (ship && ship->getOwnerId() == m_playerInfo.getId())
+    if (ship && ship->getOwnerId() == m_player.getId())
     {
         LOG_DEBUG << "Player ship added";
         updatePlayerShipsListBox();
@@ -188,7 +188,7 @@ void PilotView::updatePlayerShipsListBox()
 
     shipListBox->removeAllItems();
 
-    auto ships = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_playerInfo.getId());
+    auto ships = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_player.getId());
     for (auto ship: ships)
     {
         std::stringstream ss;

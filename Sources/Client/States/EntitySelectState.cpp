@@ -15,7 +15,7 @@ EntitySelectState::EntitySelectState(IStateManagerStack & stateManagerStack,
                                      Services::ObjectService & objectService,
                                      States::PilotState & pilotState,
                                      Common::Game::Universe & universe,
-                                     Client::Game::PlayerInfo & playerInfo) :
+                                     Common::Game::Player & playerInfo) :
     m_stateManagerStack(stateManagerStack),
     m_gui(gui),
     m_playerActionService(playerActionService),

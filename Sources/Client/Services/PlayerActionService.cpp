@@ -6,9 +6,9 @@
 using namespace Client::Services;
 
 PlayerActionService::PlayerActionService(Network::IConnection & connection, 
-                             Game::PlayerInfo & playerInfo,
+                             Common::Game::Player & player,
                              Common::Game::Universe & universe) :
-    m_playerInfo(playerInfo),
+    m_player(player),
     m_connection(connection),
     m_universe(universe)
 {

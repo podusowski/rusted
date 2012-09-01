@@ -2,6 +2,8 @@
 
 #include "Cake/Threading/Thread.hpp"
 
+#include "Common/Game/Player.hpp"
+
 #include "Client/Graphics/IGraphics.hpp"
 #include "Client/Input/Input.hpp"
 #include "Client/States/StateManager.hpp"
@@ -13,7 +15,6 @@
 #include "Client/Services/PlayerActionService.hpp"
 #include "Client/Services/ObjectService.hpp"
 
-#include "Client/Game/PlayerInfo.hpp"
 #include "Client/States/IStateDeployment.hpp"
 #include "Client/Views/ObjectsView.hpp"
 #include "Client/Views/PilotView.hpp"
@@ -38,7 +39,7 @@ public:
 
 private:
     StateManager m_stateManager;
-    Game::PlayerInfo m_playerInfo;
+    Common::Game::Player m_playerInfo;
     Network::Connection & m_connection;
     Cake::Threading::Thread & m_connectionThread;
     Common::Game::Universe m_universe;

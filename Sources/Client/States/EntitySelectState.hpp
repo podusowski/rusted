@@ -23,7 +23,7 @@ public:
                       Services::ObjectService &,
                       States::PilotState &,
                       Common::Game::Universe &,
-                      Client::Game::PlayerInfo &);
+                      Common::Game::Player &);
     void activate();
     void deactivate();
     void frameStarted();
@@ -37,7 +37,7 @@ private:
     Services::ObjectService & m_objectService;
     States::PilotState & m_pilotState;
     Common::Game::Universe & m_universe;
-    Client::Game::PlayerInfo & m_playerInfo;
+    Common::Game::Player & m_playerInfo;
 };
 
 }

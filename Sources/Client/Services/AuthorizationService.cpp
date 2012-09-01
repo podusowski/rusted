@@ -4,10 +4,10 @@
 
 using namespace Client::Services;
 
-AuthorizationService::AuthorizationService(Network::IConnection & connection, Game::PlayerInfo & playerInfo) : 
+AuthorizationService::AuthorizationService(Network::IConnection & connection, Common::Game::Player & player) : 
     m_versionChecked(false),
     m_connection(connection),
-    m_playerInfo(playerInfo)
+    m_player(player)
 {
 }
 
@@ -38,6 +38,6 @@ void AuthorizationService::handle(const Common::Messages::UserAuthorizationResp 
 {
     LOG_INFO << "Received user authorization response (player id: " << userAuthorizationResp.player_id;
 
-    m_playerInfo.setId(userAuthorizationResp.player_id);
+    m_player.setId(userAuthorizationResp.player_id);
     m_loggedInCallback(userAuthorizationResp.success);
 }
