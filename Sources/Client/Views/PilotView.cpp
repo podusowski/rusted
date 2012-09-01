@@ -18,7 +18,8 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
     m_objectService(objectService),
     m_gui(gui),
     m_universe(universe),
-    m_player(player)
+    m_player(player),
+    m_camera(graphics, player)
 {
 }
 
@@ -45,7 +46,7 @@ void PilotView::deactivate()
 void PilotView::frameStarted()
 {
     updateShipPosition();
-    updateCameraPosition();
+    m_camera.update();
 }
 
 void PilotView::updateShipPosition()
@@ -63,24 +64,6 @@ void PilotView::updateShipPosition()
     }
 
     m_gui->findWidget<MyGUI::TextBox>("NavigationTextBox")->setCaption(ss.str());
-}
-
-void PilotView::updateCameraPosition()
-{
-    // camera motion
-    Common::Game::Position position = m_player.getFocusedObject().getPosition();
-    Common::Game::Position camPosition = position + Common::Game::Position(0, 0, 1000);
-
-    // some nasty dbg 
-    static int counter = 0;
-    if (counter++ % 1000 == 0)
-    {
-        LOG_DEBUG << "camera posistion: " << camPosition;
-    }
-
-    Ogre::Camera & camera = m_graphics.getCamera();
-    camera.setPosition(camPosition.getX(), camPosition.getY(), camPosition.getZ());
-    camera.lookAt(Ogre::Vector3(position.getX(), position.getY(), position.getZ()));
 }
 
 void PilotView::mouseMoved(const OIS::MouseState & state)

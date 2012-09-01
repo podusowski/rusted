@@ -17,6 +17,7 @@ SOURCES+=Services/AuthorizationService.cpp
 SOURCES+=Services/PlayerActionService.cpp
 SOURCES+=Services/ObjectService.cpp
 SOURCES+=Views/ObjectsView.cpp
+SOURCES+=Views/Camera.cpp
 SOURCES+=Views/Object.cpp
 SOURCES+=Views/PilotView.cpp
 

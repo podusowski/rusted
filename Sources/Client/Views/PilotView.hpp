@@ -6,6 +6,7 @@
 #include "Gui/Gui.hpp" 
 #include "Client/Services/PlayerActionService.hpp"
 #include "Client/Services/ObjectService.hpp"
+#include "Camera.hpp"
 
 namespace Client
 {
@@ -31,7 +32,6 @@ public:
     void frameStarted();
 
     void updateShipPosition();
-    void updateCameraPosition();
 
     void mouseMoved(const OIS::MouseState &);
     void mousePressed(const OIS::MouseButtonID &, const OIS::MouseEvent &, unsigned x, unsigned y);
@@ -55,6 +55,7 @@ private:
     Common::Game::Universe & m_universe;
     Common::Game::Player & m_player;
     std::vector<MyGUI::Button *> m_actionButtons;
+    Camera m_camera;
 };
 
 }
