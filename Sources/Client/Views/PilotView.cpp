@@ -50,7 +50,7 @@ void PilotView::frameStarted()
 
 void PilotView::updateShipPosition()
 {
-    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_playerActionService.getFocusedObject());
+    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
 
     std::stringstream ss;
     ss << "crt: " << focusedShip.getPosition();
@@ -68,7 +68,7 @@ void PilotView::updateShipPosition()
 void PilotView::updateCameraPosition()
 {
     // camera motion
-    Common::Game::Position position = m_playerActionService.getFocusedObject().getPosition();
+    Common::Game::Position position = m_player.getFocusedObject().getPosition();
     Common::Game::Position camPosition = position + Common::Game::Position(0, 0, 1000);
 
     // some nasty dbg 

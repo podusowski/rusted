@@ -22,25 +22,18 @@ void PlayerActionService::focusObject(Common::Game::Object::ObjectBase & object)
     focusObject.id = object.getId();
     m_connection.send(focusObject);
 
-    m_focusedObject = &object;
-}
-
-Common::Game::Object::ObjectBase & PlayerActionService::getFocusedObject()
-{
-    assert(m_focusedObject);
-
-    return **m_focusedObject;
+    m_player.focusObject(object);
 }
 
 void PlayerActionService::setFocusedObjectCourse(Common::Game::Position course)
 {
-    assert(m_focusedObject);
+    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getFocusedObject());
 
-    dynamic_cast<Common::Game::Object::Ship&>(**m_focusedObject).setCourse(course);
+    focusedShip.setCourse(course);
 
     Common::Messages::EntityChangeCourseReq req;
 
-    req.entityId = (*m_focusedObject)->getId();
+    req.entityId = focusedShip.getId();
     req.courseX = course.getX();
     req.courseY = course.getY();
     req.courseZ = course.getZ();
@@ -71,8 +64,6 @@ void PlayerActionService::fetchAvailableActions(AvailableActionsFetchedCallback 
 
 void PlayerActionService::executeAction(unsigned actionId, GlobalCooldownExpiredCallback callback)
 {
-    assert(m_focusedObject);
-
     LOG_DEBUG << "Performing action: " << actionId;
 
     m_globalCooldownExpiredCallback = callback;
