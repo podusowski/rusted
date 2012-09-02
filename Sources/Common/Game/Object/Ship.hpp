@@ -28,6 +28,7 @@ public:
     void setIntegrity(unsigned); //override;
 
     float getRoll();
+    Position getTangent100();
 
     virtual IFlightTrajectory::Description getTrajectoryDescription();
     void applyTrajectoryDescription(IFlightTrajectory::Description);

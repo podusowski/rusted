@@ -90,6 +90,11 @@ float FlightTrajectory::getRoll()
 
 Common::Game::Position FlightTrajectory::getTangent100()
 {
+    if (m_description.destination == m_description.start)
+    {
+        return Common::Game::Position(100, 0, 0);
+    }
+
     auto tangent = m_description.destination - m_description.start;
     tangent = tangent * (100.0 / tangent.length());
     return tangent;

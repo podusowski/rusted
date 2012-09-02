@@ -229,9 +229,13 @@ TEST_F(FlightTrajectoryTest, NormalizedTangent)
     FlightTrajectory trajectory;
 
     trajectory.setPosition(Position());
-    trajectory.fly(Position(10, 10, 0));
 
     auto tangent100 = trajectory.getTangent100();
+    EXPECT_NEAR(100, tangent100.length(), 1);
+
+    trajectory.fly(Position(10, 10, 0));
+
+    tangent100 = trajectory.getTangent100();
     EXPECT_EQ(tangent100.getX(), tangent100.getY());
     EXPECT_NEAR(100, tangent100.length(), 1);
 }

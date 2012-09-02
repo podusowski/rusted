@@ -59,6 +59,11 @@ float Ship::getRoll()
     return m_trajectory->getRoll();
 }
 
+Common::Game::Position Ship::getTangent100()
+{
+    return m_trajectory->getTangent100();
+}
+
 IFlightTrajectory::Description Ship::getTrajectoryDescription()
 {
     return m_trajectory->getDescription();
