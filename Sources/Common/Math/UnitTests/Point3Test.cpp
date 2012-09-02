@@ -1,6 +1,6 @@
 #include <gtest/gtest.h>
 
-#include "Point3.hpp"
+#include "Common/Math/Point3.hpp"
 
 typedef Common::Point3<int>		point3i;
 typedef Common::Point3<float>	point3f;

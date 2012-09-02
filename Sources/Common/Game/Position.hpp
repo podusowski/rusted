@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Common/Point3.hpp"
+#include "Common/Math/Point3.hpp"
 
 namespace Common
 {

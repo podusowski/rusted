@@ -2,7 +2,6 @@ TARGET:=CommonUT
 TYPE:=application
 		
 SOURCES=UnitTests/mainUT.cpp \
-        UnitTests/BezierTest.cpp \
         RustedCodec/UnitTests/SimpleBufferTest.cpp \
         RustedCodec/UnitTests/RustedAbstractCodecTest.cpp \
 		Messages/UnitTests/MessagesTest.cpp \

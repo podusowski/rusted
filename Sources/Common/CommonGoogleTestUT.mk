@@ -9,7 +9,8 @@ SOURCES+=Game/Object/UnitTests/FlightTrajectoryTest.cpp
 SOURCES+=Game/UnitTests/RustedTimeTest.cpp
 SOURCES+=Game/UnitTests/TimeValueTest.cpp
 SOURCES+=Game/Utilities/UnitTests/IdGeneratorTest.cpp
-SOURCES+=UnitTests/Point3Test.cpp
+SOURCES+=Math/UnitTests/Point3Test.cpp
+SOURCES+=Math/UnitTests/BezierTest.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../
