@@ -222,3 +222,18 @@ TEST_F(FlightTrajectoryTest, Orientation)
     EXPECT_EQ(-135, radianToDegree(trajectory.getRoll()));
 }
 
+TEST_F(FlightTrajectoryTest, NormalizedTangent)
+{
+    ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
+
+    FlightTrajectory trajectory;
+
+    trajectory.setPosition(Position());
+    trajectory.fly(Position(10, 10, 0));
+
+    auto tangent100 = trajectory.getTangent100();
+    EXPECT_EQ(tangent100.getX(), tangent100.getY());
+    EXPECT_NEAR(100, tangent100.length(), 1);
+}
+
+

@@ -88,6 +88,13 @@ float FlightTrajectory::getRoll()
     throw std::runtime_error("dupa");
 }
 
+Common::Game::Position FlightTrajectory::getTangent100()
+{
+    auto tangent = m_description.destination - m_description.start;
+    tangent = tangent * (100.0 / tangent.length());
+    return tangent;
+}
+
 void FlightTrajectory::setSpeed(unsigned speed)
 {
     m_speed = speed;

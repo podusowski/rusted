@@ -26,6 +26,8 @@ public:
     float getPitch();
     float getRoll();
 
+    Position getTangent100();
+
     void setSpeed(unsigned);
     unsigned getSpeed();
 

@@ -36,6 +36,8 @@ public:
     // angle around Z-axis in radians
     virtual float getRoll() = 0;
 
+    virtual Position getTangent100() = 0;
+
     virtual void setSpeed(unsigned) = 0;
     virtual unsigned getSpeed() = 0;
 
