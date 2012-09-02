@@ -22,6 +22,7 @@ public:
     MOCK_METHOD0(getPitch, float());
     MOCK_METHOD0(getRoll, float());
     MOCK_METHOD0(getTangent100, Position());
+    MOCK_METHOD0(getOrientation, Common::Math::Quaternion());
     MOCK_METHOD1(setSpeed, void(unsigned));
     MOCK_METHOD0(getSpeed, unsigned());
     MOCK_METHOD0(getDescription, Description());

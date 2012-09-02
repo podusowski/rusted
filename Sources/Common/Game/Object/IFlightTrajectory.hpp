@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Common/Math/Quaternion.hpp"
 #include "Common/Game/Position.hpp"
 #include "Common/Game/TimeValue.hpp"
 #include "Common/Game/IRustedTime.hpp"
@@ -37,6 +38,8 @@ public:
     virtual float getRoll() = 0;
 
     virtual Position getTangent100() = 0;
+
+    virtual Common::Math::Quaternion getOrientation() = 0;
 
     virtual void setSpeed(unsigned) = 0;
     virtual unsigned getSpeed() = 0;

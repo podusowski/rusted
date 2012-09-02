@@ -100,6 +100,11 @@ Common::Game::Position FlightTrajectory::getTangent100()
     return tangent;
 }
 
+Common::Math::Quaternion FlightTrajectory::getOrientation()
+{
+    return Common::Math::Quaternion();
+}
+
 void FlightTrajectory::setSpeed(unsigned speed)
 {
     m_speed = speed;

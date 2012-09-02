@@ -28,6 +28,8 @@ public:
 
     Position getTangent100();
 
+    Common::Math::Quaternion getOrientation();
+
     void setSpeed(unsigned);
     unsigned getSpeed();
 
