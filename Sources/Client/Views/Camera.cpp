@@ -1,3 +1,5 @@
+#include "Common/Game/Object/Ship.hpp"
+
 #include "Camera.hpp"
 
 using namespace Client::Views;
