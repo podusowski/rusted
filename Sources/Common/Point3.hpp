@@ -59,7 +59,7 @@ public:
 
 	template <typename P> Point3<T> operator*(P value)
 	{
-		return Point3<T>(x * value, y * value, z * value);
+		return Point3<T>(ceil(x * value), ceil(y * value), ceil(z * value));
 	}
 
 	template <typename P> Point3<T>& operator *= (P value)
