@@ -22,15 +22,15 @@ void Camera::update()
     // camera motion
     Common::Game::Position position = ship.getPosition();
 
-    auto tangent100 = ship.getTangent100();
-    
+    auto orientation = ship.getOrientation();
+
     // move camera up
     Common::Game::Position cameraPosition = position + Common::Game::Position(0, 0, 500);
-    LOG_DEBUG << tangent100;
-    cameraPosition -= tangent100;
 
     Ogre::Camera & camera = m_graphics.getCamera();
     camera.setPosition(cameraPosition.getX(), cameraPosition.getY(), cameraPosition.getZ());
-    camera.lookAt(Ogre::Vector3(position.getX(), position.getY(), position.getZ()));
+
+    camera.setOrientation(Ogre::Quaternion(orientation.getW(), orientation.getX(), orientation.getY(), orientation.getZ()));
+    //camera.lookAt(Ogre::Vector3(position.getX(), position.getY(), position.getZ()));
 }
 

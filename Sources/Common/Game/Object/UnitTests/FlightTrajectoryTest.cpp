@@ -199,7 +199,7 @@ TEST_F(FlightTrajectoryTest, SetPositionResetsTheCourse)
     EXPECT_EQ(30, description.destination.getZ());
 }
 
-TEST_F(FlightTrajectoryTest, Orientation)
+TEST_F(FlightTrajectoryTest, Roll)
 {
     ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
 
@@ -239,5 +239,4 @@ TEST_F(FlightTrajectoryTest, NormalizedTangent)
     EXPECT_EQ(tangent100.getX(), tangent100.getY());
     EXPECT_NEAR(100, tangent100.length(), 1);
 }
-
 

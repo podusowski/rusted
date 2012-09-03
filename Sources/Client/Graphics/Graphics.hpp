@@ -20,6 +20,7 @@ public:
     Ogre::Camera & getCamera();
     unsigned getWidth();
     unsigned getHeight();
+    Ogre::Quaternion toOgreQuaternion(Common::Math::Quaternion);
 
 private:
     void initOgre();

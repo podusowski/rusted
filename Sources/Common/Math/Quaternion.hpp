@@ -28,3 +28,9 @@ private:
 
 }
 }
+
+inline std::ostream & operator<<(std::ostream & os, Common::Math::Quaternion q)
+{
+    return os << "(" << q.getW() << ", " << q.getX() << ", " << q.getY() << ", " << q.getZ() << ")";
+}
+

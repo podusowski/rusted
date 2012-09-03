@@ -2,6 +2,7 @@
 
 #include "Cake/DependencyInjection/Inject.hpp"
 
+#include "Common/Math/Quaternion.hpp"
 #include "Common/Game/Object/ObjectBase.hpp"
 #include "Common/Game/Object/OwnedObjectBase.hpp"
 #include "Common/Game/IRustedTime.hpp"
@@ -29,6 +30,7 @@ public:
 
     float getRoll();
     Position getTangent100();
+    Common::Math::Quaternion getOrientation() { return m_trajectory->getOrientation(); }
 
     virtual IFlightTrajectory::Description getTrajectoryDescription();
     void applyTrajectoryDescription(IFlightTrajectory::Description);

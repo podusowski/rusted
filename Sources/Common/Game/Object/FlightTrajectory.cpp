@@ -102,7 +102,20 @@ Common::Game::Position FlightTrajectory::getTangent100()
 
 Common::Math::Quaternion FlightTrajectory::getOrientation()
 {
-    return Common::Math::Quaternion();
+    const float HALF_PI = 1.57079633;
+
+    int x = m_description.destination.getX() - m_description.start.getX();
+    int y = m_description.destination.getY() - m_description.start.getY();
+    int z = m_description.destination.getZ() - m_description.start.getZ();
+
+    float angle = 0;
+
+    angle = atan(float(x) / float(y));
+    if (y == 0)
+    {
+        angle = 0;
+    }
+    return Common::Math::Quaternion(-angle, Point3<int>(0, 0, 1));
 }
 
 void FlightTrajectory::setSpeed(unsigned speed)

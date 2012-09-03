@@ -2,6 +2,7 @@
 
 #include <typeinfo>
 
+#include "Common/Math/Quaternion.hpp"
 #include "Cake/DependencyInjection/Inject.hpp"
 #include "Common/Game/Position.hpp"
 
@@ -27,6 +28,8 @@ public:
     virtual void setIntegrity(unsigned integrity) { m_integrity = integrity; }
 
     virtual float getRoll() { return 0.0; }
+
+    virtual Common::Math::Quaternion getOrientation() { return Common::Math::Quaternion(); }
 
     template <class ObjectType> bool is()
     {

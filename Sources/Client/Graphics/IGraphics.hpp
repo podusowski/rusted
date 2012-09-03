@@ -1,6 +1,7 @@
 #pragma once
 
 #include <OgreRoot.h>
+#include "Common/Math/Quaternion.hpp"
 
 namespace Client
 {
@@ -15,6 +16,7 @@ public:
     virtual Ogre::Camera & getCamera() = 0;
     virtual unsigned getWidth() = 0;
     virtual unsigned getHeight() = 0;
+    virtual Ogre::Quaternion toOgreQuaternion(Common::Math::Quaternion) = 0;
 
     virtual ~IGraphics() {}
 };

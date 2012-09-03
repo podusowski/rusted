@@ -39,6 +39,11 @@ unsigned Graphics::getHeight()
     return m_ogreRenderWindow->getHeight();
 }
 
+Ogre::Quaternion Graphics::toOgreQuaternion(Common::Math::Quaternion q)
+{
+    return Ogre::Quaternion(q.getW(), q.getX(), q.getY(), q.getZ());
+}
+
 void Graphics::initOgre()
 {
     m_ogreRoot = new Ogre::Root("", "");
