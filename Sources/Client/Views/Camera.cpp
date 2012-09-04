@@ -23,14 +23,16 @@ void Camera::update()
     Common::Game::Position position = ship.getPosition();
 
     auto orientation = ship.getOrientation();
+    auto cameraOrientation = m_graphics.toOgreQuaternion(orientation);
 
-    // move camera up
-    Common::Game::Position cameraPosition = position + Common::Game::Position(0, 0, 500);
+    Ogre::Vector3 cameraPosition = m_graphics.toOgreVector3(position);
+    cameraPosition += Ogre::Vector3(0, 0, 400);
+    cameraPosition += cameraOrientation * Ogre::Vector3(0, -300, 0);
+
+    cameraOrientation = cameraOrientation * Ogre::Quaternion(Ogre::Degree(40), Ogre::Vector3(1, 0, 0));
 
     Ogre::Camera & camera = m_graphics.getCamera();
-    camera.setPosition(cameraPosition.getX(), cameraPosition.getY(), cameraPosition.getZ());
-
-    camera.setOrientation(Ogre::Quaternion(orientation.getW(), orientation.getX(), orientation.getY(), orientation.getZ()));
-    //camera.lookAt(Ogre::Vector3(position.getX(), position.getY(), position.getZ()));
+    camera.setPosition(cameraPosition);
+    camera.setOrientation(cameraOrientation);
 }
 

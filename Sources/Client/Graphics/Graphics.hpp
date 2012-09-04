@@ -21,6 +21,7 @@ public:
     unsigned getWidth();
     unsigned getHeight();
     Ogre::Quaternion toOgreQuaternion(Common::Math::Quaternion);
+    Ogre::Vector3 toOgreVector3(Common::Game::Position);
 
 private:
     void initOgre();

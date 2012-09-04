@@ -83,12 +83,13 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
         Ogre::Camera & camera = m_graphics.getCamera();
         const Ogre::Vector3 ogreCameraPosition = camera.getPosition();
         Position cameraPosition(ogreCameraPosition.x, ogreCameraPosition.y, 0);
+        Position position = m_player.getFocusedObject().getPosition();
 
         int top = y - (m_graphics.getHeight() / 2);
         int left = x - (m_graphics.getWidth() / 2);
 
         Position delta(left, -top, 0); 
-        m_playerActionService.setFocusedObjectCourse(cameraPosition + delta);
+        m_playerActionService.setFocusedObjectCourse(position + delta);
     }
 }
 
