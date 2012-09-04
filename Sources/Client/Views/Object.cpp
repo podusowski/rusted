@@ -53,12 +53,10 @@ Common::Game::Object::ObjectBase & Object::getGameObject()
 void Object::update()
 {
     Common::Game::Position position = m_object.getPosition();
-    m_node->setPosition(position.getX(), position.getY(), position.getZ());
-
     auto orientation = m_object.getOrientation();
-LOG_DEBUG << orientation;
+
+    m_node->setPosition(position.getX(), position.getY(), position.getZ());
     m_node->setOrientation(m_graphics.toOgreQuaternion(orientation));
-    //m_node->setOrientation(Ogre::Quaternion(Ogre::Radian(1), Ogre::Vector3(0, 0, 1)));
 }
 
 void Object::rightClickedCallback()

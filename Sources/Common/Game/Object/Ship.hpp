@@ -30,7 +30,7 @@ public:
 
     float getRoll();
     Position getTangent100();
-    Common::Math::Quaternion getOrientation() { return m_trajectory->getOrientation(); }
+    Common::Math::Quaternion getOrientation();
 
     virtual IFlightTrajectory::Description getTrajectoryDescription();
     void applyTrajectoryDescription(IFlightTrajectory::Description);

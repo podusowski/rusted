@@ -64,6 +64,11 @@ Common::Game::Position Ship::getTangent100()
     return m_trajectory->getTangent100();
 }
 
+Common::Math::Quaternion Ship::getOrientation()
+{
+    return m_trajectory->getOrientation();
+}
+
 IFlightTrajectory::Description Ship::getTrajectoryDescription()
 {
     return m_trajectory->getDescription();
