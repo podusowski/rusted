@@ -7,7 +7,8 @@ using namespace Client::Views;
 
 Camera::Camera(Graphics::IGraphics & graphics, Common::Game::Player & player) :
     m_graphics(graphics),
-    m_player(player)
+    m_player(player),
+    m_distance(400)
 {
 }
 
@@ -25,14 +26,26 @@ void Camera::update()
     auto orientation = ship.getOrientation();
     auto cameraOrientation = m_graphics.toOgreQuaternion(orientation);
 
-    Ogre::Vector3 cameraPosition = m_graphics.toOgreVector3(position);
-    cameraPosition += Ogre::Vector3(0, 0, 400);
-    cameraPosition += cameraOrientation * Ogre::Vector3(0, -300, 0);
+    int angle = 40;
 
-    cameraOrientation = cameraOrientation * Ogre::Quaternion(Ogre::Degree(40), Ogre::Vector3(1, 0, 0));
+    auto cameraPosition = m_graphics.toOgreVector3(position);
+    auto cameraPositionDelta = Ogre::Quaternion(Ogre::Degree(-angle), Ogre::Vector3(1, 0, 0)) * Ogre::Vector3(0, -m_distance, 0);
+    cameraPosition += cameraOrientation * cameraPositionDelta;
+
+    cameraOrientation = cameraOrientation * Ogre::Quaternion(Ogre::Degree(90 - angle), Ogre::Vector3(1, 0, 0));
 
     Ogre::Camera & camera = m_graphics.getCamera();
     camera.setPosition(cameraPosition);
     camera.setOrientation(cameraOrientation);
+}
+
+void Camera::zoomIn()
+{
+    m_distance += 10;
+}
+
+void Camera::zoomOut()
+{
+    m_distance -= 10;
 }
 

@@ -68,6 +68,14 @@ void PilotView::updateShipPosition()
 
 void PilotView::mouseMoved(const OIS::MouseState & state)
 {
+    if (state.Z.rel < 0)
+    {
+        m_camera.zoomIn();
+    }
+    else if (state.Z.rel > 0)
+    {
+        m_camera.zoomOut();
+    }
 }
 
 void PilotView::mousePressed(const OIS::MouseButtonID &, const OIS::MouseEvent &, unsigned x, unsigned y)
