@@ -14,6 +14,8 @@ class Graphics : public IGraphics
 {
 public:
     Graphics();
+    ~Graphics();
+
     Ogre::Root & getOgreRoot();
     Ogre::SceneManager & getSceneManager();
     Ogre::RenderWindow & getRenderWindow();
@@ -22,6 +24,7 @@ public:
     unsigned getHeight();
     Ogre::Quaternion toOgreQuaternion(Common::Math::Quaternion);
     Ogre::Vector3 toOgreVector3(Common::Game::Position);
+    Common::Game::Position toPosition(Ogre::Vector3);
 
 private:
     void initOgre();

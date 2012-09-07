@@ -19,6 +19,7 @@ public:
     virtual unsigned getHeight() = 0;
     virtual Ogre::Quaternion toOgreQuaternion(Common::Math::Quaternion) = 0;
     virtual Ogre::Vector3 toOgreVector3(Common::Game::Position) = 0;
+    virtual Common::Game::Position toPosition(Ogre::Vector3) = 0;
 
     virtual ~IGraphics() {}
 };

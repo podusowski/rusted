@@ -88,13 +88,21 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
 
     if (button == OIS::MB_Right)
     {
-        Position position = m_player.getFocusedObject().getPosition();
+        auto position = m_player.getFocusedObject().getPosition();
+        auto orientation = m_player.getFocusedObject().getOrientation();
+
+        Ogre::Quaternion ogreOrientation = m_graphics.toOgreQuaternion(orientation);
 
         int top = y - (m_graphics.getHeight() / 2);
         int left = x - (m_graphics.getWidth() / 2);
 
-        Position delta(left, -top, 0); 
-        m_playerActionService.setFocusedObjectCourse(position + delta);
+        top *= 100;
+        left /= 2;
+
+        Ogre::Vector3 delta(left, -top, 0); 
+        delta = ogreOrientation * delta;
+
+        m_playerActionService.setFocusedObjectCourse(position + m_graphics.toPosition(delta));
     }
 }
 

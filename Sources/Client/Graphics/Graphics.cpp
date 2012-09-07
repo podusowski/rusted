@@ -9,6 +9,10 @@ Graphics::Graphics()
     initResources();
 }
 
+Graphics::~Graphics()
+{
+}
+
 Ogre::Root & Graphics::getOgreRoot()
 {
     return *m_ogreRoot;
@@ -47,6 +51,11 @@ Ogre::Quaternion Graphics::toOgreQuaternion(Common::Math::Quaternion q)
 Ogre::Vector3 Graphics::toOgreVector3(Common::Game::Position position)
 {
     return Ogre::Vector3(position.getX(), position.getY(), position.getZ());
+}
+
+Common::Game::Position Graphics::toPosition(Ogre::Vector3 vector)
+{
+    return Common::Game::Position(vector.x, vector.y, vector.z);
 }
 
 void Graphics::initOgre()
