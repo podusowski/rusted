@@ -88,9 +88,6 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
 
     if (button == OIS::MB_Right)
     {
-        Ogre::Camera & camera = m_graphics.getCamera();
-        const Ogre::Vector3 ogreCameraPosition = camera.getPosition();
-        Position cameraPosition(ogreCameraPosition.x, ogreCameraPosition.y, 0);
         Position position = m_player.getFocusedObject().getPosition();
 
         int top = y - (m_graphics.getHeight() / 2);
