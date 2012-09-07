@@ -4,7 +4,9 @@
 using namespace Common::Game::Object;
 using namespace Common::Game;
 
-FlightTrajectory::FlightTrajectory() : m_speed(1)
+FlightTrajectory::FlightTrajectory() : 
+    m_speed(1),
+    m_lastOrientation(Common::Math::Quaternion(0, Point3<int>(0, 0, 1)))
 {
 }
 
@@ -48,20 +50,26 @@ Common::Game::Position FlightTrajectory::getPosition()
 
 Common::Math::Quaternion FlightTrajectory::getOrientation()
 {
-    const float HALF_PI = 1.57079633;
-
-    int x = m_description.destination.getX() - m_description.start.getX();
-    int y = m_description.destination.getY() - m_description.start.getY();
-    int z = m_description.destination.getZ() - m_description.start.getZ();
-
-    float angle = 0;
-
-    angle = atan(float(x) / float(y));
-    if (y == 0)
+    if (m_description.destination != m_description.start)
     {
-        angle = 0;
+        int x = m_description.destination.getX() - m_description.start.getX();
+        int y = m_description.destination.getY() - m_description.start.getY();
+
+        float angle = 0;
+
+        if (y == 0)
+        {
+            angle = 0;
+        }
+        else
+        {
+            angle = atan(float(x) / float(y));
+        }
+
+        m_lastOrientation = Common::Math::Quaternion(-angle, Point3<int>(0, 0, 1));
     }
-    return Common::Math::Quaternion(-angle, Point3<int>(0, 0, 1));
+
+    return m_lastOrientation;
 }
 
 void FlightTrajectory::setSpeed(unsigned speed)

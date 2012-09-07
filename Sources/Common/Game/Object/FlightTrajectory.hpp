@@ -35,6 +35,7 @@ private:
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
     Description m_description;
     unsigned m_speed;
+    Common::Math::Quaternion m_lastOrientation;
 };
 
 }
