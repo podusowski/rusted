@@ -8,7 +8,7 @@ using namespace Client::Views;
 Camera::Camera(Graphics::IGraphics & graphics, Common::Game::Player & player) :
     m_graphics(graphics),
     m_player(player),
-    m_distance(400)
+    m_distance(1000)
 {
 }
 
@@ -41,11 +41,11 @@ void Camera::update()
 
 void Camera::zoomIn()
 {
-    m_distance += 10;
+    m_distance += 100;
 }
 
 void Camera::zoomOut()
 {
-    m_distance -= 10;
+    m_distance -= 100;
 }
 

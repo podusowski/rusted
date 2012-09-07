@@ -24,11 +24,7 @@ Object::Object(Client::Graphics::IGraphics & graphics, Client::Input::IInput & i
     m_entity = scene.createEntity(mesh);
     m_node = scene.getRootSceneNode()->createChildSceneNode();
     m_node->attachObject(m_entity);
-    m_node->setScale(10.0, 10.0, 10.0);
-
-    // apply Blender coordinations patch
-    m_node->roll(Ogre::Degree(90));
-    m_node->pitch(Ogre::Degree(90));
+    m_node->setScale(100.0, 100.0, 100.0);
 
     input.addObjectRightClickCallback(*m_entity, std::bind(&Object::rightClickedCallback, this));
     
@@ -57,6 +53,10 @@ void Object::update()
 
     m_node->setPosition(position.getX(), position.getY(), position.getZ());
     m_node->setOrientation(m_graphics.toOgreQuaternion(orientation));
+
+    // apply Blender coordinations patch
+    m_node->roll(Ogre::Degree(90));
+    m_node->pitch(Ogre::Degree(90));
 }
 
 void Object::rightClickedCallback()
