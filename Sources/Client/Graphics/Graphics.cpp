@@ -72,10 +72,10 @@ void Graphics::initOgre()
 
     Ogre::SceneManager * sm = m_ogreRoot->createSceneManager(Ogre::ST_GENERIC, "SceneMgr");
     m_ogreSceneManager = sm;
+
+    m_ogreSceneManager->setAmbientLight(Ogre::ColourValue(255, 255, 255));
     Ogre::Camera * camera = sm->createCamera("SampleCam");
     m_ogreCamera = camera;
-    camera->setPosition(Ogre::Vector3(0,0,500));
-    camera->lookAt(Ogre::Vector3(0,0,-300));
 
     Ogre::Viewport * vp = m_ogreRenderWindow->addViewport(camera);
     vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
