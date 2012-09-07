@@ -21,13 +21,6 @@ public:
 
     void setPosition(Position);
     Position getPosition();
-
-    float getYaw();
-    float getPitch();
-    float getRoll();
-
-    Position getTangent100();
-
     Common::Math::Quaternion getOrientation();
 
     void setSpeed(unsigned);

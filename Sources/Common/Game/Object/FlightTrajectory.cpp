@@ -46,60 +46,6 @@ Common::Game::Position FlightTrajectory::getPosition()
     return calculatePosition(m_time->getCurrentTime());
 }
 
-float FlightTrajectory::getYaw()
-{
-    return 0;
-}
-
-float FlightTrajectory::getPitch()
-{
-    return 0;
-}
-
-float FlightTrajectory::getRoll()
-{
-    const float HALF_PI = 1.57079633;
-
-    int x = m_description.destination.getX() - m_description.start.getX();
-    int y = m_description.destination.getY() - m_description.start.getY();
-
-    // TODO: untested, stecify this situation
-    if (x == 0 || y == 0)
-    {
-        return 0;
-    }
-    if (x > 0 && y > 0)
-    {
-        return -atan(float(x) / float(y));
-    }
-    if (x > 0 && y < 0)
-    {
-        return -atan(float(x) / float(y));
-    }
-    if (x < 0 && y > 0)
-    {
-        return -atan(float(x) / float(y)) + HALF_PI;
-    }
-    if (x < 0 && y < 0)
-    {
-        return -atan(float(x) / float(y)) - HALF_PI;
-    }
-
-    throw std::runtime_error("dupa");
-}
-
-Common::Game::Position FlightTrajectory::getTangent100()
-{
-    if (m_description.destination == m_description.start)
-    {
-        return Common::Game::Position(100, 0, 0);
-    }
-
-    auto tangent = m_description.destination - m_description.start;
-    tangent = tangent * (100.0 / tangent.length());
-    return tangent;
-}
-
 Common::Math::Quaternion FlightTrajectory::getOrientation()
 {
     const float HALF_PI = 1.57079633;

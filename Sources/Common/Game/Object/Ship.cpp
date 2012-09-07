@@ -54,16 +54,6 @@ void Ship::setIntegrity(unsigned integrity)
     }
 }
 
-float Ship::getRoll()
-{
-    return m_trajectory->getRoll();
-}
-
-Common::Game::Position Ship::getTangent100()
-{
-    return m_trajectory->getTangent100();
-}
-
 Common::Math::Quaternion Ship::getOrientation()
 {
     return m_trajectory->getOrientation();

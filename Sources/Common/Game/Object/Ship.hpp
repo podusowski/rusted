@@ -27,9 +27,6 @@ public:
     void setSpeed(unsigned speed);
     unsigned getSpeed();
     void setIntegrity(unsigned); //override;
-
-    float getRoll();
-    Position getTangent100();
     Common::Math::Quaternion getOrientation();
 
     virtual IFlightTrajectory::Description getTrajectoryDescription();
