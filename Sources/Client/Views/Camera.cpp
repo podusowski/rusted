@@ -26,7 +26,7 @@ void Camera::update()
     auto orientation = ship.getOrientation();
     auto cameraOrientation = m_graphics.toOgreQuaternion(orientation);
 
-    int angle = 40;
+    int angle = 20;
 
     auto cameraPosition = m_graphics.toOgreVector3(position);
     auto cameraPositionDelta = Ogre::Quaternion(Ogre::Degree(-angle), Ogre::Vector3(1, 0, 0)) * Ogre::Vector3(0, -m_distance, 0);
