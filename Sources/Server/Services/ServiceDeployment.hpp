@@ -6,6 +6,8 @@
 #include "Common/Game/RustedTime.hpp"
 #include "Server/Network/IConnection.hpp"
 
+#include "Game/ShipClassContainer.hpp"
+
 #include "Server/Services/IServiceDeployment.hpp"
 #include "Server/Services/ServerInfoService.hpp"
 #include "Server/Services/RustedTimeService.hpp"
@@ -32,6 +34,7 @@ private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     Server::DataBase::DataBase & m_db;
     Common::Game::Universe m_universe;
+    Game::ShipClassContainer m_shipClassContainer;
 
     Server::Services::ServerInfoService m_serverInfoService;
     Server::Services::RustedTimeService m_rustedTimeService;

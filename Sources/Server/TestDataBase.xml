@@ -15,7 +15,8 @@
    </objects>
 
     <ship_classes>
-        <ship_class id="1" speed="100" />
-        <ship_class id="2" speed="200" />
+        <ship_class id="1" speed="100" integrity="1000" />
+        <ship_class id="2" speed="200" integrity="2000" />
     </ship_classes>
 </root>
+

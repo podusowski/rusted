@@ -11,6 +11,6 @@
         <object type="StaticObject" id="3" x="100" y="100" z="100" integrity="100" />
     </objects>
     <ship_classes>
-        <ship_class id="1" speed="10" />
+        <ship_class id="1" speed="10" integrity="100" />
     </ship_classes>
 </root>

@@ -1,5 +1,6 @@
 #include <stdexcept>
 
+#include "Cake/Diagnostics/Logger.hpp"
 #include "ShipClassContainer.hpp"
 
 using namespace Server::Game;
@@ -28,6 +29,8 @@ Server::Game::ShipClass & ShipClassContainer::getById(unsigned id)
 
 void ShipClassContainer::loadFromDataBase()
 {
+    LOG_INFO << "Loading ship classes from db";
+
     auto shipClassesNode = m_db.getRoot().getFirstChild("ship_classes").getChilds();
 
     for (auto it = shipClassesNode.begin(); it != shipClassesNode.end(); it++)
