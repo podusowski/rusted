@@ -7,7 +7,7 @@
 
 using namespace Common::Messages;
 
-TEST(ActionsSct, SmokeWithServerVersion)
+TEST(SmokeSct, Smoke)
 {
 	SCT::Component component("SampleDataBase.xml");
     component.start();
