@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Common/Game/Object/ObjectBase.hpp"
+#include "DataBase/DataBase.hpp"
+#include "ShipClass.hpp"
 
 namespace Server
 {
@@ -13,8 +14,13 @@ public:
     ShipClassContainer(DataBase::DataBase &);
     ~ShipClassContainer();
 
+    ShipClass & getById(unsigned);
+
 private:
+    void loadFromDataBase();
+
     DataBase::DataBase & m_db;
+    std::map<unsigned, boost::shared_ptr<ShipClass> > m_shipClassMap;
 };
 
 }

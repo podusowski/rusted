@@ -18,6 +18,7 @@ TEST_F(ShipClassTest, ApplyBasic)
     DataBase::DataBaseNode node("class");
     node.setValue("integrity", 100);
     node.setValue("speed", 1);
+    node.setValue("id", 1);
 
     Common::Game::Object::ShipMock ship;
 
@@ -26,5 +27,7 @@ TEST_F(ShipClassTest, ApplyBasic)
 
     ShipClass shipClass(node);
     shipClass.applyTo(ship);
+
+    EXPECT_EQ(1, shipClass.getId());
 }
 

@@ -14,8 +14,10 @@ public:
     ShipClass(DataBase::DataBaseNode &);
 
     void applyTo(Common::Game::Object::Ship &);
+    unsigned getId();
 
 private:
+    unsigned m_id;
     unsigned m_speed;
     unsigned m_integrity;
 };
