@@ -16,8 +16,15 @@ class ShipClassTest : public Server::AbstractTest
 TEST_F(ShipClassTest, ApplyBasic)
 {
     DataBase::DataBaseNode node("class");
-    Common::Game::Object::ShipMock ship;
-    ShipClass shipClass(node);
+    node.setValue("integrity", 100);
+    node.setValue("speed", 1);
 
+    Common::Game::Object::ShipMock ship;
+
+    EXPECT_CALL(ship, setIntegrity(100)).Times(1);
+    EXPECT_CALL(ship, setSpeed(1)).Times(1);
+
+    ShipClass shipClass(node);
     shipClass.applyTo(ship);
 }
+

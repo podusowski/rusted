@@ -19,12 +19,12 @@ class Ship : public ObjectBase, public OwnedObjectBase
 {
 public:
     Ship();
-    ~Ship();
+    virtual ~Ship();
 
     virtual Position getPosition();
     void setPosition(const Position &);
     void setCourse(Position course);
-    void setSpeed(unsigned speed);
+    virtual void setSpeed(unsigned speed);
     unsigned getSpeed();
     void setIntegrity(unsigned); //override;
     Common::Math::Quaternion getOrientation();
