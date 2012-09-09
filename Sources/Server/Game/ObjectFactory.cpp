@@ -64,16 +64,3 @@ Common::Game::Position ObjectFactory::extractPosition(Server::DataBase::DataBase
     return position;
 }
 
-Server::DataBase::DataBaseNode & ObjectFactory::getShipClass(unsigned id)
-{
-    auto & shipClasses = m_db.getRoot().getFirstChild("ship_classes");
-    for (auto it = shipClasses.getChilds().begin(); it != shipClasses.getChilds().end(); it++)
-    {
-        if ((*it)->getValue<unsigned>("id") == id)
-        {
-            return **it;
-        }
-    }
-    throw std::out_of_range("no such ship class");
-}
-

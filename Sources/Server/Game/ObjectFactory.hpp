@@ -20,7 +20,6 @@ public:
 
 private:
     Common::Game::Position extractPosition(Server::DataBase::DataBaseNode & data);
-    DataBase::DataBaseNode & getShipClass(unsigned id);
 
     DataBase::DataBase & m_db;
     IShipClassContainer & m_shipClassContainer;
