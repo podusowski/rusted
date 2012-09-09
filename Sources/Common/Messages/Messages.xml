@@ -9,6 +9,10 @@ common signalling
 	<param type="string" name="version" />
 </message>
 
+<message id="Exception">
+    <param type="string" name="description" />
+</message>
+
 <!--
 player specific
 -->
@@ -121,7 +125,10 @@ objects
 <!--
 actions
 -->
-<message id="FetchAvailableActions" />
+
+<message id="FetchAvailableActions">
+    <param type="int32" name="shipId" />
+</message>
 
 <message id="AvailableActions">
     <list name="actions">
