@@ -40,6 +40,30 @@ bool Universe::has(unsigned id)
     return it != m_objects.end();
 }
 
+bool Universe::isOwnedBy(unsigned objectId, unsigned ownerId)
+{
+    auto it = m_objects.find(objectId);
+
+    if (it == m_objects.end())
+    {
+        return false;
+    }
+
+    auto * ownedObject = dynamic_cast<Common::Game::Object::OwnedObjectBase*>(it->second.get());
+
+    if (!ownedObject)
+    {
+        return false;
+    }
+
+    if (ownedObject->getOwnerId() != ownerId)
+    {
+        return false;
+    }
+
+    return true;
+}
+
 void Universe::addObjectAddedCallback(ObjectAddedCallback callback)
 {
     LOG_DEBUG << "Adding ObjectAddedCallback: " << callback;

@@ -182,3 +182,29 @@ TEST_F(UniverseTest, Has)
     ASSERT_TRUE(universe.has(1));
     ASSERT_FALSE(universe.has(2));
 }
+
+TEST_F(UniverseTest, IsOwnedBy)
+{
+    Common::Game::Universe universe;
+
+    boost::shared_ptr<Common::Game::Object::ObjectBase> ship(new Common::Game::Object::Ship());
+    ship->setId(1);
+    dynamic_cast<Common::Game::Object::Ship&>(*ship).setOwnerId(2);
+    universe.add(ship);
+
+    boost::shared_ptr<Common::Game::Object::ObjectBase> ship2(new Common::Game::Object::Ship());
+    ship2->setId(2);
+    dynamic_cast<Common::Game::Object::Ship&>(*ship2).setOwnerId(3);
+    universe.add(ship2);
+
+    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::StaticObject());
+    staticObject->setId(3);
+    universe.add(staticObject);
+
+    EXPECT_TRUE(universe.isOwnedBy(1, 2));
+    EXPECT_TRUE(universe.isOwnedBy(2, 3));
+    EXPECT_FALSE(universe.isOwnedBy(1, 3)); // different owner
+    EXPECT_FALSE(universe.isOwnedBy(99, 3)); // invalid object
+    EXPECT_FALSE(universe.isOwnedBy(3, 1)); // not a ship
+}
+

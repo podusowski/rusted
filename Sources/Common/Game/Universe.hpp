@@ -22,8 +22,8 @@ public:
     typedef boost::function<void(Common::Game::Object::ObjectBase &)> ObjectAddedCallback;
 
     void add(boost::shared_ptr<Object::ObjectBase> object);
-
     bool has(unsigned id);
+    bool isOwnedBy(unsigned objectId, unsigned ownerId);
 
     template<class ObjectType> ObjectType & getById(unsigned id)
     {
