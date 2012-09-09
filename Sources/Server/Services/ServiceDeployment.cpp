@@ -7,7 +7,6 @@ using namespace Server::Services;
 
 ServiceDeployment::ServiceDeployment(Cake::Configuration::Configuration & cfg, Server::DataBase::DataBase & db, Server::Game::PlayerContainer & playerContainer) :
     m_db(db),
-    m_shipClassContainer(m_db),
 
     m_rustedTimeService(*m_time),
     m_authorizationService(playerContainer, *this),

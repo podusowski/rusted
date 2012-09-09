@@ -34,7 +34,6 @@ private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     Server::DataBase::DataBase & m_db;
     Common::Game::Universe m_universe;
-    Game::ShipClassContainer m_shipClassContainer;
 
     Server::Services::ServerInfoService m_serverInfoService;
     Server::Services::RustedTimeService m_rustedTimeService;

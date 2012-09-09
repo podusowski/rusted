@@ -7,6 +7,7 @@
 #include "Game/UniverseLoader.hpp"
 #include "Game/Universe.hpp"
 #include "Game/Object/Ship.hpp"
+#include "Common/Game/Object/UnitTests/ShipMock.hpp"
 
 using namespace testing;
 
@@ -30,10 +31,16 @@ TEST_F(UniverseLoaderTest, LoadShip)
 
     Common::Game::Universe universe;
 
+    boost::shared_ptr<Common::Game::Object::Ship> ship(new Common::Game::Object::ShipMock);
+    EXPECT_CALL(getObjectFactoryMock(), create(_)).Times(1).WillRepeatedly(Return(ship));
+
     Server::Game::UniverseLoader loader;
     loader.load(universe, db);
 
     Common::Game::Object::ObjectBase & object = universe.getById<Common::Game::Object::Ship>(1);
+    EXPECT_EQ(ship.get(), &object);
 
-    ASSERT_EQ(typeid(Common::Game::Object::Ship), typeid(object));
+    // hack for gmock bug: http://code.google.com/p/googlemock/issues/detail?id=79
+    testing::Mock::VerifyAndClear(&getObjectFactoryMock());
 }
+

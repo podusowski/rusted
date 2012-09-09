@@ -7,7 +7,9 @@
 
 using namespace Server::Game;
 
-ObjectFactory::ObjectFactory(DataBase::DataBase & db) : m_db(db)
+ObjectFactory::ObjectFactory(DataBase::DataBase & db, IShipClassContainer & shipClassContainer) : 
+    m_db(db),
+    m_shipClassContainer(shipClassContainer)
 {
 }
 

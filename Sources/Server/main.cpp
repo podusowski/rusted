@@ -22,8 +22,11 @@ void initDependencies(int argc, const char * argv[])
     boost::shared_ptr<Server::DataBase::DataBase> db = dbFactory.create();
     forInterface<Server::DataBase::DataBase>().use(db);
 
-    boost::shared_ptr<Server::Game::ObjectFactory> objectFactory(new Server::Game::ObjectFactory(*db));
-    forInterface<Server::Game::ObjectFactory>().use(objectFactory);
+    boost::shared_ptr<Server::Game::IShipClassContainer> shipClassContainer(new Server::Game::ShipClassContainer(*db));
+    forInterface<Server::Game::IShipClassContainer>().use(shipClassContainer);
+
+    boost::shared_ptr<Server::Game::IObjectFactory> objectFactory(new Server::Game::ObjectFactory(*db, *shipClassContainer));
+    forInterface<Server::Game::IObjectFactory>().use(objectFactory);
 
     forInterface<Common::Game::Object::IFlightTrajectory>()
         .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();

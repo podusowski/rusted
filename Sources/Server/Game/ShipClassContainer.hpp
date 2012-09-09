@@ -1,5 +1,6 @@
 #pragma once
 
+#include "IShipClassContainer.hpp"
 #include "DataBase/DataBase.hpp"
 #include "ShipClass.hpp"
 
@@ -8,7 +9,7 @@ namespace Server
 namespace Game
 {
 
-class ShipClassContainer
+class ShipClassContainer : public IShipClassContainer
 {
 public:
     ShipClassContainer(DataBase::DataBase &);

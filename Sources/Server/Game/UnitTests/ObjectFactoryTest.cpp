@@ -7,7 +7,7 @@
 #include "Common/Game/Object/StaticObject.hpp"
 #include "DataBase/DataBaseNode.hpp"
 #include "DataBase/DataBase.hpp"
-#include "Game/UnitTests/RustedTimeStub.hpp"
+#include "Game/UnitTests/ShipClassContainerMock.hpp"
 
 using namespace testing;
 
@@ -41,7 +41,8 @@ TEST_F(ObjectFactoryTest, TestLoadShip)
     shipClass.setValue("id", 1);
     shipClass.setValue("speed", 10);
 
-    Server::Game::ObjectFactory factory(db);
+    Server::Game::ShipClassContainerMock shipClassContainer;
+    Server::Game::ObjectFactory factory(db, shipClassContainer);
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
 
@@ -71,7 +72,8 @@ TEST_F(ObjectFactoryTest, LoadStaticObject)
     node.setValue("integrity", 100);
 
     Server::DataBase::DataBase db;
-    Server::Game::ObjectFactory factory(db);
+    Server::Game::ShipClassContainerMock shipClassContainer;
+    Server::Game::ObjectFactory factory(db, shipClassContainer);
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
 
