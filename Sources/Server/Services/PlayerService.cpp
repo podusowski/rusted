@@ -20,19 +20,16 @@ void PlayerService::handle(const Common::Messages::PlayerResourcesStatusReq &, N
     connection.send(resp);
 }
 
-void PlayerService::handle(const Common::Messages::PlayerEntitiesStatusReq &, Network::IConnection & connection)
+void PlayerService::handle(const Common::Messages::FetchPlayerShips &, Network::IConnection & connection)
 {
-    Common::Messages::PlayerEntitiesStatusResp resp;
+    Common::Messages::PlayerShips resp;
 
     Game::Player & player = m_playerContainer.getBy(connection);
 
-    std::vector<boost::shared_ptr<Common::Game::Object::ObjectBase> > playerEntities
-        = m_universe.getByOwnerId<Common::Game::Object::Ship>(player.getId());
-
-    for (std::vector<boost::shared_ptr<Common::Game::Object::ObjectBase> >::iterator it = playerEntities.begin(); 
-         it != playerEntities.end(); it++)
+    auto playerShips = m_universe.getByOwnerId<Common::Game::Object::Ship>(player.getId());
+    for (auto it = playerShips.begin(); it != playerShips.end(); it++)
     {
-        resp.entities.push_back(boost::make_tuple<int>((*it)->getId()));
+        resp.ships.push_back(boost::make_tuple<int>((*it)->getId()));
     }
 
     connection.send(resp);

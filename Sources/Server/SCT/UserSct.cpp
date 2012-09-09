@@ -58,20 +58,20 @@ TEST(UserSct, TwoUsersEntitiesStatusReq)
 
     // first player
     {
-        Common::Messages::PlayerEntitiesStatusReq msg;
+        Common::Messages::FetchPlayerShips msg;
         connection1->send(msg);
 
-        auto playerEntitiesStatusResp = connection1->receive<Common::Messages::PlayerEntitiesStatusResp>();
-        ASSERT_EQ(1, playerEntitiesStatusResp->entities.size()); 
-        ASSERT_EQ(1, playerEntitiesStatusResp->entities[0].get<0>());
+        auto playerShips = connection1->receive<Common::Messages::PlayerShips>();
+        ASSERT_EQ(1, playerShips->ships.size()); 
+        EXPECT_EQ(1, playerShips->ships[0].get<0>());
     }
 
     // second player
     {
-        Common::Messages::PlayerEntitiesStatusReq msg;
+        Common::Messages::FetchPlayerShips msg;
         connection2->send(msg);
 
-        auto playerEntitiesStatusResp = connection2->receive<Common::Messages::PlayerEntitiesStatusResp>();
-        ASSERT_EQ(2, playerEntitiesStatusResp->entities.size()); 
+        auto playerShips = connection2->receive<Common::Messages::PlayerShips>();
+        ASSERT_EQ(2, playerShips->ships.size()); 
     }
 }

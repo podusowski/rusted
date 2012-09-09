@@ -40,10 +40,10 @@ player specific
 Ship
 -->
 
-<message id="PlayerEntitiesStatusReq" />
-<message id="PlayerEntitiesStatusResp">
-	<list name="entities">
-		<listparam type="int32" name="id" description="id of the entity" />
+<message id="FetchPlayerShips" />
+<message id="PlayerShips">
+	<list name="ships">
+		<listparam type="int32" name="id" description="id of the ship" />
 	</list>
 </message>
 

@@ -22,7 +22,7 @@ public:
     void fetchPlayerShips(PlayerShipsFetchedCallback);
 
     void handle(const Common::Messages::VisibleObjects &);
-    void handle(const Common::Messages::PlayerEntitiesStatusResp &);
+    void handle(const Common::Messages::PlayerShips &);
     void handle(const Common::Messages::ShipInfo &);
     void handle(const Common::Messages::StaticObjectInfoResp &);
     void handle(const Common::Messages::ShipCourseInfo &);

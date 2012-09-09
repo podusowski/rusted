@@ -21,8 +21,8 @@ void ObjectService::fetchVisibleObjects()
 void ObjectService::fetchPlayerShips(PlayerShipsFetchedCallback callback)
 {
     m_playerShipsFetchedCallback = callback;
-    Common::Messages::PlayerEntitiesStatusReq playerEntitiesStatusReq;
-    m_connection.send(playerEntitiesStatusReq);
+    Common::Messages::FetchPlayerShips fetchPlayerShips;
+    m_connection.send(fetchPlayerShips);
 }
 
 void ObjectService::handle(const Common::Messages::VisibleObjects & visibleObjects)
@@ -41,11 +41,11 @@ void ObjectService::handle(const Common::Messages::VisibleObjects & visibleObjec
     }
 }
 
-void ObjectService::handle(const Common::Messages::PlayerEntitiesStatusResp & playerEntitiesStatusResp)
+void ObjectService::handle(const Common::Messages::PlayerShips & playerShips)
 {
     LOG_DEBUG << "Got player ships";
 
-    for (auto ship: playerEntitiesStatusResp.entities)
+    for (auto ship: playerShips.ships)
     {
         int shipId = ship.get<0>();
 
