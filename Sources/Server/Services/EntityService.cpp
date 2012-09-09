@@ -1,6 +1,7 @@
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/StaticObject.hpp"
 
+#include "Game/Actions/ActionType.hpp"
 #include "Server/Services/EntityService.hpp"
 
 using namespace Server::Services;
@@ -77,8 +78,8 @@ void EntityService::handle(const Common::Messages::FocusObject & focusObject, Ne
 void EntityService::handle(const Common::Messages::FetchAvailableActions &, Network::IConnection & connection)
 {
     Common::Messages::AvailableActions availableActions;
-    availableActions.actions.push_back(boost::make_tuple<int, std::string>(1, "attack"));
-    availableActions.actions.push_back(boost::make_tuple<int, std::string>(2, "buildShip"));
+    availableActions.actions.push_back(boost::make_tuple<int, std::string>(Game::Actions::ActionType_Attack, "attack"));
+    availableActions.actions.push_back(boost::make_tuple<int, std::string>(Game::Actions::ActionType_BuildShip, "buildShip"));
     connection.send(availableActions);
 }
 

@@ -3,6 +3,7 @@
 #include "ActionFactory.hpp"
 #include "Attack.hpp"
 #include "BuildShip.hpp"
+#include "ActionType.hpp"
 
 using namespace Server::Game::Actions;
 
@@ -36,14 +37,14 @@ boost::shared_ptr<IAction> ActionFactory::create(
 
     switch (id)
     {
-        case 1:
+        case ActionType_Attack:
         {
             assert(selectedObject);
             ret = boost::shared_ptr<IAction>(new Attack(m_playerContainer, focusedShip, *selectedObject));
             break;
         }
 
-        case 2:
+        case ActionType_BuildShip:
         {
             auto & player = m_playerContainer.getBy(connection);
             ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer));
