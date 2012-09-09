@@ -15,7 +15,7 @@ public:
     ShipClassContainer(DataBase::DataBase &);
     ~ShipClassContainer();
 
-    ShipClass & getById(unsigned);
+    IShipClass & getById(unsigned);
 
 private:
     void loadFromDataBase();

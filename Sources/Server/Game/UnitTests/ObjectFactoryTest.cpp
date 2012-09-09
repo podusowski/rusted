@@ -8,6 +8,7 @@
 #include "DataBase/DataBaseNode.hpp"
 #include "DataBase/DataBase.hpp"
 #include "Game/UnitTests/ShipClassContainerMock.hpp"
+#include "Game/UnitTests/ShipClassMock.hpp"
 
 using namespace testing;
 
@@ -35,13 +36,12 @@ TEST_F(ObjectFactoryTest, TestLoadShip)
     node.setValue("integrity", 100);
     node.setValue("class", 1);
 
-    auto & shipClasses = db.getRoot().createChild("ship_classes");
-    auto & shipClass = shipClasses.createChild("ship_class");
-
-    shipClass.setValue("id", 1);
-    shipClass.setValue("speed", 10);
+    Server::Game::ShipClassMock shipClass;
+    EXPECT_CALL(shipClass, applyTo(_)).Times(1);
 
     Server::Game::ShipClassContainerMock shipClassContainer;
+    EXPECT_CALL(shipClassContainer, getById(1)).Times(1).WillRepeatedly(ReturnRef(shipClass));
+
     Server::Game::ObjectFactory factory(db, shipClassContainer);
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
@@ -54,11 +54,6 @@ TEST_F(ObjectFactoryTest, TestLoadShip)
     ASSERT_EQ(3, position.getX());
     ASSERT_EQ(4, position.getY());
     ASSERT_EQ(5, position.getZ());
-
-    ASSERT_EQ(100, object->getIntegrity());
-
-    auto & ship = dynamic_cast<Common::Game::Object::Ship &>(*object);
-    ASSERT_EQ(10, ship.getSpeed());
 }
 
 TEST_F(ObjectFactoryTest, LoadStaticObject)

@@ -14,7 +14,7 @@ ShipClassContainer::~ShipClassContainer()
 {
 }
 
-Server::Game::ShipClass & ShipClassContainer::getById(unsigned id)
+Server::Game::IShipClass & ShipClassContainer::getById(unsigned id)
 {
     auto it = m_shipClassMap.find(id);
     if (it != m_shipClassMap.end())

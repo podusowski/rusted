@@ -1,6 +1,6 @@
 #pragma once
 
-#include "ShipClass.hpp"
+#include "IShipClass.hpp"
 
 namespace Server
 {
@@ -10,7 +10,7 @@ namespace Game
 class IShipClassContainer
 {
 public:
-    virtual ShipClass & getById(unsigned) = 0;
+    virtual IShipClass & getById(unsigned) = 0;
 
     virtual ~IShipClassContainer() {}
 };

@@ -30,10 +30,9 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
         
         try
         {
-            unsigned shipClass = data.getValue<unsigned>("class");
-            auto & shipClassNode = getShipClass(shipClass);
-
-            ship.setSpeed(shipClassNode.getValue<unsigned>("speed"));
+            unsigned shipClassId = data.getValue<unsigned>("class");
+            auto & shipClass = m_shipClassContainer.getById(shipClassId);
+            shipClass.applyTo(ship);
         }
         catch (...)
         {
