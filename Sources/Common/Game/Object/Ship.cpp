@@ -5,7 +5,7 @@
 using namespace Common::Game::Object;
 using namespace Common::Game;
 
-Ship::Ship()
+Ship::Ship() : m_class(0)
 {
 }
 
@@ -57,6 +57,16 @@ void Ship::setIntegrity(unsigned integrity)
 Common::Math::Quaternion Ship::getOrientation()
 {
     return m_trajectory->getOrientation();
+}
+
+void Ship::setClass(unsigned shipClass)
+{
+    m_class = shipClass;
+}
+
+unsigned Ship::getClass()
+{
+    return m_class;
 }
 
 IFlightTrajectory::Description Ship::getTrajectoryDescription()

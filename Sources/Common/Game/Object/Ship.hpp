@@ -29,14 +29,20 @@ public:
     void setIntegrity(unsigned); //override;
     Common::Math::Quaternion getOrientation();
 
+    virtual void setClass(unsigned);
+    virtual unsigned getClass();
+
     virtual IFlightTrajectory::Description getTrajectoryDescription();
     void applyTrajectoryDescription(IFlightTrajectory::Description);
 
 private:
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
     Cake::DependencyInjection::Inject<IFlightTrajectory> m_trajectory;
+
+    unsigned m_class;
 };
 
 }
 }
 }
+
