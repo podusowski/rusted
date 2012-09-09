@@ -1,3 +1,5 @@
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "ShipClass.hpp"
 
 using namespace Server::Game;
@@ -11,6 +13,8 @@ ShipClass::ShipClass(DataBase::DataBaseNode & node) :
 
 void ShipClass::applyTo(Common::Game::Object::Ship & ship)
 {
+    LOG_DEBUG << "Applying class:" << m_id << " to ship:" << ship.getId();
+
     ship.setSpeed(m_speed);
     ship.setIntegrity(m_integrity);
 }

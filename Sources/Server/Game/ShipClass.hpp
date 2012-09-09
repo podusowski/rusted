@@ -2,13 +2,14 @@
 
 #include "Common/Game/Object/Ship.hpp"
 #include "DataBase/DataBaseNode.hpp"
+#include "IShipClass.hpp"
 
 namespace Server
 {
 namespace Game
 {
 
-class ShipClass
+class ShipClass : public IShipClass
 {
 public:
     ShipClass(DataBase::DataBaseNode &);
