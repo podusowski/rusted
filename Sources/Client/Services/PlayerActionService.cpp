@@ -58,7 +58,10 @@ void PlayerActionService::fetchAvailableActions(AvailableActionsFetchedCallback 
 
     m_availableActionsFetchedCallback = callback;
 
+    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getFocusedObject());
+
     Common::Messages::FetchAvailableActions fetchAvailableActions;
+    fetchAvailableActions.shipId = focusedShip.getId();
     m_connection.send(fetchAvailableActions);
 }
 

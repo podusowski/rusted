@@ -137,6 +137,13 @@ void PilotView::availableActionsFetched(std::vector<boost::tuple<int, std::strin
 
     LOG_DEBUG << "Got actions";
 
+    // delete action buttons
+    for (auto & actionButton: m_actionButtons)
+    {
+        m_gui->destroyWidget(actionButton);
+    }
+    m_actionButtons.clear();
+
     int buttonTop = 0;
     for (auto & action: actions)
     {
@@ -160,6 +167,7 @@ void PilotView::shipListBoxSelected(MyGUI::ListBox * listBox, size_t index)
 
     auto & ship = m_universe.getById<Common::Game::Object::Ship>(*id);
     m_playerActionService.focusObject(ship);
+    m_playerActionService.fetchAvailableActions(boost::bind(&PilotView::availableActionsFetched, this, _1));
 }
 
 void PilotView::playerShipsFetched()
