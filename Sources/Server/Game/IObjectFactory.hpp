@@ -13,9 +13,10 @@ namespace Game
 class IObjectFactory
 {
 public:
-	virtual boost::shared_ptr<Common::Game::Object::ObjectBase> create(Server::DataBase::DataBaseNode &) = 0;
+    virtual boost::shared_ptr<Common::Game::Object::ObjectBase> create(Server::DataBase::DataBaseNode &) = 0;
+    virtual boost::shared_ptr<Common::Game::Object::ObjectBase> createShip(unsigned shipClass, unsigned ownerId) = 0;
 
-	virtual ~IObjectFactory() {}
+    virtual ~IObjectFactory() {}
 };
 
 }

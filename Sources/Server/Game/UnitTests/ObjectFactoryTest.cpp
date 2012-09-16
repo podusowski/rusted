@@ -21,7 +21,7 @@ public:
     }
 };
 
-TEST_F(ObjectFactoryTest, TestLoadShip)
+TEST_F(ObjectFactoryTest, CreateShipFromDbNode)
 {
     Server::DataBase::DataBase db;
 
@@ -56,7 +56,26 @@ TEST_F(ObjectFactoryTest, TestLoadShip)
     ASSERT_EQ(5, position.getZ());
 }
 
-TEST_F(ObjectFactoryTest, LoadStaticObject)
+TEST_F(ObjectFactoryTest, CreateShip)
+{
+    Server::DataBase::DataBase db;
+
+    Server::Game::ShipClassMock shipClass;
+    EXPECT_CALL(shipClass, applyTo(_)).Times(1);
+
+    Server::Game::ShipClassContainerMock shipClassContainer;
+    EXPECT_CALL(shipClassContainer, getById(1)).Times(1).WillRepeatedly(ReturnRef(shipClass));
+
+    Server::Game::ObjectFactory factory(db, shipClassContainer);
+
+    auto object = factory.createShip(1, 2);
+
+    ASSERT_EQ(typeid(Common::Game::Object::Ship), typeid(*object));
+    ASSERT_EQ(0, object->getId()); // invalid id 
+    ASSERT_EQ(2, dynamic_cast<Common::Game::Object::OwnedObjectBase&>(*object).getOwnerId());
+}
+
+TEST_F(ObjectFactoryTest, CreateStaticObjectFromDbNode)
 {
     Server::DataBase::DataBaseNode node("object");
     node.setValue("type", "StaticObject");

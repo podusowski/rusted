@@ -17,6 +17,7 @@ class ObjectFactory : public IObjectFactory
 public:
 	ObjectFactory(DataBase::DataBase & db, IShipClassContainer &);
 	boost::shared_ptr<Common::Game::Object::ObjectBase> create(Server::DataBase::DataBaseNode & data);
+	boost::shared_ptr<Common::Game::Object::ObjectBase> createShip(unsigned shipClass, unsigned ownerId);
 
 private:
     Common::Game::Position extractPosition(Server::DataBase::DataBaseNode & data);

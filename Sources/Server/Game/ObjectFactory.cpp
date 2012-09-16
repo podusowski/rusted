@@ -55,6 +55,28 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
     return boost::shared_ptr<Common::Game::Object::ObjectBase>();
 }
 
+boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::createShip(unsigned shipClassId, unsigned ownerId)
+{
+    boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
+
+    Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
+
+    object->setId(0); // to be assigned by Universe
+    ship.setOwnerId(ownerId);
+    
+    try
+    {
+        auto & shipClass = m_shipClassContainer.getById(shipClassId);
+        shipClass.applyTo(ship);
+    }
+    catch (...)
+    {
+        LOG_WARN << "Exception thrown while applying ship's class, the ship will be created with default values";
+    }
+
+    return object;
+}
+
 Common::Game::Position ObjectFactory::extractPosition(Server::DataBase::DataBaseNode & data)
 {
     Common::Game::Position position;
