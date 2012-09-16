@@ -24,6 +24,7 @@ TEST(ActionsSct, FetchAvailableActions)
 
     // client should fetch available action list explicitly
     Common::Messages::FetchAvailableActions fetchAvailableActions;
+    fetchAvailableActions.shipId = 1;
     connection1->send(fetchAvailableActions);
 
     // currently actions are hardcoded
