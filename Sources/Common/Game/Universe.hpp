@@ -74,7 +74,7 @@ public:
         for (std::map<unsigned, boost::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.begin();
              it != m_objects.end(); it++)
         {
-            if (typeid(*it->second) == typeid(ObjectType))
+            if (it->second->is<ObjectType>())
             {
                 ret.push_back(it->second);
             }
