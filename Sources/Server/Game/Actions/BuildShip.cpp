@@ -19,7 +19,8 @@ Common::Game::TimeValue BuildShip::start()
 
 void BuildShip::finish()
 {
-    boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
+    auto object = m_objectFactory->createShip(1, m_player.getId());
+
     Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship &>(*object);
     Common::Game::Object::Ship & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
 
@@ -39,3 +40,4 @@ void BuildShip::finish()
         m_servicesUtils.sendObjectInfo(ship, *connection);
     }
 }
+

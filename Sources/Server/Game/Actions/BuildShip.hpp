@@ -4,6 +4,7 @@
 #include "Common/Game/Universe.hpp"
 #include "Server/Game/IPlayer.hpp"
 #include "Server/Game/IPlayerContainer.hpp"
+#include "Server/Game/IObjectFactory.hpp"
 #include "Server/Services/Utils.hpp"
 
 namespace Server
@@ -25,6 +26,7 @@ private:
     Server::Game::IPlayer & m_player;
     Server::Game::IPlayerContainer & m_playerContainer;
     Server::Services::Utils m_servicesUtils;
+    Cake::DependencyInjection::Inject<IObjectFactory> m_objectFactory;
 };
 
 }

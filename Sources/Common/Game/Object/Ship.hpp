@@ -23,7 +23,7 @@ public:
 
     virtual Position getPosition();
     void setPosition(const Position &);
-    void setCourse(Position course);
+    virtual void setCourse(Position course);
     virtual void setSpeed(unsigned speed);
     unsigned getSpeed();
     void setIntegrity(unsigned); //override;

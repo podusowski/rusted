@@ -22,6 +22,7 @@ TEST_F(BuildShipTest, Build)
     Common::Game::Universe universe; 
     Server::Game::PlayerMock player;
     Common::Game::Object::ShipMock focusedShip;
+    boost::shared_ptr<Common::Game::Object::ObjectBase> createdObject(new Common::Game::Object::ShipMock);
     Server::Network::ConnectionMock connection;
     Server::Game::PlayerContainerMock playerContainer;
 
@@ -32,6 +33,17 @@ TEST_F(BuildShipTest, Build)
 
     std::vector<Server::Network::IConnection *> allConnections{&connection};
     ON_CALL(playerContainer, getAllConnections(_)).WillByDefault(Return(allConnections));
+
+    auto & createdShip = dynamic_cast<Common::Game::Object::ShipMock&>(*createdObject);
+
+    // this stuff is called by utilities to send new ship's info to clients
+    ON_CALL(createdShip, getPosition()).WillByDefault(Return(Common::Game::Position()));
+    ON_CALL(createdShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
+
+    // newly created ship is flying a bit from the creator ship
+    EXPECT_CALL(createdShip, setCourse(_)).Times(1);
+
+    EXPECT_CALL(getObjectFactoryMock(), createShip(_, _)).Times(1).WillOnce(Return(createdObject));
 
     EXPECT_CALL(connection, send(
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipInfo))
@@ -51,14 +63,7 @@ TEST_F(BuildShipTest, Build)
 
     ASSERT_FALSE(ships.empty());
 
-    auto & ship = dynamic_cast<Common::Game::Object::Ship &>(*ships.at(0));
-    EXPECT_EQ(player.getId(), ship.getOwnerId());
-
-    // we want new ship to fly a bit further from focused ship
-    Common::Game::Object::IFlightTrajectory::Description description = ship.getTrajectoryDescription();
-
-    // FIXME: this would be cleaner if we mock some factory which creates shipMock
-    EXPECT_EQ(focusedShipPosition, description.start);
-    EXPECT_EQ(focusedShipPosition + Common::Game::Position(10, 10, 0), description.destination);
+    // hack for gmock bug: http://code.google.com/p/googlemock/issues/detail?id=79
+    testing::Mock::VerifyAndClear(&getObjectFactoryMock());
 }
 
