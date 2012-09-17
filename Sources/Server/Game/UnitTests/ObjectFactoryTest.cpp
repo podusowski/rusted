@@ -47,8 +47,8 @@ TEST_F(ObjectFactoryTest, CreateShipFromDbNode)
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
 
     ASSERT_EQ(typeid(Common::Game::Object::Ship), typeid(*object));
-    ASSERT_EQ(1, object->getId());
-    ASSERT_EQ(2, dynamic_cast<Common::Game::Object::OwnedObjectBase&>(*object).getOwnerId());
+    ASSERT_EQ(1u, object->getId());
+    ASSERT_EQ(2u, dynamic_cast<Common::Game::Object::OwnedObjectBase&>(*object).getOwnerId());
 
     Common::Game::Position position = object->getPosition();
     ASSERT_EQ(3, position.getX());
@@ -71,8 +71,8 @@ TEST_F(ObjectFactoryTest, CreateShip)
     auto object = factory.createShip(1, 2);
 
     ASSERT_EQ(typeid(Common::Game::Object::Ship), typeid(*object));
-    ASSERT_EQ(0, object->getId()); // invalid id 
-    ASSERT_EQ(2, dynamic_cast<Common::Game::Object::OwnedObjectBase&>(*object).getOwnerId());
+    ASSERT_EQ(0u, object->getId()); // invalid id 
+    ASSERT_EQ(2u, dynamic_cast<Common::Game::Object::OwnedObjectBase&>(*object).getOwnerId());
 }
 
 TEST_F(ObjectFactoryTest, CreateStaticObjectFromDbNode)
@@ -97,5 +97,5 @@ TEST_F(ObjectFactoryTest, CreateStaticObjectFromDbNode)
     ASSERT_EQ(4, position.getY());
     ASSERT_EQ(5, position.getZ());
 
-    ASSERT_EQ(100, object->getIntegrity());
+    ASSERT_EQ(100u, object->getIntegrity());
 }

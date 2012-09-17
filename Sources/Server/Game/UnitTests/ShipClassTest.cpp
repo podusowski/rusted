@@ -28,6 +28,6 @@ TEST_F(ShipClassTest, ApplyBasic)
     ShipClass shipClass(node);
     shipClass.applyTo(ship);
 
-    EXPECT_EQ(1, shipClass.getId());
+    EXPECT_EQ(1u, shipClass.getId());
 }
 

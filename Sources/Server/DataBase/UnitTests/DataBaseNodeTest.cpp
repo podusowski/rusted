@@ -11,7 +11,7 @@ TEST(DataBaseNodeTest, BasicTree)
     DataBaseNode root("root");
     DataBaseNode & entities = root.createChild("entities");
 
-    EXPECT_EQ(1, root.getChildCount());
+    EXPECT_EQ(1u, root.getChildCount());
 
     DataBaseNode & entity1 = entities.createChild("entity");
     entity1.setValue("id", 1);
