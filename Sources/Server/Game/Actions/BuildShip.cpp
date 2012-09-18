@@ -5,10 +5,16 @@
 
 using namespace Server::Game::Actions;
 
-BuildShip::BuildShip(Common::Game::Universe & universe, Server::Game::IPlayer & player, Server::Game::IPlayerContainer & playerContainer) : 
+BuildShip::BuildShip(
+    Common::Game::Universe & universe, 
+    Server::Game::IPlayer & player, 
+    Server::Game::IPlayerContainer & playerContainer,
+    unsigned shipClass
+) : 
     m_universe(universe),
     m_player(player),
-    m_playerContainer(playerContainer)
+    m_playerContainer(playerContainer),
+    m_shipClass(shipClass)
 {
 }
 
@@ -19,7 +25,7 @@ Common::Game::TimeValue BuildShip::start()
 
 void BuildShip::finish()
 {
-    auto object = m_objectFactory->createShip(1, m_player.getId());
+    auto object = m_objectFactory->createShip(m_shipClass, m_player.getId());
 
     Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship &>(*object);
     Common::Game::Object::Ship & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());

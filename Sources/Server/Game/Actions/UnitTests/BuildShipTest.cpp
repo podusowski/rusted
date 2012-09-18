@@ -43,7 +43,7 @@ TEST_F(BuildShipTest, Build)
     // newly created ship is flying a bit from the creator ship
     EXPECT_CALL(createdShip, setCourse(_)).Times(1);
 
-    EXPECT_CALL(getObjectFactoryMock(), createShip(_, _)).Times(1).WillOnce(Return(createdObject));
+    EXPECT_CALL(getObjectFactoryMock(), createShip(5, _)).Times(1).WillOnce(Return(createdObject));
 
     EXPECT_CALL(connection, send(
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipInfo))
@@ -55,7 +55,7 @@ TEST_F(BuildShipTest, Build)
 
     ON_CALL(player, getId()).WillByDefault(Return(1));
 
-    Server::Game::Actions::BuildShip buildShip(universe, player, playerContainer);
+    Server::Game::Actions::BuildShip buildShip(universe, player, playerContainer, 5);
     buildShip.start();
     buildShip.finish();
 

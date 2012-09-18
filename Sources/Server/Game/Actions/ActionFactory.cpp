@@ -47,7 +47,7 @@ boost::shared_ptr<IAction> ActionFactory::create(
         case ActionType_BuildShip:
         {
             auto & player = m_playerContainer.getBy(connection);
-            ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer));
+            ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer, 1));
             break;
         }
 

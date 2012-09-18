@@ -17,7 +17,7 @@ namespace Actions
 class BuildShip : public IAction
 {
 public:
-    BuildShip(Common::Game::Universe &, Server::Game::IPlayer &, Server::Game::IPlayerContainer &);
+    BuildShip(Common::Game::Universe &, Server::Game::IPlayer &, Server::Game::IPlayerContainer &, unsigned shipClass);
     Common::Game::TimeValue start();
     void finish();
 
@@ -25,6 +25,7 @@ private:
     Common::Game::Universe & m_universe;
     Server::Game::IPlayer & m_player;
     Server::Game::IPlayerContainer & m_playerContainer;
+    unsigned m_shipClass;
     Server::Services::Utils m_servicesUtils;
     Cake::DependencyInjection::Inject<IObjectFactory> m_objectFactory;
 };
