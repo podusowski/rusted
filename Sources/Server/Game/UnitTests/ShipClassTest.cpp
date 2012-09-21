@@ -31,3 +31,22 @@ TEST_F(ShipClassTest, ApplyBasic)
     EXPECT_EQ(1u, shipClass.getId());
 }
 
+TEST_F(ShipClassTest, AvailableActions)
+{
+    DataBase::DataBaseNode node("class");
+    node.setValue("integrity", 100);
+    node.setValue("speed", 1);
+    node.setValue("id", 1);
+
+    auto & actionsNode = node.createChild("actions");
+    auto & action1Node = actionsNode.createChild("action");
+    action1Node.setValue("type", 1);
+    action1Node.setValue("parameter", 1);
+
+    ShipClass shipClass(node);
+
+    auto availableActions = shipClass.getAvailableActions();
+
+    EXPECT_EQ(1u, availableActions.size());
+}
+
