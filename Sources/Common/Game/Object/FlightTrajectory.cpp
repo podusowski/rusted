@@ -55,18 +55,38 @@ Common::Math::Quaternion FlightTrajectory::getOrientation()
         int x = m_description.destination.getX() - m_description.start.getX();
         int y = m_description.destination.getY() - m_description.start.getY();
 
+        const float HALF_PI = 1.5707;
+        const float PI = 3.14;
+
         float angle = 0;
 
-        if (y == 0)
+        if (y == 0 || x == 0)
         {
+            // TODO
             angle = 0;
         }
         else
         {
-            angle = atan(float(x) / float(y));
+            angle = atan(float(abs(x)) / float(abs(y)));
         }
 
-        m_lastOrientation = Common::Math::Quaternion(-angle, Point3<int>(0, 0, 1));
+        if (y > 0 && x > 0)
+        {
+            angle = -angle;
+        }
+        else if (y > 0 && x < 0)
+        {
+        }
+        else if (y < 0 && x > 0)
+        {
+            angle = PI + angle;
+        }
+        else if (y < 0 && x < 0)
+        {
+            angle = PI - angle;
+        }
+
+        m_lastOrientation = Common::Math::Quaternion(angle, Point3<int>(0, 0, 1));
     }
 
     return m_lastOrientation;
