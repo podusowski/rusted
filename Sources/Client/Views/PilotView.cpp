@@ -97,7 +97,6 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
         int left = x - (m_graphics.getWidth() / 2);
 
         top *= 100;
-        left /= 2;
 
         Ogre::Vector3 delta(left, -top, 0); 
         delta = ogreOrientation * delta;
