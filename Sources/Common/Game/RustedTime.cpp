@@ -41,13 +41,14 @@ void RustedTime::createTimer(TimeValue time, boost::function<void()> callback)
     t.callback = callback;
     t.expiration = getCurrentTime() + time;
 
+    Cake::Threading::ScopedLock lock(m_timersMutex);
+
     if (!m_timerThread.isRunning())
     {
         LOG_DEBUG << "Starting timer thread";
         m_timerThread.start();
     }
 
-    Cake::Threading::ScopedLock lock(m_timersMutex);
     m_timers.insert(t);
     m_timersCondition.signal();
 }
@@ -76,23 +77,21 @@ void RustedTime::run()
 {
     while (true)
     {
-        m_timersMutex.aquire();
+            Cake::Threading::ScopedLock lock(m_timersMutex);
         if (m_timers.empty())
         {
             LOG_DEBUG << "Timer queue is empty, waiting";
             m_timersCondition.wait();
-            m_timersMutex.release();
             LOG_DEBUG << "New timer detected";
         }
         else
         {
             LOG_DEBUG << "There are active timers";
-            m_timersMutex.release();
         }
 
         Timer firstTimer;
         {
-            Cake::Threading::ScopedLock lock(m_timersMutex);
+
             LOG_DEBUG << "Getting the first timer";
             firstTimer = *m_timers.begin();
         }
@@ -101,19 +100,17 @@ void RustedTime::run()
 
         if (firstTimer.expiration < t)
         {
-            LOG_DEBUG << "Timer expired";
+            LOG_DEBUG << "Timer expired after: " << firstTimer.expiration;
             firstTimer.callback();
 
-            Cake::Threading::ScopedLock lock(m_timersMutex);
             m_timers.erase(m_timers.begin());
         }
         else
         {
-            LOG_DEBUG << "Timer is not expired yet";
             TimeValue timeToWait = firstTimer.expiration - t;
+            LOG_DEBUG << "Timer is not expired yet, waiting: " << timeToWait;
             
-            Cake::Threading::ScopedLock lock(m_timersMutex);
-            m_timersCondition.timedWait(timeToWait.getSeconds());
+            m_timersCondition.timedWait(timeToWait.getSeconds(), timeToWait.getMiliseconds());
         }
     }
 }
