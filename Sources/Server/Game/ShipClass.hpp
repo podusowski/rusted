@@ -9,12 +9,6 @@ namespace Server
 namespace Game
 {
 
-struct AvailableAction
-{
-    unsigned type;
-    unsigned parameter;
-};
-
 class ShipClass : public IShipClass
 {
 public:

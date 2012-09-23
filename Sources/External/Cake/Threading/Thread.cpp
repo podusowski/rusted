@@ -65,7 +65,13 @@ void * Thread::m_run(void * threadCtx)
 {
     Thread & thread = *static_cast<Thread *>(threadCtx);
 
-	thread.m_runnable.run();
+	try
+	{
+	    thread.m_runnable.run();
+	}
+	catch (...)
+	{
+	}
 
     // basically bool should be atomic but we'll be valgrind clean
 	thread.m_isRunningLock.aquire();
