@@ -18,6 +18,7 @@ public:
     TimeValue operator-(const TimeValue & val) const;
     TimeValue operator+(const TimeValue & val) const;
     bool operator<(const TimeValue & val) const;
+    bool operator<=(const TimeValue & val) const;
 
 private:
     unsigned m_seconds;

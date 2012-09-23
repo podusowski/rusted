@@ -91,7 +91,7 @@ void RustedTime::run()
         Timer firstTimer = *m_timers.begin();
         TimeValue t = getCurrentTime();
 
-        if (firstTimer.expiration < t)
+        if (firstTimer.expiration <= t)
         {
             LOG_DEBUG << "Timer id:" << firstTimer.m_id << " expired";
             firstTimer.callback();
@@ -101,7 +101,7 @@ void RustedTime::run()
         else
         {
             TimeValue timeToWait = firstTimer.expiration - t;
-            LOG_DEBUG << "Timer thread as awake but there is no expiration yet, waiting: " << timeToWait;
+            LOG_DEBUG << "Timer thread as awake but there is no expiration yet, waiting:" << timeToWait << ", now:" << getCurrentTime();
             
             m_timersCondition.timedWait(timeToWait.getSeconds(), timeToWait.getMiliseconds());
         }

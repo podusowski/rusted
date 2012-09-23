@@ -58,3 +58,8 @@ bool TimeValue::operator<(const TimeValue & val) const
     return m_seconds < val.m_seconds;
 }
 
+bool TimeValue::operator<=(const TimeValue & val) const
+{
+    return *this == val ||  *this < val;
+}
+
