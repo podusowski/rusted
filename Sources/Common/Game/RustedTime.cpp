@@ -35,7 +35,6 @@ void RustedTime::setReferenceTime(unsigned reference)
 
 void RustedTime::createTimer(TimeValue time, boost::function<void()> callback)
 {
-
     unsigned id = m_idGenerator.generate();
 
     Timer t(id);

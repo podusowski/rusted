@@ -8,13 +8,19 @@ namespace Cake
 namespace Threading
 {
 
+enum ETimedWaitResult
+{
+    ETimedWaitResult_Signal,
+    ETimedWaitResult_Timeout
+};
+
 class ConditionVariable
 {
 public:
     ConditionVariable(Mutex &); 
     ~ConditionVariable();
     void wait();
-    void timedWait(unsigned seconds, unsigned miliseconds = 0);
+    ETimedWaitResult timedWait(unsigned seconds, unsigned miliseconds = 0);
     void signal();
     void broadcast();
 
