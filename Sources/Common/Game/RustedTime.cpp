@@ -87,12 +87,7 @@ void RustedTime::run()
             LOG_DEBUG << "Timer queue is empty, waiting";
             m_timersCondition.wait();
         }
-        else
-        {
-            LOG_DEBUG << "There are " << m_timers.size() << " active timers";
-        }
 
-        LOG_DEBUG << "Getting the first timer";
         Timer firstTimer = *m_timers.begin();
         TimeValue t = getCurrentTime();
 
