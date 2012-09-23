@@ -2,6 +2,7 @@
 
 #include "Cake/Networking/Socket.hpp"
 #include "Cake/Threading/IRunnable.hpp"
+#include "Cake/Threading/Mutex.hpp"
 
 #include "Network/IConnectionListener.hpp"
 #include "Network/IConnection.hpp"
@@ -25,6 +26,7 @@ public:
 private:
     int m_id;
 	Cake::Networking::Socket & m_socket;
+	Cake::Threading::Mutex m_socketMutex;
 	std::vector<IConnectionListener *> m_listeners;
 	std::vector<IConnectionListener *> m_listenersToAdd;
 };

@@ -3,6 +3,7 @@
 #include <boost/foreach.hpp>
 
 #include "Cake/Diagnostics/Logger.hpp"
+#include "Cake/Threading/ScopedLock.hpp"
 
 #include "Common/RustedCodec/CakeReadBuffer.hpp"
 #include "Common/RustedCodec/CakeWriteBuffer.hpp"
@@ -36,6 +37,8 @@ void Connection::addListener(IConnectionListener & listener)
 void Connection::send(const Common::Messages::AbstractMessage & message)
 {
     LOG_DEBUG << "<connection:" << m_id << "> Sending: " << message;
+
+    Cake::Threading::ScopedLock lock(m_socketMutex);
 
     Common::RustedCodec::CakeWriteBuffer buffer(m_socket);
     message.serialize(buffer);
