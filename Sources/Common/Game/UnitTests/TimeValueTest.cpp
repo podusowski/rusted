@@ -4,6 +4,12 @@
 
 using namespace Common::Game;
 
+TEST(TimeValueTest, InvalidValues)
+{
+    EXPECT_ANY_THROW(TimeValue(0, 1000));
+    EXPECT_ANY_THROW(TimeValue(0, 1001));
+}
+
 TEST(TimeValueTest, Add)
 {
     EXPECT_EQ(TimeValue(2, 0), TimeValue(1, 0) + TimeValue(1, 0));

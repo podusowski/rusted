@@ -1,3 +1,5 @@
+#include <stdexcept>
+
 #include "TimeValue.hpp"
 
 using namespace Common::Game;
@@ -12,6 +14,10 @@ TimeValue::TimeValue(unsigned seconds, unsigned miliseconds) :
     m_seconds(seconds),
     m_miliseconds(miliseconds)
 {
+    if (miliseconds >= 1000)
+    {
+        throw std::runtime_error("miliseconds max is 999");
+    }
 }
 
 unsigned TimeValue::getSeconds() const
