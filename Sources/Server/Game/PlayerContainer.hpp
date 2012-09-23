@@ -3,6 +3,8 @@
 #include <map>
 #include <string>
 
+#include "Cake/Threading/Mutex.hpp"
+
 #include "DataBase/DataBase.hpp"
 #include "IPlayerContainer.hpp"
 
@@ -34,6 +36,8 @@ private:
 
     std::map<Network::IConnection *, boost::shared_ptr<Server::Game::Player> > m_connectionMap;
     Server::DataBase::DataBase & m_db;
+
+    Cake::Threading::Mutex m_mutex;
 };
 
 }
