@@ -17,14 +17,17 @@ TEST(SmokeSct, Smoke)
         boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
 
         Common::Messages::FetchAvailableActions fetchAvailableActions;
+        fetchAvailableActions.shipId = 1;
         connection1->send(fetchAvailableActions);
         auto availableActions = connection1->receive<Common::Messages::AvailableActions>();
 
         Common::Messages::FocusObject focusObject;
         focusObject.id = 1;
         connection1->send(focusObject);
+
+        Common::Messages::SelectObject selectObject;
+        selectObject.id = 2;
+        connection1->send(selectObject);
     }
 }
-
-
 
