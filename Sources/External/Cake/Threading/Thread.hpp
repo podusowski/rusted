@@ -23,6 +23,7 @@ public:
 	~Thread();
 
 	void start();
+	void join();
 	bool isRunning();
 
 	static void wait(int secs, int mili = 0);

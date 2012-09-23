@@ -43,6 +43,11 @@ void Thread::start()
 	}
 }
 
+void Thread::join()
+{
+    pthread_join(m_thread, 0);
+}
+
 void Thread::wait(int secs, int mili)
 {
 	timespec l_ts;
@@ -77,3 +82,4 @@ bool Thread::isRunning()
     ScopedLock lock(m_isRunningLock);
     return m_isRunning;
 }
+
