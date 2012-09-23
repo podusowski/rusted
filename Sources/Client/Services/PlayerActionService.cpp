@@ -31,12 +31,12 @@ void PlayerActionService::setFocusedObjectCourse(Common::Game::Position course)
 
     focusedShip.setCourse(course);
 
-    Common::Messages::EntityChangeCourseReq req;
+    Common::Messages::ChangeShipCourse req;
 
-    req.entityId = focusedShip.getId();
-    req.courseX = course.getX();
-    req.courseY = course.getY();
-    req.courseZ = course.getZ();
+    req.shipId = focusedShip.getId();
+    req.x = course.getX();
+    req.y = course.getY();
+    req.z = course.getZ();
 
     m_connection.send(req);
 }

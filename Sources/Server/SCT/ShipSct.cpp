@@ -36,11 +36,11 @@ TEST_F(ShipSct, ChangeShipCourse)
     connection->receive<Common::Messages::ShipCourseInfo>();
 
     // change course
-    Common::Messages::EntityChangeCourseReq entityChangeCourseReq;
-    entityChangeCourseReq.entityId = 1;
-    entityChangeCourseReq.courseX = 2;
-    entityChangeCourseReq.courseY = 1;
-    entityChangeCourseReq.courseZ = 1;
+    Common::Messages::ChangeShipCourse entityChangeCourseReq;
+    entityChangeCourseReq.shipId = 1;
+    entityChangeCourseReq.x = 2;
+    entityChangeCourseReq.y = 1;
+    entityChangeCourseReq.z = 1;
     connection->send(entityChangeCourseReq);
 
     Cake::Threading::Thread::wait(2.0);
@@ -118,11 +118,11 @@ void ShipSct::procedureEntityChangeCourse(
     int entityId, 
     int x, int y, int z)
 {
-    Common::Messages::EntityChangeCourseReq entityChangeCourseReq;
-    entityChangeCourseReq.entityId = entityId;
-    entityChangeCourseReq.courseX = x;
-    entityChangeCourseReq.courseY = y;
-    entityChangeCourseReq.courseZ = z;
+    Common::Messages::ChangeShipCourse entityChangeCourseReq;
+    entityChangeCourseReq.shipId = entityId;
+    entityChangeCourseReq.x = x;
+    entityChangeCourseReq.y = y;
+    entityChangeCourseReq.z = z;
     connection.send(entityChangeCourseReq); 
 }
 

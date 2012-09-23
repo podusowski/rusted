@@ -14,13 +14,13 @@ EntityService::EntityService(Common::Game::Universe & universe, Server::Game::Pl
 {
 }
 
-void EntityService::handle(const Common::Messages::EntityChangeCourseReq & changeCourseReq, Network::IConnection & connection)
+void EntityService::handle(const Common::Messages::ChangeShipCourse & changeCourseReq, Network::IConnection & connection)
 {
-    Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(changeCourseReq.entityId);
+    Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(changeCourseReq.shipId);
 
-    Common::Game::Position destination(changeCourseReq.courseX,
-                                       changeCourseReq.courseY,
-                                       changeCourseReq.courseZ);
+    Common::Game::Position destination(changeCourseReq.x,
+                                       changeCourseReq.y,
+                                       changeCourseReq.z);
     ship.setCourse(destination);
 
     std::vector<Network::IConnection *> connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);

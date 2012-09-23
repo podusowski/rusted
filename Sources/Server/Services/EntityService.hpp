@@ -20,7 +20,7 @@ class EntityService : public Server::AbstractService<EntityService>
 public:
     EntityService(Common::Game::Universe &, Game::PlayerContainer &);
 
-    void handle(const Common::Messages::EntityChangeCourseReq &, Network::IConnection &);
+    void handle(const Common::Messages::ChangeShipCourse &, Network::IConnection &);
     void handle(const Common::Messages::GetVisibleObjects &, Network::IConnection &);
     void handle(const Common::Messages::GetObjectInfo &, Network::IConnection &);
     void handle(const Common::Messages::SelectObject &, Network::IConnection &);

@@ -61,11 +61,11 @@ Ship
 	<param type="int32" name="z" />
 </message>
 
-<message id="EntityChangeCourseReq">
-	<param type="int32" name="entityId" description="identifier of the entity" />
-	<param type="int32" name="courseX" />
-	<param type="int32" name="courseY" />
-	<param type="int32" name="courseZ" />
+<message id="ChangeShipCourse">
+	<param type="int32" name="shipId" description="identifier of the entity" />
+	<param type="int32" name="x" />
+	<param type="int32" name="y" />
+	<param type="int32" name="z" />
 </message>
 
 <message id="AttackObject">
