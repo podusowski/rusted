@@ -4,6 +4,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 
 #include "Common/Game/IRustedTime.hpp"
+#include "Common/Game/Utilities/IdGenerator.hpp"
 #include "Cake/Threading/Thread.hpp"
 #include "Cake/Threading/Mutex.hpp"
 #include "Cake/Threading/ConditionVariable.hpp"
@@ -27,11 +28,21 @@ public:
 private:
     struct Timer
     {
+        Timer(unsigned id): m_id(id)
+        {
+        }
+
         boost::function<void()> callback;
         TimeValue expiration;
+        unsigned m_id;
 
         bool operator<(const Timer & t) const
         {
+            if (expiration == t.expiration)
+            {
+                return m_id < t.m_id;
+            }
+
             return expiration < t.expiration;
         }
     };
@@ -43,6 +54,7 @@ private:
     std::set<Timer> m_timers;
     Cake::Threading::Mutex m_timersMutex;
     Cake::Threading::ConditionVariable m_timersCondition;
+    Common::Game::Utilities::IdGenerator m_idGenerator;
 };
 
 }

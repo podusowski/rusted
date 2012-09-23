@@ -35,11 +35,14 @@ void RustedTime::setReferenceTime(unsigned reference)
 
 void RustedTime::createTimer(TimeValue time, boost::function<void()> callback)
 {
-    LOG_DEBUG << "Starting timer: " << time;
 
-    Timer t;
+    unsigned id = m_idGenerator.generate();
+
+    Timer t(id);
     t.callback = callback;
     t.expiration = getCurrentTime() + time;
+
+    LOG_DEBUG << "Starting timer, id:" << id << ", timeout:" << time << ", there are " << m_timers.size() << " active timers";
 
     Cake::Threading::ScopedLock lock(m_timersMutex);
 
@@ -77,30 +80,25 @@ void RustedTime::run()
 {
     while (true)
     {
-            Cake::Threading::ScopedLock lock(m_timersMutex);
+        Cake::Threading::ScopedLock lock(m_timersMutex);
+
         if (m_timers.empty())
         {
             LOG_DEBUG << "Timer queue is empty, waiting";
             m_timersCondition.wait();
-            LOG_DEBUG << "New timer detected";
         }
         else
         {
-            LOG_DEBUG << "There are active timers";
+            LOG_DEBUG << "There are " << m_timers.size() << " active timers";
         }
 
-        Timer firstTimer;
-        {
-
-            LOG_DEBUG << "Getting the first timer";
-            firstTimer = *m_timers.begin();
-        }
-
+        LOG_DEBUG << "Getting the first timer";
+        Timer firstTimer = *m_timers.begin();
         TimeValue t = getCurrentTime();
 
         if (firstTimer.expiration < t)
         {
-            LOG_DEBUG << "Timer expired after: " << firstTimer.expiration;
+            LOG_DEBUG << "Timer id:" << firstTimer.m_id << " expired";
             firstTimer.callback();
 
             m_timers.erase(m_timers.begin());
@@ -108,7 +106,7 @@ void RustedTime::run()
         else
         {
             TimeValue timeToWait = firstTimer.expiration - t;
-            LOG_DEBUG << "Timer is not expired yet, waiting: " << timeToWait;
+            LOG_DEBUG << "Timer thread as awake but there is no expiration yet, waiting: " << timeToWait;
             
             m_timersCondition.timedWait(timeToWait.getSeconds(), timeToWait.getMiliseconds());
         }

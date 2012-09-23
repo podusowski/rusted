@@ -57,3 +57,19 @@ TEST(RustedTimeTest, Timers)
     Cake::Threading::Thread::wait(1, 500);
 }
 
+TEST(RustedTimeTest, TimersStress)
+{
+    Common::Game::RustedTime time;
+    TimerCallbackMock callback;
+    TimeoutValidator validator(time);
+
+    EXPECT_CALL(callback, expired(400)).Times(100).WillRepeatedly(Invoke(validator));
+
+    for (int i = 0; i < 100; i++)
+    {
+        time.createTimer(TimeValue(0, 400), boost::bind(&TimerCallbackMock::expired, &callback, 400));
+    }
+
+    Cake::Threading::Thread::wait(1, 500);
+}
+
