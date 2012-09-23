@@ -1,6 +1,7 @@
 #pragma once
 
 #include <set>
+#include "Cake/Threading/Mutex.hpp"
 
 namespace Common
 {
@@ -17,6 +18,7 @@ public:
 
 private:
     std::set<unsigned> m_reserved;
+    Cake::Threading::Mutex m_mutex;
 };
 
 }
