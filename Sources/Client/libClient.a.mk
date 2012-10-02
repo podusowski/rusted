@@ -3,6 +3,7 @@ TYPE:=static_library
 
 SOURCES+=Engine/Engine.cpp
 SOURCES+=Graphics/Graphics.cpp
+SOURCES+=Graphics/Particles.cpp
 SOURCES+=Gui/Gui.cpp
 SOURCES+=Input/Input.cpp
 SOURCES+=Input/OgreObjectRaycaster.cpp
