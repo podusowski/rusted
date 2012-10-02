@@ -8,11 +8,11 @@ namespace Client
 namespace Graphics
 {
 
-class Particles
+class Effects 
 {
 public:
-    Particles(IGraphics &);
-    void emitSingleLinearParticle(Common::Game::Position start, Common::Game::Position end, unsigned speed);
+    Effects(IGraphics &);
+    void emitSingleLinearEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed);
 
 private:
     IGraphics & m_graphics;
