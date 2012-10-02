@@ -12,7 +12,7 @@ class Effects
 {
 public:
     Effects(IGraphics &);
-    void emitSingleLinearEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed);
+    void emitMovingBillboardEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed);
 
 private:
     IGraphics & m_graphics;

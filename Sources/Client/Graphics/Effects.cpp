@@ -6,7 +6,7 @@ Effects::Effects(IGraphics & graphics) : m_graphics(graphics)
 {
 }
 
-void Effects::emitSingleLinearEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed)
+void Effects::emitMovingBillboardEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed)
 {
 }
 
