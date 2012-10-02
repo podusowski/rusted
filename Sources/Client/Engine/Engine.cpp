@@ -1,5 +1,3 @@
-#include <OgreWindowEventUtilities.h>
-
 #include "Cake/Diagnostics/Logger.hpp"
 
 #include "Client/Engine/Engine.hpp"
@@ -30,10 +28,10 @@ void Engine::start()
             m_stateDeployment->frameStarted();
             m_connection.yield();
 
-            m_graphics->getRenderWindow().swapBuffers(true);
-            Ogre::WindowEventUtilities::messagePump();
-
-            if (!m_graphics->getOgreRoot().renderOneFrame()) break;
+            if (!m_graphics->frameStarted())
+            {
+                break;
+            }
         }
         LOG_INFO << "No further state to execute, application is going to shut down";
     }

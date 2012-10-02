@@ -20,9 +20,6 @@ int main(int argc, char * argv[])
     {
         input.frameStarted();
 
-        graphics.getRenderWindow().swapBuffers(true);
-        Ogre::WindowEventUtilities::messagePump();
-
-        if (!graphics.getOgreRoot().renderOneFrame()) break;
+        if (!graphics.frameStarted()) break;
     }
 }

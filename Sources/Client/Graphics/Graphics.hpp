@@ -17,6 +17,7 @@ public:
     ~Graphics();
 
     Ogre::Root & getOgreRoot();
+    bool frameStarted();
     Ogre::SceneManager & getSceneManager();
     Ogre::RenderWindow & getRenderWindow();
     Ogre::Camera & getCamera();

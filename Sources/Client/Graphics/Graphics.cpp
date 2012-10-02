@@ -1,3 +1,5 @@
+#include <OgreWindowEventUtilities.h>
+
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Client/Graphics/Graphics.hpp"
 
@@ -16,6 +18,14 @@ Graphics::~Graphics()
 Ogre::Root & Graphics::getOgreRoot()
 {
     return *m_ogreRoot;
+}
+
+bool Graphics::frameStarted()
+{
+    getRenderWindow().swapBuffers(true);
+    Ogre::WindowEventUtilities::messagePump();
+
+    return m_ogreRoot->renderOneFrame();
 }
 
 Ogre::SceneManager & Graphics::getSceneManager()

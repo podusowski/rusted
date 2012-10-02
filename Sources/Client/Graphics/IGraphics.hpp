@@ -12,6 +12,7 @@ namespace Graphics
 class IGraphics
 {
 public:
+    virtual bool frameStarted() = 0;
     virtual Ogre::SceneManager & getSceneManager() = 0;
     virtual Ogre::RenderWindow & getRenderWindow() = 0;
     virtual Ogre::Camera & getCamera() = 0;
