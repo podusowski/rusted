@@ -24,9 +24,12 @@ public:
     bool isAlive();
 
 private:
+    Common::Game::Position calculatePosition(Common::Game::TimeValue time);
+
     IGraphics & m_graphics;
     Ogre::Entity * m_entity;
     Ogre::SceneNode * m_node;
+    unsigned m_speed;
     Common::Game::Position m_start;
     Common::Game::Position m_end;
     Common::Game::TimeValue m_startTime;
