@@ -7,7 +7,7 @@ namespace Client
 namespace Graphics
 {
 
-class MovingBillboardEffect : public IEffect
+class MovingMeshEffect : public IEffect
 {
 public:
     void frameStarted(); 

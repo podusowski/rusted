@@ -15,6 +15,7 @@ class Effects
 {
 public:
     Effects(IGraphics &);
+    void frameStarted();
     void emitMovingMeshEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed);
 
 private:
