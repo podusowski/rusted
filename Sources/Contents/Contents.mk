@@ -5,5 +5,5 @@ TYPE:=custom
 Contents:
 	@mkdir -p $(BUILD)
 	@rm $(BUILD)/Contents -rf
-	cp -rl $(TARGET_BASE) $(BUILD)/Contents
+	@echo `cp -vrl $(TARGET_BASE) $(BUILD)/Contents | wc -l` content files
 
