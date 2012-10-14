@@ -11,7 +11,7 @@ MovingMeshEffect::MovingMeshEffect(IGraphics & graphics,
     Common::Game::Position start,
     Common::Game::Position end) : 
         m_graphics(graphics),
-        m_speed(10),
+        m_speed(5000),
         m_start(start),
         m_end(end)
 {
@@ -20,10 +20,10 @@ MovingMeshEffect::MovingMeshEffect(IGraphics & graphics,
     m_startTime = m_time->getCurrentTime();
 
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
-    std::string mesh = "Cube.mesh";
+    std::string mesh = "EnergyBall.mesh";
     m_entity = scene.createEntity(mesh);
     m_node = scene.getRootSceneNode()->createChildSceneNode();
-    m_node->setScale(50.0, 50.0, 50.0);
+    m_node->setScale(20.0, 20.0, 20.0);
     
     // to update position
     frameStarted();
