@@ -36,6 +36,8 @@ void ObjectsView::activate()
 
     m_universe.addObjectAddedCallback(boost::bind(&ObjectsView::objectAdded, this, _1));
     m_objectService.fetchVisibleObjects();
+
+    m_playerActionService.addObjectAttackedSlot(boost::bind(&ObjectsView::objectAttacked, this, _1, _2));
 }
 
 void ObjectsView::deactivate()
@@ -61,8 +63,12 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
     m_objects.push_back(obj);
 }
 
-void ObjectsView::objectAttacked(unsigned attacker, unsigned attacked)
+void ObjectsView::objectAttacked(unsigned attackerId, unsigned attackedId)
 {
+    auto & attacker = m_universe.getById<Common::Game::Object::ObjectBase>(attackerId);
+    auto & attacked = m_universe.getById<Common::Game::Object::ObjectBase>(attackedId);
+
+    m_effects.emitMovingMeshEffect(attacker.getPosition(), attacked.getPosition(), 100);
 }
 
 void ObjectsView::objectClicked(Object * object)

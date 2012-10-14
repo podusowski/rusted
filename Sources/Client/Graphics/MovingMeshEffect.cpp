@@ -15,16 +15,20 @@ MovingMeshEffect::MovingMeshEffect(IGraphics & graphics,
         m_start(start),
         m_end(end)
 {
-    LOG_DEBUG << "Creating MovingMeshEffect";
+    LOG_DEBUG << "Creating MovingMeshEffect (from " << start << " to " << end << ")";
+
+    m_startTime = m_time->getCurrentTime();
 
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
     std::string mesh = "Cube.mesh";
-
     m_entity = scene.createEntity(mesh);
     m_node = scene.getRootSceneNode()->createChildSceneNode();
-    m_node->attachObject(m_entity);
+    m_node->setScale(50.0, 50.0, 50.0);
+    
+    // to update position
+    frameStarted();
 
-    m_startTime = m_time->getCurrentTime();
+    m_node->attachObject(m_entity);
 }
 
 void MovingMeshEffect::frameStarted()

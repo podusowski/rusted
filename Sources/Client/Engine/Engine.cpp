@@ -28,6 +28,7 @@ void Engine::start()
             m_input->frameStarted();
             m_stateDeployment->frameStarted();
             m_connection.yield();
+            m_effects->frameStarted();
 
             if (!m_graphics->frameStarted())
             {

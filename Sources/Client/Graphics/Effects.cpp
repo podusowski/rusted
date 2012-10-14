@@ -11,6 +11,10 @@ Effects::Effects(IGraphics & graphics) : m_graphics(graphics)
 
 void Effects::frameStarted()
 {
+    for (auto & effect : m_effects)
+    {
+        effect->frameStarted();
+    }
 }
 
 void Effects::emitMovingMeshEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed)
