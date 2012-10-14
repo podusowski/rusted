@@ -5,6 +5,7 @@
 using namespace Client::States;
 
 StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
+                                 Graphics::Effects & effects,
                                  Input::Input & input,
                                  Gui::Gui & gui, 
                                  Network::Connection & connection, 
@@ -17,7 +18,7 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
     m_playerActionService(connection, m_playerInfo, m_universe),
     m_objectService(connection, m_universe),
 
-    m_objectsView(m_objectService, m_playerActionService, graphics, input, gui, m_universe),
+    m_objectsView(m_objectService, m_playerActionService, graphics, effects, input, gui, m_universe),
     m_pilotView(graphics, input, m_playerActionService, m_objectService, gui, m_universe, m_playerInfo),
 
     m_pilotState(m_stateManager, graphics, gui, m_playerActionService, m_objectsView, m_pilotView),

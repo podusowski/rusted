@@ -4,6 +4,7 @@
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/StaticObject.hpp"
+
 #include "Client/Views/ObjectsView.hpp"
 
 using namespace Client::Views;
@@ -11,12 +12,14 @@ using namespace Client::Views;
 ObjectsView::ObjectsView(Services::ObjectService & objectService,
                          Services::PlayerActionService & playerActionService,
                          Graphics::IGraphics & graphics,
+                         Graphics::Effects & effects,
                          Input::IInput & input,
                          Gui::Gui & gui,
                          Common::Game::Universe & universe) :
     m_objectService(objectService),
     m_playerActionService(playerActionService),
     m_graphics(graphics),
+    m_effects(effects),
     m_input(input),
     m_gui(gui),
     m_universe(universe)
@@ -56,6 +59,10 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
     boost::shared_ptr<Object> obj(new Object(m_graphics, m_input, object));
     obj->setRightClickCallback(std::bind(&ObjectsView::objectClicked, this, obj.get()));
     m_objects.push_back(obj);
+}
+
+void ObjectsView::objectAttacked(unsigned attacker, unsigned attacked)
+{
 }
 
 void ObjectsView::objectClicked(Object * object)

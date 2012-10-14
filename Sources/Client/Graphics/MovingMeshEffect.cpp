@@ -36,7 +36,7 @@ void MovingMeshEffect::frameStarted()
 
 bool MovingMeshEffect::isAlive()
 {
-    return false;
+    return m_end != m_start;
 }
 
 Common::Game::Position MovingMeshEffect::calculatePosition(Common::Game::TimeValue time)

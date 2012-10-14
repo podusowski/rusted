@@ -1,5 +1,6 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
+#include "MovingMeshEffect.hpp"
 #include "Effects.hpp"
 
 using namespace Client::Graphics;
@@ -14,6 +15,8 @@ void Effects::frameStarted()
 
 void Effects::emitMovingMeshEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed)
 {
+    boost::shared_ptr<IEffect> effect(new MovingMeshEffect(m_graphics, start, end));
+    addEffect(effect);
 }
 
 void Effects::addEffect(boost::shared_ptr<IEffect> effect)

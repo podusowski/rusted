@@ -28,6 +28,7 @@ class StateDeployment : public IStateDeployment
 {
 public:
     StateDeployment(Graphics::IGraphics &,
+                    Graphics::Effects &,
                     Input::Input &,
                     Gui::Gui & gui, 
                     Network::Connection &, 
