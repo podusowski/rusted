@@ -1,6 +1,7 @@
 #pragma once
 
 #include <boost/optional.hpp>
+#include <boost/signals2.hpp>
 
 #include "Cake/DependencyInjection/Inject.hpp"
 
@@ -21,16 +22,19 @@ namespace Services
 class PlayerActionService : public AbstractService<PlayerActionService> 
 {
 public:
-    typedef boost::function<void(std::vector<boost::tuple<int, std::string> >)> AvailableActionsFetchedCallback;
-    typedef boost::function<void()> GlobalCooldownExpiredCallback;
+    typedef boost::signals2::signal<void(std::vector<boost::tuple<int, std::string>>)> AvailableActionsFetchedSignal;
+    typedef boost::signals2::signal<void()> GlobalCooldownExpiredSignal;
 
     PlayerActionService(Network::IConnection &, Common::Game::Player &, Common::Game::Universe &);
+
+    boost::signals2::connection addAvailableActionsFetchedSlot(AvailableActionsFetchedSignal::slot_type);
+    boost::signals2::connection addGlobalCooldownExpiredSlot(GlobalCooldownExpiredSignal::slot_type);
 
     void focusObject(Common::Game::Object::ObjectBase &);
     void setFocusedObjectCourse(Common::Game::Position);
     void selectObject(Common::Game::Object::ObjectBase &);
-    void fetchAvailableActions(AvailableActionsFetchedCallback);
-    void executeAction(unsigned actionId, GlobalCooldownExpiredCallback);
+    void fetchAvailableActions();
+    void executeAction(unsigned actionId);
 
     void handle(const Common::Messages::AvailableActions &);
     void handle(const Common::Messages::GlobalCooldownExpired &);
@@ -45,8 +49,8 @@ private:
 
     boost::optional<Common::Game::Object::ObjectBase *> m_selectedObject;
 
-    AvailableActionsFetchedCallback m_availableActionsFetchedCallback;
-    GlobalCooldownExpiredCallback m_globalCooldownExpiredCallback;
+    AvailableActionsFetchedSignal m_availableActionsFetchedSignal;
+    GlobalCooldownExpiredSignal m_globalColldownExpiredSignal;
 };
 
 }

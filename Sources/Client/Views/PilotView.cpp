@@ -32,7 +32,10 @@ void PilotView::activate()
     m_input.addMouseListener(*this);
     m_universe.addObjectAddedCallback(boost::bind(&PilotView::objectAdded, this, _1));
 
-    m_playerActionService.fetchAvailableActions(boost::bind(&PilotView::availableActionsFetched, this, _1));
+    m_playerActionService.addGlobalCooldownExpiredSlot(boost::bind(&PilotView::enableActionButtons, this));
+    m_playerActionService.addAvailableActionsFetchedSlot(boost::bind(&PilotView::availableActionsFetched, this, _1));
+    m_playerActionService.fetchAvailableActions();
+
     m_objectService.fetchPlayerShips(boost::bind(&PilotView::playerShipsFetched, this));
 
     MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
@@ -110,7 +113,7 @@ void PilotView::actionClicked(MyGUI::Widget * widget)
     LOG_DEBUG << "Action clicked";
 
     int * actionId = widget->getUserData<int>();
-    m_playerActionService.executeAction(*actionId, boost::bind(&PilotView::enableActionButtons, this));
+    m_playerActionService.executeAction(*actionId);
     disableActionButtons();
 }
 
@@ -165,8 +168,9 @@ void PilotView::shipListBoxSelected(MyGUI::ListBox * listBox, size_t index)
     LOG_DEBUG << "Changing focus to: " << *id;
 
     auto & ship = m_universe.getById<Common::Game::Object::Ship>(*id);
+
     m_playerActionService.focusObject(ship);
-    m_playerActionService.fetchAvailableActions(boost::bind(&PilotView::availableActionsFetched, this, _1));
+    m_playerActionService.fetchAvailableActions();
 }
 
 void PilotView::playerShipsFetched()

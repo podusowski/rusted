@@ -14,6 +14,16 @@ PlayerActionService::PlayerActionService(Network::IConnection & connection,
 {
 }
 
+boost::signals2::connection PlayerActionService::addAvailableActionsFetchedSlot(AvailableActionsFetchedSignal::slot_type slot)
+{
+    return m_availableActionsFetchedSignal.connect(slot);
+}
+
+boost::signals2::connection PlayerActionService::addGlobalCooldownExpiredSlot(GlobalCooldownExpiredSignal::slot_type slot)
+{
+    return m_globalColldownExpiredSignal.connect(slot);
+}
+
 void PlayerActionService::focusObject(Common::Game::Object::ObjectBase & object)
 {
     LOG_DEBUG << "Object focused: " << object.getId();
@@ -52,11 +62,9 @@ void PlayerActionService::selectObject(Common::Game::Object::ObjectBase & object
     m_selectedObject = &object;
 }
 
-void PlayerActionService::fetchAvailableActions(AvailableActionsFetchedCallback callback)
+void PlayerActionService::fetchAvailableActions()
 {
     LOG_DEBUG << "Fetching available actions";
-
-    m_availableActionsFetchedCallback = callback;
 
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getFocusedObject());
 
@@ -65,11 +73,9 @@ void PlayerActionService::fetchAvailableActions(AvailableActionsFetchedCallback 
     m_connection.send(fetchAvailableActions);
 }
 
-void PlayerActionService::executeAction(unsigned actionId, GlobalCooldownExpiredCallback callback)
+void PlayerActionService::executeAction(unsigned actionId)
 {
-    LOG_DEBUG << "Performing action: " << actionId;
-
-    m_globalCooldownExpiredCallback = callback;
+    LOG_DEBUG << "Executing action: " << actionId;
 
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = actionId;
@@ -81,19 +87,13 @@ void PlayerActionService::handle(const Common::Messages::AvailableActions & avai
 {
     LOG_DEBUG << "Got available actions";
 
-    if (m_availableActionsFetchedCallback)
-    {
-        m_availableActionsFetchedCallback(availableActions.actions);
-    }
+    m_availableActionsFetchedSignal(availableActions.actions);
 }
 
 void PlayerActionService::handle(const Common::Messages::GlobalCooldownExpired &)
 {
     LOG_DEBUG << "Global cooldown expired";
 
-    if (m_globalCooldownExpiredCallback)
-    {
-        m_globalCooldownExpiredCallback();
-    }
+    m_globalColldownExpiredSignal();
 }
 
