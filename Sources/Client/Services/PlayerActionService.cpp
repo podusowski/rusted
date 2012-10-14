@@ -24,6 +24,11 @@ boost::signals2::connection PlayerActionService::addGlobalCooldownExpiredSlot(Gl
     return m_globalColldownExpiredSignal.connect(slot);
 }
 
+boost::signals2::connection PlayerActionService::addObjectAttackedSlot(ObjectAttackedSignal::slot_type slot)
+{
+    return m_objectAttackedSignal.connect(slot);
+}
+
 void PlayerActionService::focusObject(Common::Game::Object::ObjectBase & object)
 {
     LOG_DEBUG << "Object focused: " << object.getId();
@@ -95,5 +100,12 @@ void PlayerActionService::handle(const Common::Messages::GlobalCooldownExpired &
     LOG_DEBUG << "Global cooldown expired";
 
     m_globalColldownExpiredSignal();
+}
+
+void PlayerActionService::handle(const Common::Messages::AttackObject & attackObject)
+{
+    LOG_DEBUG << "Ship:" << attackObject.attackedId << " is attacked by ship:" << attackObject.attackerId;;
+
+    m_objectAttackedSignal(attackObject.attackerId, attackObject.attackedId);
 }
 
