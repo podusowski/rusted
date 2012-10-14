@@ -18,6 +18,12 @@ if [ "$tool" = "helgrind" ]; then
     rm -f $root/helgrind*
 fi
 
+if [ "$tool" = "memcheck" ]; then
+    wrapper="valgrind --tool=memcheck --log-file=$root/memcheck-%p --trace-children=yes --child-silent-after-fork=yes"
+    export SERVER_SCT_WAIT_FOR_APP_TIME=10
+    rm -f $root/memcheck*
+fi
+
 $wrapper ./ServerSCT $@
 
 popd
