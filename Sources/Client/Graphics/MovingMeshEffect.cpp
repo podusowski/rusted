@@ -58,7 +58,7 @@ Common::Game::Position MovingMeshEffect::calculatePosition(Common::Game::TimeVal
     {
         m_start = m_end;
 
-        LOG_DEBUG << m_end << " reached";
+        LOG_DEBUG << "Effect finished";
 
         return m_end;
     }

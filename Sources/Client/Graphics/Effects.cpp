@@ -1,3 +1,5 @@
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Effects.hpp"
 
 using namespace Client::Graphics;
@@ -16,4 +18,7 @@ void Effects::emitMovingMeshEffect(Common::Game::Position start, Common::Game::P
 
 void Effects::addEffect(boost::shared_ptr<IEffect> effect)
 {
+    LOG_DEBUG << "Creating effect: " << TYPENAME(*effect);
+
+    m_effects.push_back(effect);
 }
