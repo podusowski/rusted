@@ -47,6 +47,11 @@ TEST_F(ShipClassTest, AvailableActions)
 
     auto availableActions = shipClass.getAvailableActions();
 
-    EXPECT_EQ(1u, availableActions.size());
+    ASSERT_EQ(1u, availableActions.size());
+
+    auto action = availableActions[0];
+
+    EXPECT_EQ(1u, action.type);
+    EXPECT_EQ(1u, action.parameter);
 }
 

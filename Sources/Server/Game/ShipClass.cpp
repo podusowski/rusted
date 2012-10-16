@@ -19,6 +19,7 @@ ShipClass::ShipClass(DataBase::DataBaseNode & node) :
         {
             AvailableAction action;
             action.type = actionNode->getValue<unsigned>("type");
+            action.parameter = actionNode->getValue<unsigned>("parameter");
             m_availableActions.push_back(action);
 
             LOG_DEBUG << "  available action: " << action.type;
