@@ -22,7 +22,7 @@ ShipClass::ShipClass(DataBase::DataBaseNode & node) :
             action.parameter = actionNode->getValue<unsigned>("parameter");
             m_availableActions.push_back(action);
 
-            LOG_DEBUG << "  available action: " << action.type;
+            LOG_DEBUG << "  available action: " << action.type << ", parameter: " << action.parameter;
         }
     }
     catch (std::exception & ex)
