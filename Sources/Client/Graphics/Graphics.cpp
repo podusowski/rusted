@@ -72,8 +72,7 @@ void Graphics::initOgre()
 {
     m_ogreRoot = new Ogre::Root("", "");
 
-    //TODO: This application uses hardcoded OGRE library: /usr/lib/OGRE/RenderSystem_GL.so
-    m_ogreRoot->loadPlugin("RenderSystem_GL.so");
+    m_ogreRoot->loadPlugin("RenderSystem_GL");
 
     if (m_ogreRoot->getAvailableRenderers().begin() == m_ogreRoot->getAvailableRenderers().end())
     {
