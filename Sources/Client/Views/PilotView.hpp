@@ -41,7 +41,7 @@ private:
     void actionClicked(MyGUI::Widget *);
     void disableActionButtons();
     void enableActionButtons();
-    void availableActionsFetched(std::vector<boost::tuple<int, std::string> >);
+    void availableActionsFetched(std::vector<boost::tuple<int, int, std::string> >);
     void shipListBoxSelected(MyGUI::ListBox *, size_t);
     void playerShipsFetched();
     void objectAdded(Common::Game::Object::ObjectBase &);

@@ -32,10 +32,10 @@ TEST(ActionsSct, FetchAvailableActions)
     ASSERT_EQ(2, availableActions->actions.size());
 
     EXPECT_EQ(1, availableActions->actions[0].get<0>());
-    EXPECT_EQ("attack", availableActions->actions[0].get<1>());
+    EXPECT_EQ("attack", availableActions->actions[0].get<2>());
 
     EXPECT_EQ(2, availableActions->actions[1].get<0>());
-    EXPECT_EQ("buildShip", availableActions->actions[1].get<1>());
+    EXPECT_EQ("buildShip", availableActions->actions[1].get<2>());
 }
 
 TEST(ActionsSct, AttackObject)

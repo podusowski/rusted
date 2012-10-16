@@ -78,8 +78,8 @@ void EntityService::handle(const Common::Messages::FocusObject & focusObject, Ne
 void EntityService::handle(const Common::Messages::FetchAvailableActions &, Network::IConnection & connection)
 {
     Common::Messages::AvailableActions availableActions;
-    availableActions.actions.push_back(boost::make_tuple<int, std::string>(Game::Actions::ActionType_Attack, "attack"));
-    availableActions.actions.push_back(boost::make_tuple<int, std::string>(Game::Actions::ActionType_BuildShip, "buildShip"));
+    availableActions.actions.push_back(boost::make_tuple<int, int, std::string>(Game::Actions::ActionType_Attack, 1, "attack"));
+    availableActions.actions.push_back(boost::make_tuple<int, int, std::string>(Game::Actions::ActionType_BuildShip, 1, "buildShip"));
     connection.send(availableActions);
 }
 

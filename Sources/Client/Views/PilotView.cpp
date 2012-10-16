@@ -133,7 +133,7 @@ void PilotView::enableActionButtons()
     }
 }
 
-void PilotView::availableActionsFetched(std::vector<boost::tuple<int, std::string> > actions)
+void PilotView::availableActionsFetched(std::vector<boost::tuple<int, int, std::string> > actions)
 {
     auto * actionsPanel = m_gui->findWidget<MyGUI::Widget>("ActionsPanel");
 
@@ -155,7 +155,7 @@ void PilotView::availableActionsFetched(std::vector<boost::tuple<int, std::strin
         m_actionButtons.push_back(actionButton);
         buttonTop += 50;
 
-        actionButton->setCaption(action.get<1>());
+        actionButton->setCaption(action.get<2>());
         actionButton->setUserData(action.get<0>());
         actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
     }

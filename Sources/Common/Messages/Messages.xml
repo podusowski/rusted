@@ -133,6 +133,7 @@ actions
 <message id="AvailableActions">
     <list name="actions">
         <listparam type="int32" name="id" />
+        <listparam type="int32" name="parameter" />
         <listparam type="string" name="name" />
     </list>
 </message>
