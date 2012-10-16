@@ -26,31 +26,44 @@ public:
 	RustedAbstractCoder & operator << (const bool p_value);
 	RustedAbstractCoder & operator << (const std::string & p_str);
 
-        template <class A>
-        RustedAbstractCoder & operator << (const std::vector<boost::tuple<A> > & vector)
+    template <class A>
+    RustedAbstractCoder & operator << (const std::vector<boost::tuple<A> > & vector)
+    {
+        *this << vector.size();
+
+        for (typename std::vector<boost::tuple<A> >::const_iterator it = vector.begin();
+                it != vector.end(); it++)
         {
-            *this << vector.size();
-
-            for (typename std::vector<boost::tuple<A> >::const_iterator it = vector.begin();
-                    it != vector.end(); it++)
-            {
-                *this << boost::get<0>(*it);
-            }
-            return *this;
+            *this << boost::get<0>(*it);
         }
+        return *this;
+    }
 
-        template <class A, class B>
-        RustedAbstractCoder & operator << (const std::vector<boost::tuple<A, B> > & vector)
+    template <class A, class B>
+    RustedAbstractCoder & operator << (const std::vector<boost::tuple<A, B> > & vector)
+    {
+        *this << vector.size();
+
+        for (typename std::vector<boost::tuple<A, B> >::const_iterator it = vector.begin();
+                it != vector.end(); it++)
         {
-            *this << vector.size();
-
-            for (typename std::vector<boost::tuple<A, B> >::const_iterator it = vector.begin();
-                    it != vector.end(); it++)
-            {
-                *this << boost::get<0>(*it) << boost::get<1>(*it);
-            }
-            return *this;
+            *this << boost::get<0>(*it) << boost::get<1>(*it);
         }
+        return *this;
+    }
+
+    template <class A, class B, class C>
+    RustedAbstractCoder & operator << (const std::vector<boost::tuple<A, B, C> > & vector)
+    {
+        *this << vector.size();
+
+        for (typename std::vector<boost::tuple<A, B, C> >::const_iterator it = vector.begin();
+                it != vector.end(); it++)
+        {
+            *this << boost::get<0>(*it) << boost::get<1>(*it) << boost::get<2>(*it);
+        }
+        return *this;
+    }
 private:
 	RustedAbstractCoder & operator << (const size_t p_value);
 	IWriteBuffer & m_buffer;

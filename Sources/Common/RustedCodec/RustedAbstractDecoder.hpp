@@ -53,6 +53,22 @@ public:
             }
             return *this;
         }
+
+        template <class A, class B, class C>
+        RustedAbstractDecoder & operator >> (std::vector<boost::tuple<A, B, C> > & vector)
+        {
+            size_t size;
+            *this >> size;
+            while (size-- > 0)
+            {
+                A valueA;
+                B valueB;
+                C valueC;
+                *this >> valueA >> valueB >> valueC;
+                vector.push_back(boost::make_tuple(valueA, valueB, valueC));
+            }
+            return *this;
+        }
 private:
 	RustedAbstractDecoder & operator >> (size_t & p_value);
 
