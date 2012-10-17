@@ -27,7 +27,6 @@ TEST(ActionsSct, FetchAvailableActions)
     fetchAvailableActions.shipId = 1;
     connection1->send(fetchAvailableActions);
 
-    // currently actions are hardcoded
     auto availableActions = connection1->receive<Common::Messages::AvailableActions>();
     ASSERT_EQ(2, availableActions->actions.size());
 
