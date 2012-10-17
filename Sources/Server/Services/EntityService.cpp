@@ -87,11 +87,12 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
 {
     auto & player = m_playerContainer.getBy(connection);
 
-    LOG_DEBUG << "Player " << player.getId() << " is executing action " << executeAction.id;
+    LOG_DEBUG << "Player " << player.getId() << " is executing action id:" 
+              << executeAction.id << ", parameter:" << executeAction.parameter;
 
     try
     {
-        m_actionPerformer.perform(connection, player, executeAction.id);
+        m_actionPerformer.perform(connection, player, executeAction.id, executeAction.parameter);
     }
     catch (std::exception ex)
     {

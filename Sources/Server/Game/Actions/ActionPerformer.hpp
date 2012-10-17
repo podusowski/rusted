@@ -23,7 +23,8 @@ public:
     void perform(
         Server::Network::IConnection & connection,
         Server::Game::IPlayer &,
-        unsigned id);
+        unsigned id,
+        unsigned parameter);
 
 private:
     void aquireGlobalCooldown(unsigned playerId);

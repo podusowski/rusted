@@ -16,11 +16,12 @@ ActionPerformer::ActionPerformer(
 }
 
 void ActionPerformer::perform(Server::Network::IConnection & connection, 
-    Server::Game::IPlayer & player, unsigned id)
+    Server::Game::IPlayer & player, unsigned id, unsigned parameter)
 {
     aquireGlobalCooldown(player.getId());
-    auto action = m_actionFactory.create(connection, player, id);
+    auto action = m_actionFactory.create(connection, player, id, parameter);
     auto timeToFinish = action->start();
+
     if (timeToFinish == Common::Game::TimeValue(0, 0))
     {
         LOG_DEBUG << "Action doesn't have execution time";

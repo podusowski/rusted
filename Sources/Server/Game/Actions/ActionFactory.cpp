@@ -16,7 +16,8 @@ ActionFactory::ActionFactory(Common::Game::Universe & universe, Server::Game::IP
 boost::shared_ptr<IAction> ActionFactory::create(
         Server::Network::IConnection & connection,
         Server::Game::IPlayer & player,
-        unsigned id)
+        unsigned id,
+        unsigned parameter)
 {
     boost::shared_ptr<IAction> ret;
 
@@ -47,7 +48,7 @@ boost::shared_ptr<IAction> ActionFactory::create(
         case ActionType_BuildShip:
         {
             auto & player = m_playerContainer.getBy(connection);
-            ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer, 1));
+            ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer, parameter));
             break;
         }
 

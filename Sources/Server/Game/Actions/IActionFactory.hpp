@@ -21,7 +21,8 @@ public:
     virtual boost::shared_ptr<Server::Game::Actions::IAction> create(
         Server::Network::IConnection &,
         Server::Game::IPlayer &,
-        unsigned id) = 0;
+        unsigned id,
+        unsigned parameter) = 0;
 };
 
 }

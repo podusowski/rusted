@@ -93,13 +93,17 @@ TEST(ActionsSct, BuildShip)
     // execute hardcoded action 2 - buildship
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = 2;
+    executeAction.parameter = 2;
     connection1->send(executeAction);
 
     connection1->receive<Common::Messages::ActionStarted>();
     connection1->receive<Common::Messages::GlobalCooldownExpired>();
     connection1->receive<Common::Messages::ActionFinished>();
 
-    connection1->receive<Common::Messages::ShipInfo>();
+    auto shipInfo = connection1->receive<Common::Messages::ShipInfo>();
+    EXPECT_EQ(20, shipInfo->speed);
+    EXPECT_EQ(200, shipInfo->integrity);
+
     connection1->receive<Common::Messages::ShipCourseInfo>();
 
     connection2->receive<Common::Messages::ShipInfo>();
