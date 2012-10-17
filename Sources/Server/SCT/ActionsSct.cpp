@@ -90,7 +90,7 @@ TEST(ActionsSct, BuildShip)
     focusObject.id = 1;
     connection1->send(focusObject);
 
-    // execute hardcoded action 2 - buildship
+    // execute action 2 - buildship
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = 2;
     executeAction.parameter = 2;
@@ -100,6 +100,7 @@ TEST(ActionsSct, BuildShip)
     connection1->receive<Common::Messages::GlobalCooldownExpired>();
     connection1->receive<Common::Messages::ActionFinished>();
 
+    // receive info about newly created ship
     auto shipInfo = connection1->receive<Common::Messages::ShipInfo>();
     EXPECT_EQ(20, shipInfo->speed);
     EXPECT_EQ(200, shipInfo->integrity);
