@@ -112,8 +112,12 @@ void PilotView::actionClicked(MyGUI::Widget * widget)
 {
     LOG_DEBUG << "Action clicked";
 
-    int * actionId = widget->getUserData<int>();
-    m_playerActionService.executeAction(*actionId);
+    auto * action = widget->getUserData<ActionType>();
+    auto actionId = action->get<0>();
+    auto actionParameter = action->get<1>();
+
+    m_playerActionService.executeAction(actionId);
+
     disableActionButtons();
 }
 
@@ -156,7 +160,7 @@ void PilotView::availableActionsFetched(std::vector<boost::tuple<int, int, std::
         buttonTop += 50;
 
         actionButton->setCaption(action.get<2>());
-        actionButton->setUserData(action.get<0>());
+        actionButton->setUserData(action);
         actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
     }
 }
