@@ -140,6 +140,7 @@ actions
 
 <message id="ExecuteAction">
     <param type="int32" name="id" />
+    <param type="int32" name="parameter" />
 </message>
 
 <message id="ActionStarted">
