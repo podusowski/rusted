@@ -5,16 +5,19 @@
         <user id="3" login="user3" password="passwordhash" />
     </users>
     <objects>
-        <object type="Ship" id="1" owner="1" x="1" y="1" z="1" integrity="100" />
-        <object type="Ship" id="2" class="1" owner="2" x="1" y="1" z="1" integrity="100" />
+        <object type="Ship" id="1" class="1" owner="1" x="1" y="1" z="1" integrity="100" />
+        <object type="Ship" id="2" class="2" owner="2" x="1" y="1" z="1" integrity="100" />
         <object type="Ship" id="4" owner="2" x="1" y="1" z="1" integrity="100" />
         <object type="StaticObject" id="3" x="100" y="100" z="100" integrity="100" />
     </objects>
     <ship_classes>
-        <ship_class id="1" speed="10" integrity="100">
+        <ship_class id="1" speed="1" integrity="100">
             <actions>
                 <action type="1" parameter="1" />
+                <action type="2" parameter="1" />
             </actions>
+        </ship_class>
+        <ship_class id="2" speed="20" integrity="200">
         </ship_class>
     </ship_classes>
 </root>

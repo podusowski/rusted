@@ -69,7 +69,7 @@ TEST(ActionsSct, AttackObject)
     // we should also receive shipinfo with condition after the attack
     auto shipInfo1 = connection1->receive<Common::Messages::ShipInfo>();
     ASSERT_EQ(2, shipInfo1->id);
-    ASSERT_EQ(90, shipInfo1->integrity);
+    ASSERT_EQ(190, shipInfo1->integrity);
 
     // other player should also get this stuff
     connection2->receive<Common::Messages::AttackObject>();
