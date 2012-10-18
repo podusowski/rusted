@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <sstream>
 
 #include "Cake/Diagnostics/Logger.hpp"
 #include "ShipClassContainer.hpp"
@@ -23,7 +24,9 @@ Server::Game::IShipClass & ShipClassContainer::getById(unsigned id)
     }
     else
     {
-        throw std::runtime_error("no such ship class");
+        std::stringstream ss;
+        ss << "no ship class with id:" << id;
+        throw std::runtime_error(ss.str());
     }
 }
 
