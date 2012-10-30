@@ -19,6 +19,7 @@ class ActionFactoryTest : public Server::AbstractTest
 TEST_F(ActionFactoryTest, BuildAttack)
 {
     const int ATTACK_ID = 1;
+    const int ATTACK_PARAMETER = 2;
 
     Server::Network::ConnectionMock connection;
     Server::Game::PlayerContainerMock playerContainer;
@@ -31,7 +32,7 @@ TEST_F(ActionFactoryTest, BuildAttack)
     ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(ship2));
 
     Server::Game::Actions::ActionFactory factory(universe, playerContainer);
-    auto attackAction = factory.create(connection, player, ATTACK_ID);
+    auto attackAction = factory.create(connection, player, ATTACK_ID, ATTACK_PARAMETER);
 
     ASSERT_EQ(typeid(Server::Game::Actions::Attack), typeid(*attackAction));
 }

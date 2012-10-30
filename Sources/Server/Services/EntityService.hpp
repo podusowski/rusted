@@ -1,11 +1,14 @@
 #pragma once
 
+#include "Cake/DependencyInjection/Inject.hpp"
+
 #include "Common/Game/Universe.hpp"
 #include "Common/Game/Object/Ship.hpp"
 
 #include "Game/Actions/ActionFactory.hpp"
 #include "Game/Actions/ActionPerformer.hpp"
 #include "Game/PlayerContainer.hpp"
+#include "Game/IShipClassContainer.hpp"
 #include "Utils.hpp"
 
 #include "Services/AbstractService.hpp"
@@ -31,6 +34,7 @@ public:
     void handle(const Common::Messages::AbstractMessage &, Network::IConnection &) {}
 
 private:
+    Cake::DependencyInjection::Inject<Game::IShipClassContainer> m_shipClassContainer;
     Common::Game::Universe & m_universe;
     Game::PlayerContainer & m_playerContainer;
     Server::Game::Actions::ActionFactory m_actionFactory;

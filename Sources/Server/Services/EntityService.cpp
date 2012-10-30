@@ -6,7 +6,10 @@
 
 using namespace Server::Services;
 
-EntityService::EntityService(Common::Game::Universe & universe, Server::Game::PlayerContainer & playerContainer) :
+EntityService::EntityService(
+    Common::Game::Universe & universe,
+    Server::Game::PlayerContainer & playerContainer
+) :
     m_universe(universe),
     m_playerContainer(playerContainer),
     m_actionFactory(universe, playerContainer),
@@ -77,9 +80,19 @@ void EntityService::handle(const Common::Messages::FocusObject & focusObject, Ne
 
 void EntityService::handle(const Common::Messages::FetchAvailableActions &, Network::IConnection & connection)
 {
+    auto & player = m_playerContainer.getBy(connection);
+    auto & object = dynamic_cast<Common::Game::Object::Ship&>(player.getFocusedObject());
+    auto & shipClass = m_shipClassContainer->getById(object.getClass());
+    auto actions = shipClass.getAvailableActions();
+
     Common::Messages::AvailableActions availableActions;
-    availableActions.actions.push_back(boost::make_tuple<int, int, std::string>(Game::Actions::ActionType_Attack, 1, "attack"));
-    availableActions.actions.push_back(boost::make_tuple<int, int, std::string>(Game::Actions::ActionType_BuildShip, 1, "buildShip"));
+    LOG_DEBUG << "Filling actions for ship:" << object.getId() << " (class:" << shipClass.getId() << ")";
+    for (auto action: actions)
+    {
+        std::string name = action.type == 1 ? "attack" : "build";
+        LOG_DEBUG << "  name:" << name << ", type:" << action.type << ", parameter:" << action.parameter;
+        availableActions.actions.push_back(boost::make_tuple<int, int, std::string>(action.type, action.parameter, name));
+    }
     connection.send(availableActions);
 }
 

@@ -46,6 +46,8 @@ TEST_F(ObjectFactoryTest, CreateShipFromDbNode)
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
 
+    auto & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
+
     ASSERT_EQ(typeid(Common::Game::Object::Ship), typeid(*object));
     ASSERT_EQ(1u, object->getId());
     ASSERT_EQ(2u, dynamic_cast<Common::Game::Object::OwnedObjectBase&>(*object).getOwnerId());
