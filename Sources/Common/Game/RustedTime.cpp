@@ -93,7 +93,15 @@ void RustedTime::run()
         if (firstTimer.expiration <= t)
         {
             LOG_DEBUG << "Timer id:" << firstTimer.m_id << " expired";
-            firstTimer.callback();
+
+            try
+            {
+                firstTimer.callback();
+            }
+            catch (std::exception & ex)
+            {
+                LOG_DEBUG << "Exception during timer callback: " << ex.what();
+            }
 
             m_timers.erase(m_timers.begin());
         }
