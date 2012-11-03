@@ -14,7 +14,7 @@ class AbstractService : public Server::Network::IConnectionListener
 public:
     // NOTE: ServiceType isn't constructed yet, but HandlerCaller is lazy, it doesn't do anything
     //       with service until message arrive
-    AbstractService() : m_caller(reinterpret_cast<ServiceType&>(*this)) {}
+    AbstractService() : m_caller(static_cast<ServiceType&>(*this)) {}
 
     virtual void messageReceived(Server::Network::IConnection & connection, Common::Messages::AbstractMessage & message)
     {
