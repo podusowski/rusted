@@ -63,12 +63,12 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::createShip(un
     auto & shipClass = m_shipClassContainer.getById(shipClassId);
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
-
-    Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
+    auto & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
 
     object->setId(0); // to be assigned by Universe
     ship.setOwnerId(ownerId);
     shipClass.applyTo(ship);
+    ship.setClass(shipClassId);
 
     return object;
 }
