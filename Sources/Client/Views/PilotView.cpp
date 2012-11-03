@@ -116,7 +116,7 @@ void PilotView::actionClicked(MyGUI::Widget * widget)
     auto actionId = action->get<0>();
     auto actionParameter = action->get<1>();
 
-    m_playerActionService.executeAction(actionId);
+    m_playerActionService.executeAction(actionId, actionParameter);
 
     disableActionButtons();
 }

@@ -78,12 +78,13 @@ void PlayerActionService::fetchAvailableActions()
     m_connection.send(fetchAvailableActions);
 }
 
-void PlayerActionService::executeAction(unsigned actionId)
+void PlayerActionService::executeAction(unsigned actionId, unsigned actionParameter)
 {
     LOG_DEBUG << "Executing action: " << actionId;
 
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = actionId;
+    executeAction.parameter = actionParameter;
 
     m_connection.send(executeAction);
 }

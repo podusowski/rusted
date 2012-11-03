@@ -36,7 +36,7 @@ public:
     void setFocusedObjectCourse(Common::Game::Position);
     void selectObject(Common::Game::Object::ObjectBase &);
     void fetchAvailableActions();
-    void executeAction(unsigned actionId);
+    void executeAction(unsigned actionId, unsigned actionParameter);
 
     void handle(const Common::Messages::AvailableActions &);
     void handle(const Common::Messages::GlobalCooldownExpired &);
