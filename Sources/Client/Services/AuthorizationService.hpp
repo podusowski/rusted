@@ -22,6 +22,8 @@ public:
 
     void handle(const Common::Messages::ServerVersionResp &);
     void handle(const Common::Messages::UserAuthorizationResp &);
+    void handle(const Common::Messages::Exception &);
+
     void handle(const Common::Messages::AbstractMessage &) {}
 
 private:

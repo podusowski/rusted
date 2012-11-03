@@ -1,5 +1,6 @@
-#include "Cake/Diagnostics/Logger.hpp"
+#include <stdexcept>
 
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Services/AuthorizationService.hpp"
 
 using namespace Client::Services;
@@ -41,3 +42,10 @@ void AuthorizationService::handle(const Common::Messages::UserAuthorizationResp 
     m_player.setId(userAuthorizationResp.player_id);
     m_loggedInCallback(userAuthorizationResp.success);
 }
+
+void AuthorizationService::handle(const Common::Messages::Exception & exception)
+{
+    LOG_ERR << "Exception reported from the network: " << exception.description;
+    throw std::runtime_error(exception.description);
+}
+
