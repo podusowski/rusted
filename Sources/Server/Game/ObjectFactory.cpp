@@ -26,19 +26,11 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
         object->setId(data.getValue<unsigned>("id"));
         ship.setOwnerId(data.getValue<unsigned>("owner"));
         object->setPosition(extractPosition(data));
-        object->setIntegrity(data.getValue<unsigned>("integrity"));
-        
-        try
-        {
-            unsigned shipClassId = data.getValue<unsigned>("class");
-            auto & shipClass = m_shipClassContainer.getById(shipClassId);
-            shipClass.applyTo(ship);
-            ship.setClass(shipClassId);
-        }
-        catch (...)
-        {
-            LOG_WARN << "Exception thrown while applying ship's class, the ship will be created with default values";
-        }
+
+        unsigned shipClassId = data.getValue<unsigned>("class");
+        auto & shipClass = m_shipClassContainer.getById(shipClassId);
+        shipClass.applyTo(ship);
+        ship.setClass(shipClassId);
 
         return object;
     }
