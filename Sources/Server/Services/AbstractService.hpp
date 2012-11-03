@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Common/Messages/Messages.hpp"
 #include "Server/Network/IConnectionListener.hpp"
 
@@ -16,7 +18,20 @@ public:
 
     virtual void messageReceived(Server::Network::IConnection & connection, Common::Messages::AbstractMessage & message)
     {
-        m_caller.call(message, connection);
+        try
+        {
+            m_caller.call(message, connection);
+        }
+        catch (std::exception & ex)
+        {
+            LOG_WARN << "Exception while handling the message:" << ex.what();
+
+            Common::Messages::Exception exception;
+            exception.description = ex.what();
+            connection.send(exception);
+
+            throw ex;
+        }
     }
 
     virtual void handle(const Common::Messages::AbstractMessage &, Server::Network::IConnection &) {}
