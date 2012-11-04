@@ -1,8 +1,5 @@
 #include <gtest/gtest.h>
 
-#include <iostream>
-#include <boost/foreach.hpp>
-
 #include "Core/Component.hpp"
 #include "Core/Connection.hpp"
 #include "Preconditions.hpp"
