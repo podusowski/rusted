@@ -44,6 +44,22 @@ TEST(UserSct, Authorize)
 	}
 }
 
+TEST(UserSct, InvalidPassword)
+{
+    SCT::Component component("SampleDataBase.xml");
+    component.start();
+
+    boost::shared_ptr<SCT::Connection> connection = component.createConnection();
+
+    Common::Messages::UserAuthorizationReq userAuthorizationReq;
+    userAuthorizationReq.login = "user1";
+    userAuthorizationReq.password = "some_invalid_password";
+    connection->send(userAuthorizationReq);
+
+    auto userAuthorizationResp = connection->receive<Common::Messages::UserAuthorizationResp>();
+    EXPECT_FALSE(userAuthorizationResp->success);
+}
+
 TEST(UserSct, TwoUsersEntitiesStatusReq)
 {
     std::string dbFile = "SampleDataBase.xml";

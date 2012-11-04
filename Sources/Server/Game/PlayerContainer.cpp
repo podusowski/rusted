@@ -22,23 +22,16 @@ int PlayerContainer::authorize(const std::string & login,
 
     auto it = m_connectionMap.find(&connection);
 
-    try
+    if (it != m_connectionMap.end())
     {
-        if (it != m_connectionMap.end())
-        {
-            int id = checkCredentials(login, password);
-            it->second->setId(id);
-            it->second->setState(PLAYER_STATE_AUTHORIZED);
-            return id;
-        }
-        else
-        {
-            throw std::runtime_error("no such connection");
-        }
+        int id = checkCredentials(login, password);
+        it->second->setId(id);
+        it->second->setState(PLAYER_STATE_AUTHORIZED);
+        return id;
     }
-    catch (...)
+    else
     {
-        return false;
+        throw std::runtime_error("no such connection");
     }
 }
 
