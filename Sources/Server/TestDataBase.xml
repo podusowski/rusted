@@ -23,7 +23,7 @@
             </actions>
         </ship_class>
 
-        <ship_class id="2" speed="10" integrity="100">
+        <ship_class id="2" speed="100" integrity="100">
             <actions>
                 <action type="2" parameter="1" />
                 <action type="2" parameter="2" />
