@@ -20,6 +20,8 @@ public:
         Common::Game::Position start,
         Common::Game::Position end);
 
+    ~MovingMeshEffect();
+
     void frameStarted(); 
     bool isAlive();
 

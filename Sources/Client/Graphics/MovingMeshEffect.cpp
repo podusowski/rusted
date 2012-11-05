@@ -11,7 +11,7 @@ MovingMeshEffect::MovingMeshEffect(IGraphics & graphics,
     Common::Game::Position start,
     Common::Game::Position end) : 
         m_graphics(graphics),
-        m_speed(5000),
+        m_speed(3000),
         m_start(start),
         m_end(end)
 {
@@ -29,6 +29,12 @@ MovingMeshEffect::MovingMeshEffect(IGraphics & graphics,
     frameStarted();
 
     m_node->attachObject(m_entity);
+}
+
+MovingMeshEffect::~MovingMeshEffect()
+{
+    Ogre::SceneManager & scene = m_graphics.getSceneManager();
+    scene.destroySceneNode(m_node);
 }
 
 void MovingMeshEffect::frameStarted()
