@@ -55,7 +55,7 @@ Common::Game::Position MovingMeshEffect::calculatePosition(Common::Game::TimeVal
         return m_start;
 
     unsigned distance = Common::Game::Position::distance(m_end, m_start);
-    unsigned totalTripTime = distance / m_speed;
+    float totalTripTime = float(distance) / float(m_speed);
     auto timeTakenSoFar = time - m_startTime;
     float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
 
