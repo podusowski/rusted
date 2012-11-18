@@ -65,10 +65,6 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
 
 void ObjectsView::objectAttacked(unsigned attackerId, unsigned attackedId)
 {
-    auto & attacker = m_universe.getById<Common::Game::Object::ObjectBase>(attackerId);
-    auto & attacked = m_universe.getById<Common::Game::Object::ObjectBase>(attackedId);
-
-    m_effects.emitMovingMeshEffect(attacker.getPosition(), attacked.getPosition(), 100);
 }
 
 void ObjectsView::objectClicked(Object * object)
