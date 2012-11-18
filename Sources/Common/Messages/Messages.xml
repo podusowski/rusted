@@ -155,4 +155,21 @@ actions
 
 <message id="GlobalCooldownExpired" />
 
+<!--
+graphic effects
+-->
+
+<message id="EmitMovingMeshEffect">
+    <param type="int32" name="fromX" />
+    <param type="int32" name="fromY" />
+    <param type="int32" name="fromZ" />
+
+    <param type="int32" name="toX" />
+    <param type="int32" name="toY" />
+    <param type="int32" name="toZ" />
+
+    <param type="int32" name="speed" />
+    <param type="string" name="mesh" />
+</message>
+
 </messages>
