@@ -21,6 +21,7 @@ TEST_F(AttackTest, AttackOtherShip)
     Common::Game::Object::ShipMock selectedShip;
 
     ON_CALL(focusedShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
+    ON_CALL(focusedShip, getPosition()).WillByDefault(Return(Common::Game::Position()));
     ON_CALL(selectedShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
     ON_CALL(selectedShip, getPosition()).WillByDefault(Return(Common::Game::Position()));
 
