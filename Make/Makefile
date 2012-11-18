@@ -9,10 +9,6 @@ include Make/template.application.mk
 include Make/recipe.c++.mk
 include Make/recipe.resources.mk
 
-ifeq ($(mode),release)
-  $(error release mode not supported yet)
-endif
-
 .PHONY: help
 help:
 	@echo -e '$(shell basename $(PWD)) targets:\n$(FONT_BOLD)\tall$(FONT_RESET)\n$(TARGETS_HELP)'
@@ -26,10 +22,20 @@ $(BUILD):
 	@/bin/echo -e '$(FONT_BOLD)mkdir$(FONT_RESET) $(BUILD)'
 	@mkdir -p $(BUILD)
 
+#
+# this template is executed for each mk file found in the project
+# tree consuming its targets
+#
 define include_target_TEMPLATE
 
+  #
+  # root directory of the target
+  #
   TARGET_BASE=$(shell dirname $(1))
 
+  #
+  # reset variables before including mk file
+  #
   TARGET:=
   TYPE:=
   SOURCES:=
@@ -50,12 +56,14 @@ define include_target_TEMPLATE
 
   TARGETS+=$$(TARGET)
 
+  #
+  # fill the help string
+  #
   ifneq ($$(DEPENDENCIES),)
     HELP_DEPENDS_ON:=depends on$$(DEPENDENCIES)
   else
     HELP_DEPENDS_ON:=
   endif
-
   TARGETS_HELP+=\t$$(FONT_BOLD)$$(TARGET)$$(FONT_RESET) ($$(TYPE)) $$(HELP_DEPENDS_ON)\n
 
   OBJS:=$$(addprefix $$(BUILD)/build.$$(TARGET)/,$$(SOURCES))
@@ -81,12 +89,21 @@ define include_target_TEMPLATE
     $$(foreach i,$$(RESOURCES),$$(eval $$(call recipe_resources_TEMPLATE,$$(i))))
   endif
 
+  #
+  # include c++ building rules
+  #
   $$(eval $$(call recipe_c++_TEMPLATE,$$(BUILD)/build.$$(TARGET),$$(TARGET_BASE)))
+
+  #
+  # include final target rule (eg linking the app)
+  #
   $$(eval $$(call $$(TYPE)_TEMPLATE,$$(TARGET)))
 
 endef
 
-#find and include all target configs
+#
+# find and include all target configs
+#
 TARGETS:=
 TARGETS_HELP:=
 TARGET_CONFIGS := $(shell find $(SOURCE_DIR) -name *.mk)
