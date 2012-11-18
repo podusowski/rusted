@@ -71,6 +71,19 @@ TEST(ActionsSct, AttackObject)
     executeAction.id = 1;
     connection1->send(executeAction);
 
+    // clients should receive emit effect requests
+    auto emitMovingMeshEffect = connection1->receive<Common::Messages::EmitMovingMeshEffect>();
+    // TODO: check rest of the values
+    /*
+    EXPECT_EQ(1, emitMovingMeshEffect.fromX);
+    EXPECT_EQ(1, emitMovingMeshEffect.fromY);
+    EXPECT_EQ(1, emitMovingMeshEffect.fromZ);
+
+    EXPECT_EQ(10000, emitMovingMeshEffect.toX);
+    EXPECT_EQ(1, emitMovingMeshEffect.toY);
+    EXPECT_EQ(1, emitMovingMeshEffect.toZ);
+    */
+
     // user1 should also receive AttackObject to know what he has done
     auto attackObject1 = connection1->receive<Common::Messages::AttackObject>();
     ASSERT_EQ(1, attackObject1->attackerId);
@@ -82,6 +95,7 @@ TEST(ActionsSct, AttackObject)
     ASSERT_EQ(190, shipInfo1->integrity);
 
     // other player should also get this stuff
+    connection2->receive<Common::Messages::EmitMovingMeshEffect>();
     connection2->receive<Common::Messages::AttackObject>();
     connection2->receive<Common::Messages::ShipInfo>();
 }

@@ -23,7 +23,7 @@ TEST(ObjectsSct, FetchVisibleObjects)
     // more information, GetObjectInfo should be used for each of them
 
     boost::shared_ptr<Common::Messages::VisibleObjects> visibleObjects = connection1->receive<Common::Messages::VisibleObjects>();
-    EXPECT_EQ(4, visibleObjects->objects.size());
+    EXPECT_EQ(5, visibleObjects->objects.size());
 }
 
 TEST(ObjectsSct, GetObjectInfo_Ship)

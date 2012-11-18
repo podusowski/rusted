@@ -20,6 +20,8 @@ Common::Game::TimeValue Attack::start()
         return Common::Game::TimeValue(0, 0);
     }
 
+    Common::Messages::EmitMovingMeshEffect emitMovingMeshEffect;
+
     m_selectedObject.setIntegrity(integrity - 10);
 
     Common::Messages::AttackObject attackObject;
@@ -29,6 +31,7 @@ Common::Game::TimeValue Attack::start()
     auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
+        connection->send(emitMovingMeshEffect);
         connection->send(attackObject);
         m_servicesUtils.sendObjectInfo(m_selectedObject, *connection);
     }

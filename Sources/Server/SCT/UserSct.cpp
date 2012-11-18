@@ -85,6 +85,6 @@ TEST(UserSct, TwoUsersEntitiesStatusReq)
         connection2->send(msg);
 
         auto playerShips = connection2->receive<Common::Messages::PlayerShips>();
-        ASSERT_EQ(2, playerShips->ships.size()); 
+        ASSERT_EQ(3, playerShips->ships.size()); 
     }
 }

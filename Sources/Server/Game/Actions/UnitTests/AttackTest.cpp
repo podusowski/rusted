@@ -28,6 +28,10 @@ TEST_F(AttackTest, AttackOtherShip)
     ON_CALL(playerContainer, getAllConnections(_)).WillByDefault(Return(allConnections));
 
     EXPECT_CALL(connection, send(
+                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::EmitMovingMeshEffect))
+                )).Times(1);
+
+    EXPECT_CALL(connection, send(
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::AttackObject))
                 )).Times(1);
 
