@@ -20,7 +20,17 @@ Common::Game::TimeValue Attack::start()
         return Common::Game::TimeValue(0, 0);
     }
 
+    auto focusedShipPosition = m_focusedShip.getPosition();
+    auto selectedShipPosition = m_selectedObject.getPosition();
+
     Common::Messages::EmitMovingMeshEffect emitMovingMeshEffect;
+    emitMovingMeshEffect.fromX = focusedShipPosition.getX();
+    emitMovingMeshEffect.fromY = focusedShipPosition.getY();
+    emitMovingMeshEffect.fromZ = focusedShipPosition.getZ();
+    emitMovingMeshEffect.toX = selectedShipPosition.getX();
+    emitMovingMeshEffect.toY = selectedShipPosition.getY();
+    emitMovingMeshEffect.toZ = selectedShipPosition.getZ();
+    emitMovingMeshEffect.speed = 1000;
 
     m_selectedObject.setIntegrity(integrity - 10);
 

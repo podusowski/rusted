@@ -63,7 +63,7 @@ TEST(ActionsSct, AttackObject)
 
     // client has to select some object
     Common::Messages::SelectObject selectObject;
-    selectObject.id = 2;
+    selectObject.id = 5;
     connection1->send(selectObject);
 
     // execute hardcoded action 1 - attack 
@@ -73,26 +73,25 @@ TEST(ActionsSct, AttackObject)
 
     // clients should receive emit effect requests
     auto emitMovingMeshEffect = connection1->receive<Common::Messages::EmitMovingMeshEffect>();
-    // TODO: check rest of the values
-    /*
-    EXPECT_EQ(1, emitMovingMeshEffect.fromX);
-    EXPECT_EQ(1, emitMovingMeshEffect.fromY);
-    EXPECT_EQ(1, emitMovingMeshEffect.fromZ);
+    EXPECT_EQ(1, emitMovingMeshEffect->fromX);
+    EXPECT_EQ(1, emitMovingMeshEffect->fromY);
+    EXPECT_EQ(1, emitMovingMeshEffect->fromZ);
 
-    EXPECT_EQ(10000, emitMovingMeshEffect.toX);
-    EXPECT_EQ(1, emitMovingMeshEffect.toY);
-    EXPECT_EQ(1, emitMovingMeshEffect.toZ);
-    */
+    EXPECT_EQ(10000, emitMovingMeshEffect->toX);
+    EXPECT_EQ(1, emitMovingMeshEffect->toY);
+    EXPECT_EQ(1, emitMovingMeshEffect->toZ);
+
+    EXPECT_EQ(1000, emitMovingMeshEffect->speed);
 
     // user1 should also receive AttackObject to know what he has done
     auto attackObject1 = connection1->receive<Common::Messages::AttackObject>();
     ASSERT_EQ(1, attackObject1->attackerId);
-    ASSERT_EQ(2, attackObject1->attackedId);
+    ASSERT_EQ(5, attackObject1->attackedId);
 
     // we should also receive shipinfo with condition after the attack
     auto shipInfo1 = connection1->receive<Common::Messages::ShipInfo>();
-    ASSERT_EQ(2, shipInfo1->id);
-    ASSERT_EQ(190, shipInfo1->integrity);
+    ASSERT_EQ(5, shipInfo1->id);
+    ASSERT_EQ(90, shipInfo1->integrity);
 
     // other player should also get this stuff
     connection2->receive<Common::Messages::EmitMovingMeshEffect>();
