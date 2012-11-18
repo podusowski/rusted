@@ -24,11 +24,13 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
 
     if (timeToFinish == Common::Game::TimeValue(0, 0))
     {
-        LOG_DEBUG << "Action doesn't have execution time";
+        LOG_DEBUG << "Action doesn't have execution time and will be finished immidiately";
         action->finish();
     }
     else
     {
+        LOG_DEBUG << "Action started, will be finished after " << timeToFinish << "secs";
+
         auto & selectedObject = player.getFocusedObject();
 
         Common::Messages::ActionStarted actionStarted;
