@@ -18,6 +18,7 @@ SOURCES+=Services/RustedTimeService.cpp
 SOURCES+=Services/AuthorizationService.cpp
 SOURCES+=Services/PlayerActionService.cpp
 SOURCES+=Services/ObjectService.cpp
+SOURCES+=Services/EffectsService.cpp
 SOURCES+=Views/ObjectsView.cpp
 SOURCES+=Views/Camera.cpp
 SOURCES+=Views/Object.cpp

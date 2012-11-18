@@ -14,6 +14,7 @@
 #include "Client/Services/RustedTimeService.hpp"
 #include "Client/Services/PlayerActionService.hpp"
 #include "Client/Services/ObjectService.hpp"
+#include "Client/Services/EffectsService.hpp"
 
 #include "Client/States/IStateDeployment.hpp"
 #include "Client/Views/ObjectsView.hpp"
@@ -49,6 +50,7 @@ private:
     Services::RustedTimeService m_rustedTimeService;
     Services::PlayerActionService m_playerActionService;
     Services::ObjectService m_objectService;
+    Services::EffectsService m_effectsService;
 
     Views::ObjectsView m_objectsView;
     Views::PilotView m_pilotView;
