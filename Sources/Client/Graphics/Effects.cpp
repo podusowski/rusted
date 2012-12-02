@@ -21,7 +21,7 @@ void Effects::frameStarted()
 
 void Effects::emitMovingMeshEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed)
 {
-    boost::shared_ptr<IEffect> effect(new MovingMeshEffect(m_graphics, start, end));
+    boost::shared_ptr<IEffect> effect(new MovingMeshEffect(m_graphics, start, end, speed));
     addEffect(effect);
 }
 

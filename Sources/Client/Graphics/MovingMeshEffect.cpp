@@ -9,9 +9,10 @@ using namespace Client::Graphics;
 
 MovingMeshEffect::MovingMeshEffect(IGraphics & graphics,
     Common::Game::Position start,
-    Common::Game::Position end) : 
+    Common::Game::Position end,
+    int speed) : 
         m_graphics(graphics),
-        m_speed(3000),
+        m_speed(speed),
         m_start(start),
         m_end(end)
 {

@@ -18,7 +18,8 @@ public:
     MovingMeshEffect(
         IGraphics &, 
         Common::Game::Position start,
-        Common::Game::Position end);
+        Common::Game::Position end,
+        int speed);
 
     ~MovingMeshEffect();
 
