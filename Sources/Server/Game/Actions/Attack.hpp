@@ -20,10 +20,14 @@ public:
     void finish();
 
 private:
+    void sendShipInfoToClients();
+    void sendEffect();
+
     IPlayerContainer & m_playerContainer;
     Common::Game::Object::Ship & m_focusedShip;
     Common::Game::Object::ObjectBase & m_selectedObject;
     Server::Services::Utils m_servicesUtils;
+    int m_speed;
 };
 
 }

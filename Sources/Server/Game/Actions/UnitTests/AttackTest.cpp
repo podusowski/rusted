@@ -21,7 +21,7 @@ TEST_F(AttackTest, AttackOtherShip)
     Common::Game::Object::ShipMock selectedShip;
 
     ON_CALL(focusedShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
-    ON_CALL(focusedShip, getPosition()).WillByDefault(Return(Common::Game::Position()));
+    ON_CALL(focusedShip, getPosition()).WillByDefault(Return(Common::Game::Position(1000, 0, 0)));
     ON_CALL(selectedShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
     ON_CALL(selectedShip, getPosition()).WillByDefault(Return(Common::Game::Position()));
 
@@ -36,23 +36,50 @@ TEST_F(AttackTest, AttackOtherShip)
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::AttackObject))
                 )).Times(1);
 
-    EXPECT_CALL(connection, send(
-                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipInfo))
-                )).Times(1);
-
-    // this might be a little overhead but it's simple and might be useful later
-    EXPECT_CALL(connection, send(
-                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipCourseInfo))
-                )).Times(1);
-
     // doesn't matter if this is called, might be cached or something
     // the thing is what to return if it's called
     ON_CALL(selectedShip, getIntegrity()).WillByDefault(Return(100));
 
-    EXPECT_CALL(selectedShip, setIntegrity(90)).Times(1);
+    EXPECT_CALL(selectedShip, setIntegrity(_)).Times(0);
 
     Server::Game::Actions::Attack attack(playerContainer, focusedShip, selectedShip);
-    attack.start();
+    auto actionTime = attack.start();
+
+    // action time will be based on the distance of two ships
+    auto distance = Common::Game::Position::distance(focusedShip.getPosition(), selectedShip.getPosition());
+    int weaponSpeed = 1000;
+    float expectedTime = float(distance) / float(weaponSpeed);
+
+    EXPECT_EQ(Common::Game::TimeValue(floor(expectedTime), 0), actionTime);
+}
+
+TEST_F(AttackTest, AttackOtherShip_Finish)
+{
+    Server::Network::ConnectionMock connection;
+    Server::Game::PlayerContainerMock playerContainer;
+    Common::Game::Object::ShipMock focusedShip;
+    Common::Game::Object::ShipMock selectedShip;
+
+    ON_CALL(focusedShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
+    ON_CALL(focusedShip, getPosition()).WillByDefault(Return(Common::Game::Position(1000, 0, 0)));
+    ON_CALL(selectedShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
+    ON_CALL(selectedShip, getPosition()).WillByDefault(Return(Common::Game::Position()));
+
+    std::vector<Server::Network::IConnection *> allConnections{&connection};
+    ON_CALL(playerContainer, getAllConnections(_)).WillByDefault(Return(allConnections));
+
+    ON_CALL(selectedShip, getIntegrity()).WillByDefault(Return(100));
+    EXPECT_CALL(selectedShip, setIntegrity(90)).Times(1);
+
+    EXPECT_CALL(connection, send(
+                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipInfo))
+                )).Times(1);
+    EXPECT_CALL(connection, send(
+                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipCourseInfo))
+                )).Times(1);
+
+    Server::Game::Actions::Attack attack(playerContainer, focusedShip, selectedShip);
+    attack.finish();
 }
 
 TEST_F(AttackTest, AttackDestroyedShip)
