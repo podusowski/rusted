@@ -66,7 +66,7 @@ TEST(ActionsSct, AttackObject)
     selectObject.id = 5;
     connection1->send(selectObject);
 
-    // execute hardcoded action 1 - attack 
+    // execute action 1 - attack 
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = 1;
     connection1->send(executeAction);
@@ -87,6 +87,13 @@ TEST(ActionsSct, AttackObject)
     auto attackObject1 = connection1->receive<Common::Messages::AttackObject>();
     ASSERT_EQ(1, attackObject1->attackerId);
     ASSERT_EQ(5, attackObject1->attackedId);
+
+    connection1->receive<Common::Messages::ActionStarted>();
+
+    // some time will pass so global cooldown will expire at this point
+    connection1->receive<Common::Messages::GlobalCooldownExpired>();
+
+    connection1->receive<Common::Messages::ActionFinished>();
 
     // we should also receive shipinfo with condition after the attack
     auto shipInfo1 = connection1->receive<Common::Messages::ShipInfo>();
