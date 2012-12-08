@@ -123,8 +123,9 @@ void ObjectService::handle(const Common::Messages::ShipCourseInfo & shipCourseIn
     description.destination.setY(shipCourseInfo.destinationY);
     description.destination.setZ(shipCourseInfo.destinationZ);
 
-    // TODO: we should try to get higher presision
-    description.startTime = Common::Game::TimeValue(shipCourseInfo.startTimeSeconds, 0);
+    description.startTime = Common::Game::TimeValue(
+        shipCourseInfo.startTimeSeconds,
+        shipCourseInfo.startTimeMiliseconds);
 
     ship.applyTrajectoryDescription(description);
 }

@@ -85,6 +85,7 @@ Ship
     <param type="int32" name="destinationZ" />
 
     <param type="int32" name="startTimeSeconds" />
+    <param type="int32" name="startTimeMiliseconds" />
 </message>
 
 <!--
