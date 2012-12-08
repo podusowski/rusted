@@ -2,7 +2,7 @@
 
 #include "Common/Game/Utilities/PasswordHash.hpp"
 #include "DataBase/DataBase.hpp"
-#include "UnitTests/ConnectionStub.hpp"
+#include "Network/UnitTests/ConnectionMock.hpp"
 #include "Game/PlayerContainer.hpp"
 
 using namespace testing;
@@ -20,7 +20,7 @@ TEST(PlayerContainerTest, AddPlayerAndReferenceByConnection)
     playerNode.setValue("id", 1);
 
     Server::Game::PlayerContainer container(db);
-    ConnectionStub connection;
+    Server::Network::ConnectionMock connection;
     
     container.add(connection);
     int player1Id = container.authorize("someLogin", "passwordHash", connection);
