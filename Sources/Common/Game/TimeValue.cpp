@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <sstream>
 
 #include "TimeValue.hpp"
 
@@ -16,7 +17,9 @@ TimeValue::TimeValue(unsigned seconds, unsigned miliseconds) :
 {
     if (miliseconds >= 1000)
     {
-        throw std::runtime_error("miliseconds max is 999");
+        std::stringstream ss;
+        ss << "miliseconds must be in range 0-999, " << miliseconds << " given";
+        throw std::runtime_error(ss.str());
     }
 }
 
