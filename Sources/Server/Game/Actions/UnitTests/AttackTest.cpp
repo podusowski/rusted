@@ -21,12 +21,12 @@ TEST_F(AttackTest, AttackOtherShip)
     Common::Game::Object::ShipMock selectedShip;
 
     ON_CALL(focusedShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
-    ON_CALL(focusedShip, getPosition()).WillByDefault(Return(Common::Game::Position(1000, 0, 0)));
+    ON_CALL(focusedShip, getPosition()).WillByDefault(Return(Common::Game::Position(1500, 0, 0)));
     ON_CALL(selectedShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
     ON_CALL(selectedShip, getPosition()).WillByDefault(Return(Common::Game::Position()));
 
     std::vector<Server::Network::IConnection *> allConnections{&connection};
-    ON_CALL(playerContainer, getAllConnections(_)).WillByDefault(Return(allConnections));
+    EXPECT_CALL(playerContainer, getAllConnections(_)).WillRepeatedly(Return(allConnections));
 
     EXPECT_CALL(connection, send(
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::EmitMovingMeshEffect))
@@ -49,8 +49,10 @@ TEST_F(AttackTest, AttackOtherShip)
     auto distance = Common::Game::Position::distance(focusedShip.getPosition(), selectedShip.getPosition());
     int weaponSpeed = 1000;
     float expectedTime = float(distance) / float(weaponSpeed);
+    int expectedSeconds = floor(expectedTime);
+    int expectedMiliseconds = round((expectedTime - expectedSeconds) * 100);
 
-    EXPECT_EQ(Common::Game::TimeValue(floor(expectedTime), 0), actionTime);
+    EXPECT_EQ(Common::Game::TimeValue(expectedSeconds, expectedMiliseconds), actionTime);
 }
 
 TEST_F(AttackTest, AttackOtherShip_Finish)

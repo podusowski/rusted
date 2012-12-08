@@ -27,9 +27,11 @@ Common::Game::TimeValue Attack::start()
     auto selectedShipPosition = m_selectedObject.getPosition();
 
     auto distance = Common::Game::Position::distance(focusedShipPosition, selectedShipPosition);
-    int seconds = floor(float(distance) / float(m_speed));
+    float time = float(distance) / float(m_speed);
+    int seconds = floor(time);
+    int miliseconds = round((time - seconds) * 100);
 
-    return Common::Game::TimeValue(seconds, 0);
+    return Common::Game::TimeValue(seconds, miliseconds);
 }
 
 void Attack::finish()
