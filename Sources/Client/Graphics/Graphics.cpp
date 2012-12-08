@@ -92,16 +92,13 @@ void Graphics::initOgre()
     bool fullscreen = m_cfg->getValue<unsigned>("graphics.fullscreen", false);
     m_ogreRenderWindow = m_ogreRoot->createRenderWindow("Rusted", width, height, fullscreen, &videoOptions);
 
-    Ogre::SceneManager * sm = m_ogreRoot->createSceneManager(Ogre::ST_GENERIC, "SceneMgr");
-    m_ogreSceneManager = sm;
-
+    m_ogreSceneManager = m_ogreRoot->createSceneManager(Ogre::ST_GENERIC, "SceneMgr");
     m_ogreSceneManager->setAmbientLight(Ogre::ColourValue(255, 255, 255));
-    Ogre::Camera * camera = sm->createCamera("SampleCam");
-    m_ogreCamera = camera;
+    m_ogreCamera = m_ogreSceneManager->createCamera("SampleCam");
 
-    Ogre::Viewport * vp = m_ogreRenderWindow->addViewport(camera);
+    Ogre::Viewport * vp = m_ogreRenderWindow->addViewport(m_ogreCamera);
     vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
-    camera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+    m_ogreCamera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
 }
 
 void Graphics::initResources()
