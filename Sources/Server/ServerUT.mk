@@ -11,7 +11,6 @@ SOURCES+=Game/UnitTests/UniverseLoaderTest.cpp
 SOURCES+=Game/UnitTests/ObjectFactoryTest.cpp
 SOURCES+=Game/UnitTests/ShipClassTest.cpp
 SOURCES+=Game/UnitTests/ShipClassContainerTest.cpp
-SOURCES+=UnitTests/ConnectionStub.cpp
 SOURCES+=DataBase/UnitTests/DataBaseModuleTest.cpp
 SOURCES+=DataBase/UnitTests/DataBaseNodeTest.cpp
 SOURCES+=DataBase/UnitTests/XmlDataProviderTest.cpp
