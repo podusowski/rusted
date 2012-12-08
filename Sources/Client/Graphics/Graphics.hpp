@@ -5,6 +5,9 @@
 
 #include "Client/Graphics//IGraphics.hpp"
 
+#include "Cake/DependencyInjection/Inject.hpp"
+#include "Cake/Configuration/Configuration.hpp"
+
 namespace Client
 {
 namespace Graphics
@@ -31,6 +34,7 @@ private:
     void initOgre();
     void initResources();
 
+    Cake::DependencyInjection::Inject<Cake::Configuration::Configuration> m_cfg;
     Ogre::Root * m_ogreRoot;
     Ogre::RenderWindow * m_ogreRenderWindow;
     Ogre::SceneManager * m_ogreSceneManager;

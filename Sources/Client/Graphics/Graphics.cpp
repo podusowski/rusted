@@ -86,7 +86,11 @@ void Graphics::initOgre()
     initResources();
 
     Ogre::NameValuePairList videoOptions;
-    m_ogreRenderWindow = m_ogreRoot->createRenderWindow("Rusted", 800, 600, false, &videoOptions);
+
+    unsigned width = m_cfg->getValue<unsigned>("graphics.width", 800);
+    unsigned height = m_cfg->getValue<unsigned>("graphics.height", 600);
+    bool fullscreen = m_cfg->getValue<unsigned>("graphics.fullscreen", false);
+    m_ogreRenderWindow = m_ogreRoot->createRenderWindow("Rusted", width, height, fullscreen, &videoOptions);
 
     Ogre::SceneManager * sm = m_ogreRoot->createSceneManager(Ogre::ST_GENERIC, "SceneMgr");
     m_ogreSceneManager = sm;
