@@ -24,7 +24,7 @@ TEST(PlayerContainerTest, AddPlayerAndReferenceByConnection)
     
     container.add(connection);
     int player1Id = container.authorize("someLogin", "passwordHash", connection);
-    Player & player2 = container.getBy(connection);
+    Common::Game::Player & player2 = container.getBy(connection);
     Server::Network::IConnection & connection2 = container.getConnectionById(player1Id);
 
     ASSERT_EQ(1, player1Id);

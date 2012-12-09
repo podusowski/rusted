@@ -44,7 +44,7 @@ void Attack::finish()
 
 void Attack::sendShipInfoToClients()
 {
-    auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
+    auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
         m_servicesUtils.sendObjectInfo(m_selectedObject, *connection);
@@ -69,7 +69,7 @@ void Attack::sendEffect()
     attackObject.attackerId = m_focusedShip.getId();
     attackObject.attackedId = m_selectedObject.getId();
 
-    auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
+    auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
         connection->send(emitMovingMeshEffect);

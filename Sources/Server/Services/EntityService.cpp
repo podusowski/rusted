@@ -26,7 +26,7 @@ void EntityService::handle(const Common::Messages::ChangeShipCourse & changeCour
                                        changeCourseReq.z);
     ship.setCourse(destination);
 
-    std::vector<Network::IConnection *> connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
+    std::vector<Network::IConnection *> connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (std::vector<Network::IConnection *>::iterator it = connections.begin(); it != connections.end(); it++)
     {
         if (*it != &connection)

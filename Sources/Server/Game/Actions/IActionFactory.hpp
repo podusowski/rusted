@@ -20,7 +20,7 @@ public:
 
     virtual boost::shared_ptr<Server::Game::Actions::IAction> create(
         Server::Network::IConnection &,
-        Server::Game::IPlayer &,
+        Common::Game::IPlayer &,
         unsigned id,
         unsigned parameter) = 0;
 };

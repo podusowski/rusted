@@ -5,7 +5,7 @@
 #include "Server/Game/Actions/ActionPerformer.hpp"
 #include "Server/Network/UnitTests/ConnectionMock.hpp"
 #include "Server/Game/UnitTests/PlayerContainerMock.hpp"
-#include "Server/Game/UnitTests/PlayerMock.hpp"
+#include "Common/Game/UnitTests/PlayerMock.hpp"
 #include "Common/Game/Object/UnitTests/ShipMock.hpp"
 #include "Server/Game/Actions/Attack.hpp"
 #include "ActionFactoryMock.hpp"
@@ -32,7 +32,7 @@ public:
 
     Server::Network::ConnectionMock connection;
     Server::Game::PlayerContainerMock playerContainer;
-    Server::Game::PlayerMock player;
+    Common::Game::PlayerMock player;
     Server::Game::Actions::ActionFactoryMock actionFactory;
     boost::shared_ptr<Server::Game::Actions::IAction> action;
     Common::Game::Universe universe;

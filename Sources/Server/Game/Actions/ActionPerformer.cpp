@@ -16,7 +16,7 @@ ActionPerformer::ActionPerformer(
 }
 
 void ActionPerformer::perform(Server::Network::IConnection & connection, 
-    Server::Game::IPlayer & player, unsigned id, unsigned parameter)
+    Common::Game::IPlayer & player, unsigned id, unsigned parameter)
 {
     aquireGlobalCooldown(player.getId());
     auto action = m_actionFactory.create(connection, player, id, parameter);

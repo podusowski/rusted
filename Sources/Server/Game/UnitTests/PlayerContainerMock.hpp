@@ -19,10 +19,10 @@ public:
     MOCK_METHOD1(add, void(Network::IConnection &));
     MOCK_METHOD1(remove, void(Network::IConnection &));
 
-    MOCK_METHOD1(getBy, Server::Game::Player & (Network::IConnection & connection));
+    MOCK_METHOD1(getBy, Common::Game::Player & (Network::IConnection & connection));
     MOCK_METHOD1(getConnectionById, Network::IConnection & (int));
-    MOCK_METHOD1(getAll, std::vector<boost::shared_ptr<Player> > (PlayerState state));
-    MOCK_METHOD1(getAllConnections, std::vector<Network::IConnection *> (PlayerState state));
+    MOCK_METHOD1(getAll, std::vector<boost::shared_ptr<Common::Game::Player> > (Common::Game::PlayerState state));
+    MOCK_METHOD1(getAllConnections, std::vector<Network::IConnection *> (Common::Game::PlayerState state));
 };
 
 }

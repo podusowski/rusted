@@ -22,7 +22,7 @@ public:
 
     void perform(
         Server::Network::IConnection & connection,
-        Server::Game::IPlayer &,
+        Common::Game::IPlayer &,
         unsigned id,
         unsigned parameter);
 

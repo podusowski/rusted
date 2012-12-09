@@ -26,7 +26,7 @@ int PlayerContainer::authorize(const std::string & login,
     {
         int id = checkCredentials(login, password);
         it->second->setId(id);
-        it->second->setState(PLAYER_STATE_AUTHORIZED);
+        it->second->setState(Common::Game::PLAYER_STATE_AUTHORIZED);
         return id;
     }
     else
@@ -39,7 +39,7 @@ void PlayerContainer::add(Network::IConnection & connection)
 {
     LOG_DEBUG << "Adding player";
 
-    boost::shared_ptr<Player> player(new Player());
+    boost::shared_ptr<Common::Game::Player> player(new Common::Game::Player());
 
     Cake::Threading::ScopedLock lock(m_mutex);
     m_connectionMap.insert(std::make_pair(&connection, player));
@@ -63,7 +63,7 @@ void PlayerContainer::remove(Network::IConnection & connection)
     }
 }
 
-Player & PlayerContainer::getBy(Network::IConnection & connection)
+Common::Game::Player & PlayerContainer::getBy(Network::IConnection & connection)
 {
     // TODO: can't impl thread safety by this impl
     Cake::Threading::ScopedLock lock(m_mutex);
@@ -84,11 +84,11 @@ Server::Network::IConnection & PlayerContainer::getConnectionById(int playerId)
     throw std::out_of_range("player doesn't exist");
 }
 
-std::vector<boost::shared_ptr<Player> > PlayerContainer::getAll(PlayerState state)
+std::vector<boost::shared_ptr<Common::Game::Player> > PlayerContainer::getAll(Common::Game::PlayerState state)
 {
     Cake::Threading::ScopedLock lock(m_mutex);
 
-    std::vector<boost::shared_ptr<Player> > ret;
+    std::vector<boost::shared_ptr<Common::Game::Player> > ret;
 
     for (auto it = m_connectionMap.begin(); it != m_connectionMap.end(); it++)
     {
@@ -101,7 +101,7 @@ std::vector<boost::shared_ptr<Player> > PlayerContainer::getAll(PlayerState stat
     return ret;
 }
 
-std::vector<Server::Network::IConnection *> PlayerContainer::getAllConnections(PlayerState state)
+std::vector<Server::Network::IConnection *> PlayerContainer::getAllConnections(Common::Game::PlayerState state)
 {
     Cake::Threading::ScopedLock lock(m_mutex);
 

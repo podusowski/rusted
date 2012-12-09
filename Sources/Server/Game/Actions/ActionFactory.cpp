@@ -15,7 +15,7 @@ ActionFactory::ActionFactory(Common::Game::Universe & universe, Server::Game::IP
 
 boost::shared_ptr<IAction> ActionFactory::create(
         Server::Network::IConnection & connection,
-        Server::Game::IPlayer & player,
+        Common::Game::IPlayer & player,
         unsigned id,
         unsigned parameter)
 {

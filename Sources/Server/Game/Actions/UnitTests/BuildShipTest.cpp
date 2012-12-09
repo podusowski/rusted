@@ -2,12 +2,13 @@
 
 #include "Server/UnitTests/AbstractTest.hpp"
 
-#include "Server/Game/UnitTests/PlayerMock.hpp"
+#include "Common/Game/UnitTests/PlayerMock.hpp"
+#include "Common/Game/Object/UnitTests/ShipMock.hpp"
+#include "Common/Game/Object/Ship.hpp"
+
 #include "Server/Network/UnitTests/ConnectionMock.hpp"
 #include "Server/Game/UnitTests/PlayerContainerMock.hpp"
-#include "Common/Game/Object/Ship.hpp"
 #include "Game/Actions/BuildShip.hpp"
-#include "Common/Game/Object/UnitTests/ShipMock.hpp"
 
 using namespace testing;
 
@@ -20,7 +21,7 @@ TEST_F(BuildShipTest, Build)
     // TODO: since Universe is mostly templated, it's impossible to create nice mock for it
     //       and I'm unable to test reserveId() for example
     Common::Game::Universe universe; 
-    Server::Game::PlayerMock player;
+    Common::Game::PlayerMock player;
     Common::Game::Object::ShipMock focusedShip;
     boost::shared_ptr<Common::Game::Object::ObjectBase> createdObject(new Common::Game::Object::ShipMock);
     Server::Network::ConnectionMock connection;

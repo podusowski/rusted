@@ -24,7 +24,7 @@ public:
 
     boost::shared_ptr<Server::Game::Actions::IAction> create(
         Server::Network::IConnection & connection,
-        Server::Game::IPlayer &,
+        Common::Game::IPlayer &,
         unsigned id,
         unsigned parameter);
 

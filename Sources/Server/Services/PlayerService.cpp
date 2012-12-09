@@ -24,7 +24,7 @@ void PlayerService::handle(const Common::Messages::FetchPlayerShips &, Network::
 {
     Common::Messages::PlayerShips resp;
 
-    Game::Player & player = m_playerContainer.getBy(connection);
+    Common::Game::Player & player = m_playerContainer.getBy(connection);
 
     auto playerShips = m_universe.getByOwnerId<Common::Game::Object::Ship>(player.getId());
     for (auto it = playerShips.begin(); it != playerShips.end(); it++)

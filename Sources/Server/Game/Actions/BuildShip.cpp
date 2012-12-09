@@ -7,7 +7,7 @@ using namespace Server::Game::Actions;
 
 BuildShip::BuildShip(
     Common::Game::Universe & universe, 
-    Server::Game::IPlayer & player, 
+    Common::Game::IPlayer & player, 
     Server::Game::IPlayerContainer & playerContainer,
     unsigned shipClass
 ) : 
@@ -40,7 +40,7 @@ void BuildShip::finish()
 
     m_universe.add(object);
 
-    auto connections = m_playerContainer.getAllConnections(Server::Game::PLAYER_STATE_AUTHORIZED);
+    auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
         m_servicesUtils.sendObjectInfo(ship, *connection);

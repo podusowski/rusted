@@ -3,11 +3,12 @@
 #include "Server/UnitTests/AbstractTest.hpp"
 
 #include "Common/Game/UnitTests/RustedTimeStub.hpp"
+#include "Common/Game/UnitTests/PlayerMock.hpp"
+#include "Common/Game/Object/UnitTests/ShipMock.hpp"
+
 #include "Server/Game/Actions/ActionFactory.hpp"
 #include "Server/Network/UnitTests/ConnectionMock.hpp"
 #include "Server/Game/UnitTests/PlayerContainerMock.hpp"
-#include "Server/Game/UnitTests/PlayerMock.hpp"
-#include "Common/Game/Object/UnitTests/ShipMock.hpp"
 #include "Server/Game/Actions/Attack.hpp"
 
 using namespace testing;
@@ -23,7 +24,7 @@ TEST_F(ActionFactoryTest, BuildAttack)
 
     Server::Network::ConnectionMock connection;
     Server::Game::PlayerContainerMock playerContainer;
-    Server::Game::PlayerMock player;
+    Common::Game::PlayerMock player;
     Common::Game::Universe universe;
     Common::Game::Object::ShipMock ship1;
     Common::Game::Object::ShipMock ship2;
