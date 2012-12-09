@@ -11,9 +11,9 @@ PlayerService::PlayerService(Common::Game::Universe & universe, Server::Game::Pl
 {
 }
 
-void PlayerService::handle(const Common::Messages::PlayerResourcesStatusReq &, Network::IConnection & connection)
+void PlayerService::handle(const Common::Messages::GetPlayerResourcesInfo &, Network::IConnection & connection)
 {
-    Common::Messages::PlayerResourcesStatusResp resp;
+    Common::Messages::PlayerResourcesInfo resp;
     resp.carbon = 0xf00d;
     resp.uranium = 0xf00d;
     resp.credits = 0xf00d;

@@ -31,13 +31,13 @@ TEST(UserSct, Authorize)
 
 	// check player's resources
 	{
-		Common::Messages::PlayerResourcesStatusReq resourcesStatusReq;
-		connection->send(resourcesStatusReq);
+		Common::Messages::GetPlayerResourcesInfo getPlayerResourcesInfo;
+		connection->send(getPlayerResourcesInfo);
 
-		auto resp = connection->receive<Common::Messages::PlayerResourcesStatusResp>();
-		EXPECT_EQ(0xf00d, resp->carbon);
-		EXPECT_EQ(0xf00d, resp->uranium);
-		EXPECT_EQ(0xf00d, resp->credits);
+		auto playerResourcesInfo = connection->receive<Common::Messages::PlayerResourcesInfo>();
+		EXPECT_EQ(0xf00d, playerResourcesInfo->carbon);
+		EXPECT_EQ(0xf00d, playerResourcesInfo->uranium);
+		EXPECT_EQ(0xf00d, playerResourcesInfo->credits);
 	}
 }
 

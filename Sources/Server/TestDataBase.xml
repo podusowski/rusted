@@ -17,12 +17,14 @@
 
     <ship_classes>
 
+        <!-- figter -->
         <ship_class id="1" speed="500" integrity="1000">
             <actions>
                 <action type="1" parameter="1" />
             </actions>
         </ship_class>
 
+        <!-- construction ship -->
         <ship_class id="2" speed="100" integrity="100">
             <actions>
                 <action type="2" parameter="1" />

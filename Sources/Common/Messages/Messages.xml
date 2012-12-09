@@ -26,9 +26,9 @@ player specific
 	<param type="int32" name="player_id" />
 </message>
 
-<message id="PlayerResourcesStatusReq" />
+<message id="GetPlayerResourcesInfo" />
 
-<message id="PlayerResourcesStatusResp">
+<message id="PlayerResourcesInfo">
 	<param type="int32" name="carbon" />
 	<param type="int32" name="uranium" />
 	<param type="int32" name="credits" />
