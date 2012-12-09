@@ -26,6 +26,29 @@ int Player::getId()
     return *m_id;
 }
 
+PlayerState Player::getState()
+{
+    return m_state;
+}
+
+void Player::setState(PlayerState state)
+{
+    m_state = state;
+}
+
+void Player::selectObject(Common::Game::Object::ObjectBase & object)
+{
+    m_selectedObject = &object;
+}
+
+Common::Game::Object::ObjectBase & Player::getSelectedObject()
+{
+    if (!m_selectedObject)
+        throw std::runtime_error("player has no object selected");
+
+    return *m_selectedObject;
+}
+
 void Player::focusObject(Common::Game::Object::ObjectBase & object)
 {
     m_focusedObject = &object;
