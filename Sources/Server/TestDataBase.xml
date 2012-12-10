@@ -32,6 +32,13 @@
             </actions>
         </ship_class>
 
+        <!-- gatherer -->
+        <ship_class id="3" speed="100" integrity="100">
+            <actions>
+                <action type="3" parameter="1" />
+            </actions>
+        </ship_class>
+
     </ship_classes>
 </root>
 
