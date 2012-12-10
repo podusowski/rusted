@@ -90,6 +90,7 @@ void ActionPerformer::actionTimerExpired(unsigned internalId, unsigned playerId,
         throw std::runtime_error("action timer expired but there is no such active action");
     }
 
+    // TODO: shrink critical section
     Common::Messages::ActionFinished actionFinished;
     actionFinished.objectId = objectId;
     actionFinished.actionId = actionId;
