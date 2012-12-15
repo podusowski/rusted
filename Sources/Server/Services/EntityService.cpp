@@ -1,5 +1,4 @@
 #include "Common/Game/Object/Ship.hpp"
-#include "Common/Game/Object/StaticObject.hpp"
 
 #include "Game/Actions/ActionType.hpp"
 #include "Server/Services/EntityService.hpp"

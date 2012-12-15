@@ -2,7 +2,7 @@
 
 #include "ObjectFactory.hpp"
 #include "Common/Game/Object/Ship.hpp"
-#include "Common/Game/Object/StaticObject.hpp"
+#include "Common/Game/Object/Asteroid.hpp"
 #include "Server/Game/Actions/Attack.hpp"
 
 using namespace Server::Game;
@@ -34,15 +34,21 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
 
         return object;
     }
-    else if (type == "StaticObject")
+    else if (type == "Asteroid")
     {
-        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::StaticObject);
+        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
 
         object->setId(data.getValue<unsigned>("id"));
         object->setPosition(extractPosition(data));
         object->setIntegrity(data.getValue<unsigned>("integrity"));
 
         return object;
+    }
+    else
+    {
+        std::stringstream ss;
+        ss << "invalid object type: " << type;
+        throw std::runtime_error(ss.str());
     }
 
     return boost::shared_ptr<Common::Game::Object::ObjectBase>();

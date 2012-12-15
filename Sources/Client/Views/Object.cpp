@@ -3,7 +3,7 @@
 
 #include "Cake/Diagnostics/Logger.hpp"
 
-#include "Common/Game/Object/StaticObject.hpp"
+#include "Common/Game/Object/Asteroid.hpp"
 #include "Object.hpp"
 
 using namespace Client::Views;
@@ -16,7 +16,7 @@ Object::Object(Client::Graphics::IGraphics & graphics, Client::Input::IInput & i
 
     std::string mesh = "Cube.mesh";
 
-    if (object.is<Common::Game::Object::StaticObject>())
+    if (object.is<Common::Game::Object::Asteroid>())
     {
         mesh = "Asteroid.mesh";
     }

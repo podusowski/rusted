@@ -10,7 +10,7 @@ namespace Game
 namespace Object
 {
 
-class StaticObject : public ObjectBase
+class Asteroid : public ObjectBase
 {
 public:
     void setPosition(const Position &);

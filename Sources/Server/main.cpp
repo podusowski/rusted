@@ -40,7 +40,15 @@ int main(int argc, const char * argv[])
 
     LOG_INFO << "This SW version was build on " << __DATE__ << " " << __TIME__;
 
-    Server::Network::ServerController controller;
-    return controller.start();
+    try
+    {
+        Server::Network::ServerController controller;
+        return controller.start();
+    }
+    catch (std::exception & ex)
+    {
+        LOG_ERR << "Could not initialize the server, reason: " << ex.what();
+        return 1;
+    }
 }
 

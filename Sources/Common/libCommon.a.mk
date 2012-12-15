@@ -17,7 +17,7 @@ SOURCES+=Game/Universe.cpp
 SOURCES+=Game/Player.cpp
 SOURCES+=Game/Object/FlightTrajectory.cpp
 SOURCES+=Game/Object/Ship.cpp
-SOURCES+=Game/Object/StaticObject.cpp
+SOURCES+=Game/Object/Asteroid.cpp
 SOURCES+=Math/Quaternion.cpp
 
 CFLAGS+=-Wall -pedantic -g 

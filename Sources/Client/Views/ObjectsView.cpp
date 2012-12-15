@@ -3,7 +3,7 @@
 
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Common/Game/Object/Ship.hpp"
-#include "Common/Game/Object/StaticObject.hpp"
+#include "Common/Game/Object/Asteroid.hpp"
 
 #include "Client/Views/ObjectsView.hpp"
 
@@ -92,7 +92,7 @@ void ObjectsView::updateSelectedObjectWindow()
             Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>((*m_selectedObject)->getGameObject());
             ss << "Ship" << ship.getId() << " integrity: " << ship.getIntegrity();
         }
-        else if (typeid((*m_selectedObject)->getGameObject()) == typeid(Common::Game::Object::StaticObject))
+        else if (typeid((*m_selectedObject)->getGameObject()) == typeid(Common::Game::Object::Asteroid))
         {
             ss << "Asteroid";
         }

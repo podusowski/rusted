@@ -1,5 +1,7 @@
 #include "Utils.hpp"
 
+#include "Common/Game/Object/Asteroid.hpp"
+
 using namespace Server::Services;
 
 void Utils::sendObjectInfo(unsigned id, Common::Game::Universe & universe, Network::IConnection & connection)
@@ -24,7 +26,7 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
         sendShipInfo(ship, connection);
         sendShipCourseInfo(ship, connection);
     }
-    else if (IS(object, StaticObject))
+    else if (IS(object, Asteroid))
     {
         Common::Messages::StaticObjectInfoResp staticObjectInfo;
 

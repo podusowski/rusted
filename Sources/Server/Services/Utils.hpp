@@ -2,7 +2,6 @@
 
 #include "Common/Game/Universe.hpp"
 #include "Common/Game/Object/Ship.hpp"
-#include "Common/Game/Object/StaticObject.hpp"
 #include "Network/IConnection.hpp"
 
 namespace Server

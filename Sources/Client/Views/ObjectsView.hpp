@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Common/Game/Object/StaticObject.hpp"
-
 #include "Views/IView.hpp"
 #include "Services/ObjectService.hpp"
 #include "Services/PlayerActionService.hpp"

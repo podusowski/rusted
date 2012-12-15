@@ -4,7 +4,7 @@
 
 #include "Game/ObjectFactory.hpp"
 #include "Common/Game/Object/Ship.hpp"
-#include "Common/Game/Object/StaticObject.hpp"
+#include "Common/Game/Object/Asteroid.hpp"
 #include "DataBase/DataBaseNode.hpp"
 #include "DataBase/DataBase.hpp"
 #include "Game/UnitTests/ShipClassContainerMock.hpp"
@@ -80,7 +80,7 @@ TEST_F(ObjectFactoryTest, CreateShip)
 TEST_F(ObjectFactoryTest, CreateStaticObjectFromDbNode)
 {
     Server::DataBase::DataBaseNode node("object");
-    node.setValue("type", "StaticObject");
+    node.setValue("type", "Asteroid");
     node.setValue("id", 1);
     node.setValue("x", 3);
     node.setValue("y", 4);
@@ -93,7 +93,7 @@ TEST_F(ObjectFactoryTest, CreateStaticObjectFromDbNode)
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
 
-    ASSERT_EQ(typeid(Common::Game::Object::StaticObject), typeid(*object));
+    ASSERT_EQ(typeid(Common::Game::Object::Asteroid), typeid(*object));
     Common::Game::Position position = object->getPosition();
     ASSERT_EQ(3, position.getX());
     ASSERT_EQ(4, position.getY());

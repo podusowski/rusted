@@ -1,5 +1,5 @@
 #include "Common/Game/Object/Ship.hpp"
-#include "Common/Game/Object/StaticObject.hpp"
+#include "Common/Game/Object/Asteroid.hpp"
 #include "ObjectService.hpp"
 
 using namespace Client::Services;
@@ -94,7 +94,7 @@ void ObjectService::handle(const Common::Messages::StaticObjectInfoResp & messag
 {
     try
     {
-        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::StaticObject);
+        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
         object->setId(message.staticObjectId);
         object->setPosition(Common::Game::Position(message.x, message.y, message.z));
         m_universe.add(object);

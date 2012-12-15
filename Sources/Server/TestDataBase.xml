@@ -11,8 +11,8 @@
         <object id="3" type="Ship" class="1" x="2000"  y="2000" z="1" owner="2" />
         <object id="6" type="Ship" class="2" x="2000"  y="4000" z="1" owner="2" />
 
-        <object id="100" type="StaticObject" x="2000" y="1"    z="1"    integrity="100" />
-        <object id="101" type="StaticObject" x="4000" y="4000" z="2000" integrity="100" />
+        <object id="100" type="Asteroid" x="2000" y="1"    z="1"    integrity="100" />
+        <object id="101" type="Asteroid" x="4000" y="4000" z="2000" integrity="100" />
    </objects>
 
     <ship_classes>

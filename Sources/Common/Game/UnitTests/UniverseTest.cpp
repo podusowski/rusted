@@ -7,7 +7,7 @@
 #include "Cake/DependencyInjection/Registry.hpp"
 
 #include "Game/Object/Ship.hpp"
-#include "Game/Object/StaticObject.hpp"
+#include "Game/Object/Asteroid.hpp"
 #include "Game/Universe.hpp"
 #include "Game/Object/FlightTrajectory.hpp"
 
@@ -41,7 +41,7 @@ TEST_F(UniverseTest, GetByType)
     ship->setId(1);
     universe.add(ship);
 
-    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::StaticObject());
+    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::Asteroid());
     staticObject->setId(2);
     universe.add(staticObject);
 
@@ -56,7 +56,7 @@ TEST_F(UniverseTest, GetAll)
     ship->setId(1);
     universe.add(ship);
 
-    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::StaticObject());
+    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::Asteroid());
     staticObject->setId(2);
     universe.add(staticObject);
 
@@ -90,7 +90,7 @@ TEST_F(UniverseTest, GetWrongType)
 
     universe.add(ship);
 
-    ASSERT_ANY_THROW(universe.getById<Common::Game::Object::StaticObject>(1));
+    ASSERT_ANY_THROW(universe.getById<Common::Game::Object::Asteroid>(1));
 }
 
 TEST_F(UniverseTest, AddSomeShipsAndGetByOwner)
@@ -144,12 +144,12 @@ TEST_F(UniverseTest, DoubleInsert)
 {
     Common::Game::Universe universe;
 
-    boost::shared_ptr<Common::Game::Object::ObjectBase> obj1(new Common::Game::Object::StaticObject());
+    boost::shared_ptr<Common::Game::Object::ObjectBase> obj1(new Common::Game::Object::Asteroid());
     obj1->setId(1);
 
     universe.add(obj1);
 
-    boost::shared_ptr<Common::Game::Object::ObjectBase> obj2(new Common::Game::Object::StaticObject());
+    boost::shared_ptr<Common::Game::Object::ObjectBase> obj2(new Common::Game::Object::Asteroid());
     obj2->setId(1);
 
     EXPECT_ANY_THROW(universe.add(obj2));
@@ -163,7 +163,7 @@ TEST_F(UniverseTest, GetByOwnerId)
     dynamic_cast<Common::Game::Object::Ship&>(*ship).setOwnerId(2);
     universe.add(ship);
 
-    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::StaticObject());
+    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::Asteroid());
     staticObject->setId(2);
     universe.add(staticObject);
 
@@ -197,7 +197,7 @@ TEST_F(UniverseTest, IsOwnedBy)
     dynamic_cast<Common::Game::Object::Ship&>(*ship2).setOwnerId(3);
     universe.add(ship2);
 
-    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::StaticObject());
+    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::Asteroid());
     staticObject->setId(3);
     universe.add(staticObject);
 
