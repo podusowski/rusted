@@ -64,3 +64,13 @@ boost::shared_ptr<IAction> ActionFactory::create(
     return ret;
 }
 
+std::string ActionFactory::getActionName(unsigned id, unsigned parameter)
+{
+    switch (id)
+    {
+        case ActionType_Attack: return "attack";
+        case ActionType_BuildShip: return "build";
+        default: throw std::runtime_error("unknown action");
+    }
+}
+

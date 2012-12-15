@@ -89,7 +89,7 @@ void EntityService::handle(const Common::Messages::FetchAvailableActions &, Netw
     LOG_DEBUG << "Filling actions for ship:" << object.getId() << " (class:" << shipClass.getId() << ")";
     for (auto action: actions)
     {
-        std::string name = action.type == 1 ? "attack" : "build";
+        std::string name = m_actionFactory.getActionName(action.type, action.parameter);
         LOG_DEBUG << "  name:" << name << ", type:" << action.type << ", parameter:" << action.parameter;
         availableActions.actions.push_back(boost::make_tuple<int, int, std::string>(action.type, action.parameter, name));
     }
