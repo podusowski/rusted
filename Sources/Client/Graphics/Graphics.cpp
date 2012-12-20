@@ -93,7 +93,7 @@ void Graphics::initOgre()
     m_ogreRenderWindow = m_ogreRoot->createRenderWindow("Rusted", width, height, fullscreen, &videoOptions);
 
     m_ogreSceneManager = m_ogreRoot->createSceneManager(Ogre::ST_GENERIC, "SceneMgr");
-    m_ogreSceneManager->setAmbientLight(Ogre::ColourValue(255, 255, 255));
+    m_ogreSceneManager->setAmbientLight(Ogre::ColourValue(0, 0, 0));
     m_ogreCamera = m_ogreSceneManager->createCamera("SampleCam");
 
     Ogre::Viewport * vp = m_ogreRenderWindow->addViewport(m_ogreCamera);

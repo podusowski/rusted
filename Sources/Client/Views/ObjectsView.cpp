@@ -38,6 +38,11 @@ void ObjectsView::activate()
     m_objectService.fetchVisibleObjects();
 
     m_playerActionService.addObjectAttackedSlot(boost::bind(&ObjectsView::objectAttacked, this, _1, _2));
+
+    Ogre::Light* pointLight = m_graphics.getSceneManager().createLight("pointLight");
+    pointLight->setType(Ogre::Light::LT_POINT);
+    pointLight->setPosition(Ogre::Vector3(0, 150, 250));
+    pointLight->setPowerScale(20.0);
 }
 
 void ObjectsView::deactivate()
