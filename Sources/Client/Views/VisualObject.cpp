@@ -4,11 +4,11 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
 #include "Common/Game/Object/Asteroid.hpp"
-#include "Object.hpp"
+#include "VisualObject.hpp"
 
 using namespace Client::Views;
 
-Object::Object(Client::Graphics::IGraphics & graphics, Client::Input::IInput & input, Common::Game::Object::ObjectBase & object) :
+VisualObject::VisualObject(Client::Graphics::IGraphics & graphics, Client::Input::IInput & input, Common::Game::Object::ObjectBase & object) :
     m_graphics(graphics),
     m_object(object)
 {
@@ -26,27 +26,27 @@ Object::Object(Client::Graphics::IGraphics & graphics, Client::Input::IInput & i
     m_node->attachObject(m_entity);
     m_node->setScale(100.0, 100.0, 100.0);
 
-    input.addObjectRightClickCallback(*m_entity, std::bind(&Object::rightClickedCallback, this));
+    input.addObjectRightClickCallback(*m_entity, std::bind(&VisualObject::rightClickedCallback, this));
     
     update();
 }
 
-void Object::setRightClickCallback(std::function<void()> callback)
+void VisualObject::setRightClickCallback(std::function<void()> callback)
 {
     m_rightClickCallback = callback;
 }
 
-void Object::setSelected(bool selected)
+void VisualObject::setSelected(bool selected)
 {
     m_node->showBoundingBox(selected);
 }
 
-Common::Game::Object::ObjectBase & Object::getGameObject()
+Common::Game::Object::ObjectBase & VisualObject::getGameObject()
 {
     return m_object;
 }
 
-void Object::update()
+void VisualObject::update()
 {
     Common::Game::Position position = m_object.getPosition();
     auto orientation = m_object.getOrientation();
@@ -59,7 +59,7 @@ void Object::update()
     m_node->pitch(Ogre::Degree(90));
 }
 
-void Object::rightClickedCallback()
+void VisualObject::rightClickedCallback()
 {
     if (m_rightClickCallback)
         m_rightClickCallback();

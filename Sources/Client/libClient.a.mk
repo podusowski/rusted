@@ -21,7 +21,7 @@ SOURCES+=Services/ObjectService.cpp
 SOURCES+=Services/EffectsService.cpp
 SOURCES+=Views/ObjectsView.cpp
 SOURCES+=Views/Camera.cpp
-SOURCES+=Views/Object.cpp
+SOURCES+=Views/VisualObject.cpp
 SOURCES+=Views/PilotView.cpp
 
 CFLAGS+=-I$(TARGET_BASE)

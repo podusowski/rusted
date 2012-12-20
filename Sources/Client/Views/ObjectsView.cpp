@@ -58,7 +58,7 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
 {
     LOG_DEBUG << "New object:" << object;
 
-    boost::shared_ptr<Object> obj(new Object(m_graphics, m_input, object));
+    boost::shared_ptr<VisualObject> obj(new VisualObject(m_graphics, m_input, object));
     obj->setRightClickCallback(std::bind(&ObjectsView::objectClicked, this, obj.get()));
     m_objects.push_back(obj);
 }
@@ -67,7 +67,7 @@ void ObjectsView::objectAttacked(unsigned attackerId, unsigned attackedId)
 {
 }
 
-void ObjectsView::objectClicked(Object * object)
+void ObjectsView::objectClicked(VisualObject * object)
 {
     LOG_DEBUG << "Object selected, id:" << object->getGameObject().getId();
 

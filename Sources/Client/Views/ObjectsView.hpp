@@ -6,7 +6,7 @@
 #include "Graphics/IGraphics.hpp"
 #include "Graphics/Effects.hpp"
 #include "Client/Gui/Gui.hpp"
-#include "Object.hpp"
+#include "VisualObject.hpp"
 
 namespace Client
 {
@@ -32,7 +32,7 @@ public:
     void objectAttacked(unsigned attacker, unsigned attacked);
 
 private:
-    void objectClicked(Object * object);
+    void objectClicked(VisualObject * object);
     void updateSelectedObjectWindow();
 
     Services::ObjectService & m_objectService;
@@ -42,8 +42,8 @@ private:
     Input::IInput & m_input;
     Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;
-    std::vector<boost::shared_ptr<Object> > m_objects;
-    boost::optional<Object *> m_selectedObject;
+    std::vector<boost::shared_ptr<VisualObject> > m_objects;
+    boost::optional<VisualObject *> m_selectedObject;
 };
 
 }

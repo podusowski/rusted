@@ -11,10 +11,10 @@ namespace Client
 namespace Views
 {
 
-class Object
+class VisualObject
 {
 public:
-    Object(Client::Graphics::IGraphics &, Client::Input::IInput &, Common::Game::Object::ObjectBase &);
+    VisualObject(Client::Graphics::IGraphics &, Client::Input::IInput &, Common::Game::Object::ObjectBase &);
 
     void setRightClickCallback(std::function<void()>);
     void setSelected(bool);
