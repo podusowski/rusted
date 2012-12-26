@@ -14,7 +14,11 @@ namespace Views
 class VisualObject
 {
 public:
-    VisualObject(Client::Graphics::IGraphics &, Client::Input::IInput &, Common::Game::Object::ObjectBase &);
+    VisualObject(
+        Client::Graphics::IGraphics &,
+        Client::Input::IInput &,
+        Common::Game::Object::ObjectBase &,
+        std::string mesh);
 
     void setRightClickCallback(std::function<void()>);
     void setSelected(bool);
