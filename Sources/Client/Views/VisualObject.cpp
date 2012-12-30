@@ -11,15 +11,14 @@ using namespace Client::Views;
 VisualObject::VisualObject(
     Client::Graphics::IGraphics & graphics,
     Client::Input::IInput & input,
-    Common::Game::Object::ObjectBase & object,
-    std::string mesh)
+    Common::Game::Object::ObjectBase & object)
     :
     m_graphics(graphics),
     m_object(object)
 {
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
 
-    //std::string mesh = "Cube.mesh";
+    std::string mesh = object.getMesh();
 
     if (object.is<Common::Game::Object::Asteroid>())
     {

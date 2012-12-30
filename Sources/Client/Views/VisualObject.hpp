@@ -17,8 +17,7 @@ public:
     VisualObject(
         Client::Graphics::IGraphics &,
         Client::Input::IInput &,
-        Common::Game::Object::ObjectBase &,
-        std::string mesh);
+        Common::Game::Object::ObjectBase &);
 
     void setRightClickCallback(std::function<void()>);
     void setSelected(bool);
