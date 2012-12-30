@@ -1,0 +1,40 @@
+
+// blender material: gatherer
+material gatherer 
+{
+    receive_shadows on
+    technique
+    {
+        pass gatherer
+        {
+            ambient 0.3578947359009792 0.3578947359009792 0.3578947359009792 1.0
+            diffuse 0.0 0.0 0.0 1.0
+            specular 0.1578947752714157 0.1578947752714157 0.1578947752714157 1.0 2.25
+            emissive 0.2079999239444721 0.2079999239444721 0.2079999239444721 1.0
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+            texture_unit 
+            {
+                texture gatherer.png
+                tex_address_mode wrap
+                scale 1.0 1.0
+                tex_coord_set 0
+                colour_op modulate
+            }
+        }
+    }
+}

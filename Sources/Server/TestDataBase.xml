@@ -7,9 +7,10 @@
    <objects>
         <object id="1" type="Ship" class="1" x="1"     y="2000" z="1" owner="1" />
         <object id="2" type="Ship" class="2" x="1"     y="4000" z="1" owner="1" />
+        <object id="3" type="Ship" class="3" x="1"     y="5000" z="1" owner="1" />
 
-        <object id="3" type="Ship" class="1" x="2000"  y="2000" z="1" owner="2" />
-        <object id="6" type="Ship" class="2" x="2000"  y="4000" z="1" owner="2" />
+        <object id="10" type="Ship" class="1" x="2000"  y="2000" z="1" owner="2" />
+        <object id="11" type="Ship" class="2" x="2000"  y="4000" z="1" owner="2" />
 
         <object id="100" type="Asteroid" x="2000" y="1"    z="1"    integrity="100" />
         <object id="101" type="Asteroid" x="4000" y="4000" z="2000" integrity="100" />
@@ -33,9 +34,9 @@
         </ship_class>
 
         <!-- gatherer -->
-        <ship_class id="3" speed="100" integrity="100" mesh="Cube.mesh">
+        <ship_class id="3" speed="100" integrity="100" mesh="gatherer.mesh">
             <actions>
-                <action type="3" parameter="1" />
+                <!-- <action type="3" parameter="1" /> -->
             </actions>
         </ship_class>
 
