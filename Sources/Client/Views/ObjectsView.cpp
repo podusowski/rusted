@@ -63,7 +63,7 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
 {
     LOG_DEBUG << "New object:" << object;
 
-    boost::shared_ptr<VisualObject> obj(new VisualObject(m_graphics, m_input, object, "cube.mesh"));
+    boost::shared_ptr<VisualObject> obj(new VisualObject(m_graphics, m_input, object, "Cube.mesh"));
     obj->setRightClickCallback(std::bind(&ObjectsView::objectClicked, this, obj.get()));
     m_objects.push_back(obj);
 }
