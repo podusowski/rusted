@@ -7,9 +7,13 @@ using namespace Server::Game;
 ShipClass::ShipClass(DataBase::DataBaseNode & node) :
     m_id(node.getValue<unsigned>("id")),
     m_speed(node.getValue<unsigned>("speed")),
-    m_integrity(node.getValue<unsigned>("integrity"))
+    m_integrity(node.getValue<unsigned>("integrity")),
+    m_mesh(node.getValue<std::string>("mesh"))
 {
-    LOG_DEBUG << "Ship class loaded, id: " << m_id;
+    LOG_DEBUG << "Ship class loaded, id: " << m_id 
+              << ", speed: " << m_speed 
+              << ", integrity: " << m_integrity
+              << ", mesh: " << m_mesh;
 
     try
     {
@@ -37,6 +41,7 @@ void ShipClass::applyTo(Common::Game::Object::Ship & ship)
 
     ship.setSpeed(m_speed);
     ship.setIntegrity(m_integrity);
+    ship.setMesh(m_mesh);
 }
 
 std::vector<AvailableAction> ShipClass::getAvailableActions()

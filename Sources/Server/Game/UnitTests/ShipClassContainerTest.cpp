@@ -19,6 +19,7 @@ TEST_F(ShipClassContainerTest, LoadShipClasses)
     shipClassNode.setValue("id", 1);
     shipClassNode.setValue("speed", 1);
     shipClassNode.setValue("integrity", 1);
+    shipClassNode.setValue("mesh", "mesh");
 
     ShipClassContainer shipClassContainer(db);
 

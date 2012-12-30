@@ -22,6 +22,7 @@ private:
     unsigned m_id;
     unsigned m_speed;
     unsigned m_integrity;
+    std::string m_mesh;
     std::vector<AvailableAction> m_availableActions;
 };
 
