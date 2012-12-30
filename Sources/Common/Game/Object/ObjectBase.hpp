@@ -16,20 +16,21 @@ namespace Object
 class ObjectBase
 {
 public:
-    ObjectBase() : m_id(0), m_integrity(100) {}
+    ObjectBase();
 
-    unsigned getId() { return m_id; }
-    void setId(unsigned id) { m_id = id; }
+    unsigned getId();
+    void setId(unsigned id);
+
+    virtual void setMesh(std::string mesh);
+    virtual std::string getMesh();
 
     virtual Position getPosition() = 0;
     virtual void setPosition(const Position &) = 0;
 
-    virtual unsigned getIntegrity() { return m_integrity; }
-    virtual void setIntegrity(unsigned integrity) { m_integrity = integrity; }
+    virtual unsigned getIntegrity();
+    virtual void setIntegrity(unsigned integrity);
 
-    virtual float getRoll() { return 0.0; }
-
-    virtual Common::Math::Quaternion getOrientation() { return Common::Math::Quaternion(); }
+    virtual Common::Math::Quaternion getOrientation();
 
     template <class ObjectType> bool is()
     {
@@ -41,6 +42,7 @@ public:
 private:
     unsigned m_id;
     unsigned m_integrity;
+    std::string m_mesh;
 };
 
 }
