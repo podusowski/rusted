@@ -19,6 +19,7 @@ SOURCES+=Game/ShipClass.cpp
 SOURCES+=Game/ShipClassContainer.cpp
 SOURCES+=Game/Actions/Attack.cpp
 SOURCES+=Game/Actions/BuildShip.cpp
+SOURCES+=Game/Actions/Gather.cpp
 SOURCES+=Game/Actions/ActionFactory.cpp
 SOURCES+=Game/Actions/ActionPerformer.cpp
 SOURCES+=DataBase/DataBase.cpp

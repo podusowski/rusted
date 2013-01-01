@@ -10,7 +10,8 @@ namespace Actions
 enum ActionType
 {
     ActionType_Attack = 1,
-    ActionType_BuildShip
+    ActionType_BuildShip,
+    ActionType_Gather
 };
 
 }
