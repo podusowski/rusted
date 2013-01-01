@@ -46,7 +46,7 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
     auto shipCourseInfo = connection1->receive<Common::Messages::ShipCourseInfo>();
 }
 
-TEST(ObjectsSct, GetObjectInfo_StaticObject)
+TEST(ObjectsSct, GetObjectInfo_Asteroid)
 {
 	SCT::Component component("SampleDataBase.xml");
     component.start();
@@ -57,9 +57,9 @@ TEST(ObjectsSct, GetObjectInfo_StaticObject)
     getObjectInfo.id = 3;
     connection1->send(getObjectInfo);
 
-    auto staticObjectInfoResp = connection1->receive<Common::Messages::StaticObjectInfoResp>();
-    EXPECT_EQ(getObjectInfo.id, staticObjectInfoResp->staticObjectId);
-    EXPECT_EQ(100, staticObjectInfoResp->x);
-    EXPECT_EQ(100, staticObjectInfoResp->y);
-    EXPECT_EQ(100, staticObjectInfoResp->z);
+    auto asteroidInfo = connection1->receive<Common::Messages::AsteroidInfo>();
+    EXPECT_EQ(getObjectInfo.id, asteroidInfo->objectId);
+    EXPECT_EQ(100, asteroidInfo->x);
+    EXPECT_EQ(100, asteroidInfo->y);
+    EXPECT_EQ(100, asteroidInfo->z);
 }

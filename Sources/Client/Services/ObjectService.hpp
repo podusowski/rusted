@@ -24,7 +24,7 @@ public:
     void handle(const Common::Messages::VisibleObjects &);
     void handle(const Common::Messages::PlayerShips &);
     void handle(const Common::Messages::ShipInfo &);
-    void handle(const Common::Messages::StaticObjectInfoResp &);
+    void handle(const Common::Messages::AsteroidInfo &);
     void handle(const Common::Messages::ShipCourseInfo &);
 
     void handle(const Common::Messages::AbstractMessage &) {}

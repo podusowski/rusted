@@ -28,15 +28,15 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
     }
     else if (IS(object, Asteroid))
     {
-        Common::Messages::StaticObjectInfoResp staticObjectInfo;
+        Common::Messages::AsteroidInfo asteroidInfo;
 
         Common::Game::Position position = object.getPosition();
-        staticObjectInfo.staticObjectId = object.getId();
-        staticObjectInfo.x = position.getX();
-        staticObjectInfo.y = position.getY();
-        staticObjectInfo.z = position.getZ();
+        asteroidInfo.objectId = object.getId();
+        asteroidInfo.x = position.getX();
+        asteroidInfo.y = position.getY();
+        asteroidInfo.z = position.getZ();
 
-        connection.send(staticObjectInfo);
+        connection.send(asteroidInfo);
     }
 
     #undef IS

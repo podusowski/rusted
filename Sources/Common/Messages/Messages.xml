@@ -89,11 +89,11 @@ Ship
 </message>
 
 <!--
-static objects
+asteroids
 -->
 
-<message id="StaticObjectInfoResp">
-    <param type="int32" name="staticObjectId" />
+<message id="AsteroidInfo">
+    <param type="int32" name="objectId" />
 	<param type="int32" name="x" />
 	<param type="int32" name="y" />
 	<param type="int32" name="z" />

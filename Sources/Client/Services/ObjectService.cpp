@@ -94,12 +94,12 @@ void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
 }
 
 // TODO: if object is present, we need to update it
-void ObjectService::handle(const Common::Messages::StaticObjectInfoResp & message)
+void ObjectService::handle(const Common::Messages::AsteroidInfo & message)
 {
     try
     {
         boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
-        object->setId(message.staticObjectId);
+        object->setId(message.objectId);
         object->setPosition(Common::Game::Position(message.x, message.y, message.z));
         m_universe.add(object);
 
