@@ -3,6 +3,7 @@
 #include "ActionFactory.hpp"
 #include "Attack.hpp"
 #include "BuildShip.hpp"
+#include "Gather.hpp"
 #include "ActionType.hpp"
 
 using namespace Server::Game::Actions;
@@ -52,6 +53,13 @@ boost::shared_ptr<IAction> ActionFactory::create(
             break;
         }
 
+        case ActionType_Gather:
+        {
+            auto & player = m_playerContainer.getBy(connection);
+            ret = boost::shared_ptr<IAction>(new Gather(*selectedObject));
+            break;
+        }
+
         default:
             throw std::runtime_error("unknown action");
     }
@@ -70,6 +78,7 @@ std::string ActionFactory::getActionName(unsigned id, unsigned parameter)
     {
         case ActionType_Attack: return "attack";
         case ActionType_BuildShip: return "build";
+        case ActionType_Gather: return "gather";
         default: throw std::runtime_error("unknown action");
     }
 }
