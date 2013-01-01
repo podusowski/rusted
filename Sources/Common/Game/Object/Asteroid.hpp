@@ -13,6 +13,8 @@ namespace Object
 class Asteroid : public ObjectBase
 {
 public:
+    Asteroid();
+
     void setPosition(const Position &);
     Position getPosition();
 

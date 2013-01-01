@@ -90,20 +90,23 @@ void ObjectsView::updateSelectedObjectWindow()
 {
     if (m_selectedObject)
     {
+        Common::Game::Object::ObjectBase & object = (*m_selectedObject)->getGameObject();
+
         std::stringstream ss;
 
-        if (typeid((*m_selectedObject)->getGameObject()) == typeid(Common::Game::Object::Ship))
+        if (object.is<Common::Game::Object::Ship>())
         {
             Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>((*m_selectedObject)->getGameObject());
             ss << "Ship" << ship.getId() << " integrity: " << ship.getIntegrity();
         }
-        else if (typeid((*m_selectedObject)->getGameObject()) == typeid(Common::Game::Object::Asteroid))
+        else if (object.is<Common::Game::Object::Asteroid>())
         {
-            ss << "Asteroid";
+            auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(object);
+            ss << "Asteroid | carbon: " << asteroid.getCarbon() << " | helium: " << asteroid.getHelium();
         }
         else
         {
-            ss << (*m_selectedObject)->getGameObject().getId();
+            ss << "Object <" << object.getId() << ">";
         }
 
         m_gui->findWidget<MyGUI::TextBox>("TargetTextBox")->setCaption(ss.str());

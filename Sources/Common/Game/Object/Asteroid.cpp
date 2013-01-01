@@ -3,6 +3,10 @@
 using namespace Common::Game::Object;
 using namespace Common::Game;
 
+Asteroid::Asteroid() : m_helium(0), m_carbon(0)
+{
+}
+
 void Asteroid::setPosition(const Position & position)
 {
     m_position = position;
