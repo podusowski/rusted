@@ -62,4 +62,6 @@ TEST(ObjectsSct, GetObjectInfo_Asteroid)
     EXPECT_EQ(100, asteroidInfo->x);
     EXPECT_EQ(100, asteroidInfo->y);
     EXPECT_EQ(100, asteroidInfo->z);
+    EXPECT_EQ(100, asteroidInfo->carbon);
+    EXPECT_EQ(100, asteroidInfo->helium);
 }

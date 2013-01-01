@@ -30,11 +30,15 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
     {
         Common::Messages::AsteroidInfo asteroidInfo;
 
+        auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(object);
+
         Common::Game::Position position = object.getPosition();
         asteroidInfo.objectId = object.getId();
         asteroidInfo.x = position.getX();
         asteroidInfo.y = position.getY();
         asteroidInfo.z = position.getZ();
+        asteroidInfo.carbon = asteroid.getCarbon();
+        asteroidInfo.helium = asteroid.getHelium();
 
         connection.send(asteroidInfo);
     }
