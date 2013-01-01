@@ -12,3 +12,23 @@ Position Asteroid::getPosition()
 {
     return m_position;
 }
+
+unsigned Asteroid::getHelium()
+{
+    return m_helium;
+}
+
+void Asteroid::setHelium(unsigned helium)
+{
+    m_helium = helium;
+}
+
+unsigned Asteroid::getCarbon()
+{
+    return m_carbon;
+}
+
+void Asteroid::setCarbon(unsigned carbon)
+{
+    m_carbon = carbon;
+}

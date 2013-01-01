@@ -38,9 +38,14 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
     {
         boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
 
+        auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(*object);
+
         object->setId(data.getValue<unsigned>("id"));
         object->setPosition(extractPosition(data));
         object->setIntegrity(data.getValue<unsigned>("integrity"));
+
+        asteroid.setCarbon(data.getValue<unsigned>("carbon"));
+        asteroid.setHelium(data.getValue<unsigned>("helium"));
 
         return object;
     }

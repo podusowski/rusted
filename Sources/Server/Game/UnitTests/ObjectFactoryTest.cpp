@@ -77,7 +77,7 @@ TEST_F(ObjectFactoryTest, CreateShip)
     ASSERT_EQ(2u, dynamic_cast<Common::Game::Object::OwnedObjectBase&>(*object).getOwnerId());
 }
 
-TEST_F(ObjectFactoryTest, CreateStaticObjectFromDbNode)
+TEST_F(ObjectFactoryTest, CreateAsteroidFromDbNode)
 {
     Server::DataBase::DataBaseNode node("object");
     node.setValue("type", "Asteroid");
@@ -86,6 +86,8 @@ TEST_F(ObjectFactoryTest, CreateStaticObjectFromDbNode)
     node.setValue("y", 4);
     node.setValue("z", 5);
     node.setValue("integrity", 100);
+    node.setValue("carbon", 10);
+    node.setValue("helium", 20);
 
     Server::DataBase::DataBase db;
     Server::Game::ShipClassContainerMock shipClassContainer;
@@ -93,11 +95,17 @@ TEST_F(ObjectFactoryTest, CreateStaticObjectFromDbNode)
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object = factory.create(node);
 
-    ASSERT_EQ(typeid(Common::Game::Object::Asteroid), typeid(*object));
-    Common::Game::Position position = object->getPosition();
-    ASSERT_EQ(3, position.getX());
-    ASSERT_EQ(4, position.getY());
-    ASSERT_EQ(5, position.getZ());
+    ASSERT_TRUE(object.get());
 
-    ASSERT_EQ(100u, object->getIntegrity());
+    auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(*object);
+
+    Common::Game::Position position = asteroid.getPosition();
+    EXPECT_EQ(3, position.getX());
+    EXPECT_EQ(4, position.getY());
+    EXPECT_EQ(5, position.getZ());
+
+    EXPECT_EQ(100u, asteroid.getIntegrity());
+
+    EXPECT_EQ(10u, asteroid.getCarbon());
+    EXPECT_EQ(20u, asteroid.getHelium());
 }
