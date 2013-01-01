@@ -99,11 +99,18 @@ void ObjectService::handle(const Common::Messages::AsteroidInfo & message)
     try
     {
         boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
+    
+        auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(*object);
+
         object->setId(message.objectId);
         object->setPosition(Common::Game::Position(message.x, message.y, message.z));
+
+        asteroid.setCarbon(message.carbon);
+        asteroid.setHelium(message.helium);
+
         m_universe.add(object);
 
-        LOG_DEBUG << "New static object visible: " << TYPENAME(*object);
+        LOG_DEBUG << "New asteroid visible: " << TYPENAME(*object);
     }
     catch (std::exception & ex)
     {
