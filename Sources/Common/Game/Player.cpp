@@ -63,3 +63,23 @@ Common::Game::Object::ObjectBase & Player::getFocusedObject()
     return *m_focusedObject;
 }
 
+unsigned Player::getHelium()
+{
+    return m_helium;
+}
+
+void Player::setHelium(unsigned helium)
+{
+    m_helium = helium;
+}
+
+unsigned Player::getCarbon()
+{
+    return m_carbon;
+}
+
+void Player::setCarbon(unsigned carbon)
+{
+    m_carbon = carbon;
+}
+

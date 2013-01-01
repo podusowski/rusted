@@ -35,9 +35,8 @@ TEST(UserSct, Authorize)
 		connection->send(getPlayerResourcesInfo);
 
 		auto playerResourcesInfo = connection->receive<Common::Messages::PlayerResourcesInfo>();
+		EXPECT_EQ(0xf00d, playerResourcesInfo->helium);
 		EXPECT_EQ(0xf00d, playerResourcesInfo->carbon);
-		EXPECT_EQ(0xf00d, playerResourcesInfo->uranium);
-		EXPECT_EQ(0xf00d, playerResourcesInfo->credits);
 	}
 }
 

@@ -13,10 +13,11 @@ PlayerService::PlayerService(Common::Game::Universe & universe, Server::Game::Pl
 
 void PlayerService::handle(const Common::Messages::GetPlayerResourcesInfo &, Network::IConnection & connection)
 {
+    Common::Game::Player & player = m_playerContainer.getBy(connection);
+
     Common::Messages::PlayerResourcesInfo resp;
     resp.carbon = 0xf00d;
-    resp.uranium = 0xf00d;
-    resp.credits = 0xf00d;
+    resp.helium = 0xf00d;
     connection.send(resp);
 }
 

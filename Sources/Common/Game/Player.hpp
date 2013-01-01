@@ -28,11 +28,20 @@ public:
     void focusObject(Common::Game::Object::ObjectBase &);
     Common::Game::Object::ObjectBase & getFocusedObject();
 
+    unsigned getHelium();
+    void setHelium(unsigned);
+
+    unsigned getCarbon();
+    void setCarbon(unsigned);
+
 private:
     boost::optional<int> m_id;
     PlayerState m_state;
     Common::Game::Object::ObjectBase * m_selectedObject;
     Common::Game::Object::ObjectBase * m_focusedObject;
+
+    unsigned m_helium;
+    unsigned m_carbon;
 };
 
 }

@@ -29,9 +29,8 @@ player specific
 <message id="GetPlayerResourcesInfo" />
 
 <message id="PlayerResourcesInfo">
+	<param type="int32" name="helium" />
 	<param type="int32" name="carbon" />
-	<param type="int32" name="uranium" />
-	<param type="int32" name="credits" />
 </message>
 
 <message id="RustedTimeEpochReq" />
