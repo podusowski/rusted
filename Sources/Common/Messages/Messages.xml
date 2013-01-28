@@ -125,6 +125,12 @@ objects
     <param type="int32" name="id" />
 </message>
 
+<message id="ObjectCargoInfo">
+    <param type="int32" name="id" />
+	<param type="int32" name="carbon" />
+	<param type="int32" name="helium" />
+</message>
+
 <!--
 actions
 -->
