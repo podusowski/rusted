@@ -7,10 +7,10 @@ namespace Game
 namespace Object
 {
 
-class Cargo
+class CargoHold
 {
 public:
-    Cargo();
+    CargoHold();
 
     unsigned getHelium();
     void setHelium(unsigned);
