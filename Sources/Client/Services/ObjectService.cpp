@@ -105,9 +105,6 @@ void ObjectService::handle(const Common::Messages::AsteroidInfo & message)
         object->setId(message.objectId);
         object->setPosition(Common::Game::Position(message.x, message.y, message.z));
 
-        asteroid.setCarbon(message.carbon);
-        asteroid.setHelium(message.helium);
-
         m_universe.add(object);
 
         LOG_DEBUG << "New asteroid visible: " << TYPENAME(*object);

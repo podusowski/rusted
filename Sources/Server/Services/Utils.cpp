@@ -37,8 +37,6 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
         asteroidInfo.x = position.getX();
         asteroidInfo.y = position.getY();
         asteroidInfo.z = position.getZ();
-        asteroidInfo.carbon = asteroid.getCarbon();
-        asteroidInfo.helium = asteroid.getHelium();
 
         connection.send(asteroidInfo);
 

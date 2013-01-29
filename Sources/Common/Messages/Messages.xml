@@ -97,8 +97,6 @@ asteroids
 	<param type="int32" name="x" />
 	<param type="int32" name="y" />
 	<param type="int32" name="z" />
-	<param type="int32" name="carbon" />
-	<param type="int32" name="helium" />
 </message>
 
 <!--
