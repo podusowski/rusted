@@ -21,6 +21,7 @@ public:
 
 private:
     Common::Game::Position extractPosition(Server::DataBase::DataBaseNode & data);
+    void fillCargoHold(DataBase::DataBaseNode &, Common::Game::Object::CargoHold &);
 
     DataBase::DataBase & m_db;
     IShipClassContainer & m_shipClassContainer;

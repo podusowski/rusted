@@ -18,6 +18,7 @@ public:
 
 private:
     void sendShipInfo(Common::Game::Object::Ship &, Network::IConnection &);
+    void sendObjectCargoInfo(Common::Game::Object::ObjectBase &, Network::IConnection &);
 };
 
 }

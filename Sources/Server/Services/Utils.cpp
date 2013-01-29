@@ -41,6 +41,8 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
         asteroidInfo.helium = asteroid.getHelium();
 
         connection.send(asteroidInfo);
+
+        sendObjectCargoInfo(asteroid, connection);
     }
 
     #undef IS
@@ -83,3 +85,18 @@ void Utils::sendShipInfo(Common::Game::Object::Ship & ship, Network::IConnection
 
     connection.send(shipInfo);
 }
+
+void Utils::sendObjectCargoInfo(Common::Game::Object::ObjectBase & object, Network::IConnection & connection)
+{
+    Common::Messages::ObjectCargoInfo objectCargoInfo;
+    objectCargoInfo.id = object.getId();
+
+    object.visitCargoHold([&objectCargoInfo](Common::Game::Object::CargoHold & cargoHold) -> void
+    {
+        objectCargoInfo.carbon = cargoHold.getCarbon();
+        objectCargoInfo.helium = cargoHold.getHelium();
+    });
+
+    connection.send(objectCargoInfo);
+}
+

@@ -1,3 +1,5 @@
+#include <functional>
+
 #include <boost/make_shared.hpp>
 
 #include "ObjectFactory.hpp"
@@ -15,6 +17,8 @@ ObjectFactory::ObjectFactory(DataBase::DataBase & db, IShipClassContainer & ship
 
 boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server::DataBase::DataBaseNode & data)
 {
+    using namespace std::placeholders;
+
     std::string type = data.getValue<std::string>("type");
 
     if (type == "Ship")
@@ -31,6 +35,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
         auto & shipClass = m_shipClassContainer.getById(shipClassId);
         shipClass.applyTo(ship);
         ship.setClass(shipClassId);
+        ship.visitCargoHold(std::bind(&ObjectFactory::fillCargoHold, this, data, _1));
 
         return object;
     }
@@ -38,14 +43,10 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
     {
         boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
 
-        auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(*object);
-
         object->setId(data.getValue<unsigned>("id"));
         object->setPosition(extractPosition(data));
         object->setIntegrity(data.getValue<unsigned>("integrity"));
-
-        asteroid.setCarbon(data.getValue<unsigned>("carbon"));
-        asteroid.setHelium(data.getValue<unsigned>("helium"));
+        object->visitCargoHold(std::bind(&ObjectFactory::fillCargoHold, this, data, _1));
 
         return object;
     }
@@ -83,5 +84,13 @@ Common::Game::Position ObjectFactory::extractPosition(Server::DataBase::DataBase
     position.setY(data.getValue<int>("y"));
     position.setZ(data.getValue<int>("z"));
     return position;
+}
+
+void ObjectFactory::fillCargoHold(DataBase::DataBaseNode & node, Common::Game::Object::CargoHold & cargoHold)
+{
+    LOG_DEBUG << "Filling cargoHold";
+
+    cargoHold.setCarbon(node.getValue<unsigned>("carbon", 0));
+    cargoHold.setHelium(node.getValue<unsigned>("helium", 0));
 }
 

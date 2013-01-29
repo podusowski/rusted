@@ -106,6 +106,12 @@ TEST_F(ObjectFactoryTest, CreateAsteroidFromDbNode)
 
     EXPECT_EQ(100u, asteroid.getIntegrity());
 
-    EXPECT_EQ(10u, asteroid.getCarbon());
-    EXPECT_EQ(20u, asteroid.getHelium());
+    asteroid.visitCargoHold(
+        [](Common::Game::Object::CargoHold & cargoHold) -> void
+        {
+            EXPECT_EQ(10u, cargoHold.getCarbon()); 
+            EXPECT_EQ(20u, cargoHold.getHelium()); 
+        }
+    );
 }
+

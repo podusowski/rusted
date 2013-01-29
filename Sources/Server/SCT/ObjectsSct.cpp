@@ -62,6 +62,9 @@ TEST(ObjectsSct, GetObjectInfo_Asteroid)
     EXPECT_EQ(100, asteroidInfo->x);
     EXPECT_EQ(100, asteroidInfo->y);
     EXPECT_EQ(100, asteroidInfo->z);
-    EXPECT_EQ(100, asteroidInfo->carbon);
-    EXPECT_EQ(100, asteroidInfo->helium);
+
+    auto objectCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
+    EXPECT_EQ(getObjectInfo.id, objectCargoInfo->id);
+    EXPECT_EQ(100, objectCargoInfo->carbon);
+    EXPECT_EQ(100, objectCargoInfo->helium);
 }
