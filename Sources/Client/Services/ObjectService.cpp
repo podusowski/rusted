@@ -100,8 +100,6 @@ void ObjectService::handle(const Common::Messages::AsteroidInfo & message)
     {
         boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
     
-        auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(*object);
-
         object->setId(message.objectId);
         object->setPosition(Common::Game::Position(message.x, message.y, message.z));
 
@@ -136,6 +134,18 @@ void ObjectService::handle(const Common::Messages::ShipCourseInfo & shipCourseIn
         shipCourseInfo.startTimeMiliseconds);
 
     ship.applyTrajectoryDescription(description);
+}
+
+void ObjectService::handle(const Common::Messages::ObjectCargoInfo & objectCargoInfo)
+{
+    LOG_DEBUG << "Got ObjectCargoInfo for object:" << objectCargoInfo.id;
+
+    auto & object = m_universe.getById<Common::Game::Object::ObjectBase>(objectCargoInfo.id);
+    object.visitCargoHold([&objectCargoInfo](Common::Game::Object::CargoHold & cargoHold) -> void
+    {
+        cargoHold.setCarbon(objectCargoInfo.carbon);
+        cargoHold.setHelium(objectCargoInfo.helium);
+    });
 }
 
 void ObjectService::tryCallPlayerShipsFetchedCallback(int shipId)
