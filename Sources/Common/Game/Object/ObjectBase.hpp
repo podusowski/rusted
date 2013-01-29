@@ -5,6 +5,7 @@
 #include "Common/Math/Quaternion.hpp"
 #include "Cake/DependencyInjection/Inject.hpp"
 #include "Common/Game/Position.hpp"
+#include "CargoHold.hpp"
 
 namespace Common
 {
@@ -32,6 +33,8 @@ public:
 
     virtual Common::Math::Quaternion getOrientation();
 
+    void visitCargoHold(std::function<void(CargoHold &)>);
+
     template <class ObjectType> bool is()
     {
         return dynamic_cast<ObjectType*>(this) != nullptr;
@@ -43,6 +46,7 @@ private:
     unsigned m_id;
     unsigned m_integrity;
     std::string m_mesh;
+    CargoHold m_cargoHold;
 };
 
 }
