@@ -18,17 +18,8 @@ public:
     void setPosition(const Position &);
     Position getPosition();
 
-    unsigned getHelium();
-    void setHelium(unsigned);
-
-    unsigned getCarbon();
-    void setCarbon(unsigned);
-
 private:
     Position m_position;
-
-    unsigned m_helium;
-    unsigned m_carbon;
 };
 
 }

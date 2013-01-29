@@ -34,6 +34,7 @@ public:
 private:
     void objectClicked(VisualObject * object);
     void updateSelectedObjectWindow();
+    std::string formatResourcesString(Common::Game::Object::ObjectBase &);
 
     Services::ObjectService & m_objectService;
     Services::PlayerActionService & m_playerActionService;
