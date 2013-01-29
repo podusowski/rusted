@@ -25,24 +25,11 @@ boost::shared_ptr<IAction> ActionFactory::create(
     auto & focusedObject = player.getFocusedObject();
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(focusedObject);
 
-    Common::Game::Object::ObjectBase * selectedObject = nullptr;
-
-    // FIXME: you know what - but not now, when we're going to develop object deletion, it
-    //        will most likely be weak_ptr anyway
-    try
-    {
-        selectedObject = &(player.getSelectedObject());
-    }
-    catch (...)
-    {
-    }
-
     switch (id)
     {
         case ActionType_Attack:
         {
-            assert(selectedObject);
-            ret = boost::shared_ptr<IAction>(new Attack(m_playerContainer, focusedShip, *selectedObject));
+            ret = boost::shared_ptr<IAction>(new Attack(m_playerContainer, focusedShip, player.getSelectedObject()));
             break;
         }
 
@@ -56,7 +43,7 @@ boost::shared_ptr<IAction> ActionFactory::create(
         case ActionType_Gather:
         {
             auto & player = m_playerContainer.getBy(connection);
-            ret = boost::shared_ptr<IAction>(new Gather(*selectedObject));
+            ret = boost::shared_ptr<IAction>(new Gather(player.getSelectedObject()));
             break;
         }
 
