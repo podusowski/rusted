@@ -40,6 +40,19 @@ public:
         return boost::lexical_cast<T>(m_values[name]);
     }
 
+    template <typename T> 
+    const T getValue(const std::string & name, const T & defaultValue)
+    {
+        if (m_values.find(name) == m_values.end())
+        {
+            return defaultValue;
+        }
+        else
+        {
+            return boost::lexical_cast<T>(m_values[name]);
+        }
+    }
+
 private:
     std::string m_name;
     std::map<std::string, std::string> m_values;
