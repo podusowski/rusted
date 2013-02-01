@@ -21,7 +21,7 @@ public:
 
     void run()
     {
-        for (int i = 0; i < 20; i++)
+        for (int i = 0; i < 50; i++)
         {
             boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(m_component, m_user, m_password); 
 
