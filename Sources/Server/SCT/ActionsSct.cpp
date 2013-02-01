@@ -144,3 +144,39 @@ TEST(ActionsSct, BuildShip)
     connection2->receive<Common::Messages::ShipCourseInfo>();
 }
 
+TEST(ActionsSct, Gather)
+{
+    SCT::Component component("SampleDataBase.xml");
+    component.start();
+
+    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+
+    // client has to focus its own gather capable object 
+    Common::Messages::FocusObject focusObject;
+    focusObject.id = 1;
+    connection1->send(focusObject);
+
+    // select asteroid
+    Common::Messages::SelectObject selectObject;
+    selectObject.id = 3;
+    connection1->send(selectObject);
+
+    // execute action 3 - gather
+    Common::Messages::ExecuteAction executeAction;
+    executeAction.id = 3;
+    //executeAction.parameter = 2;
+    connection1->send(executeAction);
+
+    connection1->receive<Common::Messages::ActionStarted>();
+    connection1->receive<Common::Messages::GlobalCooldownExpired>();
+    connection1->receive<Common::Messages::ActionFinished>();
+
+    // receive info about player ship cargohold
+    auto shipCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
+    EXPECT_EQ(1, shipCargoInfo->id);
+
+    // receive info about asteroid cargohold
+    auto asteroidCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
+    EXPECT_EQ(3, asteroidCargoInfo->id);
+}
+

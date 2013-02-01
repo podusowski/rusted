@@ -35,15 +35,13 @@ boost::shared_ptr<IAction> ActionFactory::create(
 
         case ActionType_BuildShip:
         {
-            auto & player = m_playerContainer.getBy(connection);
             ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer, parameter));
             break;
         }
 
         case ActionType_Gather:
         {
-            auto & player = m_playerContainer.getBy(connection);
-            ret = boost::shared_ptr<IAction>(new Gather(player.getSelectedObject()));
+            ret = boost::shared_ptr<IAction>(new Gather(connection, m_playerContainer, focusedShip, player.getSelectedObject()));
             break;
         }
 
