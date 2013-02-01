@@ -56,6 +56,12 @@ void Component::start()
     //m_port = rand() % 1000 + 1025;
     m_port = s_port ++;
 
+    if (getenv("SERVER_SCT_PORT"))
+    {
+        m_port = boost::lexical_cast<unsigned>(getenv("SERVER_SCT_PORT"));
+        LOG_INFO << "Port overwritten to " << m_port << " by SERVER_SCT_PORT environment variable";
+    }
+
     const std::string filename = "./Server";
 
     // start the component
