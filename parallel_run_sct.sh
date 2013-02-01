@@ -3,7 +3,7 @@ red="\033[1;31m"
 reset="\033[0;m"
 
 tool=""
-pattern=".*"
+pattern='.*'
 
 while getopts 't:p:' opt; do
     case $opt in
@@ -22,18 +22,6 @@ echo pattern: $pattern
 root=`pwd`
 pushd _build
 
-if [ "$tool" = "helgrind" ]; then
-    wrapper="valgrind --tool=helgrind --log-file=$root/helgrind-%p --trace-children=yes --child-silent-after-fork=yes"
-    export SERVER_SCT_WAIT_FOR_APP_TIME=10
-    rm -f $root/helgrind*
-fi
-
-if [ "$tool" = "memcheck" ]; then
-    wrapper="valgrind --tool=memcheck --log-file=$root/memcheck-%p --trace-children=yes --child-silent-after-fork=yes"
-    export SERVER_SCT_WAIT_FOR_APP_TIME=10
-    rm -f $root/memcheck*
-fi
-
 function run_single_test()
 {
     name=$1
@@ -41,6 +29,16 @@ function run_single_test()
     log_dir=../_build/sct/
 
     mkdir -p $log_dir
+
+    if [ "$tool" = "helgrind" ]; then
+        wrapper="valgrind --tool=helgrind --log-file=$log_dir/$name.helgrind --trace-children=yes --child-silent-after-fork=yes"
+        export SERVER_SCT_WAIT_FOR_APP_TIME=10
+    fi
+
+    if [ "$tool" = "memcheck" ]; then
+        wrapper="valgrind --tool=memcheck --log-file=$log_dir/$name.emcheck --trace-children=yes --child-silent-after-fork=yes"
+        export SERVER_SCT_WAIT_FOR_APP_TIME=10
+    fi
 
     SERVER_SCT_PORT=$port $wrapper ./ServerSCT --gtest_filter=$name > $log_dir/$name.out 2> $log_dir/$name.err
 
@@ -50,7 +48,7 @@ function run_single_test()
         result="  ${green}pass$reset "
     fi
 
-    echo -e "$result $name port: $port `grep Failure $log_dir/$name.out`"
+    echo -e "$result $name `grep Failure $log_dir/$name.out`"
 }
 
 function read_testcases()
