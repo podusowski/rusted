@@ -36,7 +36,7 @@
         <!-- gatherer -->
         <ship_class id="3" speed="100" integrity="100" mesh="gatherer.mesh">
             <actions>
-                <!-- <action type="3" parameter="1" /> -->
+                <action type="3" parameter="1" />
             </actions>
         </ship_class>
 
