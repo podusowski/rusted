@@ -23,9 +23,13 @@ void Gui::loadLayout(const std::string & layout)
 {
     LOG_DEBUG << "Loading GUI layout: " << layout;
 
+    MyGUI::LayerManager::getInstancePtr()->resizeView(MyGUI::IntSize(800, 600));
+
     unloadAllLayouts();
     auto l = MyGUI::LayoutManager::getInstance().loadLayout(layout);
     m_myGuiLoadedLayouts.push_back(l);
+
+    MyGUI::LayerManager::getInstancePtr()->resizeView(MyGUI::IntSize(m_ogreRenderWindow.getWidth(), m_ogreRenderWindow.getHeight()));
 }
 
 void Gui::unloadAllLayouts()

@@ -1,12 +1,19 @@
 #include <cassert>
 
+#include "Cake/DependencyInjection/Registry.hpp"
+#include "Cake/Configuration/Configuration.hpp"
+
 #include "Client/Graphics/Graphics.hpp"
 #include "Gui/Gui.hpp"
 #include "Input/Input.hpp"
 
-int main(int argc, char * argv[])
+int main(int argc, const char ** argv)
 {
     using namespace Client;
+    using namespace Cake::DependencyInjection;
+
+    boost::shared_ptr<Cake::Configuration::Configuration> configuration(new Cake::Configuration::Configuration(argc, argv));
+    forInterface<Cake::Configuration::Configuration>().use(configuration);
 
     Graphics::Graphics graphics;
     Gui::Gui gui(graphics.getRenderWindow(), graphics.getSceneManager());
