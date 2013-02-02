@@ -4,6 +4,8 @@ reset="\033[0;m"
 
 tool=""
 pattern='.*'
+root=`pwd`
+log_dir=$root/_build/sct/
 
 while getopts 't:p:' opt; do
     case $opt in
@@ -16,17 +18,15 @@ while getopts 't:p:' opt; do
     esac
 done
 
+echo "Running ServerSCT"
 echo tool: $tool
-echo pattern: $pattern
 
-root=`pwd`
-pushd _build
+pushd _build > /dev/null
 
 function run_single_test()
 {
     name=$1
     port=$2
-    log_dir=../_build/sct/
 
     mkdir -p $log_dir
 
@@ -78,7 +78,5 @@ done
 
 wait
 
-#$wrapper ./ServerSCT $@
-
-popd
+popd > /dev/null
 
