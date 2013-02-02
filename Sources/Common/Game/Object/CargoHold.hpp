@@ -14,9 +14,11 @@ public:
 
     unsigned getHelium();
     void setHelium(unsigned);
+    void changeHelium(int);
 
     unsigned getCarbon();
     void setCarbon(unsigned);
+    void changeCarbon(int);
 
 private:
     unsigned m_helium;

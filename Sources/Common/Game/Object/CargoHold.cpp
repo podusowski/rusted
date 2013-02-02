@@ -16,6 +16,11 @@ void CargoHold::setHelium(unsigned value)
     m_helium = value;
 }
 
+void CargoHold::changeHelium(int delta)
+{
+    m_helium += delta;
+}
+
 unsigned CargoHold::getCarbon()
 {
     return m_carbon;
@@ -24,5 +29,10 @@ unsigned CargoHold::getCarbon()
 void CargoHold::setCarbon(unsigned value)
 {
     m_carbon = value;
+}
+
+void CargoHold::changeCarbon(int delta)
+{
+    m_carbon += delta;
 }
 

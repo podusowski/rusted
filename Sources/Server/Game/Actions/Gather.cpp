@@ -22,7 +22,20 @@ Common::Game::TimeValue Gather::start()
 
 void Gather::finish()
 {
-    // TODO: transfer goods
+    using namespace Common::Game::Object;
+
+    m_asteroid.visitCargoHold([&](CargoHold & asteroidCargoHold) -> void
+    {
+        m_focusedShip.visitCargoHold([&](CargoHold & shipCargoHold) -> void
+        {
+            asteroidCargoHold.changeCarbon(-10);
+            asteroidCargoHold.changeHelium(-10);
+
+            shipCargoHold.changeCarbon(10);
+            shipCargoHold.changeHelium(10);
+        });
+    });
+
     sendCargoInfoToClients();
 }
 
