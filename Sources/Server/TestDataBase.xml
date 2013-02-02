@@ -19,17 +19,18 @@
     <ship_classes>
 
         <!-- figter -->
-        <ship_class id="1" speed="500" integrity="1000" mesh="Cube.mesh">
+        <ship_class id="1" speed="500" integrity="1000" mesh="Cube.mesh" name="Fighter">
             <actions>
                 <action type="1" parameter="1" />
             </actions>
         </ship_class>
 
         <!-- construction ship -->
-        <ship_class id="2" speed="100" integrity="100" mesh="Cube.mesh">
+        <ship_class id="2" speed="100" integrity="100" mesh="Constructor.mesh">
             <actions>
                 <action type="2" parameter="1" />
                 <action type="2" parameter="2" />
+                <action type="2" parameter="3" />
             </actions>
         </ship_class>
 

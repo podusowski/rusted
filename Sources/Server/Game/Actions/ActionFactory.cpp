@@ -61,10 +61,24 @@ std::string ActionFactory::getActionName(unsigned id, unsigned parameter)
 {
     switch (id)
     {
-        case ActionType_Attack: return "attack";
-        case ActionType_BuildShip: return "build";
-        case ActionType_Gather: return "gather";
-        default: throw std::runtime_error("unknown action");
+        case ActionType_Attack:
+        {
+            return "attack";
+        }
+        case ActionType_BuildShip:
+        {
+            std::stringstream ss;
+            ss << "build" << parameter;
+            return ss.str();
+        }
+        case ActionType_Gather:
+        {
+            return "gather";
+        }
+        default:
+        {
+            throw std::runtime_error("unknown action");
+        }
     }
 }
 
