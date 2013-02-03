@@ -48,6 +48,7 @@ private:
     void playerShipsFetched();
     void objectAdded(Common::Game::Object::ObjectBase &);
     void updatePlayerShipsListBox();
+    void updateFocusedShipWindow();
 
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;

@@ -49,6 +49,7 @@ void PilotView::deactivate()
 void PilotView::frameStarted()
 {
     updateShipPosition();
+    updateFocusedShipWindow();
     m_camera.update();
 }
 
@@ -207,5 +208,19 @@ void PilotView::updatePlayerShipsListBox()
         ss << "Ship " << ship->getId();
         shipListBox->addItem(ss.str(), MyGUI::Any(ship->getId()));
     }
+}
+
+void PilotView::updateFocusedShipWindow()
+{
+    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
+
+    std::stringstream ss;
+
+    focusedShip.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+    {
+        ss << "C: " << cargoHold.getCarbon() << " H: " << cargoHold.getHelium();
+    });
+
+    m_gui->findWidget<MyGUI::TextBox>("FocusTextBox")->setCaption(ss.str());
 }
 
