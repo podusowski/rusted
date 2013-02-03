@@ -28,6 +28,9 @@ private:
     Common::Game::Player & m_player;
     int m_distance;
     Ogre::Quaternion m_userOrientation;
+    int m_userXAngle;
+    int m_userYAngle;
+    bool m_userOrientationChanging;
 };
 
 }
