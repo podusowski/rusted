@@ -2,6 +2,7 @@
 
 #include <functional>
 
+#include <OgreRoot.h>
 #include "Client/Input/IMouseListener.hpp"
 
 namespace Client

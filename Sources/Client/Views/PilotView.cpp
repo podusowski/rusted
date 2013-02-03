@@ -19,7 +19,7 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
     m_gui(gui),
     m_universe(universe),
     m_player(player),
-    m_camera(graphics, player)
+    m_camera(graphics, input, player)
 {
 }
 

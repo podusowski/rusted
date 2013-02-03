@@ -5,11 +5,12 @@
 
 using namespace Client::Views;
 
-Camera::Camera(Graphics::IGraphics & graphics, Common::Game::Player & player) :
+Camera::Camera(Graphics::IGraphics & graphics, Input::IInput & input, Common::Game::Player & player) :
     m_graphics(graphics),
     m_player(player),
     m_distance(1000)
 {
+    input.addMouseListener(*this);
 }
 
 Camera::~Camera()
@@ -26,6 +27,7 @@ void Camera::update()
     auto orientation = ship.getOrientation();
     auto cameraOrientation = m_graphics.toOgreQuaternion(orientation);
 
+
     int angle = 20;
 
     auto cameraPosition = m_graphics.toOgreVector3(position);
@@ -33,6 +35,9 @@ void Camera::update()
     cameraPosition += cameraOrientation * cameraPositionDelta;
 
     cameraOrientation = cameraOrientation * Ogre::Quaternion(Ogre::Degree(90 - angle), Ogre::Vector3(1, 0, 0));
+
+    // apply user orientation
+    cameraOrientation = cameraOrientation * m_userOrientation;
 
     Ogre::Camera & camera = m_graphics.getCamera();
     camera.setPosition(cameraPosition);
@@ -47,5 +52,17 @@ void Camera::zoomIn()
 void Camera::zoomOut()
 {
     m_distance -= 100;
+}
+
+void Camera::mouseMoved(const OIS::MouseState & state)
+{
+}
+
+void Camera::mousePressed(const OIS::MouseButtonID &, const OIS::MouseEvent &, unsigned x, unsigned y)
+{
+}
+
+void Camera::mouseReleased(const OIS::MouseButtonID & button, unsigned x, unsigned y)
+{
 }
 
