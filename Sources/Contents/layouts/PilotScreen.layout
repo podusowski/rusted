@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MyGUI type="Layout" version="3.2.0">
 
-    <Widget type="Window" skin="Window" position="10 10 300 100" align="Left Top" layer="Main">
+    <Widget type="Window" skin="Window" position="10 10 200 60" align="Left Top" layer="Main">
         <Property key="Caption" value="Navigation"/>
         <Property key="Snap" value="false"/>
         <Widget type="TextBox" skin="TextBox" name="NavigationTextBox" align="Stretch" position_real="0.10 0.10 0.80 0.80">
@@ -17,13 +17,21 @@
         </Widget>
     </Widget>
 
+    <Widget type="Window" skin="Window" position="190 10 300 100" align="Right Top" layer="Main">
+        <Property key="Caption" value="Focus" />
+        <Property key="Snap" value="false"/>
+        <Widget type="TextBox" skin="TextBox" name="FocusTextBox" position_real="0.10 0.10 0.80 0.80">
+            <Property key="Caption" value="<focus>"/>
+        </Widget>
+    </Widget>
+
     <Widget type="Window" skin="Window" position="10 120 60 400" align="Left VStretch" layer="Main" name="ActionsPanel">
         <Property key="Caption" value="Actions"/>
         <Property key="Snap" value="false"/>
     </Widget>
 
     <Widget type="Window" skin="Window" position="690 120 100 400" align="Right Top" layer="Main">
-        <Property key="Caption" value="My ships"/>
+        <Property key="Caption" value="Fleet"/>
         <Property key="Snap" value="false"/>
         <Widget type="ListBox" name="ShipListBox" skin="ListBox" position_real="0 0 1 1"/>
     </Widget>

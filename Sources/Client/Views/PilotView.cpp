@@ -57,13 +57,13 @@ void PilotView::updateShipPosition()
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
 
     std::stringstream ss;
-    ss << "crt: " << focusedShip.getPosition();
+    ss << "POS: " << focusedShip.getPosition();
 
     auto description = focusedShip.getTrajectoryDescription();
 
     if (focusedShip.getPosition() != description.destination)
     {
-        ss << " | dst: " << description.destination;
+        ss << " | DST: " << description.destination;
     }
 
     m_gui->findWidget<MyGUI::TextBox>("NavigationTextBox")->setCaption(ss.str());
