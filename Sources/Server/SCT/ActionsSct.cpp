@@ -35,21 +35,21 @@ TEST(ActionsSct, FetchAvailableActions)
     auto availableActions = connection1->receive<Common::Messages::AvailableActions>();
     ASSERT_EQ(4, availableActions->actions.size());
 
+    // attack
     EXPECT_EQ(1, availableActions->actions[0].get<0>()); // action id
     EXPECT_EQ(1, availableActions->actions[0].get<1>()); // action parameter
-    EXPECT_EQ("attack", availableActions->actions[0].get<2>());
 
+    // attack
     EXPECT_EQ(1, availableActions->actions[1].get<0>()); // action id
     EXPECT_EQ(2, availableActions->actions[1].get<1>()); // action parameter
-    EXPECT_EQ("attack", availableActions->actions[1].get<2>());
 
+    // build 
     EXPECT_EQ(2, availableActions->actions[2].get<0>());
     EXPECT_EQ(1, availableActions->actions[2].get<1>());
-    EXPECT_EQ("build", availableActions->actions[2].get<2>());
 
+    // gather
     EXPECT_EQ(3, availableActions->actions[3].get<0>());
     EXPECT_EQ(1, availableActions->actions[3].get<1>());
-    EXPECT_EQ("gather", availableActions->actions[3].get<2>());
 }
 
 TEST(ActionsSct, AttackObject)
