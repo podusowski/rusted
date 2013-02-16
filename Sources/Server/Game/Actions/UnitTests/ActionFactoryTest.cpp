@@ -38,14 +38,3 @@ TEST_F(ActionFactoryTest, BuildAttack)
     ASSERT_EQ(typeid(Server::Game::Actions::Attack), typeid(*attackAction));
 }
 
-TEST_F(ActionFactoryTest, GetName)
-{
-    Server::Game::PlayerContainerMock playerContainer;
-    Common::Game::Universe universe;
-
-    Server::Game::Actions::ActionFactory factory(universe, playerContainer);
-
-    EXPECT_EQ("attack", factory.getActionName(1, 1));
-    EXPECT_EQ("build", factory.getActionName(2, 1));
-}
-
