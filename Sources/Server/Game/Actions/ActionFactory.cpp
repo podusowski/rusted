@@ -28,22 +28,16 @@ boost::shared_ptr<IAction> ActionFactory::create(
     switch (id)
     {
         case ActionType_Attack:
-        {
             ret = boost::shared_ptr<IAction>(new Attack(m_playerContainer, focusedShip, player.getSelectedObject()));
             break;
-        }
 
         case ActionType_BuildShip:
-        {
             ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer, parameter));
             break;
-        }
 
         case ActionType_Gather:
-        {
-            ret = boost::shared_ptr<IAction>(new Gather(connection, m_playerContainer, focusedShip, player.getSelectedObject()));
+            ret = boost::shared_ptr<IAction>(new Gather(connection, m_playerContainer, player));
             break;
-        }
 
         default:
             throw std::runtime_error("unknown action");

@@ -5,13 +5,11 @@ using namespace Server::Game::Actions;
 Gather::Gather(
     Server::Network::IConnection & connection,
     Server::Game::IPlayerContainer & playerContainer, 
-    Common::Game::Object::Ship & focusedShip,
-    Common::Game::Object::ObjectBase & object)
+    Common::Game::IPlayer & player)
     : 
     m_connection(connection),
     m_playerContainer(playerContainer),
-    m_focusedShip(focusedShip),
-    m_asteroid(dynamic_cast<Common::Game::Object::Asteroid&>(object))
+    m_player(player)
 {
 }
 
@@ -23,10 +21,13 @@ Common::Game::TimeValue Gather::start()
 void Gather::finish()
 {
     using namespace Common::Game::Object;
+    
+    auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid &>(m_player.getSelectedObject());
+    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getFocusedObject());
 
-    m_asteroid.visitCargoHold([&](CargoHold & asteroidCargoHold) -> void
+    asteroid.visitCargoHold([&](CargoHold & asteroidCargoHold) -> void
     {
-        m_focusedShip.visitCargoHold([&](CargoHold & shipCargoHold) -> void
+        focusedShip.visitCargoHold([&](CargoHold & shipCargoHold) -> void
         {
             asteroidCargoHold.changeCarbon(-10);
             asteroidCargoHold.changeHelium(-10);
@@ -42,13 +43,15 @@ void Gather::finish()
 void Gather::sendCargoInfoToClients()
 {
     // send cargoinfo of player's ship
-    m_servicesUtils.sendObjectCargoInfo(m_focusedShip, m_connection);
+    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getFocusedObject());
+    m_servicesUtils.sendObjectCargoInfo(focusedShip, m_connection);
 
     // send asteroid cargoinfo
+    auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid &>(m_player.getSelectedObject());
     auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
-        m_servicesUtils.sendObjectCargoInfo(m_asteroid, *connection);
+        m_servicesUtils.sendObjectCargoInfo(asteroid, *connection);
     }
 }
 
