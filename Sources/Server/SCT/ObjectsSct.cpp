@@ -42,8 +42,8 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
     EXPECT_EQ(20, shipInfo->speed);
     EXPECT_EQ("Ship2.mesh", shipInfo->mesh);
 
-    // client should receive info about ship's course
     auto shipCourseInfo = connection1->receive<Common::Messages::ShipCourseInfo>();
+    auto objectCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
 }
 
 TEST(ObjectsSct, GetObjectInfo_Asteroid)

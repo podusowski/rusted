@@ -18,15 +18,14 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
 
     LOG_DEBUG << "Getting info about object id: " << object.getId() << ", type: " << TYPENAME(object);
 
-    #define IS(object, type) dynamic_cast<type*>(&object)
-
-    if (IS(object, Ship))
+    if (object.is<Ship>())
     {
         auto & ship = dynamic_cast<Ship&>(object);
         sendShipInfo(ship, connection);
         sendShipCourseInfo(ship, connection);
+        sendObjectCargoInfo(ship, connection);
     }
-    else if (IS(object, Asteroid))
+    else if (object.is<Asteroid>())
     {
         Common::Messages::AsteroidInfo asteroidInfo;
 
@@ -42,8 +41,6 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
 
         sendObjectCargoInfo(asteroid, connection);
     }
-
-    #undef IS
 }
 
 void Utils::sendShipCourseInfo(Common::Game::Object::Ship & ship, Network::IConnection & connection)
