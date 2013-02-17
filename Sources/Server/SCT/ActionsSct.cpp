@@ -178,8 +178,8 @@ TEST(ActionsSct, Gather)
     // receive info about player ship cargohold
     auto shipCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
     EXPECT_EQ(1, shipCargoInfo->id);
-    EXPECT_EQ(10, shipCargoInfo->carbon);
-    EXPECT_EQ(10, shipCargoInfo->helium);
+    EXPECT_EQ(20, shipCargoInfo->carbon);
+    EXPECT_EQ(20, shipCargoInfo->helium);
 
     // receive info about asteroid cargohold
     auto asteroidCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
