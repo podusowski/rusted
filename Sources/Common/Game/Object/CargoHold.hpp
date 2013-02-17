@@ -12,6 +12,9 @@ class CargoHold
 public:
     CargoHold();
 
+    void setCapacity(unsigned capacity);
+    unsigned getCapacity();
+
     unsigned getHelium();
     void setHelium(unsigned);
     void changeHelium(int);
@@ -21,6 +24,7 @@ public:
     void changeCarbon(int);
 
 private:
+    unsigned m_capacity;
     unsigned m_helium;
     unsigned m_carbon;
 };

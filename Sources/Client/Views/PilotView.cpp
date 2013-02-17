@@ -218,7 +218,7 @@ void PilotView::updateFocusedShipWindow()
 
     focusedShip.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
     {
-        ss << "C: " << cargoHold.getCarbon() << " H: " << cargoHold.getHelium();
+        ss << "C: " << cargoHold.getCarbon() << " H: " << cargoHold.getHelium() << " / " << cargoHold.getCapacity();
     });
 
     m_gui->findWidget<MyGUI::TextBox>("FocusTextBox")->setCaption(ss.str());

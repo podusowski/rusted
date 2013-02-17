@@ -2,8 +2,18 @@
 
 using namespace Common::Game::Object;
 
-CargoHold::CargoHold() : m_helium(0), m_carbon(0)
+CargoHold::CargoHold() : m_capacity(0), m_helium(0), m_carbon(0)
 {
+}
+
+void CargoHold::setCapacity(unsigned capacity)
+{
+    m_capacity = capacity;
+}
+
+unsigned CargoHold::getCapacity()
+{
+    return m_capacity;
 }
 
 unsigned CargoHold::getHelium()
