@@ -33,7 +33,7 @@ TEST(ActionsSct, FetchAvailableActions)
     connection1->send(fetchAvailableActions);
 
     auto availableActions = connection1->receive<Common::Messages::AvailableActions>();
-    ASSERT_EQ(4, availableActions->actions.size());
+    ASSERT_EQ(5, availableActions->actions.size());
 
     // attack
     EXPECT_EQ(1, availableActions->actions[0].get<0>()); // action id
@@ -50,6 +50,10 @@ TEST(ActionsSct, FetchAvailableActions)
     // gather
     EXPECT_EQ(3, availableActions->actions[3].get<0>());
     EXPECT_EQ(1, availableActions->actions[3].get<1>());
+
+    // transfer
+    EXPECT_EQ(4, availableActions->actions[4].get<0>());
+    EXPECT_EQ(1, availableActions->actions[4].get<1>());
 }
 
 TEST(ActionsSct, AttackObject)

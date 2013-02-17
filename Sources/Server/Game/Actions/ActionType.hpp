@@ -11,7 +11,8 @@ enum ActionType
 {
     ActionType_Attack = 1,
     ActionType_BuildShip,
-    ActionType_Gather
+    ActionType_Gather,
+    ActionType_Transfer
 };
 
 }

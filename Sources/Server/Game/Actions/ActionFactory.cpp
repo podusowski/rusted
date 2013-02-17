@@ -69,6 +69,10 @@ std::string ActionFactory::getActionName(unsigned id, unsigned parameter)
         {
             return "gather";
         }
+        case ActionType_Transfer:
+        {
+            return "transfer";
+        }
         default:
         {
             throw std::runtime_error("unknown action");
