@@ -4,6 +4,7 @@
 #include "Attack.hpp"
 #include "BuildShip.hpp"
 #include "Gather.hpp"
+#include "Transfer.hpp"
 #include "ActionType.hpp"
 
 using namespace Server::Game::Actions;
@@ -37,6 +38,10 @@ boost::shared_ptr<IAction> ActionFactory::create(
 
         case ActionType_Gather:
             ret = boost::shared_ptr<IAction>(new Gather(connection, m_playerContainer, player));
+            break;
+
+        case ActionType_Transfer:
+            ret = boost::shared_ptr<IAction>(new Transfer(connection, m_playerContainer, player));
             break;
 
         default:

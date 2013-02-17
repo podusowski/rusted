@@ -23,17 +23,22 @@ Common::Game::TimeValue Transfer::start()
     //TODO: additional parameters
     selectedShip.visitCargoHold([&](CargoHold & selectedShipCargoHold) -> void
     {
-        focusedShip.visitCargoHold([&](CargoHold & shipCargoHold) -> void
+        focusedShip.visitCargoHold([&](CargoHold & focusedShipCargoHold) -> void
         {
-            selectedShipCargoHold.changeCarbon(-10);
-            selectedShipCargoHold.changeHelium(-10);
+            focusedShipCargoHold.changeCarbon(-10);
+            focusedShipCargoHold.changeHelium(-10);
 
-            shipCargoHold.changeCarbon(10);
-            shipCargoHold.changeHelium(10);
+            selectedShipCargoHold.changeCarbon(10);
+            selectedShipCargoHold.changeHelium(10);
         });
     });
 
-//    sendCargoInfoToClients();
+    m_servicesUtils.sendObjectCargoInfo(focusedShip, m_connection);
+
+    auto & otherPlayerConnection = m_playerContainer.getConnectionById(selectedShip.getOwnerId());
+    m_servicesUtils.sendObjectCargoInfo(selectedShip, otherPlayerConnection);
+
+    return Common::Game::TimeValue();
 }
 
 void Transfer::finish()

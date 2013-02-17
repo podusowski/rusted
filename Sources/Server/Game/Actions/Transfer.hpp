@@ -6,6 +6,7 @@
 #include "Server/Game/Actions/IAction.hpp"
 #include "Server/Network/IConnection.hpp"
 #include "Server/Game/IPlayerContainer.hpp"
+#include "Server/Services/Utils.hpp"
 
 namespace Server
 {
@@ -25,6 +26,7 @@ private:
     Server::Network::IConnection & m_connection;
     IPlayerContainer & m_playerContainer;
     Common::Game::IPlayer & m_player;
+    Server::Services::Utils m_servicesUtils;
 };
 
 }

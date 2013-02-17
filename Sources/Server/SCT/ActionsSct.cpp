@@ -188,7 +188,6 @@ TEST(ActionsSct, Gather)
     EXPECT_EQ(90, asteroidCargoInfo->helium);
 }
 
-#if 0
 TEST(ActionsSct, Transfer)
 {
     SCT::Component component("SampleDataBase.xml");
@@ -210,12 +209,10 @@ TEST(ActionsSct, Transfer)
     // execute action 4 - transfer
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = 4;
-    //executeAction.parameter = 2;
     connection1->send(executeAction);
 
-    connection1->receive<Common::Messages::ActionStarted>();
-    connection1->receive<Common::Messages::GlobalCooldownExpired>();
-    connection1->receive<Common::Messages::ActionFinished>();
+    // cargo info
+    connection1->receive<Common::Messages::ObjectCargoInfo>();
+    connection2->receive<Common::Messages::ObjectCargoInfo>();
 }
-#endif
 
