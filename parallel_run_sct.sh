@@ -63,6 +63,20 @@ function read_testcases()
     done
 }
 
+function cleanup()
+{
+    echo "cleanup"
+
+    kill `jobs -p`
+
+    sleep 0.3
+    if [ -n "`jobs -p`" ]; then
+        kill -KILL `jobs -p`
+    fi
+}
+
+trap "cleanup" EXIT
+
 testcases=`read_testcases`
 echo `echo $testcases | wc -w` tests
 
@@ -80,3 +94,4 @@ wait
 
 popd > /dev/null
 
+cleanup
