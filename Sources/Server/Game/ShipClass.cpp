@@ -8,12 +8,14 @@ ShipClass::ShipClass(DataBase::DataBaseNode & node) :
     m_id(node.getValue<unsigned>("id")),
     m_speed(node.getValue<unsigned>("speed")),
     m_integrity(node.getValue<unsigned>("integrity")),
-    m_mesh(node.getValue<std::string>("mesh"))
+    m_mesh(node.getValue<std::string>("mesh")),
+    m_capacity(node.getValue<unsigned>("capacity", 0))
 {
     LOG_DEBUG << "Ship class loaded, id: " << m_id 
               << ", speed: " << m_speed 
               << ", integrity: " << m_integrity
-              << ", mesh: " << m_mesh;
+              << ", mesh: " << m_mesh
+              << ", capacity: " << m_capacity;
 
     try
     {
@@ -42,6 +44,10 @@ void ShipClass::applyTo(Common::Game::Object::Ship & ship)
     ship.setSpeed(m_speed);
     ship.setIntegrity(m_integrity);
     ship.setMesh(m_mesh);
+    ship.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+    {
+        cargoHold.setCapacity(m_capacity);
+    });
 }
 
 std::vector<AvailableAction> ShipClass::getAvailableActions()

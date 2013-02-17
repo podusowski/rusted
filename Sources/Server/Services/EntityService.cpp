@@ -106,7 +106,7 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
     {
         m_actionPerformer.perform(connection, player, executeAction.id, executeAction.parameter);
     }
-    catch (std::exception ex)
+    catch (const std::exception & ex)
     {
         LOG_DEBUG << "Can't execute action, reason: " << ex.what();
     }

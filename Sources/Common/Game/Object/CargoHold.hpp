@@ -14,6 +14,7 @@ public:
 
     void setCapacity(unsigned capacity);
     unsigned getCapacity();
+    unsigned getUsedCapacity();
 
     unsigned getHelium();
     void setHelium(unsigned);

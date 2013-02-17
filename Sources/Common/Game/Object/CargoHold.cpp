@@ -1,3 +1,6 @@
+#include <stdexcept>
+
+#include "Cake/Diagnostics/Logger.hpp"
 #include "CargoHold.hpp"
 
 using namespace Common::Game::Object;
@@ -16,6 +19,11 @@ unsigned CargoHold::getCapacity()
     return m_capacity;
 }
 
+unsigned CargoHold::getUsedCapacity()
+{
+    return m_carbon + m_helium;
+}
+
 unsigned CargoHold::getHelium()
 {
     return m_helium;
@@ -28,6 +36,11 @@ void CargoHold::setHelium(unsigned value)
 
 void CargoHold::changeHelium(int delta)
 {
+    if (getUsedCapacity() + delta > getCapacity())
+    {
+        LOG_WARN << "Capacity overloaded, used:" << getUsedCapacity() << ", total:" << getCapacity();
+        throw std::runtime_error("capacity overloaded");
+    }
     m_helium += delta;
 }
 
@@ -43,6 +56,11 @@ void CargoHold::setCarbon(unsigned value)
 
 void CargoHold::changeCarbon(int delta)
 {
+    if (getUsedCapacity() + delta > getCapacity())
+    {
+        LOG_WARN << "Capacity overloaded, used:" << getUsedCapacity() << ", total:" << getCapacity();
+        throw std::runtime_error("capacity overloaded");
+    }
     m_carbon += delta;
 }
 

@@ -48,6 +48,12 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
         object->setIntegrity(data.getValue<unsigned>("integrity"));
         object->visitCargoHold(std::bind(&ObjectFactory::fillCargoHold, this, data, _1));
 
+        // set unlimited capacity for asteroids
+        object->visitCargoHold([](Common::Game::Object::CargoHold & cargoHold) -> void
+        {
+            cargoHold.setCapacity(99999999); 
+        });
+
         return object;
     }
     else
