@@ -188,3 +188,34 @@ TEST(ActionsSct, Gather)
     EXPECT_EQ(90, asteroidCargoInfo->helium);
 }
 
+#if 0
+TEST(ActionsSct, Transfer)
+{
+    SCT::Component component("SampleDataBase.xml");
+    component.start();
+
+    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+
+    // focus some ship
+    Common::Messages::FocusObject focusObject;
+    focusObject.id = 1;
+    connection1->send(focusObject);
+
+    // select some user2's ship
+    Common::Messages::SelectObject selectObject;
+    selectObject.id = 2;
+    connection1->send(selectObject);
+
+    // execute action 4 - transfer
+    Common::Messages::ExecuteAction executeAction;
+    executeAction.id = 4;
+    //executeAction.parameter = 2;
+    connection1->send(executeAction);
+
+    connection1->receive<Common::Messages::ActionStarted>();
+    connection1->receive<Common::Messages::GlobalCooldownExpired>();
+    connection1->receive<Common::Messages::ActionFinished>();
+}
+#endif
+
