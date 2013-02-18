@@ -60,8 +60,8 @@ void Camera::mouseMoved(const OIS::MouseState & state)
 {
     if (m_userOrientationChanging)
     {
-        m_userXAngle += state.X.rel;
-        m_userYAngle += state.Y.rel;
+        m_userXAngle += state.X.rel * 0.5;
+        m_userYAngle += state.Y.rel * 0.5;
 
         m_userOrientation = 
             Ogre::Quaternion(Ogre::Degree(m_userXAngle), Ogre::Vector3(0, 0, 1)) *
