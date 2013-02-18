@@ -143,6 +143,7 @@ void ObjectService::handle(const Common::Messages::ObjectCargoInfo & objectCargo
     auto & object = m_universe.getById<Common::Game::Object::ObjectBase>(objectCargoInfo.id);
     object.visitCargoHold([&objectCargoInfo](Common::Game::Object::CargoHold & cargoHold) -> void
     {
+        cargoHold.setCapacity(objectCargoInfo.capacity);
         cargoHold.setCarbon(objectCargoInfo.carbon);
         cargoHold.setHelium(objectCargoInfo.helium);
     });

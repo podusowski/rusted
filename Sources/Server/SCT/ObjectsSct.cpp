@@ -43,7 +43,10 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
     EXPECT_EQ("Ship2.mesh", shipInfo->mesh);
 
     auto shipCourseInfo = connection1->receive<Common::Messages::ShipCourseInfo>();
+
     auto objectCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
+    EXPECT_EQ(2, objectCargoInfo->id);
+    EXPECT_EQ(1000, objectCargoInfo->capacity);
 }
 
 TEST(ObjectsSct, GetObjectInfo_Asteroid)

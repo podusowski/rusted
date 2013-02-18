@@ -88,6 +88,7 @@ void Utils::sendObjectCargoInfo(Common::Game::Object::ObjectBase & object, Netwo
 
     object.visitCargoHold([&objectCargoInfo](Common::Game::Object::CargoHold & cargoHold) -> void
     {
+        objectCargoInfo.capacity = cargoHold.getCapacity();
         objectCargoInfo.carbon = cargoHold.getCarbon();
         objectCargoInfo.helium = cargoHold.getHelium();
     });

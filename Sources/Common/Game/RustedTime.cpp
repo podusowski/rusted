@@ -100,7 +100,7 @@ void RustedTime::run()
             }
             catch (std::exception & ex)
             {
-                LOG_DEBUG << "Exception during timer callback: " << ex.what();
+                LOG_WARN << "Exception during timer callback: " << ex.what();
             }
 
             m_timers.erase(m_timers.begin());
