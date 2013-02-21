@@ -33,6 +33,19 @@ class List:
             params.append(param)
         return params
 
+class Struct:
+    def __init__(self, xml_node):
+        self.name = xml_node.getAttribute("id")
+        self.xml_node = xml_node
+        self.params = self.__parse_params()
+
+    def __parse_params(self):
+        params = []
+        for param_node in self.xml_node.getElementsByTagName("param"):
+            param = Param(param_node)
+            params.append(param)
+        return params
+
 class Message:
     def __init__(self, xml_node):
         self.xml_node = xml_node
@@ -58,9 +71,10 @@ class Message:
         return lists
 
 class CppOutput:
-    def __init__(self, messages, output_file):
+    def __init__(self, structs, messages, output_file):
         self.output_file = output_file
         self.messages = messages
+        self.structs = structs
 
     def generate(self):
         self.f = open(self.output_file, "w")
@@ -68,6 +82,7 @@ class CppOutput:
         self.__write_id_enum()
         self.__write_abstract_message()
         self.__write_structs()
+        self.__write_message_structs()
         self.__write_message_factory()
         self.__write_handler_caller()
         self.__write_print_operator()
@@ -131,6 +146,12 @@ class CppOutput:
 
     def __write_structs(self):
         print("generating structures")
+        for struct in self.structs:
+            cpp_struct = CppStruct(struct)
+            self.f.write(cpp_struct.generate())
+
+    def __write_message_structs(self):
+        print("generating message structures")
         for message in self.messages:
             cpp_struct = CppMessageStruct(message)
             self.f.write(cpp_struct.generate())
@@ -160,12 +181,51 @@ class CppOutput:
         self.f.write("} // namespace Common\n")
         self.f.write("} // namespace Messages\n")
 
+class CppStruct:
+    def __init__(self, struct):
+        self.struct = struct
+
+    def generate(self):
+        s = ""
+        s = (
+            "struct %s\n"
+            "{\n" % (self.struct.name)
+        )
+
+        s = s + self.__generate_params()
+        s = s + self.__generate_serialize_method()
+
+        s = s + (
+            "};\n\n"
+        )
+
+        return s
+
+    def __generate_serialize_method(self):
+        s = (
+            "\tvoid serialize(Common::RustedCodec::IWriteBuffer & buffer) const\n"
+            "\t{\n"
+            "\t\tCommon::RustedCodec::RustedAbstractCoder coder(buffer);\n"
+            "\t\tcoder"
+            )
+
+        for param in self.struct.params:
+            s = s + " << " + param.name
+        s = s + ";\n"
+
+
+        s = s + (
+            "\t}\n"
+            "\n"
+            )
+        return s
+
 class CppMessageStruct:
     def __init__(self, message):
         self.message = message
 
     def generate(self):
-        print("\t" + self.message.id)
+        print("\tmessage" + self.message.id)
         s = (
             "struct " + self.message.id + " : public AbstractMessage\n"
             "{\n"
@@ -403,10 +463,17 @@ class CppHandlerCaller:
 
 
 messages = minidom.parse('Messages/Messages.xml')
+
+structs = []
+for struct_xml_node in messages.childNodes[0].getElementsByTagName("struct"):
+    struct = Struct(struct_xml_node)
+    structs.append(struct)
+
 msgs = []
 for message_xml_node in messages.childNodes[0].getElementsByTagName("message"):
     message = Message(message_xml_node) 
     msgs.append(message)
-hpp = CppOutput(msgs, "Messages/Messages.hpp")
+
+hpp = CppOutput(structs, msgs,"Messages/Messages.hpp")
 hpp.generate()
 

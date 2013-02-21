@@ -138,12 +138,14 @@ actions
     <param type="int32" name="shipId" />
 </message>
 
+<struct id="AvailableAction">
+    <param type="int32" name="id" />
+    <param type="int32" name="parameter" />
+    <param type="string" name="name" />
+</struct>
+
 <message id="AvailableActions">
-    <list name="actions">
-        <listparam type="int32" name="id" />
-        <listparam type="int32" name="parameter" />
-        <listparam type="string" name="name" />
-    </list>
+    <list name="actions" type="AvailableAction" />
 </message>
 
 <message id="ExecuteAction">
