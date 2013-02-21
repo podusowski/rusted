@@ -145,7 +145,11 @@ actions
 </struct>
 
 <message id="AvailableActions">
-    <list name="actions" type="AvailableAction" />
+    <list name="actions" type="AvailableAction">
+    <listparam type="int32" name="id" />
+    <listparam type="int32" name="parameter" />
+    <listparam type="string" name="name" />
+    </list>
 </message>
 
 <message id="ExecuteAction">

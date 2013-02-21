@@ -80,6 +80,7 @@ class CppOutput:
         self.f = open(self.output_file, "w")
         self.__write_header()
         self.__write_id_enum()
+        self.__write_serializable()
         self.__write_abstract_message()
         self.__write_structs()
         self.__write_message_structs()
@@ -134,10 +135,20 @@ class CppOutput:
 
     def __write_abstract_message(self):
         s = ""
-        s = s + "struct AbstractMessage\n"
+        s = s + "struct AbstractMessage : public ISerializable\n"
         s = s + "{\n"
         s = s + "\tvirtual Id::Messages getId() const = 0;\n"
+        s = s + "};\n"
+        s = s + "\n"
+
+        self.f.write(s)
+
+    def __write_serializable(self):
+        s = ""
+        s = s + "struct ISerializable\n"
+        s = s + "{\n"
         s = s + "\tvirtual void serialize(Common::RustedCodec::IWriteBuffer &) const = 0;\n"
+        s = s + "\tvirtual void unserialize(Common::RustedCodec::IReadBuffer &) = 0;\n"
         s = s + "\tvirtual std::string toString() const = 0;\n"
         s = s + "};\n"
         s = s + "\n"
@@ -188,12 +199,13 @@ class CppStruct:
     def generate(self):
         s = ""
         s = (
-            "struct %s\n"
+            "struct %s : public ISerializable\n"
             "{\n" % (self.struct.name)
         )
 
         s = s + self.__generate_params()
         s = s + self.__generate_serialize_method()
+        s = s + self.__generate_unserialize_method()
 
         s = s + (
             "};\n\n"
@@ -220,6 +232,37 @@ class CppStruct:
             )
         return s
 
+    def __generate_unserialize_method(self):
+        s = (
+            "\tvoid unserialize(Common::RustedCodec::IReadBuffer & buffer)\n"
+            "\t{\n"
+            "\t\tCommon::RustedCodec::RustedAbstractDecoder decoder(buffer);\n"
+            "\t\tdecoder"
+            )
+
+        for param in self.struct.params:
+            s = s + " >> " + param.name
+        s = s + ";\n"
+
+        s = s + (
+            "\t}\n"
+            "\n"
+            )
+        return s
+
+    def __generate_params(self):
+        s = ""
+        if len(self.struct.params) == 0:
+            s = "\t// no parameters\n"
+
+        for param in self.struct.params:
+            print("\t\t" + param.name + ": " + param.type)
+            s = s + (
+                    "\t" + param.cpp_type + " " + param.name + ";\n"
+            )
+        s = s + "\n"
+        return s
+
 class CppMessageStruct:
     def __init__(self, message):
         self.message = message
@@ -235,6 +278,7 @@ class CppMessageStruct:
         s = s + self.__generate_lists()
         s = s + self.__generate_getid_method()
         s = s + self.__generate_serialize_method()
+        s = s + self.__generate_unserialize_method()
         s = s + self.__generate_to_string_method()
 
         s = s + (
@@ -266,6 +310,28 @@ class CppMessageStruct:
 
         for param in self.message.lists:
             s = s + " << " + param.name
+
+        s = s + ";\n"
+
+        s = s + (
+            "\t}\n"
+            "\n"
+            )
+        return s
+
+    def __generate_unserialize_method(self):
+        s = (
+            "\tvoid unserialize(Common::RustedCodec::IReadBuffer & buffer)\n"
+            "\t{\n"
+            "\t\tCommon::RustedCodec::RustedAbstractDecoder decoder(buffer);\n"
+            "\t\tdecoder"
+            )
+
+        for param in self.message.params:
+            s = s + " >> " + param.name
+
+        for param in self.message.lists:
+            s = s + " >> " + param.name
 
         s = s + ";\n"
 
@@ -368,16 +434,6 @@ class CppMessageFactory:
         s = ""
         s = s + "\t\tcase Id::" + message.id + ":\n"
         s = s + "\t\t\tret.reset(new " + message.id + "());\n"
-
-        if message.has_params():
-            s = s + "\t\t\tdecoder\n"
-            for param in message.params:
-                s = s + "\t\t\t\t>> static_cast<" + message.id + "*>(ret.get())->" + param.name + "\n"
-
-            for list in message.lists:
-                s = s + "\t\t\t\t>> static_cast<" + message.id + "*>(ret.get())->" + list.name + "\n"
-            s = s + "\t\t\t;\n"
-
         s = s + "\t\t\tbreak;\n"
         s = s + "\n"
         return s
@@ -387,6 +443,8 @@ class CppMessageFactory:
         s = s + "\t\tdefault:\n"
         s = s + "\t\t\tthrow std::runtime_error(\"unknown message id\");\n"
         s = s + "\t\t} // switch\n"
+        s = s + "\n"
+        s = s + "\t\tret->unserialize(buffer);\n"
         s = s + "\n"
         s = s + "\t\treturn ret;\n"
         s = s + "\t} // create\n"
