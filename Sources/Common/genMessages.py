@@ -35,19 +35,6 @@ class List:
 
 class Struct:
     def __init__(self, xml_node):
-        self.name = xml_node.getAttribute("id")
-        self.xml_node = xml_node
-        self.params = self.__parse_params()
-
-    def __parse_params(self):
-        params = []
-        for param_node in self.xml_node.getElementsByTagName("param"):
-            param = Param(param_node)
-            params.append(param)
-        return params
-
-class Message:
-    def __init__(self, xml_node):
         self.xml_node = xml_node
         self.id = xml_node.getAttribute("id")
         self.params = self.__parse_params()
@@ -158,13 +145,13 @@ class CppOutput:
     def __write_structs(self):
         print("generating structures")
         for struct in self.structs:
-            cpp_struct = CppStruct(struct)
+            cpp_struct = CppStruct(struct, False)
             self.f.write(cpp_struct.generate())
 
     def __write_message_structs(self):
         print("generating message structures")
         for message in self.messages:
-            cpp_struct = CppMessageStruct(message)
+            cpp_struct = CppStruct(message, True)
             self.f.write(cpp_struct.generate())
 
     def __write_message_factory(self):
@@ -193,90 +180,30 @@ class CppOutput:
         self.f.write("} // namespace Messages\n")
 
 class CppStruct:
-    def __init__(self, struct):
-        self.struct = struct
-
-    def generate(self):
-        s = ""
-        s = (
-            "struct %s : public ISerializable\n"
-            "{\n" % (self.struct.name)
-        )
-
-        s = s + self.__generate_params()
-        s = s + self.__generate_serialize_method()
-        s = s + self.__generate_unserialize_method()
-
-        s = s + (
-            "};\n\n"
-        )
-
-        return s
-
-    def __generate_serialize_method(self):
-        s = (
-            "\tvoid serialize(Common::RustedCodec::IWriteBuffer & buffer) const\n"
-            "\t{\n"
-            "\t\tCommon::RustedCodec::RustedAbstractCoder coder(buffer);\n"
-            "\t\tcoder"
-            )
-
-        for param in self.struct.params:
-            s = s + " << " + param.name
-        s = s + ";\n"
-
-
-        s = s + (
-            "\t}\n"
-            "\n"
-            )
-        return s
-
-    def __generate_unserialize_method(self):
-        s = (
-            "\tvoid unserialize(Common::RustedCodec::IReadBuffer & buffer)\n"
-            "\t{\n"
-            "\t\tCommon::RustedCodec::RustedAbstractDecoder decoder(buffer);\n"
-            "\t\tdecoder"
-            )
-
-        for param in self.struct.params:
-            s = s + " >> " + param.name
-        s = s + ";\n"
-
-        s = s + (
-            "\t}\n"
-            "\n"
-            )
-        return s
-
-    def __generate_params(self):
-        s = ""
-        if len(self.struct.params) == 0:
-            s = "\t// no parameters\n"
-
-        for param in self.struct.params:
-            print("\t\t" + param.name + ": " + param.type)
-            s = s + (
-                    "\t" + param.cpp_type + " " + param.name + ";\n"
-            )
-        s = s + "\n"
-        return s
-
-class CppMessageStruct:
-    def __init__(self, message):
+    def __init__(self, message, is_message):
         self.message = message
+        self.is_message = is_message
 
     def generate(self):
-        print("\tmessage" + self.message.id)
-        s = (
-            "struct " + self.message.id + " : public AbstractMessage\n"
-            "{\n"
+        if self.is_message:
+            print("\tmessage " + self.message.id)
+            s = (
+                "struct " + self.message.id + " : public AbstractMessage\n"
+                "{\n"
+            )
+        else:
+            print("\tstructure " + self.message.id)
+            s = (
+                "struct " + self.message.id + " : public ISerializable\n"
+                "{\n"
             )
 
         s = s + self.__generate_params()
         s = s + self.__generate_lists()
-        s = s + self.__generate_getid_method()
+
+        if self.is_message:
+            s = s + self.__generate_getid_method()
+
         s = s + self.__generate_serialize_method()
         s = s + self.__generate_unserialize_method()
         s = s + self.__generate_to_string_method()
@@ -529,7 +456,7 @@ for struct_xml_node in messages.childNodes[0].getElementsByTagName("struct"):
 
 msgs = []
 for message_xml_node in messages.childNodes[0].getElementsByTagName("message"):
-    message = Message(message_xml_node) 
+    message = Struct(message_xml_node) 
     msgs.append(message)
 
 hpp = CppOutput(structs, msgs,"Messages/Messages.hpp")
