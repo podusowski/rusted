@@ -36,5 +36,10 @@
         <Widget type="ListBox" name="ShipListBox" skin="ListBox" position_real="0 0 1 1"/>
     </Widget>
 
+    <!-- misc - not visible by default -->
+    <Widget type="TextBox" skin="TextBox" position="70 120 60 400" align="Right Top" layer="Main" name="FocusedActionTextBox">
+        <Property key="Caption" value="Build Gatherer\nGatherer is cool ship which can gather stuff from asteroids"/>
+    </Widget>
+
 </MyGUI>
 

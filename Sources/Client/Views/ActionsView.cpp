@@ -33,6 +33,24 @@ void ActionsView::actionClicked(MyGUI::Widget * widget)
     disableActionButtons();
 }
 
+void ActionsView::actionMouseSetFocus(MyGUI::Widget * sender, MyGUI::Widget * old)
+{
+    auto position = sender->getAbsolutePosition();
+    position += MyGUI::IntPoint(60, 0);
+    auto focusedActionTextBox = m_gui->findWidget<MyGUI::TextBox>("FocusedActionTextBox");
+    focusedActionTextBox->setPosition(position); 
+
+    std::stringstream ss;
+    ss << "some action!";
+    focusedActionTextBox->setCaption(ss.str());
+    focusedActionTextBox->setVisible(true);
+}
+
+void ActionsView::actionMouseLostFocus(MyGUI::Widget *, MyGUI::Widget * _new)
+{
+    m_gui->findWidget<MyGUI::TextBox>("FocusedActionTextBox")->setVisible(false);
+}
+
 void ActionsView::disableActionButtons()
 {
     for (auto * button: m_actionButtons)
@@ -74,6 +92,8 @@ void ActionsView::availableActionsFetched(std::vector<Common::Messages::Availabl
         actionButton->setCaption(action.name);
         actionButton->setUserData(action);
         actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &ActionsView::actionClicked);
+        actionButton->eventMouseSetFocus += MyGUI::newDelegate(this, &ActionsView::actionMouseSetFocus);
+        actionButton->eventMouseLostFocus += MyGUI::newDelegate(this, &ActionsView::actionMouseLostFocus);
     }
 }
 

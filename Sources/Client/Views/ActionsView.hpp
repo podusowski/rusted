@@ -20,6 +20,8 @@ public:
 private:
     void availableActionsFetched(std::vector<Common::Messages::AvailableAction>);
     void actionClicked(MyGUI::Widget *);
+    void actionMouseSetFocus(MyGUI::Widget *, MyGUI::Widget * old);
+    void actionMouseLostFocus(MyGUI::Widget *, MyGUI::Widget * _new);
     void disableActionButtons();
     void enableActionButtons();
 
