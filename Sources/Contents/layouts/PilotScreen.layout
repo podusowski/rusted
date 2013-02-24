@@ -30,15 +30,15 @@
         <Property key="Snap" value="false"/>
     </Widget>
 
+    <!-- action tooltip -->
+    <Widget type="TextBox" skin="TextBox" position="70 120 200 200" align="Right Top" layer="Main" name="FocusedActionTextBox">
+        <Property key="Caption" value="Build Gatherer\nGatherer is cool ship which can gather stuff from asteroids"/>
+    </Widget>
+
     <Widget type="Window" skin="Window" position="690 120 100 400" align="Right Top" layer="Main">
         <Property key="Caption" value="Fleet"/>
         <Property key="Snap" value="false"/>
         <Widget type="ListBox" name="ShipListBox" skin="ListBox" position_real="0 0 1 1"/>
-    </Widget>
-
-    <!-- misc - not visible by default -->
-    <Widget type="TextBox" skin="TextBox" position="70 120 60 400" align="Right Top" layer="Main" name="FocusedActionTextBox">
-        <Property key="Caption" value="Build Gatherer\nGatherer is cool ship which can gather stuff from asteroids"/>
     </Widget>
 
 </MyGUI>
