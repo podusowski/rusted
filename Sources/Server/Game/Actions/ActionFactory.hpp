@@ -29,6 +29,7 @@ public:
         unsigned parameter);
 
     std::string getActionName(unsigned id, unsigned parameter);
+    std::string getActionDescription(unsigned id, unsigned parameter);
 
 private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;

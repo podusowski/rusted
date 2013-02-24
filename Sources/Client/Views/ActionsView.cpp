@@ -40,8 +40,11 @@ void ActionsView::actionMouseSetFocus(MyGUI::Widget * sender, MyGUI::Widget * ol
     auto focusedActionTextBox = m_gui->findWidget<MyGUI::TextBox>("FocusedActionTextBox");
     focusedActionTextBox->setPosition(position); 
 
+    auto * action = sender->getUserData<Common::Messages::AvailableAction>();
+
     std::stringstream ss;
-    ss << "some action!";
+    ss << action->description;
+
     focusedActionTextBox->setCaption(ss.str());
     focusedActionTextBox->setVisible(true);
 }

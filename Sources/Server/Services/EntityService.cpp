@@ -92,12 +92,15 @@ void EntityService::handle(const Common::Messages::FetchAvailableActions &, Netw
     for (auto action: actions)
     {
         std::string name = m_actionFactory.getActionName(action.type, action.parameter);
+        std::string description = m_actionFactory.getActionDescription(action.type, action.parameter);
+
         LOG_DEBUG << "  name:" << name << ", type:" << action.type << ", parameter:" << action.parameter;
 
         Common::Messages::AvailableAction availableAction;
         availableAction.id = action.type;
         availableAction.name = name;
         availableAction.parameter = action.parameter;
+        availableAction.description = description;
 
         availableActions.actions.push_back(availableAction);
     }

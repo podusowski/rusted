@@ -146,6 +146,7 @@ actions
     <param type="int32" name="id" />
     <param type="int32" name="parameter" />
     <param type="string" name="name" />
+    <param type="string" name="description" />
 </struct>
 
 <message id="AvailableActions">

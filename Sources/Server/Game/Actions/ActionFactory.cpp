@@ -85,3 +85,31 @@ std::string ActionFactory::getActionName(unsigned id, unsigned parameter)
     }
 }
 
+std::string ActionFactory::getActionDescription(unsigned id, unsigned parameter)
+{
+    switch (id)
+    {
+        case ActionType_Attack:
+        {
+            return "attack selected ship with\nsome default gun";
+        }
+        case ActionType_BuildShip:
+        {
+            std::stringstream ss;
+            ss << "build " << parameter;
+            return ss.str();
+        }
+        case ActionType_Gather:
+        {
+            return "gather carbon and helium\nfrom selected asteroid";
+        }
+        case ActionType_Transfer:
+        {
+            return "transfer 10C and 10H to selected ship";
+        }
+        default:
+        {
+            throw std::runtime_error("unknown action");
+        }
+    }
+}
