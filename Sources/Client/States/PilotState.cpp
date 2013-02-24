@@ -26,6 +26,7 @@ void PilotState::activate()
 
     m_objectsView.activate();
     m_pilotView.activate();
+    m_actionsView.activate();
 }
 
 void PilotState::deactivate()
@@ -36,5 +37,6 @@ void PilotState::frameStarted()
 {
     m_objectsView.frameStarted();
     m_pilotView.frameStarted();
+    m_actionsView.frameStarted();
 }
 

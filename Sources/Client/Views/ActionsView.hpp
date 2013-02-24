@@ -18,8 +18,14 @@ public:
     void frameStarted();
 
 private:
+    void availableActionsFetched(std::vector<Common::Messages::AvailableAction>);
+    void actionClicked(MyGUI::Widget *);
+    void disableActionButtons();
+    void enableActionButtons();
+
     Services::PlayerActionService & m_playerActionService;
-    Gui::Gui m_gui;
+    Gui::Gui & m_gui;
+    std::vector<MyGUI::Button *> m_actionButtons;
 };
 
 }

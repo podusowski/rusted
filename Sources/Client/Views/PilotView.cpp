@@ -32,10 +32,6 @@ void PilotView::activate()
     m_input.addMouseListener(*this);
     m_universe.addObjectAddedCallback(boost::bind(&PilotView::objectAdded, this, _1));
 
-    m_playerActionService.addGlobalCooldownExpiredSlot(boost::bind(&PilotView::enableActionButtons, this));
-    m_playerActionService.addAvailableActionsFetchedSlot(boost::bind(&PilotView::availableActionsFetched, this, _1));
-    m_playerActionService.fetchAvailableActions();
-
     m_objectService.fetchPlayerShips(boost::bind(&PilotView::playerShipsFetched, this));
 
     MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
@@ -106,60 +102,6 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
         delta = ogreOrientation * delta;
 
         m_playerActionService.setFocusedObjectCourse(position + m_graphics.toPosition(delta));
-    }
-}
-
-void PilotView::actionClicked(MyGUI::Widget * widget)
-{
-    LOG_DEBUG << "Action clicked";
-
-    auto * action = widget->getUserData<Common::Messages::AvailableAction>();
-    m_playerActionService.executeAction(action->id, action->parameter);
-
-    disableActionButtons();
-}
-
-void PilotView::disableActionButtons()
-{
-    for (auto * button: m_actionButtons)
-    {
-        button->setEnabled(false);
-    }
-}
-
-void PilotView::enableActionButtons()
-{
-    for (auto * button: m_actionButtons)
-    {
-        button->setEnabled(true);
-    }
-}
-
-void PilotView::availableActionsFetched(std::vector<Common::Messages::AvailableAction> actions)
-{
-    auto * actionsPanel = m_gui->findWidget<MyGUI::Widget>("ActionsPanel");
-
-    LOG_DEBUG << "Got actions";
-
-    // delete action buttons
-    for (auto & actionButton: m_actionButtons)
-    {
-        m_gui->destroyWidget(actionButton);
-    }
-    m_actionButtons.clear();
-
-    int buttonTop = 0;
-    for (auto & action: actions)
-    {
-        LOG_DEBUG << "  " << action.id << "/" << action.parameter;
-
-        auto * actionButton = actionsPanel->createWidget<MyGUI::Button>("Button", MyGUI::IntCoord(0, buttonTop, 50, 50), MyGUI::Align::Default);
-        m_actionButtons.push_back(actionButton);
-        buttonTop += 50;
-
-        actionButton->setCaption(action.name);
-        actionButton->setUserData(action);
-        actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
     }
 }
 

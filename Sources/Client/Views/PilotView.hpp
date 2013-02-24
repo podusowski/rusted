@@ -38,10 +38,6 @@ public:
     void mouseReleased(const OIS::MouseButtonID &, unsigned x, unsigned y);
 
 private:
-    void actionClicked(MyGUI::Widget *);
-    void disableActionButtons();
-    void enableActionButtons();
-    void availableActionsFetched(std::vector<Common::Messages::AvailableAction>);
     void shipListBoxSelected(MyGUI::ListBox *, size_t);
     void playerShipsFetched();
     void objectAdded(Common::Game::Object::ObjectBase &);
@@ -55,7 +51,6 @@ private:
     Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;
     Common::Game::Player & m_player;
-    std::vector<MyGUI::Button *> m_actionButtons;
     Camera m_camera;
 };
 
