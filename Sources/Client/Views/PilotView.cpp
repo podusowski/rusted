@@ -113,11 +113,8 @@ void PilotView::actionClicked(MyGUI::Widget * widget)
 {
     LOG_DEBUG << "Action clicked";
 
-    auto * action = widget->getUserData<ActionType>();
-    auto actionId = action->get<0>();
-    auto actionParameter = action->get<1>();
-
-    m_playerActionService.executeAction(actionId, actionParameter);
+    auto * action = widget->getUserData<Common::Messages::AvailableAction>();
+    m_playerActionService.executeAction(action->id, action->parameter);
 
     disableActionButtons();
 }
@@ -138,7 +135,7 @@ void PilotView::enableActionButtons()
     }
 }
 
-void PilotView::availableActionsFetched(std::vector<boost::tuple<int, int, std::string> > actions)
+void PilotView::availableActionsFetched(std::vector<Common::Messages::AvailableAction> actions)
 {
     auto * actionsPanel = m_gui->findWidget<MyGUI::Widget>("ActionsPanel");
 
@@ -154,13 +151,13 @@ void PilotView::availableActionsFetched(std::vector<boost::tuple<int, int, std::
     int buttonTop = 0;
     for (auto & action: actions)
     {
-        LOG_DEBUG << "  " << action.get<0>() << "/" << action.get<1>();
+        LOG_DEBUG << "  " << action.id << "/" << action.parameter;
 
         auto * actionButton = actionsPanel->createWidget<MyGUI::Button>("Button", MyGUI::IntCoord(0, buttonTop, 50, 50), MyGUI::Align::Default);
         m_actionButtons.push_back(actionButton);
         buttonTop += 50;
 
-        actionButton->setCaption(action.get<2>());
+        actionButton->setCaption(action.name);
         actionButton->setUserData(action);
         actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::actionClicked);
     }

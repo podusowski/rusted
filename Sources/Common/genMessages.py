@@ -23,6 +23,7 @@ class Param:
 class List:
     def __init__(self, xml_node):
         self.name = xml_node.getAttribute("name")
+        self.type = xml_node.getAttribute("type")
         self.xml_node = xml_node
         self.params = self.__parse_params()
 
@@ -229,16 +230,21 @@ class CppStruct:
             "\tvoid serialize(Common::RustedCodec::IWriteBuffer & buffer) const\n"
             "\t{\n"
             "\t\tCommon::RustedCodec::RustedAbstractCoder coder(buffer);\n"
-            "\t\tcoder << getId()"
             )
 
-        for param in self.message.params:
-            s = s + " << " + param.name
+        if len(self.message.params) > 0 or len(self.message.lists) > 0 or self.is_message:
+            s = s + "\t\tcoder"
 
-        for param in self.message.lists:
-            s = s + " << " + param.name
+            if self.is_message:
+                s = s + " << getId()"
 
-        s = s + ";\n"
+            for param in self.message.params:
+                s = s + " << " + param.name
+
+            for param in self.message.lists:
+                s = s + " << " + param.name
+
+            s = s + ";\n"
 
         s = s + (
             "\t}\n"
@@ -251,16 +257,18 @@ class CppStruct:
             "\tvoid unserialize(Common::RustedCodec::IReadBuffer & buffer)\n"
             "\t{\n"
             "\t\tCommon::RustedCodec::RustedAbstractDecoder decoder(buffer);\n"
-            "\t\tdecoder"
             )
 
-        for param in self.message.params:
-            s = s + " >> " + param.name
+        if len(self.message.params) > 0 or len(self.message.lists) > 0:
+            s = s + "\t\tdecoder"
 
-        for param in self.message.lists:
-            s = s + " >> " + param.name
+            for param in self.message.params:
+                s = s + " >> " + param.name
 
-        s = s + ";\n"
+            for param in self.message.lists:
+                s = s + " >> " + param.name
+
+            s = s + ";\n"
 
         s = s + (
             "\t}\n"
@@ -287,18 +295,8 @@ class CppStruct:
             s = "\t// no list parameters\n"
 
         for list in self.message.lists:
-            print("\t\t" + list.name + ": list of")
-            s = s + (
-                    "\tstd::vector<boost::tuple<"
-                    )
-
-            for i, listparam in enumerate(list.params):
-                print("\t\t\t" + listparam.type)
-                if i > 0:
-                    s = s + ", "
-                s = s + listparam.cpp_type 
-
-            s = s + "> > " + list.name + ";\n"
+            print("\t\t" + list.name + ": list of " + list.type)
+            s = s + "\tstd::vector<" + list.type + "> " + list.name + ";\n"
 
         s = s + "\n"
         return s

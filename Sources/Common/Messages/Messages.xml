@@ -43,11 +43,13 @@ player specific
 Ship
 -->
 
+<struct id="ShipId">
+    <param type="int32" name="id" />
+</struct>
+
 <message id="FetchPlayerShips" />
 <message id="PlayerShips">
-	<list name="ships">
-		<listparam type="int32" name="id" description="id of the ship" />
-	</list>
+	<list name="ships" type="ShipId" />
 </message>
 
 <message id="ShipInfo">
@@ -105,10 +107,12 @@ objects
 
 <message id="GetVisibleObjects" />
 
+<struct id="ObjectId">
+    <param type="int32" name="id" />
+</struct>
+
 <message id="VisibleObjects">
-    <list name="objects">
-        <listparam type="int32" name="id" />
-    </list>
+    <list name="objects" type="ObjectId" />
 </message>
 
 <message id="GetObjectInfo">
@@ -145,11 +149,7 @@ actions
 </struct>
 
 <message id="AvailableActions">
-    <list name="actions" type="AvailableAction">
-    <listparam type="int32" name="id" />
-    <listparam type="int32" name="parameter" />
-    <listparam type="string" name="name" />
-    </list>
+    <list name="actions" type="AvailableAction" />
 </message>
 
 <message id="ExecuteAction">

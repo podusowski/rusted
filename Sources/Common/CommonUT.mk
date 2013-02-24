@@ -3,7 +3,6 @@ TYPE:=application
 		
 SOURCES=UnitTests/mainUT.cpp \
         RustedCodec/UnitTests/SimpleBufferTest.cpp \
-        RustedCodec/UnitTests/RustedAbstractCodecTest.cpp \
 		Messages/UnitTests/MessagesTest.cpp \
 		RustedCodec/UnitTests/AsioBufferTest.cpp \
 		Game/Utilities/UnitTests/PasswordHashTest.cpp \

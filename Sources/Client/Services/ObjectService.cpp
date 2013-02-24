@@ -31,12 +31,12 @@ void ObjectService::handle(const Common::Messages::VisibleObjects & visibleObjec
 
     for (auto object: visibleObjects.objects)
     {
-        LOG_DEBUG << "Fetch info about object id: " << object.get<0>();
+        LOG_DEBUG << "Fetch info about object id: " << object.id;
 
         //TODO we might have it already
 
         Common::Messages::GetObjectInfo getObjectInfo;
-        getObjectInfo.id = object.get<0>();
+        getObjectInfo.id = object.id;
         m_connection.send(getObjectInfo);
     }
 }
@@ -47,7 +47,7 @@ void ObjectService::handle(const Common::Messages::PlayerShips & playerShips)
 
     for (auto ship: playerShips.ships)
     {
-        int shipId = ship.get<0>();
+        int shipId = ship.id;
 
         LOG_DEBUG << "  id: " << shipId;
 

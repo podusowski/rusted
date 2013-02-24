@@ -22,7 +22,7 @@ namespace Services
 class PlayerActionService : public AbstractService<PlayerActionService> 
 {
 public:
-    typedef boost::signals2::signal<void(std::vector<boost::tuple<int, int, std::string>>)> AvailableActionsFetchedSignal;
+    typedef boost::signals2::signal<void(std::vector<Common::Messages::AvailableAction>)> AvailableActionsFetchedSignal;
     typedef boost::signals2::signal<void()> GlobalCooldownExpiredSignal;
     typedef boost::signals2::signal<void(unsigned /* attacker */, unsigned /* attacked */)> ObjectAttackedSignal;
 

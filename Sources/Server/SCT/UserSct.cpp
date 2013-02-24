@@ -75,7 +75,7 @@ TEST(UserSct, TwoUsersEntitiesStatusReq)
 
         auto playerShips = connection1->receive<Common::Messages::PlayerShips>();
         ASSERT_EQ(1, playerShips->ships.size()); 
-        EXPECT_EQ(1, playerShips->ships[0].get<0>());
+        EXPECT_EQ(1, playerShips->ships[0].id);
     }
 
     // second player

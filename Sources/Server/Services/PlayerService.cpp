@@ -30,7 +30,10 @@ void PlayerService::handle(const Common::Messages::FetchPlayerShips &, Network::
     auto playerShips = m_universe.getByOwnerId<Common::Game::Object::Ship>(player.getId());
     for (auto it = playerShips.begin(); it != playerShips.end(); it++)
     {
-        resp.ships.push_back(boost::make_tuple<int>((*it)->getId()));
+        Common::Messages::ShipId shipId;
+        shipId.id = (*it)->getId();
+
+        resp.ships.push_back(shipId);
     }
 
     connection.send(resp);

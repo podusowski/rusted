@@ -46,7 +46,10 @@ void EntityService::handle(const Common::Messages::GetVisibleObjects &, Network:
     {
         LOG_DEBUG << "  id: " << object->getId() << ", type: " << TYPENAME(*object);
 
-        visibleObjects.objects.push_back(boost::make_tuple(object->getId()));
+        Common::Messages::ObjectId objectId;
+        objectId.id = object->getId();
+
+        visibleObjects.objects.push_back(objectId);
     }
 
     connection.send(visibleObjects);
@@ -90,7 +93,13 @@ void EntityService::handle(const Common::Messages::FetchAvailableActions &, Netw
     {
         std::string name = m_actionFactory.getActionName(action.type, action.parameter);
         LOG_DEBUG << "  name:" << name << ", type:" << action.type << ", parameter:" << action.parameter;
-        availableActions.actions.push_back(boost::make_tuple<int, int, std::string>(action.type, action.parameter, name));
+
+        Common::Messages::AvailableAction availableAction;
+        availableAction.id = action.type;
+        availableAction.name = name;
+        availableAction.parameter = action.parameter;
+
+        availableActions.actions.push_back(availableAction);
     }
     connection.send(availableActions);
 }

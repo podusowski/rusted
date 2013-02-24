@@ -17,8 +17,6 @@ class PilotView : public IView,
                   public Input::IMouseListener
 {
 public:
-    typedef boost::tuple<int, int, std::string> ActionType;
-
     PilotView(Graphics::IGraphics &, 
               Input::IInput &, 
               Services::PlayerActionService &,
@@ -43,7 +41,7 @@ private:
     void actionClicked(MyGUI::Widget *);
     void disableActionButtons();
     void enableActionButtons();
-    void availableActionsFetched(std::vector<ActionType>);
+    void availableActionsFetched(std::vector<Common::Messages::AvailableAction>);
     void shipListBoxSelected(MyGUI::ListBox *, size_t);
     void playerShipsFetched();
     void objectAdded(Common::Game::Object::ObjectBase &);

@@ -36,24 +36,24 @@ TEST(ActionsSct, FetchAvailableActions)
     ASSERT_EQ(5, availableActions->actions.size());
 
     // attack
-    EXPECT_EQ(1, availableActions->actions[0].get<0>()); // action id
-    EXPECT_EQ(1, availableActions->actions[0].get<1>()); // action parameter
+    EXPECT_EQ(1, availableActions->actions[0].id); // action id
+    EXPECT_EQ(1, availableActions->actions[0].parameter); // action parameter
 
     // attack
-    EXPECT_EQ(1, availableActions->actions[1].get<0>()); // action id
-    EXPECT_EQ(2, availableActions->actions[1].get<1>()); // action parameter
+    EXPECT_EQ(1, availableActions->actions[1].id); // action id
+    EXPECT_EQ(2, availableActions->actions[1].parameter); // action parameter
 
     // build 
-    EXPECT_EQ(2, availableActions->actions[2].get<0>());
-    EXPECT_EQ(1, availableActions->actions[2].get<1>());
+    EXPECT_EQ(2, availableActions->actions[2].id);
+    EXPECT_EQ(1, availableActions->actions[2].parameter);
 
     // gather
-    EXPECT_EQ(3, availableActions->actions[3].get<0>());
-    EXPECT_EQ(1, availableActions->actions[3].get<1>());
+    EXPECT_EQ(3, availableActions->actions[3].id);
+    EXPECT_EQ(1, availableActions->actions[3].parameter);
 
     // transfer
-    EXPECT_EQ(4, availableActions->actions[4].get<0>());
-    EXPECT_EQ(1, availableActions->actions[4].get<1>());
+    EXPECT_EQ(4, availableActions->actions[4].id);
+    EXPECT_EQ(1, availableActions->actions[4].parameter);
 }
 
 TEST(ActionsSct, AttackObject)
