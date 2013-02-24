@@ -7,6 +7,7 @@
 #include "Client/Graphics/IGraphics.hpp"
 #include "Client/Views/ObjectsView.hpp"
 #include "Client/Views/PilotView.hpp"
+#include "Client/Views/ActionsView.hpp"
 
 namespace Client
 {
@@ -21,7 +22,8 @@ public:
                Client::Gui::Gui &, 
                Client::Services::PlayerActionService &,
                Views::ObjectsView &,
-               Views::PilotView &);
+               Views::PilotView &,
+               Views::ActionsView &);
     void activate();
     void deactivate();
     void frameStarted();
@@ -31,6 +33,7 @@ private:
     Client::Gui::Gui & m_gui;
     Views::ObjectsView & m_objectsView;
     Views::PilotView & m_pilotView;
+    Views::ActionsView & m_actionsView;
 };
 
 }

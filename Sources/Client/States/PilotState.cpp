@@ -10,11 +10,13 @@ PilotState::PilotState(IStateManagerStack &,
                        Client::Gui::Gui & gui, 
                        Client::Services::PlayerActionService &,
                        Views::ObjectsView & objectsView,
-                       Views::PilotView & pilotView) :
+                       Views::PilotView & pilotView,
+                       Views::ActionsView & actionsView) :
     m_graphics(graphics),
     m_gui(gui),
     m_objectsView(objectsView),
-    m_pilotView(pilotView)
+    m_pilotView(pilotView),
+    m_actionsView(actionsView)
 {
 }
 

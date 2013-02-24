@@ -19,6 +19,7 @@
 #include "Client/States/IStateDeployment.hpp"
 #include "Client/Views/ObjectsView.hpp"
 #include "Client/Views/PilotView.hpp"
+#include "Client/Views/ActionsView.hpp"
 
 namespace Client
 {
@@ -54,6 +55,7 @@ private:
 
     Views::ObjectsView m_objectsView;
     Views::PilotView m_pilotView;
+    Views::ActionsView m_actionsView;
 
     States::PilotState m_pilotState;
     States::EntitySelectState m_entitySelect;
