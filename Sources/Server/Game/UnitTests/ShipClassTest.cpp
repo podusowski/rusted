@@ -19,6 +19,7 @@ TEST_F(ShipClassTest, ApplyBasic)
     node.setValue("integrity", 100);
     node.setValue("speed", 1);
     node.setValue("id", 1);
+    node.setValue("name", "name");
     node.setValue("mesh", "mesh");
 
     Common::Game::Object::ShipMock ship;
@@ -39,6 +40,7 @@ TEST_F(ShipClassTest, AvailableActions)
     node.setValue("integrity", 100);
     node.setValue("speed", 1);
     node.setValue("id", 1);
+    node.setValue("name", "name");
     node.setValue("mesh", "mesh");
 
     auto & actionsNode = node.createChild("actions");

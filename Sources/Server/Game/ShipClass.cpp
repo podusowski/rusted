@@ -10,7 +10,9 @@ ShipClass::ShipClass(DataBase::DataBaseNode & node) :
     m_speed(node.getValue<unsigned>("speed")),
     m_integrity(node.getValue<unsigned>("integrity")),
     m_mesh(node.getValue<std::string>("mesh")),
-    m_capacity(node.getValue<unsigned>("capacity", 0))
+    m_capacity(node.getValue<unsigned>("capacity", 0)),
+    m_requiredCarbon(node.getValue<unsigned>("required_carbon", 0)),
+    m_requiredHelium(node.getValue<unsigned>("required_helium", 0))
 {
     LOG_DEBUG << "Ship class loaded, id: " << m_id 
               << ", name: " << m_name
@@ -65,5 +67,15 @@ unsigned ShipClass::getId()
 std::string ShipClass::getName()
 {
     return m_name;
+}
+
+unsigned ShipClass::getRequiredCarbon()
+{
+    return m_requiredCarbon;
+}
+
+unsigned ShipClass::getRequiredHelium()
+{
+    return m_requiredHelium;
 }
 

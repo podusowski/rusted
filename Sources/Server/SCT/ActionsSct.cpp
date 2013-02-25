@@ -133,6 +133,12 @@ TEST(ActionsSct, BuildShip)
     executeAction.parameter = 2;
     connection1->send(executeAction);
 
+    // receive cargo info of focused object since some resources
+    // were used to build new ship
+    auto objectCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
+    EXPECT_EQ(0, objectCargoInfo->carbon);
+    EXPECT_EQ(5, objectCargoInfo->helium);
+
     connection1->receive<Common::Messages::ActionStarted>();
     connection1->receive<Common::Messages::GlobalCooldownExpired>();
     connection1->receive<Common::Messages::ActionFinished>();

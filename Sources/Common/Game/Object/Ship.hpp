@@ -1,5 +1,7 @@
 #pragma once
 
+#include <boost/utility.hpp>
+
 #include "Cake/DependencyInjection/Inject.hpp"
 
 #include "Common/Math/Quaternion.hpp"
@@ -15,7 +17,7 @@ namespace Game
 namespace Object
 {
 
-class Ship : public ObjectBase, public OwnedObjectBase
+class Ship : public ObjectBase, public OwnedObjectBase, public boost::noncopyable
 {
 public:
     Ship();

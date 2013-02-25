@@ -79,6 +79,9 @@ TEST_F(AttackTest, AttackOtherShip_Finish)
     EXPECT_CALL(connection, send(
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipCourseInfo))
                 )).Times(1);
+    EXPECT_CALL(connection, send(
+                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ObjectCargoInfo))
+                )).Times(1);
 
     Server::Game::Actions::Attack attack(playerContainer, focusedShip, selectedShip);
     attack.finish();

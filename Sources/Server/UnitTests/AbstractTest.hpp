@@ -5,6 +5,7 @@
 #include <boost/shared_ptr.hpp>
 
 #include "Game/UnitTests/ObjectFactoryMock.hpp"
+#include "Game/UnitTests/ShipClassContainerMock.hpp"
 #include "Cake/DependencyInjection/Registry.hpp"
 #include "Common/Game/UnitTests/RustedTimeStub.hpp"
 #include "Common/Game/Object/FlightTrajectory.hpp"
@@ -28,6 +29,9 @@ public:
         m_objectFactory = boost::shared_ptr<Server::Game::IObjectFactory>(new Server::Game::ObjectFactoryMock);
         forInterface<Server::Game::IObjectFactory>().use(m_objectFactory);
 
+        m_shipClassContainer = boost::shared_ptr<Game::IShipClassContainer>(new Game::ShipClassContainerMock());
+        forInterface<Server::Game::IShipClassContainer>().use(m_shipClassContainer);
+
         ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(testing::Return(Common::Game::TimeValue()));
     }
 
@@ -46,9 +50,15 @@ public:
         return dynamic_cast<Server::Game::ObjectFactoryMock&>(*m_objectFactory);
     }
 
+    Server::Game::ShipClassContainerMock & getShipClassContainerMock()
+    {
+        return dynamic_cast<Server::Game::ShipClassContainerMock&>(*m_shipClassContainer);
+    }
+
 private:
     boost::shared_ptr<Common::Game::IRustedTime> m_time;
     boost::shared_ptr<Server::Game::IObjectFactory> m_objectFactory;
+    boost::shared_ptr<Server::Game::IShipClassContainer> m_shipClassContainer;
 };
 
 }

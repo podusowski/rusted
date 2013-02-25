@@ -21,6 +21,8 @@ public:
     virtual std::vector<AvailableAction> getAvailableActions() = 0;
     virtual unsigned getId() = 0;
     virtual std::string getName() = 0;
+    virtual unsigned getRequiredCarbon() = 0;
+    virtual unsigned getRequiredHelium() = 0;
 
     virtual ~IShipClass() {}
 };

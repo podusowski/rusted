@@ -20,6 +20,8 @@ BuildShip::BuildShip(
 
 Common::Game::TimeValue BuildShip::start()
 {
+    updateCargoHold();
+
     return Common::Game::TimeValue(2, 0);
 }
 
@@ -45,5 +47,23 @@ void BuildShip::finish()
     {
         m_servicesUtils.sendObjectInfo(ship, *connection);
     }
+}
+
+void BuildShip::updateCargoHold()
+{
+    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
+    auto & shipClass = m_shipClassContainer->getById(m_shipClass);
+
+    focusedShip.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+    {
+        unsigned requiredCarbon = shipClass.getRequiredCarbon();
+        unsigned requiredHelium = shipClass.getRequiredHelium();
+
+        cargoHold.changeCarbon(-requiredCarbon);
+        cargoHold.changeHelium(-requiredHelium);
+
+        auto & connection = m_playerContainer.getConnectionById(m_player.getId());
+        m_servicesUtils.sendObjectCargoInfo(focusedShip, connection);
+    });
 }
 

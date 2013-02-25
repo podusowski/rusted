@@ -8,6 +8,7 @@
 
 #include "Server/Network/UnitTests/ConnectionMock.hpp"
 #include "Server/Game/UnitTests/PlayerContainerMock.hpp"
+#include "Server/Game/UnitTests/ShipClassMock.hpp"
 #include "Game/Actions/BuildShip.hpp"
 
 using namespace testing;
@@ -26,6 +27,8 @@ TEST_F(BuildShipTest, Build)
     boost::shared_ptr<Common::Game::Object::ObjectBase> createdObject(new Common::Game::Object::ShipMock);
     Server::Network::ConnectionMock connection;
     Server::Game::PlayerContainerMock playerContainer;
+    Server::Game::ShipClassMock shipClass;
+    ON_CALL(getShipClassContainerMock(), getById(_)).WillByDefault(ReturnRef(shipClass));
 
     Common::Game::Position focusedShipPosition(10, 20, 30);
     ON_CALL(focusedShip, getPosition()).WillByDefault(Return(focusedShipPosition));
@@ -34,6 +37,7 @@ TEST_F(BuildShipTest, Build)
 
     std::vector<Server::Network::IConnection *> allConnections{&connection};
     ON_CALL(playerContainer, getAllConnections(_)).WillByDefault(Return(allConnections));
+    ON_CALL(playerContainer, getConnectionById(_)).WillByDefault(ReturnRef(connection));
 
     auto & createdShip = dynamic_cast<Common::Game::Object::ShipMock&>(*createdObject);
 
@@ -45,6 +49,11 @@ TEST_F(BuildShipTest, Build)
     EXPECT_CALL(createdShip, setCourse(_)).Times(1);
 
     EXPECT_CALL(getObjectFactoryMock(), createShip(5, _)).Times(1).WillOnce(Return(createdObject));
+
+    // one for newly created object and other for focused object
+    EXPECT_CALL(connection, send(
+                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ObjectCargoInfo))
+                )).Times(2);
 
     EXPECT_CALL(connection, send(
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipInfo))

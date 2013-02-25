@@ -6,6 +6,7 @@
 #include "Server/Game/Actions/IAction.hpp"
 #include "Server/Game/IPlayerContainer.hpp"
 #include "Server/Game/IObjectFactory.hpp"
+#include "Server/Game/IShipClassContainer.hpp"
 #include "Server/Services/Utils.hpp"
 
 namespace Server
@@ -15,6 +16,7 @@ namespace Game
 namespace Actions
 {
 
+// FIXME: FocusedObject will be invalid if player select other one during action time
 class BuildShip : public IAction
 {
 public:
@@ -23,12 +25,15 @@ public:
     void finish();
 
 private:
+    void updateCargoHold();
+
     Common::Game::Universe & m_universe;
     Common::Game::IPlayer & m_player;
     Server::Game::IPlayerContainer & m_playerContainer;
     unsigned m_shipClass;
     Server::Services::Utils m_servicesUtils;
     Cake::DependencyInjection::Inject<IObjectFactory> m_objectFactory;
+    Cake::DependencyInjection::Inject<IShipClassContainer> m_shipClassContainer;
 };
 
 }

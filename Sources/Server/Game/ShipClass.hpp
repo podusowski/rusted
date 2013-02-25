@@ -18,6 +18,8 @@ public:
     std::vector<AvailableAction> getAvailableActions();
     unsigned getId();
     std::string getName();
+    unsigned getRequiredCarbon();
+    unsigned getRequiredHelium();
 
 private:
     unsigned m_id;
@@ -26,6 +28,8 @@ private:
     unsigned m_integrity;
     std::string m_mesh;
     unsigned m_capacity;
+    unsigned m_requiredCarbon;
+    unsigned m_requiredHelium;
     std::vector<AvailableAction> m_availableActions;
 };
 

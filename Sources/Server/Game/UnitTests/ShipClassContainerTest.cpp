@@ -17,6 +17,7 @@ TEST_F(ShipClassContainerTest, LoadShipClasses)
     auto & shipClassesNode = db.getRoot().createChild("ship_classes");
     auto & shipClassNode = shipClassesNode.createChild("ship_class");
     shipClassNode.setValue("id", 1);
+    shipClassNode.setValue("name", "ship1");
     shipClassNode.setValue("speed", 1);
     shipClassNode.setValue("integrity", 1);
     shipClassNode.setValue("mesh", "mesh");
@@ -34,9 +35,11 @@ TEST_F(ShipClassContainerTest, DuplicatedShipClasses)
 
     auto & shipClass1Node = shipClassesNode.createChild("ship_class");
     shipClass1Node.setValue("id", 1);
+    shipClass1Node.setValue("name", "ship1");
 
     auto & shipClass2Node = shipClassesNode.createChild("ship_class");
     shipClass2Node.setValue("id", 1);
+    shipClass2Node.setValue("name", "ship2");
 
     EXPECT_ANY_THROW(ShipClassContainer shipClassContainer(db));
 }

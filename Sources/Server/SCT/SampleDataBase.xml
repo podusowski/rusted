@@ -6,14 +6,14 @@
     </users>
     <objects>
         <object type="Ship" id="1" class="1" owner="1" x="1" y="1" z="1" carbon="10" helium="10" />
-        <object type="Ship" id="2" class="2" owner="2" x="1" y="1" z="1" />
+        <object type="Ship" id="2" class="2" owner="2" x="1" y="1" z="1" carbon="11" helium="6" />
         <object type="Ship" id="4" class="1" owner="2" x="1" y="1" z="1" />
         <object type="Ship" id="5" class="1" owner="2" x="10000" y="1" z="1" />
         <object type="Asteroid" id="3" x="100" y="100" z="100" integrity="100" carbon="100" helium="100" />
     </objects>
     <ship_classes>
 
-        <ship_class id="1" speed="1" integrity="100" name="Ship1" mesh="Ship1.mesh" capacity="1000">
+        <ship_class id="1" speed="1" integrity="100" name="Ship1" mesh="Ship1.mesh" capacity="1000" required_carbon="10" required_helium="5">
             <actions>
                 <action type="1" parameter="1" />
                 <action type="1" parameter="2" />
@@ -23,7 +23,7 @@
             </actions>
         </ship_class>
 
-        <ship_class id="2" speed="20" integrity="200" name="Ship2" mesh="Ship2.mesh" capacity="1000" />
+        <ship_class id="2" speed="20" integrity="200" name="Ship2" mesh="Ship2.mesh" capacity="1000" required_carbon="10" required_helium="5" />
 
     </ship_classes>
 </root>
