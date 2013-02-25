@@ -95,8 +95,9 @@ std::string ActionFactory::getActionDescription(unsigned id, unsigned parameter)
         }
         case ActionType_BuildShip:
         {
+            auto & shipClass = m_shipClassContainer->getById(parameter);
             std::stringstream ss;
-            ss << "build " << parameter;
+            ss << "build " << shipClass.getName();
             return ss.str();
         }
         case ActionType_Gather:

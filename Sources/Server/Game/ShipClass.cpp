@@ -6,12 +6,14 @@ using namespace Server::Game;
 
 ShipClass::ShipClass(DataBase::DataBaseNode & node) :
     m_id(node.getValue<unsigned>("id")),
+    m_name(node.getValue<std::string>("name")),
     m_speed(node.getValue<unsigned>("speed")),
     m_integrity(node.getValue<unsigned>("integrity")),
     m_mesh(node.getValue<std::string>("mesh")),
     m_capacity(node.getValue<unsigned>("capacity", 0))
 {
     LOG_DEBUG << "Ship class loaded, id: " << m_id 
+              << ", name: " << m_name
               << ", speed: " << m_speed 
               << ", integrity: " << m_integrity
               << ", mesh: " << m_mesh
@@ -58,5 +60,10 @@ std::vector<AvailableAction> ShipClass::getAvailableActions()
 unsigned ShipClass::getId()
 {
     return m_id;
+}
+
+std::string ShipClass::getName()
+{
+    return m_name;
 }
 

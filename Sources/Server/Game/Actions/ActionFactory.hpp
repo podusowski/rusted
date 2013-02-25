@@ -6,6 +6,7 @@
 #include "Server/Game/Actions/IAction.hpp"
 #include "Server/Network/IConnection.hpp"
 #include "Server/Game/IPlayerContainer.hpp"
+#include "Server/Game/IShipClassContainer.hpp"
 #include "Common/Game/Universe.hpp"
 #include "Common/Game/Object/Ship.hpp"
 #include "IActionFactory.hpp"
@@ -33,6 +34,7 @@ public:
 
 private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
+    Cake::DependencyInjection::Inject<Game::IShipClassContainer> m_shipClassContainer;
     Common::Game::Universe & m_universe;
     Server::Game::IPlayerContainer & m_playerContainer;
 };

@@ -17,9 +17,11 @@ public:
     void applyTo(Common::Game::Object::Ship &);
     std::vector<AvailableAction> getAvailableActions();
     unsigned getId();
+    std::string getName();
 
 private:
     unsigned m_id;
+    std::string m_name;
     unsigned m_speed;
     unsigned m_integrity;
     std::string m_mesh;

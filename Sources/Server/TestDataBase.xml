@@ -27,7 +27,7 @@
         </ship_class>
 
         <!-- construction ship -->
-        <ship_class id="2" speed="100" integrity="100" mesh="Constructor.mesh" capacity="10000">
+        <ship_class id="2" speed="100" integrity="100" mesh="Constructor.mesh" name="Constructor" capacity="10000">
             <actions>
                 <action type="2" parameter="1" />
                 <action type="2" parameter="2" />
@@ -37,7 +37,7 @@
         </ship_class>
 
         <!-- gatherer -->
-        <ship_class id="3" speed="100" integrity="100" mesh="gatherer.mesh" capacity="1000">
+        <ship_class id="3" speed="100" integrity="100" mesh="gatherer.mesh" name="Gatherer" capacity="1000">
             <actions>
                 <action type="3" parameter="1" />
                 <action type="4" parameter="1" />

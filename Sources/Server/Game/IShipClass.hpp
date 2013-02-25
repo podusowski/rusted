@@ -20,6 +20,7 @@ public:
     virtual void applyTo(Common::Game::Object::Ship &) = 0;
     virtual std::vector<AvailableAction> getAvailableActions() = 0;
     virtual unsigned getId() = 0;
+    virtual std::string getName() = 0;
 
     virtual ~IShipClass() {}
 };
