@@ -56,6 +56,16 @@ void Camera::zoomOut()
     m_distance -= 100;
 }
 
+Ogre::Quaternion Camera::getOrientation()
+{
+    return m_userOrientation;
+}
+
+bool Camera::isUserOrientationChanging()
+{
+    return m_userOrientationChanging;
+}
+
 void Camera::mouseMoved(const OIS::MouseState & state)
 {
     if (m_userOrientationChanging)

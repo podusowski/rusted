@@ -43,6 +43,8 @@ private:
     void objectAdded(Common::Game::Object::ObjectBase &);
     void updatePlayerShipsListBox();
     void updateFocusedShipWindow();
+    void createOrientationPlane();
+    void updateOrientationPlane();
 
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;
@@ -52,6 +54,7 @@ private:
     Common::Game::Universe & m_universe;
     Common::Game::Player & m_player;
     Camera m_camera;
+    Ogre::SceneNode * m_orientationPlaneSceneNode;
 };
 
 }

@@ -1,0 +1,19 @@
+material Grid 
+{
+    receive_shadows off
+    technique
+    {
+        pass Grid
+        {
+            lighting off
+            scene_blend alpha_blend
+            texture_unit 
+            {
+                texture Grid.png
+                tex_address_mode wrap
+                scale 1.0 1.0
+                colour_op modulate
+            }
+        }
+    }
+}

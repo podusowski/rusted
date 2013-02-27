@@ -18,6 +18,8 @@ public:
     void update();
     void zoomIn();
     void zoomOut();
+    Ogre::Quaternion getOrientation();
+    bool isUserOrientationChanging();
 
     void mouseMoved(const OIS::MouseState &);
     void mousePressed(const OIS::MouseButtonID &, const OIS::MouseEvent &, unsigned x, unsigned y);

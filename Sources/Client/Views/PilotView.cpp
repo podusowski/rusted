@@ -36,6 +36,8 @@ void PilotView::activate()
 
     MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
     shipListBox->eventListChangePosition += MyGUI::newDelegate(this, &PilotView::shipListBoxSelected);
+
+    createOrientationPlane();
 }
 
 void PilotView::deactivate()
@@ -47,6 +49,7 @@ void PilotView::frameStarted()
     updateShipPosition();
     updateFocusedShipWindow();
     m_camera.update();
+    updateOrientationPlane();
 }
 
 void PilotView::updateShipPosition()
@@ -161,5 +164,35 @@ void PilotView::updateFocusedShipWindow()
     });
 
     m_gui->findWidget<MyGUI::TextBox>("FocusTextBox")->setCaption(ss.str());
+}
+
+void PilotView::createOrientationPlane()
+{
+    Ogre::Plane plane(Ogre::Vector3::UNIT_Y, 0);
+    Ogre::MeshManager::getSingleton().createPlane(
+        "OrientationPlane.vmesh", Ogre::ResourceGroupManager::DEFAULT_RESOURCE_GROUP_NAME,
+        plane, 2400, 1800, 20, 20, true, 1, 1, 1, Ogre::Vector3::UNIT_Z);
+
+    Ogre::Entity * entGround = m_graphics.getSceneManager().createEntity("GroundEntity", "OrientationPlane.vmesh");
+    entGround->setMaterialName("Grid");
+    entGround->setCastShadows(false);
+
+    m_orientationPlaneSceneNode = m_graphics.getSceneManager().getRootSceneNode()->createChildSceneNode();
+    m_orientationPlaneSceneNode->attachObject(entGround);
+}
+
+void PilotView::updateOrientationPlane()
+{
+    m_orientationPlaneSceneNode->setVisible(m_camera.isUserOrientationChanging());
+
+    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
+    auto position = focusedShip.getPosition();
+    auto orientation = focusedShip.getOrientation();
+    m_orientationPlaneSceneNode->setPosition(position.getX(), position.getY(), position.getZ());
+    m_orientationPlaneSceneNode->setOrientation(-m_camera.getOrientation());
+
+    // apply Blender coordinations patch
+    m_orientationPlaneSceneNode->roll(Ogre::Degree(90));
+    m_orientationPlaneSceneNode->pitch(Ogre::Degree(90));
 }
 
