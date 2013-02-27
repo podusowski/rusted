@@ -32,6 +32,7 @@
 
     <!-- action tooltip -->
     <Widget type="TextBox" skin="TextBox" position="70 120 500 200" align="Right Top" layer="Main" name="FocusedActionTextBox">
+        <Property key="Visible" value="false" />
         <Property key="Caption" value="Build Gatherer\nGatherer is cool ship which can gather stuff from asteroids"/>
     </Widget>
 
