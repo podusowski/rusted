@@ -58,7 +58,8 @@ void Camera::zoomOut()
 
 Ogre::Quaternion Camera::getOrientation()
 {
-    return m_userOrientation;
+    Ogre::Camera & camera = m_graphics.getCamera();
+    return camera.getOrientation();
 }
 
 bool Camera::isUserOrientationChanging()
