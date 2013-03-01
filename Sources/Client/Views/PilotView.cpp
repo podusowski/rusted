@@ -95,12 +95,15 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
         auto orientation = m_player.getFocusedObject().getOrientation();
 
         //Ogre::Quaternion ogreOrientation = m_graphics.toOgreQuaternion(orientation);
-        auto ogreOrientation = m_orientationPlaneSceneNode->getOrientation();
+        auto ogreOrientation = 
+            m_orientationPlaneSceneNode->getOrientation()
+            * Ogre::Quaternion(Ogre::Degree(-90), Ogre::Vector3::UNIT_X);
 
         int top = y - (m_graphics.getHeight() / 2);
         int left = x - (m_graphics.getWidth() / 2);
 
         top *= 100;
+        left *= 10;
 
         Ogre::Vector3 delta(left, -top, 0); 
         delta = ogreOrientation * delta;
@@ -192,7 +195,7 @@ void PilotView::updateOrientationPlane()
     m_orientationPlaneSceneNode->setPosition(position.getX(), position.getY(), position.getZ());
     m_orientationPlaneSceneNode->setOrientation(m_camera.getOrientation());
 
-    // apply Blender coordinations patch
+    // orintation
     m_orientationPlaneSceneNode->pitch(Ogre::Degree(20));
 }
 
