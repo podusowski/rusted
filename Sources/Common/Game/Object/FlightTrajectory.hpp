@@ -2,6 +2,7 @@
 
 #include "Cake/DependencyInjection/Inject.hpp"
 #include "IFlightTrajectory.hpp"
+#include "Common/Math/Bezier.hpp"
 
 namespace Common
 {
@@ -36,6 +37,7 @@ private:
     Description m_description;
     unsigned m_speed;
     Common::Math::Quaternion m_lastOrientation;
+    Common::Math::Bezier<int> m_bezier;
 };
 
 }

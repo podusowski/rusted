@@ -4,7 +4,7 @@
 
 TEST(BezierTest, QuadricCurve)
 {
-	Common::Bezier<Common::Point3<int>, double> b1;
+	Common::Math::Bezier<Common::Point3<int>, double> b1;
 
 	// "random" values :)
 	b1.addControlPoint(Common::Point3<int>(4, 10, 12));
@@ -19,7 +19,7 @@ TEST(BezierTest, QuadricCurve)
 
 TEST(BezierTest, CubicCurveTest)
 {
-	Common::Bezier<Common::Point3<int>, double> b1;
+	Common::Math::Bezier<Common::Point3<int>, double> b1;
 
 	// "random" values :)
 	b1.addControlPoint(Common::Point3<int>(0, 0, 0));
@@ -31,5 +31,15 @@ TEST(BezierTest, CubicCurveTest)
 	EXPECT_TRUE(Common::Point3<int>(100,728,-40) == b1(1));	// check for B(1)
 	EXPECT_TRUE(Common::Point3<int>(3,63,-2) == b1(0.25f));	// check for B(0.25)
 	EXPECT_TRUE(Common::Point3<int>(45,441,-20) == b1(0.75f)); // check for B(0.75)
+}
+
+TEST(BezierTest, LinearLength)
+{
+	Common::Math::Bezier<Common::Point3<int>, double> b1;
+
+	b1.addControlPoint(Common::Point3<int>(0, 0, 0));
+	b1.addControlPoint(Common::Point3<int>(0, 0, 100));
+
+	EXPECT_EQ(100u, b1.getLength());
 }
 

@@ -1,5 +1,4 @@
-#ifndef BEZIER_HPP
-#define BEZIER_HPP
+#pragma once
 
 #include "Point3.hpp"
 #include <vector>
@@ -7,6 +6,8 @@
 #include <cmath>
 
 namespace Common
+{
+namespace Math
 {
 
 /**
@@ -45,9 +46,26 @@ public:
 
 		return Point(p[0], p[1], p[2]);
 	}
+
+	unsigned getLength()
+	{
+        // according to http://www.gamedev.net/topic/313018-calculating-the-length-of-a-bezier-curve/ there
+        // is no way to calculate length of the Bezier curve so we need to "measure" it
+
+	    const float step = 0.1f;
+	    float ret = 0;
+
+	    for (float i = step; i < 1.0f + step; i += step)
+	    {
+	        Point p1 = (*this)(i - step);
+	        Point p2 = (*this)(i);
+	        ret += Point::distance(p1, p2);
+        }
+
+        return round(ret);
+	}
 };
 
 }
-
-#endif
+}
 
