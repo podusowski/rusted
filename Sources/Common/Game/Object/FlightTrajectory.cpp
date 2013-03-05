@@ -23,6 +23,8 @@ void FlightTrajectory::fly(Common::Game::Position destination)
     m_description.destination = destination;
     m_description.startTime = time;
 
+    configureBezier();
+
     LOG_DEBUG << "New trajectory: from " << position << " to " << destination << ", start time: " << time << ", speed: " << m_speed;
 }
 
@@ -110,14 +112,17 @@ FlightTrajectory::Description FlightTrajectory::getDescription()
 void FlightTrajectory::applyDescription(FlightTrajectory::Description description)
 {
     m_description = description;
+    configureBezier();
 }
 
 Position FlightTrajectory::calculatePosition(TimeValue time)
 {
-    if (m_description.destination == m_description.start)
+    if (m_bezier.empty())
+    {
         return m_description.start;
+    }
 
-    unsigned distance = Position::distance(m_description.destination, m_description.start);
+    unsigned distance = m_bezier.getLength();
     unsigned totalTripTime = distance / m_speed;
     TimeValue timeTakenSoFar = time - m_description.startTime;
     float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
@@ -137,8 +142,14 @@ Position FlightTrajectory::calculatePosition(TimeValue time)
     }
     else
     {
-        Position trajectoryVector = m_description.destination - m_description.start;
-        return m_description.start + (trajectoryVector * progress);
+        return m_bezier(progress);
     }
+}
+
+void FlightTrajectory::configureBezier()
+{
+    m_bezier.reset();
+    m_bezier.addControlPoint(m_description.start);
+    m_bezier.addControlPoint(m_description.destination);
 }
 

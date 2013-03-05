@@ -26,11 +26,26 @@ public:
 		points.push_back(point);
 	}
 
+	void reset()
+	{
+        points.clear();
+	}
+
+	bool empty()
+	{
+        return points.empty();
+	}
+
 	/**
 	 * Returns value for bezier function with t parameter.
 	 */
 	Point operator()(float t)
 	{
+        if (points.empty())
+        {
+            throw std::runtime_error("can't calculate bezier curve, no control points");
+        }
+
 		CalcType f = 0;
 		CalcType p[3] = {0, 0, 0};
 		size_t n = points.size() - 1;

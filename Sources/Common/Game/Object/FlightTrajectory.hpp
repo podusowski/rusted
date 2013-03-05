@@ -32,12 +32,13 @@ public:
 
 private:
     Position calculatePosition(TimeValue time);
+    void configureBezier();
 
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
     Description m_description;
     unsigned m_speed;
     Common::Math::Quaternion m_lastOrientation;
-    Common::Math::Bezier<int> m_bezier;
+    Common::Math::Bezier<Common::Game::Position> m_bezier;
 };
 
 }
