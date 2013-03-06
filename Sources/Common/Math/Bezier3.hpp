@@ -10,18 +10,18 @@ namespace Common
 namespace Math
 {
 
-/**
- * Generic implementation for bezier curves.
- */
-template<typename Point, typename CalcType = float> class Bezier
+class Bezier3
 {
-	std::vector<Point> points;
+    typedef Point3<int> PointType;
+    typedef float CalcType;
+
+    std::vector<PointType> points;
 
 public:
 	/**
 	 * Adds control point for bezier curve. 
 	 */
-	void addControlPoint(const Point &point)
+	void addControlPoint(const PointType &point)
 	{
 		points.push_back(point);
 	}
@@ -39,7 +39,7 @@ public:
 	/**
 	 * Returns value for bezier function with t parameter.
 	 */
-	Point operator()(float t)
+	PointType operator()(float t)
 	{
         if (points.empty())
         {
@@ -50,7 +50,7 @@ public:
 		CalcType p[3] = {0, 0, 0};
 		size_t n = points.size() - 1;
 
-		for (int i = 0; i <= n; i ++)
+		for (size_t i = 0; i <= n; i ++)
 		{
 			f = (CalcType)(boost::math::binomial_coefficient<CalcType>((unsigned int)n, i)*pow(1.0-t, (double)n - i)*pow(t, i));
 
@@ -59,7 +59,7 @@ public:
 			p[2] += points[i].getZ() * f;
 		}
 
-		return Point(p[0], p[1], p[2]);
+		return PointType(p[0], p[1], p[2]);
 	}
 
 	unsigned getLength()
@@ -72,9 +72,9 @@ public:
 
 	    for (float i = step; i < 1.0f + step; i += step)
 	    {
-	        Point p1 = (*this)(i - step);
-	        Point p2 = (*this)(i);
-	        ret += Point::distance(p1, p2);
+	        PointType p1 = (*this)(i - step);
+	        PointType p2 = (*this)(i);
+	        ret += PointType::distance(p1, p2);
         }
 
         return round(ret);

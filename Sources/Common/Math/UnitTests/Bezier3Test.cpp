@@ -1,10 +1,10 @@
 #include <gtest/gtest.h>
 
-#include "Common/Math/Bezier.hpp"
+#include "Common/Math/Bezier3.hpp"
 
 TEST(BezierTest, QuadricCurve)
 {
-	Common::Math::Bezier<Common::Point3<int>, double> b1;
+	Common::Math::Bezier3 b1;
 
 	// "random" values :)
 	b1.addControlPoint(Common::Point3<int>(4, 10, 12));
@@ -19,7 +19,7 @@ TEST(BezierTest, QuadricCurve)
 
 TEST(BezierTest, CubicCurveTest)
 {
-	Common::Math::Bezier<Common::Point3<int>, double> b1;
+	Common::Math::Bezier3 b1;
 
 	// "random" values :)
 	b1.addControlPoint(Common::Point3<int>(0, 0, 0));
@@ -35,7 +35,7 @@ TEST(BezierTest, CubicCurveTest)
 
 TEST(BezierTest, LinearLength)
 {
-	Common::Math::Bezier<Common::Point3<int>, double> b1;
+	Common::Math::Bezier3 b1;
 
 	b1.addControlPoint(Common::Point3<int>(0, 0, 0));
 	b1.addControlPoint(Common::Point3<int>(0, 0, 100));

@@ -21,6 +21,7 @@ SOURCES+=Game/Object/Ship.cpp
 SOURCES+=Game/Object/Asteroid.cpp
 SOURCES+=Game/Object/CargoHold.cpp
 SOURCES+=Math/Quaternion.cpp
+SOURCES+=Math/Bezier3.cpp
 
 CFLAGS+=-Wall -pedantic -g 
 CFLAGS+=-I$(TARGET_BASE)
