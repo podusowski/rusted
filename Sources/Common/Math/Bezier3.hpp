@@ -1,9 +1,8 @@
 #pragma once
 
-#include "Point3.hpp"
 #include <vector>
-#include <boost/math/special_functions/binomial.hpp>
-#include <cmath>
+
+#include "Point3.hpp"
 
 namespace Common
 {
@@ -20,11 +19,15 @@ public:
     void reset();
     bool empty();
     PointType operator()(float t);
+    PointType derivative(float t);
     unsigned getLength();
 
 private:
+    PointType bezierCurve(const std::vector<PointType> & points, CalcType t);
     CalcType bernsteinPolynomial(unsigned i, unsigned n, CalcType t);
+    void calculateDerivativePoints();
     std::vector<PointType> m_points;
+    std::vector<PointType> m_derivativePoints;
 };
 
 }

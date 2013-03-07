@@ -43,3 +43,16 @@ TEST(BezierTest, LinearLength)
 	EXPECT_EQ(100u, b1.getLength());
 }
 
+TEST(BezierTest, LinearDerivative)
+{
+    Common::Math::Bezier3 b1;
+
+    b1.addControlPoint(Common::Point3<int>(0, 0, 0));
+    b1.addControlPoint(Common::Point3<int>(0, 0, 100));
+
+    for (float f = 0.0; f < 1.0; f += 0.01)
+    {
+        EXPECT_EQ(Common::Point3<int>(0, 0, 100), b1.derivative(0.5));
+    }
+}
+
