@@ -122,15 +122,7 @@ Position FlightTrajectory::calculatePosition(TimeValue time)
         return m_description.start;
     }
 
-    unsigned distance = m_bezier.getLength();
-    unsigned totalTripTime = distance / m_speed;
-    TimeValue timeTakenSoFar = time - m_description.startTime;
-    float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
-
-    if (timeTakenSoFar == TimeValue(0, 0))
-        return m_description.start;
-
-    float progress = float(secondsTakenSoFar) / float(totalTripTime);
+    float progress = calculateProgress(time);
 
     if (progress >= 1.0)
     {
@@ -144,6 +136,21 @@ Position FlightTrajectory::calculatePosition(TimeValue time)
     {
         return m_bezier(progress);
     }
+}
+
+float FlightTrajectory::calculateProgress(TimeValue time)
+{
+    if (m_bezier.empty())
+    {
+        return 0.0;
+    }
+
+    unsigned distance = m_bezier.getLength();
+    unsigned totalTripTime = distance / m_speed;
+    TimeValue timeTakenSoFar = time - m_description.startTime;
+    float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
+
+    return float(secondsTakenSoFar) / float(totalTripTime);
 }
 
 void FlightTrajectory::configureBezier()

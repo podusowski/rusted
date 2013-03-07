@@ -32,6 +32,7 @@ public:
 
 private:
     Position calculatePosition(TimeValue time);
+    float calculateProgress(TimeValue time);
     void configureBezier();
 
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
