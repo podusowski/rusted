@@ -14,7 +14,7 @@ namespace Math
 class Bezier3
 {
 public:
-    typedef Point3<int> PointType;
+    typedef Point3<Real> PointType;
     typedef Real CalcType;
 
     void addControlPoint(const PointType & point);
