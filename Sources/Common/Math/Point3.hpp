@@ -147,6 +147,10 @@ public:
         {
             return Quaternion();
         }
+        else if (dot <= 1e-6f - 1.0f) // < ~ -1 - negative vectors, totate by 180 degree
+        {
+            return Quaternion(PI, std::make_tuple(1, 0, 0));
+        }
         else
         {
             Real s = sqrt((1 + dot) * 2);
@@ -161,6 +165,12 @@ public:
 
             Quaternion q(w, x, y, z);
             q.normalize();
+
+            assert(!std::isnan(q.getW()));
+            assert(!std::isnan(q.getX()));
+            assert(!std::isnan(q.getY()));
+            assert(!std::isnan(q.getZ()));
+
             return q;
         }
     }
