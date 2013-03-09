@@ -22,7 +22,6 @@ public:
     bool empty();
     PointType operator()(float t);
     PointType derivative(float t);
-    Quaternion orientation(float t);
     unsigned getLength();
 
 private:

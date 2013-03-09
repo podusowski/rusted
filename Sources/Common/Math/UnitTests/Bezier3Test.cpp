@@ -58,16 +58,3 @@ TEST(Bezier3Test, LinearDerivative)
     }
 }
 
-TEST(Bezier3Test, LinearOrientation)
-{
-    Bezier3 b1;
-
-    b1.addControlPoint(Point3<int>(0, 0, 0));
-    b1.addControlPoint(Point3<int>(0, 0, 100));
-
-    for (float f = 0.0; f < 1.0; f += 0.01)
-    {
-        //EXPECT_EQ(Quaternion(PI / 4.0, Point3<int>(0, 0, 1)), b1.orientation(f));
-    }
-}
-
