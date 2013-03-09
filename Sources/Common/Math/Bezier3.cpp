@@ -38,6 +38,11 @@ Bezier3::PointType Bezier3::derivative(float t)
     return bezierCurve(m_derivativePoints, t);
 }
 
+Quaternion Bezier3::orientation(float t)
+{
+    return Quaternion();
+}
+
 unsigned Bezier3::getLength()
 {
     // according to http://www.gamedev.net/topic/313018-calculating-the-length-of-a-bezier-curve/ there

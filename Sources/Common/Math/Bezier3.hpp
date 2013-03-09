@@ -2,7 +2,9 @@
 
 #include <vector>
 
+#include "Real.hpp"
 #include "Point3.hpp"
+#include "Quaternion.hpp"
 
 namespace Common
 {
@@ -13,13 +15,14 @@ class Bezier3
 {
 public:
     typedef Point3<int> PointType;
-    typedef float CalcType;
+    typedef Real CalcType;
 
     void addControlPoint(const PointType & point);
     void reset();
     bool empty();
     PointType operator()(float t);
     PointType derivative(float t);
+    Quaternion orientation(float t);
     unsigned getLength();
 
 private:
