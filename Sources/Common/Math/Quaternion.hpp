@@ -14,6 +14,8 @@ public:
     Quaternion(float radians, const Point3<int> & axis);
     ~Quaternion();
 
+    bool operator == (const Quaternion &) const;
+
     float getW();
     float getX();
     float getY();

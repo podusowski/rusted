@@ -2,6 +2,11 @@
 
 #include "Common/Math/Bezier3.hpp"
 
+using namespace Common::Math;
+
+//FIXME: for Point3
+using namespace Common;
+
 TEST(BezierTest, QuadricCurve)
 {
 	Common::Math::Bezier3 b1;
@@ -52,7 +57,20 @@ TEST(BezierTest, LinearDerivative)
 
     for (float f = 0.0; f < 1.0; f += 0.01)
     {
-        EXPECT_EQ(Common::Point3<int>(0, 0, 100), b1.derivative(0.5));
+        EXPECT_EQ(Common::Point3<int>(0, 0, 100), b1.derivative(f));
+    }
+}
+
+TEST(BezierTest, LinearOrientation)
+{
+    Common::Math::Bezier3 b1;
+
+    b1.addControlPoint(Common::Point3<int>(0, 0, 0));
+    b1.addControlPoint(Common::Point3<int>(0, 0, 100));
+
+    for (float f = 0.0; f < 1.0; f += 0.01)
+    {
+        //EXPECT_EQ(Common::Math::Quaternion(PI / 4.0, Point3<int>(0, 0, 1)), b1.orientation(f));
     }
 }
 

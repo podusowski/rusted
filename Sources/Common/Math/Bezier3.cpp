@@ -40,6 +40,7 @@ Bezier3::PointType Bezier3::derivative(float t)
 
 Quaternion Bezier3::orientation(float t)
 {
+    //auto derivative = derivative(t);
     return Quaternion();
 }
 

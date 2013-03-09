@@ -20,6 +20,11 @@ Quaternion::~Quaternion()
 {
 }
 
+bool Quaternion::operator == (const Quaternion & rhs) const
+{
+    return m_w == rhs.m_w && m_x == rhs.m_x && m_y == rhs.m_y && m_z == rhs.m_z;
+}
+
 float Quaternion::getW()
 {
     return m_w;

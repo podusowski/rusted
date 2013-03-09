@@ -57,7 +57,6 @@ Common::Math::Quaternion FlightTrajectory::getOrientation()
         int x = m_description.destination.getX() - m_description.start.getX();
         int y = m_description.destination.getY() - m_description.start.getY();
 
-        const float HALF_PI = 1.5707;
         const float PI = 3.14;
 
         float angle = 0;
