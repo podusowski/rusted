@@ -82,10 +82,10 @@ TEST(Point3Test, Length)
 TEST(Point3Test, Normalize)
 {
     point3i p1(0, 0, 10);
-    point3i i = p1.normalize();
-    EXPECT_EQ(0, i.getX());
-    EXPECT_EQ(0, i.getY());
-    EXPECT_EQ(1, i.getZ());
+    p1.normalize();
+    EXPECT_EQ(0, p1.getX());
+    EXPECT_EQ(0, p1.getY());
+    EXPECT_EQ(1, p1.getZ());
 }
 
 TEST(Point3Test, RotationTo)

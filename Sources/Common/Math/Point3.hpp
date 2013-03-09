@@ -66,7 +66,7 @@ public:
 		return Point3<T>(ceil(m_x * value), ceil(m_y * value), ceil(m_z * value));
 	}
 
-	template <typename P> Point3<T>& operator *= (P value)
+	Point3<T> & operator *= (Real value)
 	{
 		m_x *= value;
 		m_y *= value;
@@ -74,6 +74,7 @@ public:
 
 		return *this;
 	}
+
 	bool operator!=(const Point3<T> &p)
 	{
 		return m_x != p.m_x || m_y != p.m_y || m_z != p.m_z;
@@ -114,9 +115,9 @@ public:
 		return sqrt(m_x*m_x + m_y*m_y + m_z*m_z);
 	}
 
-	Point3<T> normalize()
+	void normalize()
 	{
-        return *this * ( 1.0 / length() );
+        *this *= ( 1.0 / length() );
 	}
 
     Point3<T> crossProduct(const Point3<T> & rhs)
