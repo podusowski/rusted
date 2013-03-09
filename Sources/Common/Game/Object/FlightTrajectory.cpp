@@ -96,6 +96,7 @@ Position FlightTrajectory::calculatePosition(TimeValue time)
     if (progress >= 1.0)
     {
         m_description.start = m_description.destination;
+        m_bezier.reset();
 
         LOG_DEBUG << "Destination " << m_description.destination << " reached";
 
