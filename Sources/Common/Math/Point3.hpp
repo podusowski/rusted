@@ -4,6 +4,7 @@
 #include <ostream>
 
 #include "Real.hpp"
+#include "Quaternion.hpp"
 
 namespace Common
 {
@@ -129,6 +130,39 @@ public:
     Common::Math::Real dotProduct(const Point3<T> & rhs)
     {
         return m_x * rhs.m_x + m_y * rhs.m_y + m_z * rhs.m_z;
+    }
+
+    Quaternion getRotationTo(const Point3<T> & rhs)
+    {
+        // need higher precision in such calculations
+        Point3<Real> p1 = *this;
+        Point3<Real> p2 = rhs;
+
+        p1.normalize();
+        p2.normalize();
+
+        auto dot = p1.dotProduct(p2);
+
+        if (dot >= 1.0)
+        {
+            return Quaternion();
+        }
+        else
+        {
+            Real s = sqrt((1 + dot) * 2);
+            Real invs = 1 / s;
+
+            auto cross = p1.crossProduct(p2);
+
+            auto x = cross.getX() * invs;
+            auto y = cross.getY() * invs;
+            auto z = cross.getZ() * invs;
+            auto w = s * 0.5f;
+
+            Quaternion q(w, x, y, z);
+            q.normalize();
+            return q;
+        }
     }
 
 	static T distance(const Point3<T> &a, const Point3<T> &b)

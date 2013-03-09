@@ -5,6 +5,8 @@
 typedef Common::Math::Point3<int> point3i;
 typedef Common::Math::Point3<float> point3f;
 
+using namespace Common::Math;
+
 TEST(Point3Test, Operators)
 {
 	point3i p1, p2, p3;
@@ -84,5 +86,15 @@ TEST(Point3Test, Normalize)
     EXPECT_EQ(0, i.getX());
     EXPECT_EQ(0, i.getY());
     EXPECT_EQ(1, i.getZ());
+}
+
+TEST(Point3Test, RotationTo)
+{
+    Point3<int> p1(0, 0, 10);
+    Point3<int> p2(0, 0, 0);
+
+    // 90 degrees
+    // TODO
+    //EXPECT_EQ(Quaternion(PI / 2, std::make_tuple(0, 1, 0)), p1.getRotationTo(p2));
 }
 

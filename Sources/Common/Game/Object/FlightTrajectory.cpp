@@ -6,7 +6,7 @@ using namespace Common::Game;
 
 FlightTrajectory::FlightTrajectory() : 
     m_speed(1),
-    m_lastOrientation(Common::Math::Quaternion(0, Common::Math::Point3<int>(0, 0, 1)))
+    m_lastOrientation(Common::Math::Quaternion(0, std::make_tuple(0, 0, 1)))
 {
 }
 
@@ -87,7 +87,7 @@ Common::Math::Quaternion FlightTrajectory::getOrientation()
             angle = PI - angle;
         }
 
-        m_lastOrientation = Common::Math::Quaternion(angle, Common::Math::Point3<int>(0, 0, 1));
+        m_lastOrientation = Common::Math::Quaternion(angle, std::make_tuple(0, 0, 1));
     }
 
     return m_lastOrientation;
