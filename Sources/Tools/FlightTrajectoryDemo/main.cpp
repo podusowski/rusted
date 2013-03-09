@@ -73,11 +73,12 @@ int main(int argc, const char ** argv)
     pointLight->setPowerScale(20.0);
 
     // create ships
+    const int range = 1;
     std::vector<Object> g_objects;
-    for(int i = -10; i <= 10; i++)
-        for(int j = -10; j <= 10; j++)
-            for(int k = -10; k <= 10; k++)
-                g_objects.push_back(Object(graphics, 100, Common::Game::Position(i * 1000, j * 1000, k * 1000)));
+    for(int i = -range; i <= range; i++)
+        for(int j = -range; j <= range; j++)
+            for(int k = -range; k <= range; k++)
+                g_objects.push_back(Object(graphics, 100, Common::Game::Position(i * 10000, j * 10000, k * 10000)));
 
     graphics.getSceneManager().setSkyBox(true, "SkyBox1", 8000);
 
