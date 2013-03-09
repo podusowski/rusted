@@ -7,7 +7,7 @@ namespace Common
 namespace Game
 {
 
-typedef Point3<int> Position;
+typedef Common::Math::Point3<int> Position;
 
 }
 }

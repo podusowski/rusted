@@ -7,9 +7,10 @@
 
 namespace Common
 {
+namespace Math
+{
 
-template <typename T=int>
-class Point3
+template <typename T> class Point3
 {
 private:
 	T m_x;
@@ -141,9 +142,9 @@ public:
 };
 
 }
+}
 
-template<typename T>
-std::ostream & operator<<(std::ostream & os, const Common::Point3<T> & p)
+template<typename T> std::ostream & operator<<(std::ostream & os, const Common::Math::Point3<T> & p)
 {
     os << "(" << p.getX() << ", " << p.getY() << ", " << p.getZ() << ")";
     return os;

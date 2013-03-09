@@ -2,8 +2,8 @@
 
 #include "Common/Math/Point3.hpp"
 
-typedef Common::Point3<int>		point3i;
-typedef Common::Point3<float>	point3f;
+typedef Common::Math::Point3<int> point3i;
+typedef Common::Math::Point3<float> point3f;
 
 TEST(Point3Test, Operators)
 {
