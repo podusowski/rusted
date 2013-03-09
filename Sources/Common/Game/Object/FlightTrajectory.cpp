@@ -54,40 +54,10 @@ Common::Math::Quaternion FlightTrajectory::getOrientation()
 {
     if (m_description.destination != m_description.start)
     {
-        int x = m_description.destination.getX() - m_description.start.getX();
-        int y = m_description.destination.getY() - m_description.start.getY();
-
-        const float PI = 3.14;
-
-        float angle = 0;
-
-        if (y == 0 || x == 0)
-        {
-            // TODO
-            angle = 0;
-        }
-        else
-        {
-            angle = atan(float(abs(x)) / float(abs(y)));
-        }
-
-        if (y > 0 && x > 0)
-        {
-            angle = -angle;
-        }
-        else if (y > 0 && x < 0)
-        {
-        }
-        else if (y < 0 && x > 0)
-        {
-            angle = PI + angle;
-        }
-        else if (y < 0 && x < 0)
-        {
-            angle = PI - angle;
-        }
-
-        m_lastOrientation = Common::Math::Quaternion(angle, std::make_tuple(0, 0, 1));
+        auto time = m_time->getCurrentTime();
+        float progress = calculateProgress(time);
+        auto derivative = m_bezier.derivative(progress);
+        m_lastOrientation = derivative.getRotationTo(Common::Math::Point3<int>(1, 0, 0));
     }
 
     return m_lastOrientation;
