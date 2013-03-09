@@ -74,16 +74,10 @@ int main(int argc, const char ** argv)
 
     // create ships
     std::vector<Object> g_objects;
-    g_objects.push_back(Object(graphics, 100, Common::Game::Position(0,     0    , 10000)));
-    g_objects.push_back(Object(graphics, 100, Common::Game::Position(0    , 10000, 0)));
-    g_objects.push_back(Object(graphics, 100, Common::Game::Position(0,     10000, 10000)));
-    g_objects.push_back(Object(graphics, 100, Common::Game::Position(10000, 0    , 0)));
-    g_objects.push_back(Object(graphics, 100, Common::Game::Position(10000, 0    , 10000)));
-    g_objects.push_back(Object(graphics, 100, Common::Game::Position(10000, 10000, 0)));
-    g_objects.push_back(Object(graphics, 100, Common::Game::Position(10000, 10000, 10000)));
-    g_objects.push_back(Object(graphics, 100, Common::Game::Position(0    , 0    , -10000)));
-
-    // camera
+    for(int i = -10; i <= 10; i++)
+        for(int j = -10; j <= 10; j++)
+            for(int k = -10; k <= 10; k++)
+                g_objects.push_back(Object(graphics, 100, Common::Game::Position(i * 1000, j * 1000, k * 1000)));
 
     graphics.getSceneManager().setSkyBox(true, "SkyBox1", 8000);
 
