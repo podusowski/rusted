@@ -8,6 +8,7 @@
         <object id="1" type="Ship" class="1" x="1"     y="2000" z="1" owner="1" />
         <object id="2" type="Ship" class="2" x="1"     y="4000" z="1000" owner="1" />
         <object id="3" type="Ship" class="3" x="1"     y="5000" z="1" owner="1" />
+	<object id="4" type="Ship" class="4" x="1000"  y="5000" z="1" owner="1" />
 
         <object id="10" type="Ship" class="1" x="2000"  y="2000" z="1" owner="2" />
         <object id="11" type="Ship" class="2" x="2000"  y="4000" z="1" owner="2" />
@@ -20,6 +21,14 @@
 
         <!-- figter -->
         <ship_class id="1" speed="500" integrity="1000" mesh="Cube.mesh" name="Fighter" capacity="100" required_carbon="10" required_helium="5">
+            <actions>
+                <action type="1" parameter="1" />
+                <action type="4" parameter="1" />
+            </actions>
+        </ship_class>
+
+        <!-- fregate -->
+        <ship_class id="4" speed="80" integrity="100" mesh="Fregate.mesh" name="Fregate" capacity="1000" required_carbon="1" required_helium="1">
             <actions>
                 <action type="1" parameter="1" />
                 <action type="4" parameter="1" />
