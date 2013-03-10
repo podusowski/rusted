@@ -24,8 +24,14 @@ public:
     void normalize();
 
     float getW();
+
+    void setX(Real);
     float getX();
+
+    void setY(Real);
     float getY();
+
+    void setZ(Real);
     float getZ();
 
 private:

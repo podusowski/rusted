@@ -20,7 +20,7 @@ struct Object
     Object(Graphics::Graphics & graphics, unsigned speed, Common::Game::Position destination) : m_graphics(&graphics)
     {
         ship = new Common::Game::Object::Ship();
-        ship->setSpeed(100);
+        ship->setSpeed(speed);
         ship->setCourse(destination);
 
         Ogre::SceneManager & scene = graphics.getSceneManager();
@@ -36,11 +36,13 @@ struct Object
         auto orientation = ship->getOrientation();
 
         node->setPosition(position.getX(), position.getY(), position.getZ());
-        node->setOrientation(m_graphics->toOgreQuaternion(orientation));
+        auto q = m_graphics->toOgreQuaternion(orientation);
+        if (!q.isNaN())
+            node->setOrientation(m_graphics->toOgreQuaternion(orientation));
 
         // apply Blender coordinations patch
         node->roll(Ogre::Degree(90));
-        node->pitch(Ogre::Degree(90));
+        //node->pitch(Ogre::Degree(90));
     }
 
     Common::Game::Object::Ship * ship;
@@ -78,7 +80,7 @@ int main(int argc, const char ** argv)
     for(int i = -range; i <= range; i++)
         for(int j = -range; j <= range; j++)
             for(int k = -range; k <= range; k++)
-                g_objects.push_back(Object(graphics, 100, Common::Game::Position(i * 10000, j * 10000, k * 10000)));
+                g_objects.push_back(Object(graphics, 200, Common::Game::Position(i * 10000, j * 10000, k * 10000)));
 
     graphics.getSceneManager().setSkyBox(true, "SkyBox1", 8000);
 

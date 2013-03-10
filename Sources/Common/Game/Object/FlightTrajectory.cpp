@@ -57,7 +57,10 @@ Common::Math::Quaternion FlightTrajectory::getOrientation()
         auto time = m_time->getCurrentTime();
         float progress = calculateProgress(time);
         auto derivative = m_bezier.derivative(progress);
-        m_lastOrientation = derivative.getRotationTo(Common::Math::Point3<int>(1, 0, 0));
+
+        Common::Game::Position unit(0, 1, 0);
+        m_lastOrientation = unit.getRotationTo(derivative);
+        m_lastOrientation.normalize();
     }
 
     return m_lastOrientation;

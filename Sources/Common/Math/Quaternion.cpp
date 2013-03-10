@@ -1,4 +1,5 @@
 #include <cmath>
+#include <cassert>
 
 #include "Quaternion.hpp"
 
@@ -46,6 +47,9 @@ void Quaternion::normalize()
 {
     Real len = m_w * m_w + m_x * m_x + m_y * m_y + m_z * m_z;
     Real factor = 1.0 / len;
+
+    assert(!std::isnan(factor));
+
     *this *= factor;
 }
 
@@ -54,14 +58,29 @@ float Quaternion::getW()
     return m_w;
 }
 
+void Quaternion::setX(Real v)
+{
+    m_x = v;
+}
+
 float Quaternion::getX()
 {
     return m_x;
 }
 
+void Quaternion::setY(Real v)
+{
+    m_y = v;
+}
+
 float Quaternion::getY()
 {
     return m_y;
+}
+
+void Quaternion::setZ(Real v)
+{
+    m_z = v;
 }
 
 float Quaternion::getZ()
