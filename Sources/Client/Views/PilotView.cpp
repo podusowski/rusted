@@ -107,6 +107,8 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
         delta = ogreOrientation * delta;
 
         m_playerActionService.setFocusedObjectCourse(position + m_graphics.toPosition(delta));
+
+        m_camera.resetUserOrientation();
     }
 }
 

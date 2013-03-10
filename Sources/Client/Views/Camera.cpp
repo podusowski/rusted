@@ -9,9 +9,10 @@ Camera::Camera(Graphics::IGraphics & graphics, Input::IInput & input, Common::Ga
     m_graphics(graphics),
     m_player(player),
     m_distance(1000),
+    m_userOrientationIsReseting(false),
+    m_userOrientationChanging(false),
     m_userXAngle(0),
-    m_userYAngle(0),
-    m_userOrientationChanging(false)
+    m_userYAngle(0)
 {
     input.addMouseListener(*this);
 
@@ -36,17 +37,11 @@ void Camera::update()
     auto cameraPosition = m_graphics.toOgreVector3(position);
 
     // check if slerp is needed
-    if (cameraOrientation != m_lastShipOrientation)
+    if (m_userOrientationIsReseting)
     {
-        m_slerpProgress = 1;
-        m_lastShipOrientation = cameraOrientation;
-        LOG_DEBUG << "Slerping started";
-    }
-    if (m_slerpProgress <= 1 && m_slerpProgress >= 0)
-    {
-        m_slerpProgress -= 0.01;
-        m_userXAngle *= m_slerpProgress;
-        m_userYAngle *= m_slerpProgress;
+        const float ratio = 0.9;
+        m_userXAngle *= ratio;
+        m_userYAngle *= ratio;
 
         recalculateUserOrientation();
     }
@@ -92,6 +87,11 @@ bool Camera::isUserOrientationChanging()
     return m_userOrientationChanging;
 }
 
+void Camera::resetUserOrientation()
+{
+    m_userOrientationIsReseting = true;
+}
+
 void Camera::mouseMoved(const OIS::MouseState & state)
 {
     if (m_userOrientationChanging)
@@ -108,6 +108,7 @@ void Camera::mousePressed(const OIS::MouseButtonID & button, const OIS::MouseEve
     if (button == OIS::MB_Middle)
     {
         m_userOrientationChanging = true;
+        m_userOrientationIsReseting = false;
     }
 }
 

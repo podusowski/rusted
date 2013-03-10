@@ -20,6 +20,7 @@ public:
     void zoomOut();
     Ogre::Quaternion getOrientation();
     bool isUserOrientationChanging();
+    void resetUserOrientation();
 
     void mouseMoved(const OIS::MouseState &);
     void mousePressed(const OIS::MouseButtonID &, const OIS::MouseEvent &, unsigned x, unsigned y);
@@ -32,12 +33,10 @@ private:
     Common::Game::Player & m_player;
     int m_distance;
     Ogre::Quaternion m_userOrientation;
-    Ogre::Quaternion m_userOrientationSlerpBase;
-    Ogre::Quaternion m_lastShipOrientation;
-    float m_slerpProgress;
+    bool m_userOrientationIsReseting;
+    bool m_userOrientationChanging;
     int m_userXAngle;
     int m_userYAngle;
-    bool m_userOrientationChanging;
     Ogre::Light * m_cameraLight;
 };
 
