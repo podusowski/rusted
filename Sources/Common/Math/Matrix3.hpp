@@ -26,6 +26,7 @@ public:
         Real x20, Real x21, Real x22);
 
     Real & operator () (size_t row, size_t column);
+    Real operator () (size_t row, size_t column) const;
 
 private:
     Real m_data[3][3];

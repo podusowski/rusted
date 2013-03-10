@@ -6,7 +6,7 @@ using namespace Common::Math;
 
 TEST(Matrix3Test, Store)
 {
-    Matrix3 m(
+    const Matrix3 m(
         1, 2, 3,
         4, 5, 6,
         7, 8, 9);

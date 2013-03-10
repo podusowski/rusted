@@ -34,3 +34,8 @@ Real & Matrix3::operator () (size_t row, size_t column)
     return m_data[row][column];
 }
 
+Real Matrix3::operator () (size_t row, size_t column) const
+{
+    return m_data[row][column];
+}
+

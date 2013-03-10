@@ -4,6 +4,7 @@
 #include <ostream>
 
 #include "Real.hpp"
+#include "Matrix3.hpp"
 
 namespace Common
 {
@@ -14,6 +15,8 @@ class Quaternion
 {
 public:
     Quaternion();
+    Quaternion(const Matrix3 & rotationMatrix);
+    Quaternion(const std::tuple<Real, Real, Real> & direction);
     Quaternion(Real radians, const std::tuple<int, int, int> &);
     Quaternion(Real w, Real x, Real y, Real z);
     ~Quaternion();
