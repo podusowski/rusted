@@ -11,29 +11,30 @@ namespace Common
 namespace Math
 {
 
-template <typename T> class Point3
+class Point3
 {
+public:
+    typedef Real ScalarType;
+
 private:
-	T m_x;
-	T m_y;
-	T m_z;
+	ScalarType m_x;
+	ScalarType m_y;
+	ScalarType m_z;
 
 public:
 	Point3() : m_x (0), m_y (0), m_z (0) {}
 
-	Point3(T x, T y, T z): m_x(x), m_y(y), m_z(z) {}
-
-	template <typename P> Point3(const Point3<P> p) :
-	    m_x(p.getX()), m_y(p.getY()), m_z(p.getZ())
+	Point3(ScalarType x, ScalarType y, ScalarType z):
+	    m_x(x), m_y(y), m_z(z)
 	{
 	}
 
-	Point3<T> operator+(const Point3<T> &p)
+	Point3 operator+(const Point3 & p)
 	{
-		return Point3<T>(m_x + p.m_x, m_y + p.m_y, m_z + p.m_z);
+		return Point3(m_x + p.m_x, m_y + p.m_y, m_z + p.m_z);
 	}
 
-	Point3<T>& operator+=(const Point3<T> &p)
+	Point3 & operator+=(const Point3 & p)
 	{
 		m_x += p.m_x;
 		m_y += p.m_y;
@@ -42,12 +43,12 @@ public:
 		return *this;
 	}
 
-	Point3<T> operator-(const Point3<T> &p)
+	Point3 operator-(const Point3 & p)
 	{
-		return Point3<T>(m_x - p.m_x, m_y - p.m_y, m_z - p.m_z);
+		return Point3(m_x - p.m_x, m_y - p.m_y, m_z - p.m_z);
 	}
 
-	Point3<T>& operator-=(const Point3<T> &p)
+	Point3 & operator-=(const Point3 & p)
 	{
 		m_x -= p.m_x;
 		m_y -= p.m_y;
@@ -56,17 +57,17 @@ public:
 		return *this;
 	}
 
-	bool operator==(const Point3<T> &p) const
+	bool operator==(const Point3 & p) const
 	{
 		return m_x == p.m_x && m_y == p.m_y && m_z == p.m_z;
 	}
 
-	template <typename P> Point3<T> operator*(P value)
+	template <typename P> Point3 operator*(P value)
 	{
-		return Point3<T>(ceil(m_x * value), ceil(m_y * value), ceil(m_z * value));
+		return Point3(ceil(m_x * value), ceil(m_y * value), ceil(m_z * value));
 	}
 
-	Point3<T> & operator *= (Real value)
+	Point3 & operator *= (Real value)
 	{
 		m_x *= value;
 		m_y *= value;
@@ -75,42 +76,42 @@ public:
 		return *this;
 	}
 
-	bool operator!=(const Point3<T> &p)
+	bool operator!=(const Point3 &p)
 	{
 		return m_x != p.m_x || m_y != p.m_y || m_z != p.m_z;
 	}
 
-	T getX() const
+	ScalarType getX() const
 	{
 		return m_x;
 	}
 
-	T getY() const
+	ScalarType getY() const
 	{
 		return m_y;
 	}
 
-	T getZ() const
+	ScalarType getZ() const
 	{
 		return m_z;
 	}
 
-	void setX(T value)
+	void setX(ScalarType value)
 	{
 		m_x = value;
 	}
 
-	void setY(T value)
+	void setY(ScalarType value)
 	{
 		m_y = value;
 	}
 
-	void setZ(T value)
+	void setZ(ScalarType value)
 	{
 		m_z = value;
 	}
 
-	T length()
+	ScalarType length()
 	{
 		return sqrt(m_x*m_x + m_y*m_y + m_z*m_z);
 	}
@@ -120,24 +121,24 @@ public:
         *this *= ( 1.0 / length() );
 	}
 
-    Point3<T> crossProduct(const Point3<T> & rhs)
+    Point3 crossProduct(const Point3 & rhs)
     {
-        return Point3<T>(
+        return Point3(
             m_y * rhs.m_z - m_z * rhs.m_y,
             m_z * rhs.m_x - m_x * rhs.m_z,
             m_x * rhs.m_y - m_y * rhs.m_x);
     }
 
-    Common::Math::Real dotProduct(const Point3<T> & rhs)
+    Common::Math::Real dotProduct(const Point3 & rhs)
     {
         return m_x * rhs.m_x + m_y * rhs.m_y + m_z * rhs.m_z;
     }
 
-    Quaternion getRotationTo(const Point3<T> & rhs)
+    Quaternion getRotationTo(const Point3 & rhs)
     {
         // need higher precision in such calculations
-        Point3<Real> p1 = *this;
-        Point3<Real> p2 = rhs;
+        Point3 p1 = *this;
+        Point3 p2 = rhs;
 
         p1.normalize();
         p2.normalize();
@@ -176,21 +177,22 @@ public:
         }
     }
 
-	static T distance(const Point3<T> &a, const Point3<T> &b)
-	{
-		T sa = a.m_x - b.m_x;
-		T sb = a.m_y - b.m_y;
-		T sc = a.m_z - b.m_z;
+    static Real distance(const Point3 & a, const Point3 & b)
+    {
+        ScalarType sa = a.m_x - b.m_x;
+        ScalarType sb = a.m_y - b.m_y;
+        ScalarType sc = a.m_z - b.m_z;
 
-		return sqrt(sa*sa + sb*sb + sc*sc);
-	}
+        return sqrt(sa*sa + sb*sb + sc*sc);
+    }
 };
 
 }
 }
 
-template<typename T> std::ostream & operator<<(std::ostream & os, const Common::Math::Point3<T> & p)
+inline std::ostream & operator<<(std::ostream & os, const Common::Math::Point3 & p)
 {
     os << "(" << p.getX() << ", " << p.getY() << ", " << p.getZ() << ")";
     return os;
 }
+

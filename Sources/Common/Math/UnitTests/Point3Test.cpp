@@ -2,66 +2,60 @@
 
 #include "Common/Math/Point3.hpp"
 
-typedef Common::Math::Point3<int> point3i;
-typedef Common::Math::Point3<float> point3f;
-
 using namespace Common::Math;
 
 TEST(Point3Test, Operators)
 {
-	point3i p1, p2, p3;
+	Point3 p1, p2, p3;
 
-	p1 = point3i(1, 2, 4);
-	p2 = point3i(4, 5, 0);
+	p1 = Point3(1, 2, 4);
+	p2 = Point3(4, 5, 0);
 
 	// init/operator =
-	EXPECT_TRUE(point3i(1, 2, 4) == p1);
-	EXPECT_TRUE(point3i(4, 5, 0) == p2);
+	EXPECT_TRUE(Point3(1, 2, 4) == p1);
+	EXPECT_TRUE(Point3(4, 5, 0) == p2);
 
 	p3 = p1 + p2;
 
 	// operator+
-	EXPECT_TRUE(point3i(5, 7, 4) == p3);
+	EXPECT_TRUE(Point3(5, 7, 4) == p3);
 
 	p2 = p3 - p1;
 
 	// operator -
-	EXPECT_TRUE(point3i(4, 5, 0) == p2);
+	EXPECT_TRUE(Point3(4, 5, 0) == p2);
 
-	p2 += point3i(1, 1, 1);
+	p2 += Point3(1, 1, 1);
 
 	// operator +=
-	EXPECT_TRUE(point3i(5, 6, 1) == p2);
+	EXPECT_TRUE(Point3(5, 6, 1) == p2);
 
-	p2 -= point3i(2, 2, 2);
+	p2 -= Point3(2, 2, 2);
 
 	// operator -=
-	EXPECT_TRUE(point3i(3, 4, -1) == p2);
+	EXPECT_TRUE(Point3(3, 4, -1) == p2);
 
 	p2 = p1 * 3;
 
 	// operator *
-	EXPECT_TRUE(point3i(3, 6, 12) == p2);
+	EXPECT_TRUE(Point3(3, 6, 12) == p2);
 
 	p2 *= -2;
 
 	// operator *=
-	EXPECT_TRUE(point3i(-6, -12, -24) == p2);
+	EXPECT_TRUE(Point3(-6, -12, -24) == p2);
 }
 
 TEST(Point3Test, distanceTest)
 {
-	int integerDistance = point3i::distance(point3i(0, 0, 0), point3i(-1, 240, -100));
-	float floatDistance = point3f::distance(point3f(2, 1, -4), point3f(-4, 3, 10));
-
-	EXPECT_EQ(260, integerDistance);
+	float floatDistance = Point3::distance(Point3(2, 1, -4), Point3(-4, 3, 10));
 	EXPECT_EQ(15.362291f, floatDistance);
 }
 
 TEST(Point3Test, FloatMultiply)
 {
-    point3i p1(2, 20, 200);
-    point3i p2(2, 20, 200);
+    Point3 p1(2, 20, 200);
+    Point3 p2(2, 20, 200);
 
     p1 = p1 * .5f;
     p2 *= .5f;
@@ -75,13 +69,13 @@ TEST(Point3Test, FloatMultiply)
 
 TEST(Point3Test, Length)
 {
-    point3i p1(0, 0, 1);
+    Point3 p1(0, 0, 1);
     EXPECT_EQ(1, p1.length());
 }
 
 TEST(Point3Test, Normalize)
 {
-    point3i p1(0, 0, 10);
+    Point3 p1(0, 0, 10);
     p1.normalize();
     EXPECT_EQ(0, p1.getX());
     EXPECT_EQ(0, p1.getY());
@@ -90,8 +84,8 @@ TEST(Point3Test, Normalize)
 
 TEST(Point3Test, RotationTo)
 {
-    Point3<int> p1(0, 0, 10);
-    Point3<int> p2(0, 0, 0);
+    Point3 p1(0, 0, 10);
+    Point3 p2(0, 0, 0);
 
     // 90 degrees
     // TODO

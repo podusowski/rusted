@@ -59,10 +59,10 @@ Quaternion::Quaternion(const std::tuple<Real, Real, Real> & d)
     Real dirY = std::get<1>(d);
     Real dirZ = std::get<2>(d);
 
-    Point3<Real> direction(dirX, dirY, dirZ);
+    Point3 direction(dirX, dirY, dirZ);
     direction.normalize();
 
-    Point3<Real> up(0, 1, 0);
+    Point3 up(0, 1, 0);
 
     auto xVec = up.crossProduct(direction);
     xVec.normalize();
