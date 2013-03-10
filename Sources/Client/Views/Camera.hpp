@@ -38,6 +38,7 @@ private:
     int m_userXAngle;
     int m_userYAngle;
     bool m_userOrientationChanging;
+    Ogre::Light * m_cameraLight;
 };
 
 }

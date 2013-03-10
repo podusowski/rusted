@@ -14,6 +14,9 @@ Camera::Camera(Graphics::IGraphics & graphics, Input::IInput & input, Common::Ga
     m_userOrientationChanging(false)
 {
     input.addMouseListener(*this);
+
+    m_cameraLight = graphics.getSceneManager().createLight("cameraLight");
+    m_cameraLight->setType(Ogre::Light::LT_DIRECTIONAL);
 }
 
 Camera::~Camera()
@@ -64,6 +67,8 @@ void Camera::update()
     Ogre::Camera & camera = m_graphics.getCamera();
     camera.setPosition(cameraPosition);
     camera.setOrientation(cameraOrientation);
+
+    m_cameraLight->setDirection(cameraOrientation * -Ogre::Vector3::UNIT_Z);
 }
 
 void Camera::zoomIn()
