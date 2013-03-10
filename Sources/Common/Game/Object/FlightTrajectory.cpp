@@ -58,9 +58,12 @@ Common::Math::Quaternion FlightTrajectory::getOrientation()
         float progress = calculateProgress(time);
         auto derivative = m_bezier.derivative(progress);
 
+        m_lastOrientation = Common::Math::Quaternion(std::make_tuple(derivative.getX(), derivative.getY(), derivative.getZ()));
+/*
         Common::Game::Position unit(0, 1, 0);
         m_lastOrientation = unit.getRotationTo(derivative);
         m_lastOrientation.normalize();
+*/
     }
 
     return m_lastOrientation;

@@ -2,6 +2,7 @@
 #include <cassert>
 
 #include "Quaternion.hpp"
+#include "Point3.hpp"
 
 using namespace Common::Math;
 
@@ -52,11 +53,31 @@ Quaternion::Quaternion(const Matrix3 & rotationMatrix)
     }  
 }
 
-Quaternion::Quaternion(const std::tuple<Real, Real, Real> & direction)
+Quaternion::Quaternion(const std::tuple<Real, Real, Real> & d)
 {
-    Real dirX = std::get<0>(direction);
-    Real dirY = std::get<1>(direction);
-    Real dirZ = std::get<2>(direction);
+    Real dirX = std::get<0>(d);
+    Real dirY = std::get<1>(d);
+    Real dirZ = std::get<2>(d);
+
+    Point3<Real> direction(dirX, dirY, dirZ);
+    direction.normalize();
+
+    Point3<Real> up(0, 1, 0);
+
+    auto xVec = up.crossProduct(direction);
+    xVec.normalize();
+
+    auto yVec = direction.crossProduct(xVec);
+    yVec.normalize();
+
+    auto zVec = direction;
+
+    Matrix3 m(
+        xVec.getX(), yVec.getX(), zVec.getX(),
+        xVec.getY(), yVec.getY(), zVec.getY(),
+        xVec.getZ(), yVec.getZ(), zVec.getZ());
+
+    *this = Quaternion(m);
 }
 
 Quaternion::Quaternion(float radians, const std::tuple<int, int, int> & axis)
