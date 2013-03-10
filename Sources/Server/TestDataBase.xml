@@ -6,7 +6,7 @@
 
    <objects>
         <object id="1" type="Ship" class="1" x="1"     y="2000" z="1" owner="1" />
-        <object id="2" type="Ship" class="2" x="1"     y="4000" z="1" owner="1" />
+        <object id="2" type="Ship" class="2" x="1"     y="4000" z="1000" owner="1" />
         <object id="3" type="Ship" class="3" x="1"     y="5000" z="1" owner="1" />
 
         <object id="10" type="Ship" class="1" x="2000"  y="2000" z="1" owner="2" />

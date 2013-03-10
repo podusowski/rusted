@@ -26,20 +26,24 @@ void Camera::update()
 
     // camera motion
     Common::Game::Position position = ship.getPosition();
-
     auto orientation = ship.getOrientation();
+
+    // basics
     auto cameraOrientation = m_graphics.toOgreQuaternion(orientation);
+    auto cameraPosition = m_graphics.toOgreVector3(position);
+
+    // flip backwards
+    cameraOrientation = cameraOrientation * Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y);
 
     // apply user orientation
     cameraOrientation = cameraOrientation * m_userOrientation;
 
     int angle = 20;
+    Ogre::Quaternion cameraOrientationAngle(Ogre::Degree(-angle), Ogre::Vector3(1, 0, 0));
+    auto cameraPositionDelta = cameraOrientationAngle * Ogre::Vector3(0, 0, m_distance);
 
-    auto cameraPosition = m_graphics.toOgreVector3(position);
-    auto cameraPositionDelta = Ogre::Quaternion(Ogre::Degree(-angle), Ogre::Vector3(1, 0, 0)) * Ogre::Vector3(0, -m_distance, 0);
     cameraPosition += cameraOrientation * cameraPositionDelta;
-
-    cameraOrientation = cameraOrientation * Ogre::Quaternion(Ogre::Degree(90 - angle), Ogre::Vector3(1, 0, 0));
+    cameraOrientation = cameraOrientation * cameraOrientationAngle;
 
     Ogre::Camera & camera = m_graphics.getCamera();
     camera.setPosition(cameraPosition);
@@ -75,7 +79,7 @@ void Camera::mouseMoved(const OIS::MouseState & state)
         m_userYAngle += state.Y.rel * 0.5;
 
         m_userOrientation = 
-            Ogre::Quaternion(Ogre::Degree(m_userXAngle), Ogre::Vector3(0, 0, 1)) *
+            Ogre::Quaternion(Ogre::Degree(m_userXAngle), Ogre::Vector3(0, 1, 0)) *
             Ogre::Quaternion(Ogre::Degree(m_userYAngle), Ogre::Vector3(1, 0, 0));
     }
 }

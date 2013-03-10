@@ -59,8 +59,9 @@ void VisualObject::update()
     m_node->setOrientation(m_graphics.toOgreQuaternion(orientation));
 
     // apply Blender coordinations patch
-    m_node->roll(Ogre::Degree(90));
-    m_node->pitch(Ogre::Degree(90));
+    //m_node->roll(Ogre::Degree(90));
+    //m_node->pitch(Ogre::Degree(90));
+    m_node->yaw(Ogre::Degree(-90));
 }
 
 void VisualObject::rightClickedCallback()
