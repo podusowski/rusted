@@ -46,6 +46,9 @@ private:
     void createOrientationPlane();
     void updateOrientationPlane();
 
+    void createCourseMarker();
+    void updateCourseMarker();
+
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;
     Services::PlayerActionService & m_playerActionService;
@@ -55,6 +58,9 @@ private:
     Common::Game::Player & m_player;
     Camera m_camera;
     Ogre::SceneNode * m_orientationPlaneSceneNode;
+
+    Ogre::Entity * m_courseMarkerEntity;
+    Ogre::SceneNode * m_courseMarkerNode;
 };
 
 }

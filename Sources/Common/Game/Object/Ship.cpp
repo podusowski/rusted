@@ -23,6 +23,11 @@ void Ship::setPosition(const Position & position)
     m_trajectory->setPosition(position);
 }
 
+Position Ship::getCourseMarkerPosition()
+{
+    return m_trajectory->getCourseMarkerPosition();
+}
+
 void Ship::setCourse(Position position)
 {
     if (getIntegrity() == 0)

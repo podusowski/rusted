@@ -22,6 +22,7 @@ public:
 
     void setPosition(Position);
     Position getPosition();
+    Position getCourseMarkerPosition();
     Common::Math::Quaternion getOrientation();
 
     void setSpeed(unsigned);
@@ -31,7 +32,7 @@ public:
     void applyDescription(Description);
 
 private:
-    Position calculatePosition(TimeValue time);
+    Position calculatePosition(float progress);
     float calculateProgress(TimeValue time);
     void configureBezier();
 

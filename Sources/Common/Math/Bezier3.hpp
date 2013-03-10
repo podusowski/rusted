@@ -18,6 +18,7 @@ public:
     typedef Real CalcType;
 
     void addControlPoint(const PointType & point);
+    std::vector<PointType> getControlPoints();
     void reset();
     bool empty();
     PointType operator()(float t);

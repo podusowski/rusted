@@ -17,8 +17,9 @@ FlightTrajectory::~FlightTrajectory()
 void FlightTrajectory::fly(Common::Game::Position destination)
 {
     TimeValue time = m_time->getCurrentTime();
+    float progress = calculateProgress(time);
 
-    auto position = calculatePosition(time);
+    auto position = calculatePosition(progress);
     m_description.start = position;
     m_description.destination = destination;
     m_description.startTime = time;
@@ -31,7 +32,8 @@ void FlightTrajectory::fly(Common::Game::Position destination)
 void FlightTrajectory::stop()
 {
     auto time = m_time->getCurrentTime();
-    auto position = calculatePosition(time);
+    auto progress = calculateProgress(time);
+    auto position = calculatePosition(progress);
 
     m_description.start = position;
     m_description.destination = position;
@@ -47,7 +49,14 @@ void FlightTrajectory::setPosition(Common::Game::Position position)
 
 Common::Game::Position FlightTrajectory::getPosition()
 {
-    return calculatePosition(m_time->getCurrentTime());
+    return calculatePosition(calculateProgress(m_time->getCurrentTime()));
+}
+
+Common::Game::Position FlightTrajectory::getCourseMarkerPosition()
+{
+    float progress = calculateProgress(m_time->getCurrentTime()) * 20;
+    progress -= floor(progress);
+    return calculatePosition(progress);
 }
 
 Common::Math::Quaternion FlightTrajectory::getOrientation()
@@ -85,14 +94,12 @@ void FlightTrajectory::applyDescription(FlightTrajectory::Description descriptio
     configureBezier();
 }
 
-Position FlightTrajectory::calculatePosition(TimeValue time)
+Position FlightTrajectory::calculatePosition(float progress)
 {
     if (m_bezier.empty())
     {
         return m_description.start;
     }
-
-    float progress = calculateProgress(time);
 
     if (progress >= 1.0)
     {
@@ -126,8 +133,28 @@ float FlightTrajectory::calculateProgress(TimeValue time)
 
 void FlightTrajectory::configureBezier()
 {
-    m_bezier.reset();
-    m_bezier.addControlPoint(m_description.start);
-    m_bezier.addControlPoint(m_description.destination);
+    if (m_bezier.empty())
+    {
+        m_bezier.addControlPoint(m_description.start);
+        m_bezier.addControlPoint(m_description.destination);
+    }
+    else
+    {
+        auto previousControlPoints = m_bezier.getControlPoints();
+        assert(previousControlPoints.size() >= 2);
+
+        auto last = previousControlPoints[previousControlPoints.size() - 1];
+        auto prelast = previousControlPoints[previousControlPoints.size() - 2];
+
+        auto p0 = last;
+        auto p1 = last + (last - prelast);
+        auto p3 = m_description.destination;
+
+        m_bezier.reset();
+
+        m_bezier.addControlPoint(p0);
+        m_bezier.addControlPoint(p1);
+        m_bezier.addControlPoint(p3);
+    }
 }
 

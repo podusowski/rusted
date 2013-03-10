@@ -25,6 +25,7 @@ public:
 
     virtual Position getPosition();
     void setPosition(const Position &);
+    Position getCourseMarkerPosition();
     virtual void setCourse(Position course);
     virtual void setSpeed(unsigned speed);
     unsigned getSpeed();

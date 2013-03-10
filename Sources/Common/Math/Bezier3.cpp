@@ -10,6 +10,11 @@ void Bezier3::addControlPoint(const PointType & point)
     m_points.push_back(point);
 }
 
+std::vector<Bezier3::PointType> Bezier3::getControlPoints()
+{
+    return m_points;
+}
+
 void Bezier3::reset()
 {
     m_points.clear();
