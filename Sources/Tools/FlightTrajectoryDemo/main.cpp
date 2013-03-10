@@ -41,8 +41,9 @@ struct Object
             node->setOrientation(m_graphics->toOgreQuaternion(orientation));
 
         // apply Blender coordinations patch
-        node->roll(Ogre::Degree(90));
+        //node->roll(Ogre::Degree(90));
         //node->pitch(Ogre::Degree(90));
+        node->yaw(Ogre::Degree(-90));
     }
 
     Common::Game::Object::Ship * ship;
@@ -75,7 +76,7 @@ int main(int argc, const char ** argv)
     pointLight->setPowerScale(20.0);
 
     // create ships
-    const int range = 1;
+    const int range = 3;
     std::vector<Object> g_objects;
     for(int i = -range; i <= range; i++)
         for(int j = -range; j <= range; j++)
