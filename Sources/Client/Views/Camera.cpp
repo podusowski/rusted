@@ -32,6 +32,22 @@ void Camera::update()
     auto cameraOrientation = m_graphics.toOgreQuaternion(orientation);
     auto cameraPosition = m_graphics.toOgreVector3(position);
 
+    // check if slerp is needed
+    if (cameraOrientation != m_lastShipOrientation)
+    {
+        m_slerpProgress = 1;
+        m_lastShipOrientation = cameraOrientation;
+        LOG_DEBUG << "Slerping started";
+    }
+    if (m_slerpProgress <= 1 && m_slerpProgress >= 0)
+    {
+        m_slerpProgress -= 0.01;
+        m_userXAngle *= m_slerpProgress;
+        m_userYAngle *= m_slerpProgress;
+
+        recalculateUserOrientation();
+    }
+
     // flip backwards
     cameraOrientation = cameraOrientation * Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y);
 
@@ -78,9 +94,7 @@ void Camera::mouseMoved(const OIS::MouseState & state)
         m_userXAngle += state.X.rel * 0.5;
         m_userYAngle += state.Y.rel * 0.5;
 
-        m_userOrientation = 
-            Ogre::Quaternion(Ogre::Degree(m_userXAngle), Ogre::Vector3(0, 1, 0)) *
-            Ogre::Quaternion(Ogre::Degree(m_userYAngle), Ogre::Vector3(1, 0, 0));
+        recalculateUserOrientation();
     }
 }
 
@@ -98,5 +112,12 @@ void Camera::mouseReleased(const OIS::MouseButtonID & button, unsigned x, unsign
     {
         m_userOrientationChanging = false;
     }
+}
+
+void Camera::recalculateUserOrientation()
+{
+    m_userOrientation = 
+        Ogre::Quaternion(Ogre::Degree(m_userXAngle), Ogre::Vector3(0, 1, 0)) *
+        Ogre::Quaternion(Ogre::Degree(m_userYAngle), Ogre::Vector3(1, 0, 0));
 }
 

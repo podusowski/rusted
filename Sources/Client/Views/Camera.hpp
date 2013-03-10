@@ -26,10 +26,15 @@ public:
     void mouseReleased(const OIS::MouseButtonID &, unsigned x, unsigned y);
 
 private:
+    void recalculateUserOrientation();
+
     Graphics::IGraphics & m_graphics;
     Common::Game::Player & m_player;
     int m_distance;
     Ogre::Quaternion m_userOrientation;
+    Ogre::Quaternion m_userOrientationSlerpBase;
+    Ogre::Quaternion m_lastShipOrientation;
+    float m_slerpProgress;
     int m_userXAngle;
     int m_userYAngle;
     bool m_userOrientationChanging;
