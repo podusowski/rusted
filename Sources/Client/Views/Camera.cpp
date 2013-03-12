@@ -39,7 +39,7 @@ void Camera::update()
     // check if slerp is needed
     if (m_userOrientationIsReseting)
     {
-        const float ratio = 0.9;
+        const float ratio = 0.9995;
         m_userXAngle *= ratio;
         m_userYAngle *= ratio;
 

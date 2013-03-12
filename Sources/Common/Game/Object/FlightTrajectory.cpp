@@ -35,7 +35,7 @@ void FlightTrajectory::fly(Common::Game::Position destination)
         tangent.normalize();
 
         auto p0 = position;
-        auto p1 = position + (tangent * 100);
+        auto p1 = position + (tangent * 1000);
         auto p2 = m_description.destination;
 
         LOG_DEBUG << "Configuring new bezier with p0:" << p0 << ", p1:" << p1 << ", p2:" << p2;
