@@ -1,0 +1,32 @@
+
+// blender material: CourseMarker
+material CourseMarker 
+{
+    receive_shadows on
+    technique
+    {
+        pass CourseMarker
+        {
+            ambient 0.18447500467300415 0.18447500467300415 0.18447500467300415 0.2469135969877243
+            diffuse 0.14758000593751675 0.14758000593751675 0.14758000593751675 0.2469135969877243
+            specular 0.5 0.5 0.5 0.2469135969877243 12.5
+            emissive 0.18447500467300415 0.18447500467300415 0.18447500467300415 1.0
+            alpha_to_coverage off
+            colour_write on
+            cull_hardware clockwise
+            depth_check on
+            depth_func less_equal
+            depth_write on
+            illumination_stage 
+            light_clip_planes off
+            light_scissor off
+            lighting on
+            normalise_normals off
+            polygon_mode solid
+            scene_blend one zero
+            scene_blend_op add
+            shading gouraud
+            transparent_sorting on
+        }
+    }
+}

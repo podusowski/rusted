@@ -18,13 +18,33 @@ void FlightTrajectory::fly(Common::Game::Position destination)
 {
     TimeValue time = m_time->getCurrentTime();
     float progress = calculateProgress(time);
-
     auto position = calculatePosition(progress);
+
     m_description.start = position;
     m_description.destination = destination;
     m_description.startTime = time;
 
-    configureBezier();
+    if (m_bezier.empty())
+    {
+        m_bezier.addControlPoint(m_description.start);
+        m_bezier.addControlPoint(m_description.destination);
+    }
+    else
+    {
+        auto tangent = m_bezier.derivative(progress);
+        tangent.normalize();
+
+        auto p0 = position;
+        auto p1 = position + (tangent * 100);
+        auto p2 = m_description.destination;
+
+        LOG_DEBUG << "Configuring new bezier with p0:" << p0 << ", p1:" << p1 << ", p2:" << p2;
+
+        m_bezier.reset();
+        m_bezier.addControlPoint(p0);
+        m_bezier.addControlPoint(p1);
+        m_bezier.addControlPoint(p2);
+    }
 
     LOG_DEBUG << "New trajectory: from " << position << " to " << destination << ", start time: " << time << ", speed: " << m_speed;
 }
@@ -133,28 +153,6 @@ float FlightTrajectory::calculateProgress(TimeValue time)
 
 void FlightTrajectory::configureBezier()
 {
-    if (m_bezier.empty())
-    {
-        m_bezier.addControlPoint(m_description.start);
-        m_bezier.addControlPoint(m_description.destination);
-    }
-    else
-    {
-        auto previousControlPoints = m_bezier.getControlPoints();
-        assert(previousControlPoints.size() >= 2);
 
-        auto last = previousControlPoints[previousControlPoints.size() - 1];
-        auto prelast = previousControlPoints[previousControlPoints.size() - 2];
-
-        auto p0 = last;
-        auto p1 = last + (last - prelast);
-        auto p3 = m_description.destination;
-
-        m_bezier.reset();
-
-        m_bezier.addControlPoint(p0);
-        m_bezier.addControlPoint(p1);
-        m_bezier.addControlPoint(p3);
-    }
 }
 

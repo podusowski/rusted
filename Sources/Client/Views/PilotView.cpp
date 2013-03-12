@@ -204,10 +204,10 @@ void PilotView::updateOrientationPlane()
 void PilotView::createCourseMarker()
 {
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
-    std::string mesh = "EnergyBall.mesh";
+    std::string mesh = "CourseMarker.mesh";
     m_courseMarkerEntity = scene.createEntity(mesh);
     m_courseMarkerNode = scene.getRootSceneNode()->createChildSceneNode();
-    m_courseMarkerNode->setScale(20.0, 20.0, 20.0);
+    m_courseMarkerNode->setScale(100.0, 100.0, 100.0);
     m_courseMarkerNode->attachObject(m_courseMarkerEntity);
 }
 
