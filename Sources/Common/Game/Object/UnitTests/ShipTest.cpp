@@ -108,20 +108,13 @@ TEST_F(ShipTest, GetTrajectoryDescription)
     Common::Game::Object::Ship ship;
 
     Common::Game::Object::IFlightTrajectory::Description description;
-    description.start = Position(10, 20, 30);
-    description.destination = Position(100, 200, 300);
+    description.controlPoints.push_back(Common::Game::Position(1, 2, 3));
 
     EXPECT_CALL(getTrajectoryMock(), getDescription()).Times(1).WillRepeatedly(Return(description));
  
     auto course = ship.getTrajectoryDescription();
 
-    EXPECT_EQ(10, course.start.getX());
-    EXPECT_EQ(20, course.start.getY());
-    EXPECT_EQ(30, course.start.getZ());
-
-    EXPECT_EQ(100, course.destination.getX());
-    EXPECT_EQ(200, course.destination.getY());
-    EXPECT_EQ(300, course.destination.getZ());
+    EXPECT_EQ(1u, course.controlPoints.size());
 }
 
 TEST_F(ShipTest, ApplyTrajectoryDescription)
@@ -129,8 +122,7 @@ TEST_F(ShipTest, ApplyTrajectoryDescription)
     Common::Game::Object::Ship ship;
 
     Common::Game::Object::IFlightTrajectory::Description description;
-    description.start = Position(10, 20, 30);
-    description.destination = Position(100, 200, 300);
+    description.controlPoints.push_back(Common::Game::Position(1, 2, 3));
 
     EXPECT_CALL(getTrajectoryMock(), applyDescription(_)).Times(1);
 

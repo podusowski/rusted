@@ -76,12 +76,7 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
     // second player gets notified
     auto shipCourseInfo = connection2->receive<Common::Messages::ShipCourseInfo>();
     EXPECT_EQ(1, shipCourseInfo->objectId);
-    EXPECT_EQ(1, shipCourseInfo->positionX);
-    EXPECT_EQ(1, shipCourseInfo->positionY);
-    EXPECT_EQ(1, shipCourseInfo->positionZ);
-    EXPECT_EQ(2, shipCourseInfo->destinationX);
-    EXPECT_EQ(1, shipCourseInfo->destinationY);
-    EXPECT_EQ(1, shipCourseInfo->destinationZ);
+    // TODO: match controlPoints
 
     // start time should be more or less (1 seconds) equal to epoch received earlier
     EXPECT_TRUE(

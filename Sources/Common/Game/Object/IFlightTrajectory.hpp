@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include "Common/Math/Quaternion.hpp"
 #include "Common/Game/Position.hpp"
 #include "Common/Game/TimeValue.hpp"
@@ -17,8 +19,7 @@ class IFlightTrajectory
 public:
     struct Description
     {
-        Position start;
-        Position destination;
+        std::vector<Position> controlPoints;
         TimeValue startTime;
     };
 
@@ -29,6 +30,7 @@ public:
     virtual Position getPosition() = 0;
 
     virtual Position getCourseMarkerPosition() = 0;
+    virtual Common::Math::Quaternion getCourseMarkerOrientation() = 0;
 
     virtual Common::Math::Quaternion getOrientation() = 0;
 
@@ -44,3 +46,4 @@ public:
 }
 }
 }
+

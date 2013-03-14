@@ -121,13 +121,11 @@ void ObjectService::handle(const Common::Messages::ShipCourseInfo & shipCourseIn
 
     Common::Game::Object::IFlightTrajectory::Description description;
 
-    description.start.setX(shipCourseInfo.positionX);
-    description.start.setY(shipCourseInfo.positionY);
-    description.start.setZ(shipCourseInfo.positionZ);
-
-    description.destination.setX(shipCourseInfo.destinationX);
-    description.destination.setY(shipCourseInfo.destinationY);
-    description.destination.setZ(shipCourseInfo.destinationZ);
+    for (const auto & p : shipCourseInfo.controlPoints)
+    {
+        Common::Game::Position position(p.x, p.y, p.z);
+        description.controlPoints.push_back(position);
+    }
 
     description.startTime = Common::Game::TimeValue(
         shipCourseInfo.startTimeSeconds,

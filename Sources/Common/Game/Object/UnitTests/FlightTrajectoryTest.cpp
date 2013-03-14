@@ -40,44 +40,6 @@ private:
     boost::shared_ptr<Common::Game::IRustedTime> m_time;
 };
 
-TEST_F(FlightTrajectoryTest, FlyByVector)
-{
-    FlightTrajectory trajectory;
-
-    // position can be changed explicitly, for example when client get information about ship
-    trajectory.setPosition(Position(0, 0, 0));
-
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
-    trajectory.fly(Position(100, 0, 0));
-    Mock::VerifyAndClear(&getTimeMock());
-
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(50, 0)));
-    ASSERT_EQ(Position(50, 0, 0), trajectory.getPosition());
-    Mock::VerifyAndClear(&getTimeMock());
-
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
-    ASSERT_EQ(Position(100, 0, 0), trajectory.getPosition());
-    Mock::VerifyAndClear(&getTimeMock());
-
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
-    trajectory.fly(Position(100, 100, 0));
-    Mock::VerifyAndClear(&getTimeMock());
-
-    // still the same place
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
-    ASSERT_EQ(Position(100, 0, 0), trajectory.getPosition());
-    Mock::VerifyAndClear(&getTimeMock());
-
-    // should be half the way
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(150, 0)));
-    ASSERT_EQ(Position(100, 50, 0), trajectory.getPosition());
-    Mock::VerifyAndClear(&getTimeMock());
-
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(200, 0)));
-    ASSERT_EQ(Position(100, 100, 0), trajectory.getPosition());
-    Mock::VerifyAndClear(&getTimeMock());
-}
-
 TEST_F(FlightTrajectoryTest, HighPrecisionTimer)
 {
     FlightTrajectory trajectory;
@@ -144,13 +106,16 @@ TEST_F(FlightTrajectoryTest, GetDescription)
  
     auto description = trajectory.getDescription();
 
-    EXPECT_EQ(10, description.start.getX());
-    EXPECT_EQ(20, description.start.getY());
-    EXPECT_EQ(30, description.start.getZ());
+    ASSERT_TRUE(description.controlPoints.size() >= 2);
 
-    EXPECT_EQ(100, description.destination.getX());
-    EXPECT_EQ(200, description.destination.getY());
-    EXPECT_EQ(300, description.destination.getZ());
+    EXPECT_EQ(10, description.controlPoints[0].getX());
+    EXPECT_EQ(20, description.controlPoints[0].getY());
+    EXPECT_EQ(30, description.controlPoints[0].getZ());
+
+    size_t last = description.controlPoints.size() - 1;
+    EXPECT_EQ(100, description.controlPoints[last].getX());
+    EXPECT_EQ(200, description.controlPoints[last].getY());
+    EXPECT_EQ(300, description.controlPoints[last].getZ());
 }
 
 TEST_F(FlightTrajectoryTest, ApplyDescription)
@@ -160,24 +125,20 @@ TEST_F(FlightTrajectoryTest, ApplyDescription)
     trajectory.setPosition(Position(0, 0, 0));
 
     FlightTrajectory::Description description;
-    description.start.setX(0);
-    description.start.setY(0);
-    description.start.setZ(0);
 
-    description.destination.setX(100);
-    description.destination.setY(0);
-    description.destination.setZ(0);
+    // some random control points, first and last are most important ones
+    description.controlPoints.push_back(Common::Game::Position(0, 0, 0));
+    description.controlPoints.push_back(Common::Game::Position(10, 0, 0));
+    description.controlPoints.push_back(Common::Game::Position(20, 0, 0));
+    description.controlPoints.push_back(Common::Game::Position(100, 0, 0));
 
     description.startTime = TimeValue(0, 0);
 
     trajectory.applyDescription(description);
 
-    ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
-    ASSERT_EQ(Position(50, 0, 0), trajectory.getPosition());
-    Mock::VerifyAndClear(&getTimeMock());
-
     ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(100, 0)));
     ASSERT_EQ(Position(100, 0, 0), trajectory.getPosition());
+
     Mock::VerifyAndClear(&getTimeMock());
 }
 
@@ -189,13 +150,7 @@ TEST_F(FlightTrajectoryTest, SetPositionResetsTheCourse)
     trajectory.setPosition(Position(10, 20, 30));
 
     auto description = trajectory.getDescription();
-
-    EXPECT_EQ(10, description.start.getX());
-    EXPECT_EQ(20, description.start.getY());
-    EXPECT_EQ(30, description.start.getZ());
-
-    EXPECT_EQ(10, description.destination.getX());
-    EXPECT_EQ(20, description.destination.getY());
-    EXPECT_EQ(30, description.destination.getZ());
+    EXPECT_EQ(0, description.controlPoints.size());
 }
+
 

@@ -19,6 +19,7 @@ public:
     MOCK_METHOD1(setPosition, void(Position));
     MOCK_METHOD0(getPosition, Position());
     MOCK_METHOD0(getCourseMarkerPosition, Position());
+    MOCK_METHOD0(getCourseMarkerOrientation, Common::Math::Quaternion());
     MOCK_METHOD0(getYaw, float());
     MOCK_METHOD0(getPitch, float());
     MOCK_METHOD0(getRoll, float());

@@ -20,14 +20,12 @@ void FlightTrajectory::fly(Common::Game::Position destination)
     float progress = calculateProgress(time);
     auto position = calculatePosition(progress);
 
-    m_description.start = position;
-    m_description.destination = destination;
-    m_description.startTime = time;
+    m_description.controlPoints.clear();
 
     if (m_bezier.empty())
     {
-        m_bezier.addControlPoint(m_description.start);
-        m_bezier.addControlPoint(m_description.destination);
+        m_description.controlPoints.push_back(position);
+        m_description.controlPoints.push_back(destination);
     }
     else
     {
@@ -36,15 +34,16 @@ void FlightTrajectory::fly(Common::Game::Position destination)
 
         auto p0 = position;
         auto p1 = position + (tangent * 1000);
-        auto p2 = m_description.destination;
+        auto p2 = destination;
 
-        LOG_DEBUG << "Configuring new bezier with p0:" << p0 << ", p1:" << p1 << ", p2:" << p2;
-
-        m_bezier.reset();
-        m_bezier.addControlPoint(p0);
-        m_bezier.addControlPoint(p1);
-        m_bezier.addControlPoint(p2);
+        m_description.controlPoints.push_back(p0);
+        m_description.controlPoints.push_back(p1);
+        m_description.controlPoints.push_back(p2);
     }
+
+    m_description.startTime = time;
+
+    configureBezier();
 
     LOG_DEBUG << "New trajectory: from " << position << " to " << destination << ", start time: " << time << ", speed: " << m_speed;
 }
@@ -55,16 +54,20 @@ void FlightTrajectory::stop()
     auto progress = calculateProgress(time);
     auto position = calculatePosition(progress);
 
-    m_description.start = position;
-    m_description.destination = position;
+    m_cachedPosition = position;
+
+    m_description.controlPoints.clear();
+    configureBezier();
 
     LOG_DEBUG << "Stoped at: " << position;
 }
 
 void FlightTrajectory::setPosition(Common::Game::Position position)
 {
-    m_description.start = position;
-    m_description.destination = position;
+    m_cachedPosition = position;
+
+    m_description.controlPoints.clear();
+    configureBezier();
 }
 
 Common::Game::Position FlightTrajectory::getPosition()
@@ -79,14 +82,21 @@ Common::Game::Position FlightTrajectory::getCourseMarkerPosition()
     return calculatePosition(progress);
 }
 
+Common::Math::Quaternion FlightTrajectory::getCourseMarkerOrientation()
+{
+    return Common::Math::Quaternion();
+}
+
 Common::Math::Quaternion FlightTrajectory::getOrientation()
 {
-    if (m_description.destination != m_description.start)
-    {
-        auto time = m_time->getCurrentTime();
-        float progress = calculateProgress(time);
-        auto derivative = m_bezier.derivative(progress);
+    // revalidate bezier
+    auto time = m_time->getCurrentTime();
+    float progress = calculateProgress(time);
+    calculatePosition(progress);
 
+    if (!m_bezier.empty())
+    {
+        auto derivative = m_bezier.derivative(progress);
         m_lastOrientation = Common::Math::Quaternion(std::make_tuple(derivative.getX(), derivative.getY(), derivative.getZ()));
     }
 
@@ -118,17 +128,22 @@ Position FlightTrajectory::calculatePosition(float progress)
 {
     if (m_bezier.empty())
     {
-        return m_description.start;
+        return m_cachedPosition;
     }
 
     if (progress >= 1.0)
     {
-        m_description.start = m_description.destination;
-        m_bezier.reset();
+        m_cachedPosition = m_bezier(1.0);
 
-        LOG_DEBUG << "Destination " << m_description.destination << " reached";
+        auto derivative = m_bezier.derivative(progress);
+        m_lastOrientation = Common::Math::Quaternion(std::make_tuple(derivative.getX(), derivative.getY(), derivative.getZ()));
 
-        return m_description.destination;
+        m_description.controlPoints.clear();
+        configureBezier();
+
+        LOG_DEBUG << "Destination " << m_cachedPosition << " reached";
+
+        return m_cachedPosition;
     }
     else
     {
@@ -153,6 +168,14 @@ float FlightTrajectory::calculateProgress(TimeValue time)
 
 void FlightTrajectory::configureBezier()
 {
+    m_bezier.reset();
+    
+    LOG_DEBUG << "Configuring bezier:";
 
+    for (const auto & p : m_description.controlPoints)
+    {
+        LOG_DEBUG << "  " << p;
+        m_bezier.addControlPoint(p);
+    }
 }
 

@@ -23,6 +23,7 @@ public:
     void setPosition(Position);
     Position getPosition();
     Position getCourseMarkerPosition();
+    Common::Math::Quaternion getCourseMarkerOrientation();
     Common::Math::Quaternion getOrientation();
 
     void setSpeed(unsigned);
@@ -41,6 +42,7 @@ private:
     unsigned m_speed;
     Common::Math::Quaternion m_lastOrientation;
     Common::Math::Bezier3 m_bezier;
+    Position m_cachedPosition;
 };
 
 }

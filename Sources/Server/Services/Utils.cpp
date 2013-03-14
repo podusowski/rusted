@@ -49,14 +49,15 @@ void Utils::sendShipCourseInfo(Common::Game::Object::Ship & ship, Network::IConn
 
     Common::Messages::ShipCourseInfo shipCourseInfo;
     shipCourseInfo.objectId = ship.getId();
-
-    shipCourseInfo.positionX = description.start.getX();
-    shipCourseInfo.positionY = description.start.getY();
-    shipCourseInfo.positionZ = description.start.getZ();
-
-    shipCourseInfo.destinationX = description.destination.getX();
-    shipCourseInfo.destinationY = description.destination.getY();
-    shipCourseInfo.destinationZ = description.destination.getZ();
+   
+    for (const auto & point : description.controlPoints)
+    {
+        Common::Messages::Position p;
+        p.x = point.getX();
+        p.y = point.getY();
+        p.z = point.getZ();
+        shipCourseInfo.controlPoints.push_back(p);
+    }
 
     shipCourseInfo.startTimeSeconds = description.startTime.getSeconds();
     shipCourseInfo.startTimeMiliseconds = description.startTime.getMiliseconds();

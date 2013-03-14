@@ -63,10 +63,12 @@ void PilotView::updateShipPosition()
 
     auto description = focusedShip.getTrajectoryDescription();
 
+    /*
     if (focusedShip.getPosition() != description.destination)
     {
         ss << "\nDestination: " << description.destination;
     }
+    */
 
     m_gui->findWidget<MyGUI::TextBox>("NavigationTextBox")->setCaption(ss.str());
 }
