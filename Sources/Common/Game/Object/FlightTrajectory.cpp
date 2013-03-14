@@ -22,24 +22,17 @@ void FlightTrajectory::fly(Common::Game::Position destination)
 
     m_description.controlPoints.clear();
 
-    if (m_bezier.empty())
-    {
-        m_description.controlPoints.push_back(position);
-        m_description.controlPoints.push_back(destination);
-    }
-    else
-    {
-        auto tangent = m_bezier.derivative(progress);
-        tangent.normalize();
+    // TODO: is this be faster than derivative calc?
+    auto direction = m_cachedOrientation * Common::Math::Point3(0, 0, 1);
+    direction.normalize();
 
-        auto p0 = position;
-        auto p1 = position + (tangent * 1000);
-        auto p2 = destination;
+    auto p0 = position;
+    auto p1 = position + (direction * 1000);
+    auto p2 = destination;
 
-        m_description.controlPoints.push_back(p0);
-        m_description.controlPoints.push_back(p1);
-        m_description.controlPoints.push_back(p2);
-    }
+    m_description.controlPoints.push_back(p0);
+    m_description.controlPoints.push_back(p1);
+    m_description.controlPoints.push_back(p2);
 
     m_description.startTime = time;
 
