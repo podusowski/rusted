@@ -5,11 +5,14 @@
 
 #include "Real.hpp"
 #include "Matrix3.hpp"
+#include "Point3.hpp"
 
 namespace Common
 {
 namespace Math
 {
+
+class Point3;
 
 class Quaternion
 {
@@ -23,6 +26,8 @@ public:
 
     bool operator == (const Quaternion &) const;
     Quaternion & operator *= (Real factor);
+
+    Point3 operator * (const Point3 & vector) const;
 
     void normalize();
 

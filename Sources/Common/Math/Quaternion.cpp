@@ -114,6 +114,21 @@ Quaternion & Quaternion::operator *= (Real factor)
     return *this;
 }
 
+Point3 Quaternion::operator * (const Point3 & vector) const
+{
+    // taken from Ogre3D which says:
+    // nVidia SDK implementation
+
+    Point3 uv, uuv;
+    Point3 qvec(m_x, m_y, m_z); 
+    uv = qvec.crossProduct(vector);
+    uuv = qvec.crossProduct(uv);
+    uv *= (2.0f * m_w); 
+    uuv *= 2.0f;
+
+    return vector + uv + uuv;
+}
+
 void Quaternion::normalize()
 {
     Real len = m_w * m_w + m_x * m_x + m_y * m_y + m_z * m_z;

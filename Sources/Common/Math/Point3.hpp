@@ -11,6 +11,8 @@ namespace Common
 namespace Math
 {
 
+class Quaternion;
+
 class Point3
 {
 public:
@@ -29,7 +31,7 @@ public:
 	{
 	}
 
-	Point3 operator+(const Point3 & p)
+	Point3 operator+(const Point3 & p) const
 	{
 		return Point3(m_x + p.m_x, m_y + p.m_y, m_z + p.m_z);
 	}
@@ -43,7 +45,7 @@ public:
 		return *this;
 	}
 
-	Point3 operator-(const Point3 & p)
+	Point3 operator-(const Point3 & p) const
 	{
 		return Point3(m_x - p.m_x, m_y - p.m_y, m_z - p.m_z);
 	}
@@ -62,7 +64,7 @@ public:
 		return m_x == p.m_x && m_y == p.m_y && m_z == p.m_z;
 	}
 
-	template <typename P> Point3 operator*(P value)
+	template <typename P> Point3 operator*(P value) const
 	{
 		return Point3(ceil(m_x * value), ceil(m_y * value), ceil(m_z * value));
 	}
@@ -76,7 +78,7 @@ public:
 		return *this;
 	}
 
-	bool operator!=(const Point3 &p)
+	bool operator!=(const Point3 &p) const
 	{
 		return m_x != p.m_x || m_y != p.m_y || m_z != p.m_z;
 	}
@@ -134,49 +136,8 @@ public:
         return m_x * rhs.m_x + m_y * rhs.m_y + m_z * rhs.m_z;
     }
 
-    Quaternion getRotationTo(const Point3 & rhs)
-    {
-        // need higher precision in such calculations
-        Point3 p1 = *this;
-        Point3 p2 = rhs;
-
-        p1.normalize();
-        p2.normalize();
-
-        auto dot = p1.dotProduct(p2);
-
-        if (dot >= 1.0)
-        {
-            return Quaternion();
-        }
-        else if (dot <= 1e-6f - 1.0f) // < ~ -1 - negative vectors, totate by 180 degree
-        {
-            return Quaternion(PI, std::make_tuple(1, 0, 0));
-        }
-        else
-        {
-            Real s = sqrt((1 + dot) * 2);
-            Real invs = 1 / s;
-
-            auto cross = p1.crossProduct(p2);
-
-            auto x = cross.getX() * invs;
-            auto y = cross.getY() * invs;
-            auto z = cross.getZ() * invs;
-            auto w = s * 0.5f;
-
-            Quaternion q(w, x, y, z);
-            q.normalize();
-
-            assert(!std::isnan(q.getW()));
-            assert(!std::isnan(q.getX()));
-            assert(!std::isnan(q.getY()));
-            assert(!std::isnan(q.getZ()));
-
-            return q;
-        }
-    }
-
+    Quaternion getRotationTo(const Point3 & rhs);
+    
     static Real distance(const Point3 & a, const Point3 & b)
     {
         ScalarType sa = a.m_x - b.m_x;
