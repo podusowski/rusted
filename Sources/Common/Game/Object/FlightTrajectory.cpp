@@ -6,7 +6,7 @@ using namespace Common::Game;
 
 FlightTrajectory::FlightTrajectory() : 
     m_speed(1),
-    m_lastOrientation(Common::Math::Quaternion(0, std::make_tuple(0, 0, 1)))
+    m_cachedOrientation(Common::Math::Quaternion(0, std::make_tuple(0, 0, 1)))
 {
 }
 
@@ -52,14 +52,13 @@ void FlightTrajectory::stop()
 {
     auto time = m_time->getCurrentTime();
     auto progress = calculateProgress(time);
-    auto position = calculatePosition(progress);
 
-    m_cachedPosition = position;
+    calculateCachedPositionAndOrientation(progress);
 
     m_description.controlPoints.clear();
     configureBezier();
 
-    LOG_DEBUG << "Stoped at: " << position;
+    LOG_DEBUG << "Stoped at: " << m_cachedPosition;
 }
 
 void FlightTrajectory::setPosition(Common::Game::Position position)
@@ -72,7 +71,11 @@ void FlightTrajectory::setPosition(Common::Game::Position position)
 
 Common::Game::Position FlightTrajectory::getPosition()
 {
-    return calculatePosition(calculateProgress(m_time->getCurrentTime()));
+    auto progress = calculateProgress(m_time->getCurrentTime());
+    calculateCachedPositionAndOrientation(progress);
+    revalidateProgress(progress);
+
+    return m_cachedPosition;
 }
 
 Common::Game::Position FlightTrajectory::getCourseMarkerPosition()
@@ -89,18 +92,11 @@ Common::Math::Quaternion FlightTrajectory::getCourseMarkerOrientation()
 
 Common::Math::Quaternion FlightTrajectory::getOrientation()
 {
-    // revalidate bezier
-    auto time = m_time->getCurrentTime();
-    float progress = calculateProgress(time);
-    calculatePosition(progress);
+    auto progress = calculateProgress(m_time->getCurrentTime());
+    calculateCachedPositionAndOrientation(progress);
+    revalidateProgress(progress);
 
-    if (!m_bezier.empty())
-    {
-        auto derivative = m_bezier.derivative(progress);
-        m_lastOrientation = Common::Math::Quaternion(std::make_tuple(derivative.getX(), derivative.getY(), derivative.getZ()));
-    }
-
-    return m_lastOrientation;
+    return m_cachedOrientation;
 }
 
 void FlightTrajectory::setSpeed(unsigned speed)
@@ -130,25 +126,34 @@ Position FlightTrajectory::calculatePosition(float progress)
     {
         return m_cachedPosition;
     }
-
-    if (progress >= 1.0)
+    else if (progress >= 1.0)
     {
-        m_cachedPosition = m_bezier(1.0);
-
-        auto derivative = m_bezier.derivative(progress);
-        m_lastOrientation = Common::Math::Quaternion(std::make_tuple(derivative.getX(), derivative.getY(), derivative.getZ()));
-
-        m_description.controlPoints.clear();
-        configureBezier();
-
-        LOG_DEBUG << "Destination " << m_cachedPosition << " reached";
-
-        return m_cachedPosition;
+        return m_bezier(1.0);
     }
     else
     {
         return m_bezier(progress);
     }
+}
+
+Common::Math::Quaternion FlightTrajectory::calculateOrientation(float progress)
+{
+    Common::Math::Point3 derivative;
+
+    if (m_bezier.empty())
+    {
+        return m_cachedOrientation;
+    }
+    else if (progress >= 1.0)
+    {
+        derivative = m_bezier.derivative(1.0);
+    }
+    else
+    {
+        derivative = m_bezier.derivative(progress);
+    }
+
+    return Common::Math::Quaternion(std::make_tuple(derivative.getX(), derivative.getY(), derivative.getZ()));
 }
 
 float FlightTrajectory::calculateProgress(TimeValue time)
@@ -177,5 +182,20 @@ void FlightTrajectory::configureBezier()
         LOG_DEBUG << "  " << p;
         m_bezier.addControlPoint(p);
     }
+}
+
+void FlightTrajectory::revalidateProgress(float progress)
+{
+    if (progress > 1.0)
+    {
+        m_description.controlPoints.clear();
+        configureBezier();
+    }
+}
+
+void FlightTrajectory::calculateCachedPositionAndOrientation(float progress)
+{
+    m_cachedPosition = calculatePosition(progress);
+    m_cachedOrientation = calculateOrientation(progress);
 }
 

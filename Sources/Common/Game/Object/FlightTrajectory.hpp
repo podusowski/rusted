@@ -34,15 +34,19 @@ public:
 
 private:
     Position calculatePosition(float progress);
+    Common::Math::Quaternion calculateOrientation(float progress);
     float calculateProgress(TimeValue time);
     void configureBezier();
+    void revalidateProgress(float progress);
+    void calculateCachedPositionAndOrientation(float progress);
 
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
     Description m_description;
     unsigned m_speed;
-    Common::Math::Quaternion m_lastOrientation;
     Common::Math::Bezier3 m_bezier;
+
     Position m_cachedPosition;
+    Common::Math::Quaternion m_cachedOrientation;
 };
 
 }
