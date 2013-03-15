@@ -109,6 +109,11 @@ FlightTrajectory::Description FlightTrajectory::getDescription()
 
 void FlightTrajectory::applyDescription(FlightTrajectory::Description description)
 {
+    LOG_DEBUG << "Applying precalculated trajectory, description.startTime: "
+              << description.startTime
+              << ", now: " << m_time->getCurrentTime()
+              << ", current position: " << getPosition();
+
     m_description = description;
     configureBezier();
 }

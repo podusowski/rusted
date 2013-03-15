@@ -20,8 +20,9 @@ public:
     RustedTime();
     boost::posix_time::ptime getRustedEpoch();
     unsigned getSeconds();
-    void setReferenceTime(unsigned);
+    void setReferenceTime(TimeValue);
     TimeValue getCurrentTime();
+    TimeValue getAbsoluteTime();
     void createTimer(TimeValue, boost::function<void()>);
     void run();
 

@@ -24,6 +24,7 @@ public:
 private:
     Network::IConnection & m_connection;
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
+    Common::Game::TimeValue m_syncRequestTime;
 };
 
 }

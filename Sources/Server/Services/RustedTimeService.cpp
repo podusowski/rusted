@@ -8,7 +8,11 @@ RustedTimeService::RustedTimeService(Common::Game::IRustedTime & time) : m_time(
 
 void RustedTimeService::handle(const Common::Messages::RustedTimeEpochReq &, Network::IConnection & connection)
 {
+    auto time = m_time.getCurrentTime();
+
     Common::Messages::RustedTimeEpochResp resp;
-    resp.time = m_time.getSeconds();
+    resp.seconds = time.getSeconds();
+    resp.miliSeconds = time.getMiliseconds();
+
     connection.send(resp);
 }

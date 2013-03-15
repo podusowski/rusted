@@ -44,7 +44,7 @@ void PlayerActionService::setFocusedObjectCourse(Common::Game::Position course)
 {
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getFocusedObject());
 
-    focusedShip.setCourse(course);
+    //focusedShip.setCourse(course);
 
     Common::Messages::ChangeShipCourse req;
 

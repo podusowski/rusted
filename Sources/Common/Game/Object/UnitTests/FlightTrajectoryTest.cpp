@@ -45,14 +45,14 @@ TEST_F(FlightTrajectoryTest, HighPrecisionTimer)
     FlightTrajectory trajectory;
 
     trajectory.setPosition(Position(0, 0, 0));
-    trajectory.setSpeed(2);
+    trajectory.setSpeed(10000);
 
     EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
-    trajectory.fly(Position(2, 0, 0));
+    trajectory.fly(Position(0, 0, 10000));
     Mock::VerifyAndClear(&getTimeMock());
 
     EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 500)));
-    ASSERT_EQ(Position(1, 0, 0), trajectory.getPosition());
+    ASSERT_EQ(Position(0, 0, 5000), trajectory.getPosition());
     Mock::VerifyAndClear(&getTimeMock());
 }
 

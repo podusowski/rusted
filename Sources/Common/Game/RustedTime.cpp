@@ -25,10 +25,12 @@ unsigned RustedTime::getSeconds()
     return (t - m_epoch).total_seconds();
 }
 
-void RustedTime::setReferenceTime(unsigned reference)
+void RustedTime::setReferenceTime(TimeValue reference)
 {
     unsigned now = getSeconds();
-    m_epoch += boost::posix_time::seconds(now - reference);
+    m_epoch += boost::posix_time::seconds(now) 
+                - boost::posix_time::seconds(reference.getSeconds())
+                - boost::posix_time::milliseconds(reference.getMiliseconds());
 
     LOG_INFO << "New epoch set to " << m_epoch;
 }
@@ -63,6 +65,19 @@ TimeValue RustedTime::getCurrentTime()
     // actually, we need mili resolution, but since we're too lazy to implement
     // converters, we will stick with micro
     assert(duration.resolution() == boost::date_time::micro);
+
+    unsigned seconds = duration.total_seconds();
+    unsigned miliseconds = duration.fractional_seconds() / 1000;
+
+    return TimeValue(seconds, miliseconds);
+}
+
+TimeValue RustedTime::getAbsoluteTime()
+{
+    boost::posix_time::ptime t = now();
+    boost::posix_time::ptime posixEpoch(boost::gregorian::date(1970, boost::gregorian::Jan, 1));
+
+    auto duration = t - posixEpoch;
 
     unsigned seconds = duration.total_seconds();
     unsigned miliseconds = duration.fractional_seconds() / 1000;

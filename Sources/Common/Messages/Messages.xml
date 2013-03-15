@@ -36,7 +36,8 @@ player specific
 <message id="RustedTimeEpochReq" />
 
 <message id="RustedTimeEpochResp">
-    <param type="int32" name="time" />
+    <param type="int32" name="seconds" />
+    <param type="int32" name="miliSeconds" />
 </message>
 
 <!--
