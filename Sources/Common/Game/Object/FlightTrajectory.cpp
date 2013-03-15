@@ -114,6 +114,17 @@ void FlightTrajectory::applyDescription(FlightTrajectory::Description descriptio
               << ", now: " << m_time->getCurrentTime()
               << ", current position: " << getPosition();
 
+    if (!description.controlPoints.empty())
+    {
+        auto newStartingPosition = *description.controlPoints.begin();
+        auto currentPosition = getPosition();
+        auto offset = newStartingPosition - currentPosition;
+
+        LOG_DEBUG << "Latency offset: " << offset << " (length: " << offset.length() << "), compensating";
+
+        description.controlPoints.insert(description.controlPoints.begin(), currentPosition);
+    }
+
     m_description = description;
     configureBezier();
 }
