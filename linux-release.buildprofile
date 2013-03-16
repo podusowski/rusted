@@ -1,0 +1,4 @@
+PROFILE:=linux-release
+CC:=g++
+CFLAGS:=-O3 -std=gnu++0x -Wall -pedantic -DNDEBUG
+

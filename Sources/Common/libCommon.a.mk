@@ -24,7 +24,6 @@ SOURCES+=Math/Quaternion.cpp
 SOURCES+=Math/Bezier3.cpp
 SOURCES+=Math/Matrix3.cpp
 
-CFLAGS+=-Wall -pedantic -g 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/.. 
 CFLAGS+=-I$(TARGET_BASE)/../External/

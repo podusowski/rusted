@@ -1,6 +1,3 @@
-CC=g++
-DEFAULT_CFLAGS+=-Wall -g -O0 -std=gnu++0x
-
 define recipe_c++_TEMPLATE
 
 $(1)/%.o: $(2)/%.cpp

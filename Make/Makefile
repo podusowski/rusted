@@ -1,4 +1,11 @@
-BUILD=$(PWD)/_build
+PROFILE:=default
+
+include $(PROFILE).buildprofile
+$(info profile: $(PROFILE))
+$(info cflags: $(CFLAGS))
+
+BUILD_BASE:=$(PWD)/_build
+BUILD:=$(BUILD_BASE)/$(PROFILE)/
 SOURCE_DIR=$(PWD)/Sources
 
 VPATH:=$(BUILD)
@@ -16,11 +23,14 @@ help:
 .PHONY: clean
 clean:
 	@/bin/echo -e '$(FONT_BOLD)rm$(FONT_RESET) $(BUILD)'
-	@rm -rf $(BUILD)
+	@rm -rf $(BUILD_BASE)
 
 $(BUILD):
 	@/bin/echo -e '$(FONT_BOLD)mkdir$(FONT_RESET) $(BUILD)'
 	@mkdir -p $(BUILD)
+
+# from profile
+DEFAULT_CFLAGS:=$(CFLAGS)
 
 #
 # this template is executed for each mk file found in the project

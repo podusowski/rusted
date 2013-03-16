@@ -64,7 +64,7 @@ function run_test()
     rm $stdout $stderr
 }
 
-pushd _build > /dev/null
+pushd _build/linux-debug > /dev/null
 
 result=0
 

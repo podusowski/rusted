@@ -10,7 +10,7 @@ done
 echo tool: $tool
 
 root=`pwd`
-pushd _build
+pushd _build/linux-debug
 
 if [ "$tool" = "helgrind" ]; then
     wrapper="valgrind --tool=helgrind --log-file=$root/helgrind-%p --trace-children=yes --child-silent-after-fork=yes"

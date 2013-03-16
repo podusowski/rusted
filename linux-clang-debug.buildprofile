@@ -1,0 +1,4 @@
+PROFILE:=linux-clang-debug
+CC:=clang
+CFLAGS:=-g -O0 -std=gnu++0x 
+
