@@ -68,12 +68,12 @@ void Camera::update()
 
 void Camera::zoomIn()
 {
-    m_distance += 100;
+    m_distance += 1000;
 }
 
 void Camera::zoomOut()
 {
-    m_distance -= 100;
+    m_distance -= 1000;
 }
 
 Ogre::Quaternion Camera::getOrientation()
