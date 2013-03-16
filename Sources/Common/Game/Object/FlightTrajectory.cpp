@@ -114,15 +114,28 @@ void FlightTrajectory::applyDescription(FlightTrajectory::Description descriptio
               << ", now: " << m_time->getCurrentTime()
               << ", current position: " << getPosition();
 
+    const unsigned positionCompensationThreshold = 2000;
+    const TimeValue timeCompensationThreshold(1, 0);
+
     if (!description.controlPoints.empty())
     {
         auto newStartingPosition = *description.controlPoints.begin();
         auto currentPosition = getPosition();
         auto offset = newStartingPosition - currentPosition;
 
-        LOG_DEBUG << "Latency offset: " << offset << " (length: " << offset.length() << "), compensating";
+        if (offset.length() < positionCompensationThreshold)
+        {
+            LOG_DEBUG << "Position offset: " << offset << " (length: " << offset.length() << ") smaller than threshold, compensating";
+            description.controlPoints[0] = currentPosition;
+        }
 
-        description.controlPoints.insert(description.controlPoints.begin(), currentPosition);
+        auto now = m_time->getCurrentTime();
+        auto timeOffset = now - description.startTime;
+        if (timeOffset < timeCompensationThreshold)
+        {
+            LOG_DEBUG << "Time offset: " << timeOffset << " smaller than threshold, compensating";
+            description.startTime = now;
+        }
     }
 
     m_description = description;
