@@ -114,19 +114,32 @@ void FlightTrajectory::applyDescription(FlightTrajectory::Description descriptio
               << ", now: " << m_time->getCurrentTime()
               << ", current position: " << getPosition();
 
-    const unsigned positionCompensationThreshold = 2000;
+    const unsigned positionMaxCompensationThreshold = 2000;
+    const unsigned positionMinCompensationThreshold = 0;
     const TimeValue timeCompensationThreshold(1, 0);
 
-    if (!description.controlPoints.empty())
+    if (description.controlPoints.size() >= 3)
     {
         auto newStartingPosition = *description.controlPoints.begin();
         auto currentPosition = getPosition();
         auto offset = newStartingPosition - currentPosition;
 
-        if (offset.length() < positionCompensationThreshold)
+        // if thresholds are met, add control point with current position at the beginning
+        // of the curve
+        if (offset.length() < positionMaxCompensationThreshold && offset.length() > positionMinCompensationThreshold)
         {
             LOG_DEBUG << "Position offset: " << offset << " (length: " << offset.length() << ") smaller than threshold, compensating";
+            //description.controlPoints.insert(description.controlPoints.begin(), currentPosition);
+
+            LOG_DEBUG << "  " << description.controlPoints[0] << " replacing with " << currentPosition << " at first control point";
             description.controlPoints[0] = currentPosition;
+        
+            // replace second control point
+            // TODO: extract to some method to remove duplication
+            auto direction = m_cachedOrientation * Common::Math::Point3(0, 0, 1);
+            direction.normalize();
+
+            description.controlPoints[1] = currentPosition + (direction * 1000);
         }
 
         auto now = m_time->getCurrentTime();
