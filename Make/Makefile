@@ -1,6 +1,8 @@
 PROFILE:=default
 
-include $(PROFILE).buildprofile
+build_profiles_dir:=BuildProfiles/
+
+include $(build_profiles_dir)/$(PROFILE).buildprofile
 $(info profile: $(PROFILE))
 $(info cflags: $(CFLAGS))
 
