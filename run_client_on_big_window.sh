@@ -7,4 +7,4 @@ height=$(($height-100))
 
 echo $width x $height
 
-_build/runTestClient --graphics.width $width --graphics.height $height 
+_build/linux-debug/runTestClient --graphics.width $width --graphics.height $height 
