@@ -9,7 +9,6 @@ Camera::Camera(Graphics::IGraphics & graphics, Input::IInput & input, Common::Ga
     m_graphics(graphics),
     m_player(player),
     m_distance(1000),
-    m_userOrientationIsReseting(false),
     m_userOrientationChanging(false),
     m_userXAngle(0),
     m_userYAngle(0)
@@ -18,6 +17,9 @@ Camera::Camera(Graphics::IGraphics & graphics, Input::IInput & input, Common::Ga
 
     m_cameraLight = graphics.getSceneManager().createLight("cameraLight");
     m_cameraLight->setType(Ogre::Light::LT_DIRECTIONAL);
+
+    m_userXAngle.setSpeed(0.01);
+    m_userYAngle.setSpeed(0.01);
 }
 
 Camera::~Camera()
@@ -36,15 +38,10 @@ void Camera::update()
     auto cameraOrientation = m_graphics.toOgreQuaternion(orientation);
     auto cameraPosition = m_graphics.toOgreVector3(position);
 
-    // check if slerp is needed
-    if (m_userOrientationIsReseting)
-    {
-        const float ratio = 0.9995;
-        m_userXAngle *= ratio;
-        m_userYAngle *= ratio;
+    m_userXAngle.update();
+    m_userYAngle.update();
 
-        recalculateUserOrientation();
-    }
+    recalculateUserOrientation();
 
     // flip backwards
     cameraOrientation = cameraOrientation * Ogre::Quaternion(Ogre::Degree(180), Ogre::Vector3::UNIT_Y);
@@ -91,15 +88,16 @@ bool Camera::isUserOrientationChanging()
 
 void Camera::resetUserOrientation()
 {
-    m_userOrientationIsReseting = true;
+    m_userXAngle = 0;
+    m_userYAngle = 0;
 }
 
 void Camera::mouseMoved(const OIS::MouseState & state)
 {
     if (m_userOrientationChanging)
     {
-        m_userXAngle += state.X.rel * 0.5;
-        m_userYAngle += state.Y.rel * 0.5;
+        m_userXAngle.set(*m_userXAngle + static_cast<float>(state.X.rel) * 0.5);
+        m_userYAngle.set(*m_userYAngle + static_cast<float>(state.Y.rel) * 0.5);
 
         recalculateUserOrientation();
     }
@@ -110,7 +108,6 @@ void Camera::mousePressed(const OIS::MouseButtonID & button, const OIS::MouseEve
     if (button == OIS::MB_Middle)
     {
         m_userOrientationChanging = true;
-        m_userOrientationIsReseting = false;
     }
 }
 
@@ -125,7 +122,7 @@ void Camera::mouseReleased(const OIS::MouseButtonID & button, unsigned x, unsign
 void Camera::recalculateUserOrientation()
 {
     m_userOrientation = 
-        Ogre::Quaternion(Ogre::Degree(m_userXAngle), Ogre::Vector3(0, 1, 0)) *
-        Ogre::Quaternion(Ogre::Degree(m_userYAngle), Ogre::Vector3(1, 0, 0));
+        Ogre::Quaternion(Ogre::Degree(*m_userXAngle), Ogre::Vector3(0, 1, 0)) *
+        Ogre::Quaternion(Ogre::Degree(*m_userYAngle), Ogre::Vector3(1, 0, 0));
 }
 

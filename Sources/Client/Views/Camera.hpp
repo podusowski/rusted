@@ -34,10 +34,9 @@ private:
     Common::Game::Player & m_player;
     Common::Math::AnimatedVariable<int> m_distance;
     Ogre::Quaternion m_userOrientation;
-    bool m_userOrientationIsReseting;
     bool m_userOrientationChanging;
-    int m_userXAngle;
-    int m_userYAngle;
+    Common::Math::AnimatedVariable<Common::Math::Real> m_userXAngle;
+    Common::Math::AnimatedVariable<Common::Math::Real> m_userYAngle;
     Ogre::Light * m_cameraLight;
 };
 

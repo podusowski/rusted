@@ -20,10 +20,21 @@ public:
         m_animating(false)
     {
     }
+
+    void setSpeed(Real speed)
+    {
+        m_speed = speed;
+    }
     
     T operator * () const
     {
         return calculate();
+    }
+
+    void set(T value)
+    {
+        m_value = value;
+        m_animating = false;
     }
 
     AnimatedVariable<T> & operator = (T value)
