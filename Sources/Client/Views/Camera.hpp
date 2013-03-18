@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Common/Math/AnimatedVariable.hpp"
 #include "Common/Game/Player.hpp"
 #include "Client/Input/IInput.hpp"
 #include "Client/Graphics/IGraphics.hpp"
@@ -31,7 +32,7 @@ private:
 
     Graphics::IGraphics & m_graphics;
     Common::Game::Player & m_player;
-    int m_distance;
+    Common::Math::AnimatedVariable<int> m_distance;
     Ogre::Quaternion m_userOrientation;
     bool m_userOrientationIsReseting;
     bool m_userOrientationChanging;

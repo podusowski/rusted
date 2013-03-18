@@ -54,7 +54,7 @@ void Camera::update()
 
     int angle = 20;
     Ogre::Quaternion cameraOrientationAngle(Ogre::Degree(-angle), Ogre::Vector3(1, 0, 0));
-    auto cameraPositionDelta = cameraOrientationAngle * Ogre::Vector3(0, 0, m_distance);
+    auto cameraPositionDelta = cameraOrientationAngle * Ogre::Vector3(0, 0, *m_distance);
 
     cameraPosition += cameraOrientation * cameraPositionDelta;
     cameraOrientation = cameraOrientation * cameraOrientationAngle;
@@ -64,16 +64,18 @@ void Camera::update()
     camera.setOrientation(cameraOrientation);
 
     m_cameraLight->setDirection(cameraOrientation * -Ogre::Vector3::UNIT_Z);
+
+    m_distance.update();
 }
 
 void Camera::zoomIn()
 {
-    m_distance += 1000;
+    m_distance += 2000;
 }
 
 void Camera::zoomOut()
 {
-    m_distance -= 1000;
+    m_distance -= 2000;
 }
 
 Ogre::Quaternion Camera::getOrientation()
