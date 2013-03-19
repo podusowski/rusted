@@ -20,6 +20,9 @@ Camera::Camera(Graphics::IGraphics & graphics, Input::IInput & input, Common::Ga
 
     m_userXAngle.setSpeed(0.01);
     m_userYAngle.setSpeed(0.01);
+
+    m_userXAngle.setDelay(50);
+    m_userYAngle.setDelay(50);
 }
 
 Camera::~Camera()

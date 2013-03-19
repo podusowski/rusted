@@ -17,13 +17,20 @@ public:
         m_to(value),
         m_progress(0),
         m_speed(0.15),
-        m_animating(false)
+        m_animating(false),
+        m_delay(0),
+        m_delayValue(0)
     {
     }
 
     void setSpeed(Real speed)
     {
         m_speed = speed;
+    }
+
+    void setDelay(unsigned delay)
+    {
+        m_delay = delay;
     }
     
     T operator * () const
@@ -60,7 +67,15 @@ public:
 
     void update()
     {
-        m_progress += m_speed;
+        if (m_delayValue > 0)
+        {
+            m_delayValue--;
+        }
+        else
+        {
+            m_progress += m_speed;
+        }
+
         if (m_progress >= PI / 2)
         {
             stop();
@@ -92,7 +107,13 @@ private:
 
     void start()
     {
-        if (m_animating && m_progress < -PI / 4)
+        if (m_animating && m_delayValue > 0)
+        {
+            // delay in progress, reset it
+
+            m_delayValue = m_delay;
+        }
+        else if (m_animating && m_progress < -PI / 4)
         {
             // it's accelerating so just keep it going
         }
@@ -109,6 +130,7 @@ private:
         }
         else
         {
+            m_delayValue = m_delay;
             m_progress = -PI / 2;
             m_animating = true;
         }
@@ -128,6 +150,8 @@ private:
     Real m_progress;
     Real m_speed;
     bool m_animating;
+    unsigned m_delay;
+    unsigned m_delayValue;
 };
 
 }
