@@ -109,4 +109,5 @@ void Graphics::initResources()
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/particles", "FileSystem", "General");
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/meshes", "FileSystem", "General");
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/materials", "FileSystem", "General");
+    Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/objects", "FileSystem", "General");
 }
