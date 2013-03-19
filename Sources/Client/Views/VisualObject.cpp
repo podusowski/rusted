@@ -20,7 +20,7 @@ VisualObject::VisualObject(
 {
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
 
-    std::string modelFilename = "Contents/objects/" + object.getMesh();
+    std::string modelFilename = "Contents/objects/" + object.getModel();
     std::ifstream f(modelFilename);
 
     if (!f.good())

@@ -20,13 +20,13 @@ TEST_F(ShipClassTest, ApplyBasic)
     node.setValue("speed", 1);
     node.setValue("id", 1);
     node.setValue("name", "name");
-    node.setValue("mesh", "mesh");
+    node.setValue("model", "mesh");
 
     Common::Game::Object::ShipMock ship;
 
     EXPECT_CALL(ship, setIntegrity(100)).Times(1);
     EXPECT_CALL(ship, setSpeed(1)).Times(1);
-    EXPECT_CALL(ship, setMesh("mesh")).Times(1);
+    EXPECT_CALL(ship, setModel("mesh")).Times(1);
 
     ShipClass shipClass(node);
     shipClass.applyTo(ship);
@@ -41,7 +41,7 @@ TEST_F(ShipClassTest, AvailableActions)
     node.setValue("speed", 1);
     node.setValue("id", 1);
     node.setValue("name", "name");
-    node.setValue("mesh", "mesh");
+    node.setValue("model", "mesh");
 
     auto & actionsNode = node.createChild("actions");
     auto & action1Node = actionsNode.createChild("action");

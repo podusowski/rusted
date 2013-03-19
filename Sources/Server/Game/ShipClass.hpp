@@ -26,7 +26,7 @@ private:
     std::string m_name;
     unsigned m_speed;
     unsigned m_integrity;
-    std::string m_mesh;
+    std::string m_model;
     unsigned m_capacity;
     unsigned m_requiredCarbon;
     unsigned m_requiredHelium;

@@ -56,7 +56,7 @@ Ship
 <message id="ShipInfo">
 	<param type="int32" name="id" />
 	<param type="int32" name="player_id" description="id of the player owning this entity" />
-	<param type="string" name="mesh" />
+	<param type="string" name="model" />
 	<param type="int32" name="integrity" />
 	<param type="int32" name="speed" />
 	<param type="int32" name="x" />

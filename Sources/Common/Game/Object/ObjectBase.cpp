@@ -18,14 +18,14 @@ void ObjectBase::setId(unsigned id)
     m_id = id;
 }
 
-void ObjectBase::setMesh(std::string mesh)
+void ObjectBase::setModel(std::string model)
 {
-    m_mesh = mesh;
+    m_model = model;
 }
 
-std::string ObjectBase::getMesh()
+std::string ObjectBase::getModel()
 {
-    return m_mesh;
+    return m_model;
 }
 
 unsigned ObjectBase::getIntegrity()

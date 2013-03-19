@@ -9,7 +9,7 @@ ShipClass::ShipClass(DataBase::DataBaseNode & node) :
     m_name(node.getValue<std::string>("name")),
     m_speed(node.getValue<unsigned>("speed")),
     m_integrity(node.getValue<unsigned>("integrity")),
-    m_mesh(node.getValue<std::string>("mesh")),
+    m_model(node.getValue<std::string>("model")),
     m_capacity(node.getValue<unsigned>("capacity", 0)),
     m_requiredCarbon(node.getValue<unsigned>("required_carbon", 0)),
     m_requiredHelium(node.getValue<unsigned>("required_helium", 0))
@@ -18,7 +18,7 @@ ShipClass::ShipClass(DataBase::DataBaseNode & node) :
               << ", name: " << m_name
               << ", speed: " << m_speed 
               << ", integrity: " << m_integrity
-              << ", mesh: " << m_mesh
+              << ", model: " << m_model
               << ", capacity: " << m_capacity;
 
     try
@@ -47,7 +47,7 @@ void ShipClass::applyTo(Common::Game::Object::Ship & ship)
 
     ship.setSpeed(m_speed);
     ship.setIntegrity(m_integrity);
-    ship.setMesh(m_mesh);
+    ship.setModel(m_model);
     ship.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
     {
         cargoHold.setCapacity(m_capacity);

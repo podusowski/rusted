@@ -72,7 +72,7 @@ void Utils::sendShipInfo(Common::Game::Object::Ship & ship, Network::IConnection
     Common::Game::Position position = ship.getPosition();
     shipInfo.id = ship.getId();
     shipInfo.player_id = ship.getOwnerId();
-    shipInfo.mesh = ship.getMesh();
+    shipInfo.model = ship.getModel();
     shipInfo.x = position.getX();
     shipInfo.y = position.getY();
     shipInfo.z = position.getZ();

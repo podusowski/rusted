@@ -19,7 +19,7 @@ public:
     MOCK_METHOD1(setSpeed, void(unsigned));
     MOCK_METHOD0(getIntegrity, unsigned());
     MOCK_METHOD1(setIntegrity, void(unsigned));
-    MOCK_METHOD1(setMesh, void(std::string));
+    MOCK_METHOD1(setModel, void(std::string));
     MOCK_METHOD0(getTrajectoryDescription, IFlightTrajectory::Description());
 };
 

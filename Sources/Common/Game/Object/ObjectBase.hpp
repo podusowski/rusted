@@ -22,8 +22,8 @@ public:
     unsigned getId();
     void setId(unsigned id);
 
-    virtual void setMesh(std::string mesh);
-    virtual std::string getMesh();
+    virtual void setModel(std::string mesh);
+    virtual std::string getModel();
 
     virtual Position getPosition() = 0;
     virtual void setPosition(const Position &) = 0;
@@ -45,7 +45,7 @@ public:
 private:
     unsigned m_id;
     unsigned m_integrity;
-    std::string m_mesh;
+    std::string m_model;
     CargoHold m_cargoHold;
 };
 
