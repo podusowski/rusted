@@ -73,6 +73,7 @@ void Graphics::initOgre()
     m_ogreRoot = new Ogre::Root("", "");
 
     m_ogreRoot->loadPlugin("RenderSystem_GL");
+    m_ogreRoot->loadPlugin("Plugin_ParticleFX");
 
     if (m_ogreRoot->getAvailableRenderers().begin() == m_ogreRoot->getAvailableRenderers().end())
     {
@@ -99,10 +100,13 @@ void Graphics::initOgre()
     Ogre::Viewport * vp = m_ogreRenderWindow->addViewport(m_ogreCamera);
     vp->setBackgroundColour(Ogre::ColourValue(0, 0, 0));
     m_ogreCamera->setAspectRatio(Ogre::Real(vp->getActualWidth()) / Ogre::Real(vp->getActualHeight()));
+
+    Ogre::ResourceGroupManager::getSingleton().initialiseAllResourceGroups();
 }
 
 void Graphics::initResources()
 {
+    Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/particles", "FileSystem", "General");
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/meshes", "FileSystem", "General");
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/materials", "FileSystem", "General");
 }

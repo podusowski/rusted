@@ -1,5 +1,6 @@
 #include <OgreSceneNode.h>
 #include <OgreEntity.h>
+#include <OgreParticleSystem.h>
 
 #include "Cake/Diagnostics/Logger.hpp"
 
@@ -31,6 +32,11 @@ VisualObject::VisualObject(
     m_node->setScale(100.0, 100.0, 100.0);
 
     input.addObjectRightClickCallback(*m_entity, std::bind(&VisualObject::rightClickedCallback, this));
+
+    std::stringstream ss;
+    ss << "particle-" << object.getId();
+    Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "EngineTail");
+    m_node->attachObject(ps);
     
     update();
 }
