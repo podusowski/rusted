@@ -4,7 +4,7 @@ using namespace Cake::Serialization;
 
 Tms::Tms(std::istream & stream)
 {
-    while (!stream.eof())
+    while (stream.good())
     {
         std::string name;
         std::string value;

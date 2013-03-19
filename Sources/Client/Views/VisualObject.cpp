@@ -3,6 +3,7 @@
 #include <OgreParticleSystem.h>
 
 #include "Cake/Diagnostics/Logger.hpp"
+#include "Cake/Serialization/Tms.hpp"
 
 #include "Common/Game/Object/Asteroid.hpp"
 #include "VisualObject.hpp"
@@ -19,11 +20,27 @@ VisualObject::VisualObject(
 {
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
 
-    std::string mesh = object.getMesh();
+    std::string modelFilename = "Contents/objects/" + object.getMesh();
+    std::ifstream f(modelFilename);
+
+    if (!f.good())
+    {
+        std::stringstream ss;
+        ss << "can't read model file: " << modelFilename;
+        throw std::runtime_error(ss.str());
+    }
+
+    Cake::Serialization::Tms tms(f);
+
+    std::string mesh;
 
     if (object.is<Common::Game::Object::Asteroid>())
     {
         mesh = "Asteroid.mesh";
+    }
+    else
+    {
+        mesh = tms.getValue<std::string>("mesh");
     }
 
     m_entity = scene.createEntity(mesh);
