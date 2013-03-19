@@ -20,6 +20,8 @@ SOURCES+=Networking/ServerSocket.cpp
 SOURCES+=Networking/Socket.cpp
 SOURCES+=Networking/SocketStream.cpp
 
+SOURCES+=Serialization/Tms.cpp
+
 SOURCES+=System/AtomicSyscall.cpp
 SOURCES+=System/ShellResult.cpp
 SOURCES+=System/Shell.cpp
