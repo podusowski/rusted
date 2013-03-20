@@ -33,6 +33,7 @@ void Utils::sendObjectInfo(Common::Game::Object::ObjectBase & object, Network::I
 
         Common::Game::Position position = object.getPosition();
         asteroidInfo.objectId = object.getId();
+        asteroidInfo.model = object.getModel();
         asteroidInfo.x = position.getX();
         asteroidInfo.y = position.getY();
         asteroidInfo.z = position.getZ();

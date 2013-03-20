@@ -44,6 +44,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
         boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
 
         object->setId(data.getValue<unsigned>("id"));
+        object->setModel(data.getValue<std::string>("model"));
         object->setPosition(extractPosition(data));
         object->setIntegrity(data.getValue<unsigned>("integrity"));
         object->visitCargoHold(std::bind(&ObjectFactory::fillCargoHold, this, data, _1));

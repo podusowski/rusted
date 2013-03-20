@@ -62,6 +62,7 @@ TEST(ObjectsSct, GetObjectInfo_Asteroid)
 
     auto asteroidInfo = connection1->receive<Common::Messages::AsteroidInfo>();
     EXPECT_EQ(getObjectInfo.id, asteroidInfo->objectId);
+    EXPECT_EQ("Asteroid.model", asteroidInfo->model);
     EXPECT_EQ(100, asteroidInfo->x);
     EXPECT_EQ(100, asteroidInfo->y);
     EXPECT_EQ(100, asteroidInfo->z);
