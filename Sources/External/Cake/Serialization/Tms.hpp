@@ -1,3 +1,4 @@
+#include <sstream>
 #include <istream>
 #include <map>
 #include <stdexcept>
@@ -23,7 +24,9 @@ public:
             return val;
         }
 
-        throw std::runtime_error("no such parameter");
+        std::stringstream ss;
+        ss << "no such parameter: " << name;
+        throw std::runtime_error(ss.str());
     }
 
 private:

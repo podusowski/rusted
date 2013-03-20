@@ -50,10 +50,26 @@ VisualObject::VisualObject(
 
     input.addObjectRightClickCallback(*m_entity, std::bind(&VisualObject::rightClickedCallback, this));
 
-    std::stringstream ss;
-    ss << "particle-" << object.getId();
-    Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "EngineTail");
-    m_node->attachObject(ps);
+    try
+    {
+        int x = tms.getValue<int>("engine1.thrust.x");
+        int y = tms.getValue<int>("engine1.thrust.y");
+        int z = tms.getValue<int>("engine1.thrust.z");
+
+        LOG_DEBUG << "Engine1 thrust at: " << x << ", " << y << ", " << z;
+
+        std::stringstream ss;
+        ss << "particle-" << object.getId();
+        Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "EngineTail");
+
+        auto * psNode = m_node->createChildSceneNode();
+        psNode->setPosition(Ogre::Vector3(x, y, z));
+        psNode->attachObject(ps);
+    }
+    catch (const std::exception & ex)
+    {
+        LOG_ERR << "Can't create engine thrust effect, reason: " << ex.what();
+    }
     
     update();
 }
