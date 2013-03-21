@@ -1,21 +1,24 @@
 particle_system EngineTail
 {
     material        Flare
-    particle_width  100
-    particle_height 100
+    particle_width  150
+    particle_height 150
     cull_each       false
-    quota           1000
+    quota           5000
     billboard_type  point
 
-    emitter Point
+    emitter Cylinder
     {
+        depth 0
+        width 0.5
+        height 0.5
         angle 0
-        emission_rate 650
-        time_to_live   0.3
+
+        emission_rate 200
+        time_to_live   0.5
         direction       -1 0 0
-        velocity    850
-        colour_range_start  0.5 1 0.7
-        colour_range_end    0.5 0.8 1 
+        velocity    2500
+        colour 0.5 1 1 
     }
 
 
@@ -25,12 +28,11 @@ particle_system EngineTail
         red -5
         green -5
         blue -5
-        alpha -10
     }
 
     affector Scaler
     {
-        rate -150
+        rate -350
     }
 
 }

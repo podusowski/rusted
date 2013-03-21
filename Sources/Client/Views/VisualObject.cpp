@@ -52,19 +52,26 @@ VisualObject::VisualObject(
 
     try
     {
-        int x = tms.getValue<int>("engine1.thrust.x");
-        int y = tms.getValue<int>("engine1.thrust.y");
-        int z = tms.getValue<int>("engine1.thrust.z");
+        for (int i = 1; i < 10; i++)
+        {
+            std::stringstream engineNameSs;
+            engineNameSs << "engine";
+            engineNameSs << i;
 
-        LOG_DEBUG << "Engine1 thrust at: " << x << ", " << y << ", " << z;
+            int x = tms.getValue<int>(engineNameSs.str() + ".thrust.x");
+            int y = tms.getValue<int>(engineNameSs.str() + ".thrust.y");
+            int z = tms.getValue<int>(engineNameSs.str() + ".thrust.z");
 
-        std::stringstream ss;
-        ss << "particle-" << object.getId();
-        Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "EngineTail");
+            LOG_DEBUG << "Engine" << i << " thrust at: " << x << ", " << y << ", " << z;
 
-        auto * psNode = m_node->createChildSceneNode();
-        psNode->setPosition(Ogre::Vector3(x, y, z));
-        psNode->attachObject(ps);
+            std::stringstream ss;
+            ss << "engine-particle-" << object.getId() << "-" << i;
+            Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "EngineTail");
+
+            auto * psNode = m_node->createChildSceneNode();
+            psNode->setPosition(Ogre::Vector3(x, y, z));
+            psNode->attachObject(ps);
+        }
     }
     catch (const std::exception & ex)
     {
