@@ -52,22 +52,7 @@ TEST_F(FlightTrajectoryTest, HighPrecisionTimer)
     Mock::VerifyAndClear(&getTimeMock());
 
     EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 500)));
-    ASSERT_EQ(Position(0, 0, 5000), trajectory.getPosition());
-    Mock::VerifyAndClear(&getTimeMock());
-}
-
-TEST_F(FlightTrajectoryTest, MoveToTheSamePosition)
-{
-    FlightTrajectory trajectory;
-
-    trajectory.setPosition(Position(1, 2, 3));
-
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(100, 0)));
-    trajectory.fly(Position(1, 2, 3));
-    Mock::VerifyAndClear(&getTimeMock());
-
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(200, 0)));
-    ASSERT_EQ(Position(1, 2, 3), trajectory.getPosition());
+    ASSERT_GT(5000, trajectory.getPosition().getZ());
     Mock::VerifyAndClear(&getTimeMock());
 }
 
@@ -78,18 +63,18 @@ TEST_F(FlightTrajectoryTest, Stop)
     trajectory.setPosition(Position(0, 0, 0));
 
     EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
-    trajectory.fly(Common::Game::Position(100, 0, 0));
+
+    // by default ships are facing (0,0,1) so it should fly straight line here
+    trajectory.fly(Common::Game::Position(0, 0, 10000));
     Mock::VerifyAndClear(&getTimeMock());
 
     ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(50, 0)));
-    ASSERT_EQ(Position(50, 0, 0), trajectory.getPosition());
+    auto position = trajectory.getPosition();
     trajectory.stop();
     Mock::VerifyAndClear(&getTimeMock());
 
-    // ship should stop
-
     ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(100, 0)));
-    ASSERT_EQ(Position(50, 0, 0), trajectory.getPosition());
+    ASSERT_EQ(position, trajectory.getPosition());
     Mock::VerifyAndClear(&getTimeMock());
 }
 
