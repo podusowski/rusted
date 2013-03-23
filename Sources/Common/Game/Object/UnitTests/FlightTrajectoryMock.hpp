@@ -20,13 +20,10 @@ public:
     MOCK_METHOD0(getPosition, Position());
     MOCK_METHOD0(getCourseMarkerPosition, Position());
     MOCK_METHOD0(getCourseMarkerOrientation, Common::Math::Quaternion());
-    MOCK_METHOD0(getYaw, float());
-    MOCK_METHOD0(getPitch, float());
-    MOCK_METHOD0(getRoll, float());
-    MOCK_METHOD0(getTangent100, Position());
     MOCK_METHOD0(getOrientation, Common::Math::Quaternion());
     MOCK_METHOD1(setSpeed, void(unsigned));
     MOCK_METHOD0(getSpeed, unsigned());
+    MOCK_METHOD0(isMoving, bool());
     MOCK_METHOD0(getDescription, Description());
     MOCK_METHOD1(applyDescription, void(Description));
 };

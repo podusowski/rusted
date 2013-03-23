@@ -29,6 +29,8 @@ public:
     void setSpeed(unsigned);
     unsigned getSpeed();
 
+    bool isMoving();
+
     Description getDescription();
     void applyDescription(Description);
 

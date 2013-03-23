@@ -102,6 +102,15 @@ unsigned FlightTrajectory::getSpeed()
     return m_speed;
 }
 
+bool FlightTrajectory::isMoving()
+{
+    auto progress = calculateProgress(m_time->getCurrentTime());
+    calculateCachedPositionAndOrientation(progress);
+    revalidateProgress(progress);
+    
+    return !m_bezier.empty();
+}
+
 FlightTrajectory::Description FlightTrajectory::getDescription()
 {
     return m_description;

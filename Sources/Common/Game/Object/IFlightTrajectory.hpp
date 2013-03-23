@@ -37,6 +37,8 @@ public:
     virtual void setSpeed(unsigned) = 0;
     virtual unsigned getSpeed() = 0;
 
+    virtual bool isMoving() = 0;
+
     virtual Description getDescription() = 0;
     virtual void applyDescription(Description) = 0;
 
