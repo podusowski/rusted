@@ -62,7 +62,7 @@ TEST_F(FlightTrajectoryTest, Stop)
 
     trajectory.setPosition(Position(0, 0, 0));
 
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
+    ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(0, 0)));
 
     // by default ships are facing (0,0,1) so it should fly straight line here
     trajectory.fly(Common::Game::Position(0, 0, 10000));
@@ -119,7 +119,9 @@ TEST_F(FlightTrajectoryTest, ApplyDescription)
 
     description.startTime = TimeValue(0, 0);
 
+    ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(0, 0)));
     trajectory.applyDescription(description);
+    Mock::VerifyAndClear(&getTimeMock());
 
     ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(TimeValue(100, 0)));
     ASSERT_EQ(Position(100, 0, 0), trajectory.getPosition());
