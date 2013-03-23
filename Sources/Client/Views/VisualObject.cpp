@@ -21,6 +21,9 @@ VisualObject::VisualObject(
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
 
     std::string modelFilename = "Contents/objects/" + object.getModel();
+
+    LOG_DEBUG << "Loading model: " << modelFilename;
+
     std::ifstream f(modelFilename);
 
     if (!f.good())
@@ -32,17 +35,7 @@ VisualObject::VisualObject(
 
     Cake::Serialization::Tms tms(f);
 
-    std::string mesh;
-
-    if (object.is<Common::Game::Object::Asteroid>())
-    {
-        mesh = "Asteroid.mesh";
-    }
-    else
-    {
-        mesh = tms.getValue<std::string>("mesh");
-    }
-
+    std::string mesh = tms.getValue<std::string>("mesh");
     m_entity = scene.createEntity(mesh);
     m_node = scene.getRootSceneNode()->createChildSceneNode();
     m_node->attachObject(m_entity);

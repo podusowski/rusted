@@ -102,6 +102,7 @@ void ObjectService::handle(const Common::Messages::AsteroidInfo & message)
     
         object->setId(message.objectId);
         object->setPosition(Common::Game::Position(message.x, message.y, message.z));
+        object->setModel(message.model);
 
         m_universe.add(object);
 
