@@ -81,6 +81,7 @@ TEST_F(ObjectFactoryTest, CreateAsteroidFromDbNode)
 {
     Server::DataBase::DataBaseNode node("object");
     node.setValue("type", "Asteroid");
+    node.setValue("model", "Asteroid.model");
     node.setValue("id", 1);
     node.setValue("x", 3);
     node.setValue("y", 4);
