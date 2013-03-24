@@ -63,29 +63,13 @@ bool Input::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
 {
     LOG_DEBUG << "Mouse pressed (x: " << arg.state.X.abs << ", y: " << arg.state.Y.abs << ")"; 
 
-    BOOST_FOREACH(IMouseListener * listener, m_mouseListeners)
+    for (auto * listener: m_mouseListeners)
     {
         listener->mousePressed(id, arg, arg.state.X.abs, arg.state.Y.abs);
     }
 
+    mousePressedRaycast(arg, id);
     MyGUI::InputManager::getInstance().injectMousePress(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
-
-    // raycast
-    auto mousePos = MyGUI::InputManager::getInstance().getMousePosition();
-    Ogre::Ray mouseRay = m_camera.getCameraToViewportRay(
-                            mousePos.left / float(arg.state.width), 
-                            mousePos.top / float(arg.state.height));
-
-    auto * entity = m_raycast.cast(mouseRay);
-    if (entity)
-    {
-        auto it = m_entityRightClickCallbacks.find(entity);
-        if (it != m_entityRightClickCallbacks.end())
-        {
-            it->second();
-        }
-    }
-
     return true;
 }
 
@@ -135,5 +119,23 @@ void Input::addMouseListener(IMouseListener & listener)
 void Input::addObjectRightClickCallback(Ogre::Entity & entity, std::function<void()> callback)
 {
     m_entityRightClickCallbacks.insert(std::make_pair(&entity, callback));
+}
+
+void Input::mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
+{
+    auto mousePos = MyGUI::InputManager::getInstance().getMousePosition();
+    Ogre::Ray mouseRay = m_camera.getCameraToViewportRay(
+                            mousePos.left / float(arg.state.width), 
+                            mousePos.top / float(arg.state.height));
+
+    auto * entity = m_raycast.cast(mouseRay);
+    if (entity)
+    {
+        auto it = m_entityRightClickCallbacks.find(entity);
+        if (it != m_entityRightClickCallbacks.end())
+        {
+            it->second();
+        }
+    }
 }
 
