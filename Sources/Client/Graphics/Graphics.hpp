@@ -29,7 +29,7 @@ public:
     Ogre::Quaternion toOgreQuaternion(Common::Math::Quaternion);
     Ogre::Vector3 toOgreVector3(Common::Game::Position);
     Common::Game::Position toPosition(Ogre::Vector3);
-    std::tuple<bool, Ogre::Vector2> getScreenCoordinates(const Ogre::MovableObject &, const Ogre::Camera &);
+    std::tuple<bool, Ogre::Vector2> getScreenCoordinates(const Ogre::MovableObject &);
 
 private:
     void initOgre();

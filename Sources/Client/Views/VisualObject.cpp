@@ -12,10 +12,12 @@ using namespace Client::Views;
 
 VisualObject::VisualObject(
     Client::Graphics::IGraphics & graphics,
+    Gui::Gui & gui,
     Client::Input::IInput & input,
     Common::Game::Object::ObjectBase & object)
     :
     m_graphics(graphics),
+    m_gui(gui),
     m_object(object)
 {
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
@@ -73,6 +75,7 @@ VisualObject::VisualObject(
         LOG_ERR << "Can't create engine thrust effect, reason: " << ex.what();
     }
     
+    createLabel();
     update();
 }
 
@@ -105,6 +108,7 @@ void VisualObject::update()
     m_node->yaw(Ogre::Degree(-90));
 
     setEngineThrustEnabled(m_object.isMoving());
+    updateLabel();
 }
 
 void VisualObject::rightClickedCallback()
@@ -119,5 +123,22 @@ void VisualObject::setEngineThrustEnabled(bool v)
     {
         ps->setEmitting(v);
     }
+}
+
+void VisualObject::createLabel()
+{
+    m_label = m_gui->createWidget<MyGUI::TextBox>("TextBox", MyGUI::IntCoord(10, 10, 50, 50), MyGUI::Align::Default, "Main");
+    m_label->setCaption("object");
+}
+
+void VisualObject::updateLabel()
+{
+    auto screenCoords = m_graphics.getScreenCoordinates(*m_entity);
+    if (std::get<0>(screenCoords))
+    {
+        auto position = std::get<1>(screenCoords);
+        m_label->setPosition(MyGUI::IntPoint(position.x, position.y - 20));
+    }
+    m_label->setVisible(std::get<0>(screenCoords));
 }
 

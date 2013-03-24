@@ -68,7 +68,7 @@ Common::Game::Position Graphics::toPosition(Ogre::Vector3 vector)
     return Common::Game::Position(vector.x, vector.y, vector.z);
 }
 
-std::tuple<bool, Ogre::Vector2> Graphics::getScreenCoordinates(const Ogre::MovableObject & object, const Ogre::Camera & camera)
+std::tuple<bool, Ogre::Vector2> Graphics::getScreenCoordinates(const Ogre::MovableObject & object)
 {
     if (!object.isInScene())
     {
@@ -80,20 +80,23 @@ std::tuple<bool, Ogre::Vector2> Graphics::getScreenCoordinates(const Ogre::Movab
     Ogre::Vector3 point = AABB.getCenter();
  
     // Is the camera facing that point? If not, return false
-    Ogre::Plane cameraPlane = Ogre::Plane(Ogre::Vector3(camera.getDerivedOrientation().zAxis()), camera.getDerivedPosition());
+    Ogre::Plane cameraPlane = Ogre::Plane(Ogre::Vector3(m_ogreCamera->getDerivedOrientation().zAxis()), m_ogreCamera->getDerivedPosition());
     if (cameraPlane.getSide(point) != Ogre::Plane::NEGATIVE_SIDE)
     {
         return std::make_tuple(false, Ogre::Vector2());
     }
  
     // Transform the 3D point into screen space
-    point = camera.getProjectionMatrix() * (camera.getViewMatrix() * point);
+    point = m_ogreCamera->getProjectionMatrix() * (m_ogreCamera->getViewMatrix() * point);
 
     Ogre::Vector2 result;
  
     // Transform from coordinate space [-1, 1] to [0, 1] and update in-value
     result.x = (point.x / 2) + 0.5f;
     result.y = 1 - ((point.y / 2) + 0.5f);
+
+    result.x *= m_ogreRenderWindow->getViewport(0)->getActualWidth();
+    result.y *= m_ogreRenderWindow->getViewport(0)->getActualHeight();
  
     return std::make_tuple(true, result);
 }
