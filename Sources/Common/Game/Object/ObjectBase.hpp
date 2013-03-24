@@ -27,6 +27,7 @@ public:
 
     virtual Position getPosition() = 0;
     virtual void setPosition(const Position &) = 0;
+    virtual bool isMoving() = 0;
 
     virtual unsigned getIntegrity();
     virtual void setIntegrity(unsigned integrity);

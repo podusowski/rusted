@@ -27,12 +27,14 @@ public:
 
 private:
     void rightClickedCallback();
+    void setEngineThrustEnabled(bool);
 
     Client::Graphics::IGraphics & m_graphics;
     Common::Game::Object::ObjectBase & m_object;
     Ogre::Entity * m_entity;
     Ogre::SceneNode * m_node;
     std::function<void()> m_rightClickCallback;
+    std::vector<Ogre::ParticleSystem *> m_engineThrustParticleSystems;
 };
 
 }

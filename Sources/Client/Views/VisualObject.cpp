@@ -64,6 +64,8 @@ VisualObject::VisualObject(
             auto * psNode = m_node->createChildSceneNode();
             psNode->setPosition(Ogre::Vector3(x, y, z));
             psNode->attachObject(ps);
+
+            m_engineThrustParticleSystems.push_back(ps);
         }
     }
     catch (const std::exception & ex)
@@ -101,6 +103,8 @@ void VisualObject::update()
     //m_node->roll(Ogre::Degree(90));
     //m_node->pitch(Ogre::Degree(90));
     m_node->yaw(Ogre::Degree(-90));
+
+    setEngineThrustEnabled(m_object.isMoving());
 }
 
 void VisualObject::rightClickedCallback()
@@ -108,3 +112,12 @@ void VisualObject::rightClickedCallback()
     if (m_rightClickCallback)
         m_rightClickCallback();
 }
+
+void VisualObject::setEngineThrustEnabled(bool v)
+{
+    for (auto ps: m_engineThrustParticleSystems)
+    {
+        ps->setEmitting(v);
+    }
+}
+

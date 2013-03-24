@@ -17,3 +17,7 @@ Position Asteroid::getPosition()
     return m_position;
 }
 
+bool Asteroid::isMoving()
+{
+    return false;
+}

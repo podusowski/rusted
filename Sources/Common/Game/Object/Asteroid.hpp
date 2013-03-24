@@ -17,6 +17,7 @@ public:
 
     void setPosition(const Position &);
     Position getPosition();
+    bool isMoving();
 
 private:
     Position m_position;
