@@ -11,6 +11,7 @@
 #include "Input/IMouseListener.hpp"
 #include "IInput.hpp"
 #include "OgreObjectRaycaster.hpp"
+#include "Graphics/Raycast.hpp"
 
 namespace Client
 {
@@ -43,7 +44,11 @@ private:
     std::vector<IMouseListener *> m_mouseListeners;
 
     Ogre::RenderWindow & m_ogreRenderWindow;
+    Ogre::Camera & m_camera;
     OgreObjectRaycaster m_ogreObjectRaycaster;
+
+    Graphics::Raycast m_raycast;
+    std::map<Ogre::Entity *, std::function<void()>> m_entityRightClickCallbacks;
 };
 
 }

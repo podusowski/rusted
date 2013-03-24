@@ -11,7 +11,9 @@ using namespace Client::Input;
 
 Input::Input(Ogre::RenderWindow & window, Ogre::SceneManager & ogreSceneManager, Ogre::Camera & ogreCamera, Client::Gui::Gui &) : 
     m_ogreRenderWindow(window),
-    m_ogreObjectRaycaster(ogreSceneManager, ogreCamera)
+    m_camera(ogreCamera),
+    m_ogreObjectRaycaster(ogreSceneManager, ogreCamera),
+    m_raycast(ogreSceneManager)
 {
     LOG_INFO << "Initializing input subsystem";
 
@@ -45,8 +47,6 @@ Input::Input(Ogre::RenderWindow & window, Ogre::SceneManager & ogreSceneManager,
 
     m_oisKeyboard = static_cast<OIS::Keyboard *>(m_oisInputManager->createInputObject(OIS::OISKeyboard, true));
     m_oisKeyboard->setEventCallback(this);
-
-    addMouseListener(m_ogreObjectRaycaster);
 }
 
 bool Input::mouseMoved( const OIS::MouseEvent &arg )
@@ -70,6 +70,23 @@ bool Input::mousePressed( const OIS::MouseEvent &arg, OIS::MouseButtonID id )
     }
 
     MyGUI::InputManager::getInstance().injectMousePress(arg.state.X.abs, arg.state.Y.abs, MyGUI::MouseButton::Enum(id));
+
+    // raycast
+    auto mousePos = MyGUI::InputManager::getInstance().getMousePosition();
+    Ogre::Ray mouseRay = m_camera.getCameraToViewportRay(
+                            mousePos.left / float(arg.state.width), 
+                            mousePos.top / float(arg.state.height));
+
+    auto * entity = m_raycast.cast(mouseRay);
+    if (entity)
+    {
+        auto it = m_entityRightClickCallbacks.find(entity);
+        if (it != m_entityRightClickCallbacks.end())
+        {
+            it->second();
+        }
+    }
+
     return true;
 }
 
@@ -118,6 +135,6 @@ void Input::addMouseListener(IMouseListener & listener)
 
 void Input::addObjectRightClickCallback(Ogre::Entity & entity, std::function<void()> callback)
 {
-    m_ogreObjectRaycaster.addObjectRightClickCallback(entity, callback);
+    m_entityRightClickCallbacks.insert(std::make_pair(&entity, callback));
 }
 

@@ -13,9 +13,8 @@ Raycast::Raycast(Ogre::SceneManager & sceneManager)
     m_raySceneQuery->setSortByDistance(true);
 }
 
-Ogre::Entity * Raycast::cast(const Ogre::Vector3 & point, const Ogre::Vector3 & normal)
+Ogre::Entity * Raycast::cast(const Ogre::Ray & ray)
 {
-    Ogre::Ray ray(point, normal);
     m_raySceneQuery->setRay(ray);
 
     // reference of the result is persistent in Ogre::RaySceneQuery until

@@ -11,7 +11,7 @@ class Raycast
 {
 public:
     Raycast(Ogre::SceneManager &);
-    Ogre::Entity * cast(const Ogre::Vector3 & point, const Ogre::Vector3 & normal);
+    Ogre::Entity * cast(const Ogre::Ray & ray);
 
 private:
     void getMeshInformation(
