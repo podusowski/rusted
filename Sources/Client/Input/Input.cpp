@@ -12,7 +12,6 @@ using namespace Client::Input;
 Input::Input(Ogre::RenderWindow & window, Ogre::SceneManager & ogreSceneManager, Ogre::Camera & ogreCamera, Client::Gui::Gui &) : 
     m_ogreRenderWindow(window),
     m_camera(ogreCamera),
-    m_ogreObjectRaycaster(ogreSceneManager, ogreCamera),
     m_raycast(ogreSceneManager)
 {
     LOG_INFO << "Initializing input subsystem";

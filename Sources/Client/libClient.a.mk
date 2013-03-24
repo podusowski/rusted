@@ -8,7 +8,6 @@ SOURCES+=Graphics/MovingMeshEffect.cpp
 SOURCES+=Graphics/Raycast.cpp
 SOURCES+=Gui/Gui.cpp
 SOURCES+=Input/Input.cpp
-SOURCES+=Input/OgreObjectRaycaster.cpp
 SOURCES+=Network/Connection.cpp
 SOURCES+=States/StateManager.cpp
 SOURCES+=States/StateDeployment.cpp
