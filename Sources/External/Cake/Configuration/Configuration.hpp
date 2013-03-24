@@ -38,6 +38,8 @@ public:
         m_properties[name] = boost::lexical_cast<std::string>(value);
     }
 
+    bool hasValue(const std::string & name);
+
     std::string getAppName();
 
 private:

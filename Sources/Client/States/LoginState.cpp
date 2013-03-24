@@ -27,11 +27,21 @@ LoginState::LoginState(IStateManagerStack & stateManagerStack,
 
 void LoginState::activate()
 {
+    m_stateDeployment.deployNewConnection();
+
     m_gui.loadLayout("LoginScreen.layout");
     m_graphics.getSceneManager().setSkyBox(true, "SkyBox1", 8000);
 
     m_gui->findWidget<MyGUI::Button>("LoginButton")->eventMouseButtonClick += MyGUI::newDelegate(this, &LoginState::loginButtonClicked);
     m_gui->findWidget<MyGUI::Button>("QuitButton")->eventMouseButtonClick += MyGUI::newDelegate(this, &LoginState::quitButtonClicked);
+
+    if (m_cfg->hasValue("player.login") && m_cfg->hasValue("player.password"))
+    {
+        m_authorizationService.login(
+            m_cfg->getValue<std::string>("player.login"), 
+            m_cfg->getValue<std::string>("player.password"),
+            boost::bind(&LoginState::loggedIn, this, _1));
+    }
 }
 
 void LoginState::deactivate()
@@ -47,8 +57,6 @@ void LoginState::loginButtonClicked(MyGUI::WidgetPtr)
     LOG_DEBUG << "Login button clicked, let's make the connection!";
     try
     {
-        m_stateDeployment.deployNewConnection();
-
         auto loginEditBox = m_gui->findWidget<MyGUI::EditBox>("LoginEditBox");
         auto passwordEditBox = m_gui->findWidget<MyGUI::EditBox>("PasswordEditBox");
 

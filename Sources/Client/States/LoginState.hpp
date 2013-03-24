@@ -34,6 +34,7 @@ private:
 
     void loggedIn(bool success);
 
+    Cake::DependencyInjection::Inject<Cake::Configuration::Configuration> m_cfg;
     Graphics::IGraphics & m_graphics;
     Gui::Gui & m_gui;
     Services::AuthorizationService & m_authorizationService;

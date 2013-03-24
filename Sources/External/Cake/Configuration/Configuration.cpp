@@ -138,6 +138,11 @@ void Configuration::parse(int argc, const char * argv[])
     }
 }
 
+bool Configuration::hasValue(const std::string & name)
+{
+    return m_properties.find(name) != m_properties.end();
+}
+
 std::string Configuration::getAppName()
 {
 	return m_appName;
