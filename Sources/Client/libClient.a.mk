@@ -5,6 +5,7 @@ SOURCES+=Engine/Engine.cpp
 SOURCES+=Graphics/Graphics.cpp
 SOURCES+=Graphics/Effects.cpp
 SOURCES+=Graphics/MovingMeshEffect.cpp
+SOURCES+=Graphics/Raycast.cpp
 SOURCES+=Gui/Gui.cpp
 SOURCES+=Input/Input.cpp
 SOURCES+=Input/OgreObjectRaycaster.cpp
