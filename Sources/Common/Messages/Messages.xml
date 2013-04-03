@@ -41,6 +41,19 @@ player specific
 </message>
 
 <!--
+other players
+-->
+
+<message id="GetPlayerName">
+    <param type="int32" name="id" />
+</message>
+
+<message id="PlayerName">
+    <param type="int32" name="id" />
+    <param type="string" name="name" />
+</message>
+
+<!--
 Ship
 -->
 
