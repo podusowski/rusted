@@ -15,11 +15,13 @@ VisualObject::VisualObject(
     Client::Graphics::IGraphics & graphics,
     Gui::Gui & gui,
     Client::Input::IInput & input,
-    Common::Game::Object::ObjectBase & object)
+    Common::Game::Object::ObjectBase & object,
+    Client::Services::ObjectService & objectService)
     :
     m_graphics(graphics),
     m_gui(gui),
-    m_object(object)
+    m_object(object),
+    m_objectService(objectService)
 {
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
 
@@ -138,9 +140,7 @@ void VisualObject::createLabel()
     {
         auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
 
-        std::stringstream ss;
-        ss << ship.getOwnerId();
-        m_label->setCaption(ss.str());
+        m_label->setCaption("Ship");
     }
 }
 
