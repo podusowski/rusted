@@ -1,2 +1,6 @@
 mesh Cube.mesh
 
+engine1.thrust.x -7
+engine1.thrust.y 0
+engine1.thrust.z 0
+
