@@ -1,5 +1,6 @@
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Common/Game/Object/Ship.hpp"
+#include "Common/Math/Degree.hpp"
 
 #include "Camera.hpp"
 
@@ -99,8 +100,14 @@ void Camera::mouseMoved(const OIS::MouseState & state)
 {
     if (m_userOrientationChanging)
     {
-        m_userXAngle.set(*m_userXAngle + static_cast<float>(state.X.rel) * 0.5);
-        m_userYAngle.set(*m_userYAngle + static_cast<float>(state.Y.rel) * 0.5);
+        Common::Math::Degree newXAngle = *m_userXAngle + static_cast<float>(state.X.rel) * 0.5;
+        Common::Math::Degree newYAngle = *m_userYAngle + static_cast<float>(state.Y.rel) * 0.5;
+
+        newXAngle.normalize();
+        newYAngle.normalize();
+
+        m_userXAngle.set(*newXAngle);
+        m_userYAngle.set(*newYAngle);
 
         recalculateUserOrientation();
     }
