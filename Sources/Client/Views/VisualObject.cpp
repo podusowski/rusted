@@ -6,6 +6,7 @@
 #include "Cake/Serialization/Tms.hpp"
 
 #include "Common/Game/Object/Asteroid.hpp"
+#include "Common/Game/Object/Ship.hpp"
 #include "VisualObject.hpp"
 
 using namespace Client::Views;
@@ -128,7 +129,19 @@ void VisualObject::setEngineThrustEnabled(bool v)
 void VisualObject::createLabel()
 {
     m_label = m_gui->createWidget<MyGUI::TextBox>("TextBox", MyGUI::IntCoord(10, 10, 50, 50), MyGUI::Align::Default, "Main");
-    m_label->setCaption("object");
+
+    if (m_object.is<Common::Game::Object::Asteroid>())
+    {
+        m_label->setCaption("asteroid");
+    }
+    else if (m_object.is<Common::Game::Object::Ship>())
+    {
+        auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
+
+        std::stringstream ss;
+        ss << ship.getOwnerId();
+        m_label->setCaption(ss.str());
+    }
 }
 
 void VisualObject::updateLabel()

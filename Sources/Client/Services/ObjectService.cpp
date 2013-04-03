@@ -25,6 +25,21 @@ void ObjectService::fetchPlayerShips(PlayerShipsFetchedCallback callback)
     m_connection.send(fetchPlayerShips);
 }
 
+boost::signals2::connection ObjectService::fetchPlayerName(int id, PlayerNameSignal::slot_type slot)
+{
+    // TODO: cache
+
+    std::shared_ptr<PlayerNameSignal> signal(new PlayerNameSignal);
+    auto ins = m_playerNameSignals.insert(std::make_pair(id, signal));
+    boost::signals2::connection ret = ins.first->second->connect(slot);
+
+    Common::Messages::GetPlayerName getPlayerName;
+    getPlayerName.id = id;
+    m_connection.send(getPlayerName);
+
+    return ret;
+}
+
 void ObjectService::handle(const Common::Messages::VisibleObjects & visibleObjects)
 {
     LOG_DEBUG << "Got visible objects";
@@ -146,6 +161,13 @@ void ObjectService::handle(const Common::Messages::ObjectCargoInfo & objectCargo
         cargoHold.setCarbon(objectCargoInfo.carbon);
         cargoHold.setHelium(objectCargoInfo.helium);
     });
+}
+
+void ObjectService::handle(const Common::Messages::PlayerName & playerName)
+{
+    auto it = m_playerNameSignals.find(playerName.id);
+    it->second->operator()(playerName.id, playerName.name);
+    m_playerNameSignals.erase(it);
 }
 
 void ObjectService::tryCallPlayerShipsFetchedCallback(int shipId)
