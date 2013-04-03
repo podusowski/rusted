@@ -3,7 +3,6 @@
 #include <OgreParticleSystem.h>
 
 #include "Cake/Diagnostics/Logger.hpp"
-#include "Cake/Serialization/Tms.hpp"
 
 #include "Common/Game/Object/Asteroid.hpp"
 #include "Common/Game/Object/Ship.hpp"
@@ -78,7 +77,7 @@ VisualObject::VisualObject(
         LOG_ERR << "Can't create engine thrust effect, reason: " << ex.what();
     }
     
-    createLabel();
+    createLabel(tms);
     update();
 }
 
@@ -128,7 +127,7 @@ void VisualObject::setEngineThrustEnabled(bool v)
     }
 }
 
-void VisualObject::createLabel()
+void VisualObject::createLabel(const Cake::Serialization::Tms & model)
 {
     m_label = m_gui->createWidget<MyGUI::TextBox>("TextBox", MyGUI::IntCoord(10, 10, 50, 50), MyGUI::Align::Default, "Main");
 
@@ -140,7 +139,9 @@ void VisualObject::createLabel()
     {
         auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
 
-        m_label->setCaption("Ship");
+        std::stringstream ss;
+        ss << model.getValue<std::string>("name") << "\n" << ship.getOwnerId();
+        m_label->setCaption(ss.str());
     }
 }
 

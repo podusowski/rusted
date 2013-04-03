@@ -2,11 +2,13 @@
 
 #include <functional>
 
+#include "Cake/Serialization/Tms.hpp"
+
+#include "Common/Game/Object/ObjectBase.hpp"
 #include "Client/Graphics/IGraphics.hpp"
 #include "Gui/Gui.hpp"
 #include "Client/Input/IInput.hpp"
 #include "Client/Services/ObjectService.hpp"
-#include "Common/Game/Object/ObjectBase.hpp"
 
 namespace Client
 {
@@ -32,7 +34,7 @@ public:
 private:
     void rightClickedCallback();
     void setEngineThrustEnabled(bool);
-    void createLabel();
+    void createLabel(const Cake::Serialization::Tms &);
     void updateLabel();
 
     Client::Graphics::IGraphics & m_graphics;

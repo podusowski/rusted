@@ -1,4 +1,5 @@
 mesh Fregate.mesh
+name Fregate
 
 engine1.thrust.x -17
 engine1.thrust.y 0

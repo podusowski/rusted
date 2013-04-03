@@ -1,4 +1,5 @@
 mesh Cube.mesh
+name Fighter
 
 engine1.thrust.x -7
 engine1.thrust.y 0
