@@ -30,6 +30,7 @@ public:
     void handle(const Common::Messages::FocusObject &, Network::IConnection &);
     void handle(const Common::Messages::FetchAvailableActions &, Network::IConnection &);
     void handle(const Common::Messages::ExecuteAction &, Network::IConnection &);
+    void handle(const Common::Messages::GetPlayerName &, Network::IConnection &);
 
     void handle(const Common::Messages::AbstractMessage &, Network::IConnection &) {}
 

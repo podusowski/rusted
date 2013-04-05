@@ -166,8 +166,11 @@ void ObjectService::handle(const Common::Messages::ObjectCargoInfo & objectCargo
 void ObjectService::handle(const Common::Messages::PlayerName & playerName)
 {
     auto it = m_playerNameSignals.find(playerName.id);
-    it->second->operator()(playerName.id, playerName.name);
-    m_playerNameSignals.erase(it);
+    if (it != m_playerNameSignals.end())
+    {
+        it->second->operator()(playerName.id, playerName.name);
+        m_playerNameSignals.erase(it);
+    }
 }
 
 void ObjectService::tryCallPlayerShipsFetchedCallback(int shipId)
