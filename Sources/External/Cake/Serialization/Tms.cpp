@@ -2,6 +2,10 @@
 
 using namespace Cake::Serialization;
 
+Tms::Tms()
+{
+}
+
 Tms::Tms(std::istream & stream)
 {
     while (stream.good())

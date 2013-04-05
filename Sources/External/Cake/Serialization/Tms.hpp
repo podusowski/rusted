@@ -11,6 +11,7 @@ namespace Serialization
 class Tms
 {
 public:
+    Tms();
     Tms(std::istream & stream);
 
     template<typename T> T getValue(const std::string & name) const
