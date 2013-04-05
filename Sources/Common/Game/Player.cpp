@@ -83,3 +83,13 @@ void Player::setCarbon(unsigned carbon)
     m_carbon = carbon;
 }
 
+std::string Player::getName()
+{
+    return m_name;
+}
+
+void Player::setName(const std::string & name)
+{
+    m_name = name;
+}
+

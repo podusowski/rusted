@@ -34,6 +34,9 @@ public:
     unsigned getCarbon();
     void setCarbon(unsigned);
 
+    std::string getName();
+    void setName(const std::string &);
+
 private:
     boost::optional<int> m_id;
     PlayerState m_state;
@@ -42,6 +45,7 @@ private:
 
     unsigned m_helium;
     unsigned m_carbon;
+    std::string m_name;
 };
 
 }
