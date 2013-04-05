@@ -2,12 +2,10 @@
 
 using namespace Server::Network;
 
-ConnectionContext::ConnectionContext(unsigned id, 
-                                     boost::shared_ptr<Cake::Networking::Socket> socket, 
+ConnectionContext::ConnectionContext(boost::shared_ptr<Cake::Networking::Socket> socket, 
                                      Services::IServiceDeployment & serviceDeployment) :
-    m_id(id),
     m_socket(socket),
-    m_connection(id, *socket, serviceDeployment),
+    m_connection(*socket, serviceDeployment),
     m_thread(m_connection)
 {
 }

@@ -16,15 +16,13 @@ namespace Network
 class Connection : public Cake::Threading::IRunnable, public Server::Network::IConnection
 {
 public:
-	Connection(int id, Cake::Networking::Socket & socket, Services::IServiceDeployment & serviceDeployment);
+	Connection(Cake::Networking::Socket & socket, Services::IServiceDeployment & serviceDeployment);
 	~Connection();
 	void run();
 	void addListener(IConnectionListener & listener);
 	void send(const Common::Messages::AbstractMessage & message);
-    int getId();
 
 private:
-    int m_id;
 	Cake::Networking::Socket & m_socket;
 	Cake::Threading::Mutex m_socketMutex;
 	std::vector<IConnectionListener *> m_listeners;

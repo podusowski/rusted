@@ -16,16 +16,13 @@ namespace Network
 class ConnectionContext
 {
 public:
-    ConnectionContext(unsigned id, 
-                      boost::shared_ptr<Cake::Networking::Socket> socket, 
+    ConnectionContext(boost::shared_ptr<Cake::Networking::Socket> socket, 
                       Services::IServiceDeployment & serviceDeployment);
 
-    unsigned getId() { return m_id; }
     Cake::Threading::Thread & getThread();
     Network::IConnection & getConnection();
 
 private:
-    unsigned m_id;
     boost::shared_ptr<Cake::Networking::Socket> m_socket;
     Connection m_connection;
     Cake::Threading::Thread m_thread;
@@ -33,3 +30,4 @@ private:
 
 }
 }
+

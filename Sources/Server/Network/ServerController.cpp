@@ -40,7 +40,7 @@ int ServerController::start()
 
             LOG_DEBUG << "New connection established";
 
-            boost::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(m_lastConnectionId++, socket, m_serviceDeployment));
+            boost::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket, m_serviceDeployment));
             m_connections.push_back(connectionContext);
             m_playerContainer.add(connectionContext->getConnection());
             connectionContext->getThread().start();
@@ -63,7 +63,7 @@ void ServerController::gc()
     {
         if (not (*it)->getThread().isRunning())
         {
-            LOG_DEBUG << "Collecting innactive connection: " << (*it)->getId();
+            LOG_DEBUG << "Collecting innactive connection: " << (*it);
 
             m_playerContainer.remove((*it)->getConnection());
             it = m_connections.erase(it);

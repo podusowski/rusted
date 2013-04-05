@@ -13,8 +13,7 @@
 
 using namespace Server::Network;
 
-Connection::Connection(int id, Cake::Networking::Socket & socket, Services::IServiceDeployment & serviceDeployment) :
-        m_id(id),
+Connection::Connection(Cake::Networking::Socket & socket, Services::IServiceDeployment & serviceDeployment) :
         m_socket(socket)
 {
     serviceDeployment.deployNewConnection(*this);
@@ -22,12 +21,12 @@ Connection::Connection(int id, Cake::Networking::Socket & socket, Services::ISer
 
 Connection::~Connection()
 {
-    LOG_DEBUG << "Connection: " << m_id << " destroyed";
+    LOG_DEBUG << "Connection: " << this << " destroyed";
 }
 
 void Connection::addListener(IConnectionListener & listener)
 {
-    LOG_DEBUG << "Adding " << TYPENAME(listener) << " as message handler for connection: " << m_id;
+    LOG_DEBUG << "Adding " << TYPENAME(listener) << " as message handler for connection: " << this;
 
     // this method can be called in loop where listeners are notified about message,
     // and we don't want to modify collection during its iteration
@@ -36,7 +35,7 @@ void Connection::addListener(IConnectionListener & listener)
 
 void Connection::send(const Common::Messages::AbstractMessage & message)
 {
-    LOG_DEBUG << "<connection:" << m_id << "> Sending: " << message;
+    LOG_DEBUG << "<connection:" << this << "> Sending: " << message;
 
     Cake::Threading::ScopedLock lock(m_socketMutex);
 
@@ -64,7 +63,7 @@ void Connection::run()
             // receive message
             boost::shared_ptr<AbstractMessage> message = MessageFactory::create(buffer);
 
-            LOG_DEBUG << "<connection:" << m_id << "> Received: " << *message;
+            LOG_DEBUG << "<connection:" << this << "> Received: " << *message;
 
             for (std::vector< IConnectionListener * >::iterator it = m_listeners.begin(); it != m_listeners.end(); it++)
             {
@@ -74,16 +73,11 @@ void Connection::run()
     }
     catch (std::exception & ex)
     {
-        LOG_DEBUG << "Connection dropped (id: " << m_id << ", reason: " << ex.what() << ")";
+        LOG_DEBUG << "Connection dropped (id: " << this << ", reason: " << ex.what() << ")";
     }
     catch (...)
     {
         LOG_ERR << "Unknown exception was thrown";
     }
-}
-
-int Connection::getId()
-{
-    return m_id;
 }
 
