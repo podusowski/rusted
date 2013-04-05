@@ -34,8 +34,10 @@ public:
 private:
     void rightClickedCallback();
     void setEngineThrustEnabled(bool);
-    void createLabel(const Cake::Serialization::Tms &);
+    void createLabel();
+    void updateLabelText();
     void updateLabel();
+    void ownerNameFetched(unsigned id, const std::string & name);
 
     Client::Graphics::IGraphics & m_graphics;
     Gui::Gui & m_gui;
@@ -46,6 +48,8 @@ private:
     std::function<void()> m_rightClickCallback;
     std::vector<Ogre::ParticleSystem *> m_engineThrustParticleSystems;
     MyGUI::TextBox * m_label;
+    std::string m_ownerName;
+    Cake::Serialization::Tms m_model;
 };
 
 }

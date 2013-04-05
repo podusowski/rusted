@@ -37,9 +37,9 @@ VisualObject::VisualObject(
         throw std::runtime_error(ss.str());
     }
 
-    Cake::Serialization::Tms tms(f);
+    m_model = Cake::Serialization::Tms(f);
 
-    std::string mesh = tms.getValue<std::string>("mesh");
+    std::string mesh = m_model.getValue<std::string>("mesh");
     m_entity = scene.createEntity(mesh);
     m_node = scene.getRootSceneNode()->createChildSceneNode();
     m_node->attachObject(m_entity);
@@ -55,9 +55,9 @@ VisualObject::VisualObject(
             engineNameSs << "engine";
             engineNameSs << i;
 
-            int x = tms.getValue<int>(engineNameSs.str() + ".thrust.x");
-            int y = tms.getValue<int>(engineNameSs.str() + ".thrust.y");
-            int z = tms.getValue<int>(engineNameSs.str() + ".thrust.z");
+            int x = m_model.getValue<int>(engineNameSs.str() + ".thrust.x");
+            int y = m_model.getValue<int>(engineNameSs.str() + ".thrust.y");
+            int z = m_model.getValue<int>(engineNameSs.str() + ".thrust.z");
 
             LOG_DEBUG << "Engine" << i << " thrust at: " << x << ", " << y << ", " << z;
 
@@ -77,7 +77,7 @@ VisualObject::VisualObject(
         LOG_ERR << "Can't create engine thrust effect, reason: " << ex.what();
     }
     
-    createLabel(tms);
+    createLabel();
     update();
 }
 
@@ -127,10 +127,23 @@ void VisualObject::setEngineThrustEnabled(bool v)
     }
 }
 
-void VisualObject::createLabel(const Cake::Serialization::Tms & model)
+void VisualObject::createLabel()
 {
     m_label = m_gui->createWidget<MyGUI::TextBox>("TextBox", MyGUI::IntCoord(10, 10, 50, 50), MyGUI::Align::Default, "Main");
 
+    updateLabelText();
+
+    if (m_object.is<Common::Game::Object::Ship>())
+    {
+        auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
+
+        m_objectService.fetchPlayerName(ship.getOwnerId(),
+            std::bind(&VisualObject::ownerNameFetched, this, std::placeholders::_1, std::placeholders::_2));
+    }
+}
+
+void VisualObject::updateLabelText()
+{
     if (m_object.is<Common::Game::Object::Asteroid>())
     {
         m_label->setCaption("asteroid");
@@ -140,7 +153,7 @@ void VisualObject::createLabel(const Cake::Serialization::Tms & model)
         auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
 
         std::stringstream ss;
-        ss << model.getValue<std::string>("name") << "\n" << ship.getOwnerId();
+        ss << m_model.getValue<std::string>("name") << "\n" << m_ownerName;
         m_label->setCaption(ss.str());
     }
 }
@@ -155,4 +168,11 @@ void VisualObject::updateLabel()
     }
     m_label->setVisible(std::get<0>(screenCoords));
 }
+
+void VisualObject::ownerNameFetched(unsigned id, const std::string & name)
+{
+    m_ownerName = name;
+    updateLabelText();
+}
+
 
