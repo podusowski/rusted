@@ -20,6 +20,7 @@ public:
 
     virtual Common::Game::Player & getBy(Network::IConnection & connection) = 0;
     virtual Network::IConnection & getConnectionById(int) = 0;
+    virtual void visitOnlinePlayerById(int, std::function<void(Common::Game::Player &, Network::IConnection &)>) = 0;
     virtual std::vector<boost::shared_ptr<Common::Game::Player> > getAll(Common::Game::PlayerState state) = 0;
     virtual std::vector<Network::IConnection *> getAllConnections(Common::Game::PlayerState state) = 0;
 
