@@ -127,20 +127,9 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
 void EntityService::handle(const Common::Messages::GetPlayerName & getPlayerName, Network::IConnection & connection)
 {
     Common::Messages::PlayerName playerName; 
-
-    try
-    {
-        m_playerContainer.visitOnlinePlayerById(getPlayerName.id, [&](Common::Game::Player & player, Network::IConnection &) -> void
-        {
-            playerName.name = player.getName();
-        });
-    }
-    catch(...)
-    {
-        playerName.name = "<offline>";
-    }
-
+    auto playerSummary = m_playerContainer.getPlayerSummary(getPlayerName.id);
     playerName.id = getPlayerName.id;
+    playerName.name = playerSummary.name;
     connection.send(playerName);
 }
 
