@@ -2,6 +2,7 @@
 
 #include "Common/Game/Player.hpp"
 #include "Server/Network/IConnection.hpp"
+#include "PlayerSummary.hpp"
 
 namespace Server
 {
@@ -23,6 +24,7 @@ public:
     virtual void visitOnlinePlayerById(int, std::function<void(Common::Game::Player &, Network::IConnection &)>) = 0;
     virtual std::vector<boost::shared_ptr<Common::Game::Player> > getAll(Common::Game::PlayerState state) = 0;
     virtual std::vector<Network::IConnection *> getAllConnections(Common::Game::PlayerState state) = 0;
+    virtual PlayerSummary getPlayerSummary(int id) = 0;
 
     virtual ~IPlayerContainer() {}
 };

@@ -133,6 +133,26 @@ std::vector<Server::Network::IConnection *> PlayerContainer::getAllConnections(C
     return ret;
 }
 
+PlayerSummary PlayerContainer::getPlayerSummary(int id)
+{
+    auto players = m_db.getRoot().getFirstChild("users").getChilds();
+
+    for (auto it = players.begin(); it != players.end(); it++)
+    {
+        if ((*it)->getValue<int>("id") == id)
+        {
+            PlayerSummary ret;
+            ret.id = id;
+            ret.name = (*it)->getValue<std::string>("login");
+            return ret;
+        }
+    }
+
+    std::stringstream ss;
+    ss << "no player with id: " << id;
+    throw std::out_of_range(ss.str());
+}
+
 int PlayerContainer::checkCredentials(const std::string & login, const std::string & password)
 {
     auto players = m_db.getRoot().getFirstChild("users").getChilds();
@@ -154,3 +174,4 @@ int PlayerContainer::checkCredentials(const std::string & login, const std::stri
     }
     throw std::out_of_range("no such player \"" + login + "\"");
 }
+

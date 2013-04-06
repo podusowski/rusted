@@ -33,6 +33,8 @@ public:
     std::vector<boost::shared_ptr<Common::Game::Player> > getAll(Common::Game::PlayerState state);
     std::vector<Network::IConnection *> getAllConnections(Common::Game::PlayerState state);
 
+    PlayerSummary getPlayerSummary(int id);
+
 private:
     int checkCredentials(const std::string & login, const std::string & password);
 
