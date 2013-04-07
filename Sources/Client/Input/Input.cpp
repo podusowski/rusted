@@ -123,12 +123,7 @@ void Input::addObjectRightClickCallback(Ogre::Entity & entity, std::function<voi
 
 void Input::mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
-    auto mousePos = MyGUI::InputManager::getInstance().getMousePosition();
-    Ogre::Ray mouseRay = m_camera.getCameraToViewportRay(
-                            mousePos.left / float(arg.state.width), 
-                            mousePos.top / float(arg.state.height));
-
-    auto * entity = m_raycast.cast(mouseRay);
+    auto * entity = raycastFromMouseCursor();
     if (entity)
     {
         auto it = m_entityRightClickCallbacks.find(entity);
@@ -137,5 +132,15 @@ void Input::mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID i
             it->second();
         }
     }
+}
+
+Ogre::Entity * Input::raycastFromMouseCursor()
+{
+    auto mousePos = MyGUI::InputManager::getInstance().getMousePosition();
+    Ogre::Ray mouseRay = m_camera.getCameraToViewportRay(
+                            mousePos.left / float(m_ogreRenderWindow.getWidth()), 
+                            mousePos.top / float(m_ogreRenderWindow.getHeight()));
+
+    return m_raycast.cast(mouseRay);
 }
 

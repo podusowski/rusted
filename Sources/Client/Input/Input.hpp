@@ -38,6 +38,8 @@ public:
 private:
     void mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
 
+    Ogre::Entity * raycastFromMouseCursor();
+
     OIS::InputManager * m_oisInputManager; 
     OIS::Mouse * m_oisMouse;
     OIS::Keyboard * m_oisKeyboard;
