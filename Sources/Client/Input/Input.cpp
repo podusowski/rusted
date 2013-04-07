@@ -50,11 +50,12 @@ Input::Input(Ogre::RenderWindow & window, Ogre::SceneManager & ogreSceneManager,
 
 bool Input::mouseMoved( const OIS::MouseEvent &arg )
 {
-    BOOST_FOREACH(IMouseListener * listener, m_mouseListeners)
+    for (auto * listener: m_mouseListeners)
     {
         listener->mouseMoved(arg.state);
     }
 
+    mouseMovedRaycast();
     MyGUI::InputManager::getInstance().injectMouseMove(arg.state.X.abs, arg.state.Y.abs, arg.state.Z.abs);
     return true;
 }
@@ -121,6 +122,11 @@ void Input::addObjectRightClickCallback(Ogre::Entity & entity, std::function<voi
     m_entityRightClickCallbacks.insert(std::make_pair(&entity, callback));
 }
 
+void Input::addEntityMouseMovedCallback(Ogre::Entity & entity, std::function<void()> callback)
+{
+    m_entityMouseMovedCallbacks.insert(std::make_pair(&entity, callback));
+}
+
 void Input::mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
     auto * entity = raycastFromMouseCursor();
@@ -128,6 +134,19 @@ void Input::mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID i
     {
         auto it = m_entityRightClickCallbacks.find(entity);
         if (it != m_entityRightClickCallbacks.end())
+        {
+            it->second();
+        }
+    }
+}
+
+void Input::mouseMovedRaycast()
+{
+    auto * entity = raycastFromMouseCursor();
+    if (entity)
+    {
+        auto it = m_entityMouseMovedCallbacks.find(entity);
+        if (it != m_entityMouseMovedCallbacks.end())
         {
             it->second();
         }
