@@ -34,10 +34,12 @@ public:
 
     void addEntityClickedCallback(Ogre::Entity &, std::function<void()>);
     void addEntityMouseMovedCallback(Ogre::Entity & entity, std::function<void()> callback);
+    void addEntityMouseLeavedCallback(Ogre::Entity & entity, std::function<void()> callback);
 
 private:
     void mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     void mouseMovedRaycast();
+    void mouseLeavedCallbackIfNeeded(Ogre::Entity *);
 
     Ogre::Entity * raycastFromMouseCursor();
 
@@ -53,6 +55,8 @@ private:
     Graphics::Raycast m_raycast;
     std::map<Ogre::Entity *, std::function<void()>> m_entityClickedCallbacks;
     std::map<Ogre::Entity *, std::function<void()>> m_entityMouseMovedCallbacks;
+    std::map<Ogre::Entity *, std::function<void()>> m_entityMouseLeavedCallbacks;
+    Ogre::Entity * m_mouseFocusedEntity;
 };
 
 }

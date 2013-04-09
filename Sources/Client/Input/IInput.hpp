@@ -16,6 +16,7 @@ public:
     virtual void addMouseListener(IMouseListener &) = 0;
     virtual void addEntityClickedCallback(Ogre::Entity &, std::function<void()>) = 0;
     virtual void addEntityMouseMovedCallback(Ogre::Entity & entity, std::function<void()> callback) = 0;
+    virtual void addEntityMouseLeavedCallback(Ogre::Entity & entity, std::function<void()> callback) = 0;
 
     virtual ~IInput() {}
 };

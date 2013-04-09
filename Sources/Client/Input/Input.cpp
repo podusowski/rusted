@@ -12,7 +12,8 @@ using namespace Client::Input;
 Input::Input(Ogre::RenderWindow & window, Ogre::SceneManager & ogreSceneManager, Ogre::Camera & ogreCamera, Client::Gui::Gui &) : 
     m_ogreRenderWindow(window),
     m_camera(ogreCamera),
-    m_raycast(ogreSceneManager)
+    m_raycast(ogreSceneManager),
+    m_mouseFocusedEntity(nullptr)
 {
     LOG_INFO << "Initializing input subsystem";
 
@@ -127,6 +128,11 @@ void Input::addEntityMouseMovedCallback(Ogre::Entity & entity, std::function<voi
     m_entityMouseMovedCallbacks.insert(std::make_pair(&entity, callback));
 }
 
+void Input::addEntityMouseLeavedCallback(Ogre::Entity & entity, std::function<void()> callback)
+{
+    m_entityMouseLeavedCallbacks.insert(std::make_pair(&entity, callback));
+}
+
 void Input::mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
     auto * entity = raycastFromMouseCursor();
@@ -148,8 +154,23 @@ void Input::mouseMovedRaycast()
         auto it = m_entityMouseMovedCallbacks.find(entity);
         if (it != m_entityMouseMovedCallbacks.end())
         {
+            mouseLeavedCallbackIfNeeded(entity);
             it->second();
         }
+    }
+}
+
+void Input::mouseLeavedCallbackIfNeeded(Ogre::Entity * entity)
+{
+    if (entity != m_mouseFocusedEntity)
+    {
+        auto it = m_entityMouseLeavedCallbacks.find(m_mouseFocusedEntity);
+        if (it != m_entityMouseLeavedCallbacks.end())
+        {
+            it->second();
+        }
+
+        m_mouseFocusedEntity = entity;
     }
 }
 
