@@ -19,6 +19,7 @@ private:
     static int m_id;
 
     Graphics::IGraphics & m_graphics;
+    Ogre::ParticleSystem * m_ps;
 };
 
 }

@@ -3,6 +3,7 @@
 #include <OgreSceneNode.h>
 #include <OgreEntity.h>
 #include <OgreParticleSystem.h>
+#include <OgreParticleEmitter.h>
 
 #include "Explosion.hpp"
 
@@ -17,11 +18,11 @@ Explosion::Explosion(Graphics::IGraphics & graphics, Common::Game::Position posi
 
     std::stringstream ss;
     ss << "explosion-particle-" << m_id++;
-    Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "Explosion");
+    m_ps = scene.createParticleSystem(ss.str(), "Explosion");
 
     auto * psNode = scene.getRootSceneNode()->createChildSceneNode();
     psNode->setPosition(Ogre::Vector3(position.getX(), position.getY(), position.getZ()));
-    psNode->attachObject(ps);
+    psNode->attachObject(m_ps);
 }
 
 void Explosion::frameStarted()
@@ -30,6 +31,14 @@ void Explosion::frameStarted()
 
 bool Explosion::isAlive()
 {
+    for (unsigned i = 0; i < m_ps->getNumEmitters(); i++)
+    {
+        Ogre::ParticleEmitter * emitter = m_ps->getEmitter(i);
+        if (!emitter->getEnabled())
+        {
+            return false;
+        }
+    }
     return true;
 }
 
