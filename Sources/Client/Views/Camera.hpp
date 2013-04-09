@@ -19,8 +19,9 @@ public:
     void update();
     void zoomIn();
     void zoomOut();
-    Ogre::Quaternion getOrientation();
-    bool isUserOrientationChanging();
+    Ogre::Vector3 getPosition() const;
+    Ogre::Quaternion getOrientation() const;
+    bool isUserOrientationChanging() const;
     void resetUserOrientation();
 
     void mouseMoved(const OIS::MouseState &);

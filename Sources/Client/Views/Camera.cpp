@@ -79,13 +79,18 @@ void Camera::zoomOut()
     m_distance -= 2000;
 }
 
-Ogre::Quaternion Camera::getOrientation()
+Ogre::Vector3 Camera::getPosition() const
+{
+    return m_graphics.getCamera().getPosition();
+}
+
+Ogre::Quaternion Camera::getOrientation() const
 {
     Ogre::Camera & camera = m_graphics.getCamera();
     return camera.getOrientation();
 }
 
-bool Camera::isUserOrientationChanging()
+bool Camera::isUserOrientationChanging() const
 {
     return m_userOrientationChanging;
 }
