@@ -25,7 +25,7 @@ public:
 private:
     Cake::DependencyInjection::Inject<Cake::Configuration::Configuration> m_cfg;
     boost::scoped_ptr<Graphics::Graphics> m_graphics;
-    boost::scoped_ptr<Graphics::Effects> m_effects;
+    boost::scoped_ptr<Effects::Effects> m_effects;
     boost::scoped_ptr<Gui::Gui> m_gui;
     boost::scoped_ptr<Input::Input> m_input;
     boost::scoped_ptr<States::StateDeployment> m_stateDeployment;

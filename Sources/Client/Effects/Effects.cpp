@@ -3,9 +3,9 @@
 #include "MovingMeshEffect.hpp"
 #include "Effects.hpp"
 
-using namespace Client::Graphics;
+using namespace Client::Effects;
 
-Effects::Effects(IGraphics & graphics) : m_graphics(graphics)
+Effects::Effects(Client::Graphics::IGraphics & graphics) : m_graphics(graphics)
 {
 }
 

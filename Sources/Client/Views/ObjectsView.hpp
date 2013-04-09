@@ -4,7 +4,7 @@
 #include "Services/ObjectService.hpp"
 #include "Services/PlayerActionService.hpp"
 #include "Graphics/IGraphics.hpp"
-#include "Graphics/Effects.hpp"
+#include "Effects/Effects.hpp"
 #include "Client/Gui/Gui.hpp"
 #include "VisualObject.hpp"
 
@@ -19,7 +19,7 @@ public:
     ObjectsView(Services::ObjectService &,
                 Services::PlayerActionService &,
                 Graphics::IGraphics &,
-                Graphics::Effects &,
+                Effects::Effects &,
                 Input::IInput &,
                 Gui::Gui &,
                 Common::Game::Universe &);
@@ -39,7 +39,7 @@ private:
     Services::ObjectService & m_objectService;
     Services::PlayerActionService & m_playerActionService;
     Graphics::IGraphics & m_graphics;
-    Graphics::Effects & m_effects;
+    Effects::Effects & m_effects;
     Input::IInput & m_input;
     Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;

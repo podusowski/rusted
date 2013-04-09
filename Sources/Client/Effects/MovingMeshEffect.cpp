@@ -5,9 +5,10 @@
 
 #include "MovingMeshEffect.hpp"
 
-using namespace Client::Graphics;
+using namespace Client::Effects;
 
-MovingMeshEffect::MovingMeshEffect(IGraphics & graphics,
+MovingMeshEffect::MovingMeshEffect(
+    Graphics::IGraphics & graphics,
     Common::Game::Position start,
     Common::Game::Position end,
     int speed) : 

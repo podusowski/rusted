@@ -12,7 +12,7 @@ using namespace Client::Views;
 ObjectsView::ObjectsView(Services::ObjectService & objectService,
                          Services::PlayerActionService & playerActionService,
                          Graphics::IGraphics & graphics,
-                         Graphics::Effects & effects,
+                         Effects::Effects & effects,
                          Input::IInput & input,
                          Gui::Gui & gui,
                          Common::Game::Universe & universe) :

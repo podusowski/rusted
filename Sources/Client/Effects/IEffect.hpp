@@ -2,7 +2,7 @@
 
 namespace Client
 {
-namespace Graphics
+namespace Effects 
 {
 
 class IEffect

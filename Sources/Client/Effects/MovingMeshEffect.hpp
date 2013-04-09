@@ -4,19 +4,19 @@
 #include "Common/Game/IRustedTime.hpp"
 #include "Common/Game/TimeValue.hpp"
 
-#include "IGraphics.hpp"
+#include "Graphics/IGraphics.hpp"
 #include "IEffect.hpp"
 
 namespace Client
 {
-namespace Graphics
+namespace Effects
 {
 
 class MovingMeshEffect : public IEffect
 {
 public:
     MovingMeshEffect(
-        IGraphics &, 
+        Graphics::IGraphics &, 
         Common::Game::Position start,
         Common::Game::Position end,
         int speed);
@@ -29,7 +29,7 @@ public:
 private:
     Common::Game::Position calculatePosition(Common::Game::TimeValue time);
 
-    IGraphics & m_graphics;
+    Graphics::IGraphics & m_graphics;
     Ogre::Entity * m_entity;
     Ogre::SceneNode * m_node;
     unsigned m_speed;

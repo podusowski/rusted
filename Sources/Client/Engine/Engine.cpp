@@ -18,7 +18,7 @@ void Engine::start()
     try
     {
         m_graphics.reset(new Graphics::Graphics());
-        m_effects.reset(new Graphics::Effects(*m_graphics));
+        m_effects.reset(new Effects::Effects(*m_graphics));
         m_gui.reset(new Gui::Gui(m_graphics->getRenderWindow(), m_graphics->getSceneManager()));
         m_input.reset(new Input::Input(m_graphics->getRenderWindow(), m_graphics->getSceneManager(), m_graphics->getCamera(), *m_gui));
         m_stateDeployment.reset(new States::StateDeployment(*m_graphics, *m_effects, *m_input, *m_gui, m_connection, m_connectionThread));
