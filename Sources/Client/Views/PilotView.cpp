@@ -184,6 +184,7 @@ void PilotView::createOrientationPlane()
     Ogre::Entity * entGround = m_graphics.getSceneManager().createEntity("GroundEntity", "OrientationPlane.vmesh");
     entGround->setMaterialName("Grid");
     entGround->setCastShadows(false);
+    entGround->setQueryFlags(Ogre::SceneManager::FX_TYPE_MASK);
 
     m_orientationPlaneSceneNode = m_graphics.getSceneManager().getRootSceneNode()->createChildSceneNode();
     m_orientationPlaneSceneNode->attachObject(entGround);
