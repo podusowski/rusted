@@ -32,8 +32,7 @@ public:
 
     void addMouseListener(IMouseListener &);
 
-    //TODO: add generinc click callback (it is not right click anyway)
-    void addObjectRightClickCallback(Ogre::Entity &, std::function<void()>);
+    void addEntityClickedCallback(Ogre::Entity &, std::function<void()>);
     void addEntityMouseMovedCallback(Ogre::Entity & entity, std::function<void()> callback);
 
 private:
@@ -52,7 +51,7 @@ private:
     Ogre::Camera & m_camera;
 
     Graphics::Raycast m_raycast;
-    std::map<Ogre::Entity *, std::function<void()>> m_entityRightClickCallbacks;
+    std::map<Ogre::Entity *, std::function<void()>> m_entityClickedCallbacks;
     std::map<Ogre::Entity *, std::function<void()>> m_entityMouseMovedCallbacks;
 };
 

@@ -117,9 +117,9 @@ void Input::addMouseListener(IMouseListener & listener)
     m_mouseListeners.push_back(&listener);
 }
 
-void Input::addObjectRightClickCallback(Ogre::Entity & entity, std::function<void()> callback)
+void Input::addEntityClickedCallback(Ogre::Entity & entity, std::function<void()> callback)
 {
-    m_entityRightClickCallbacks.insert(std::make_pair(&entity, callback));
+    m_entityClickedCallbacks.insert(std::make_pair(&entity, callback));
 }
 
 void Input::addEntityMouseMovedCallback(Ogre::Entity & entity, std::function<void()> callback)
@@ -132,8 +132,8 @@ void Input::mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID i
     auto * entity = raycastFromMouseCursor();
     if (entity)
     {
-        auto it = m_entityRightClickCallbacks.find(entity);
-        if (it != m_entityRightClickCallbacks.end())
+        auto it = m_entityClickedCallbacks.find(entity);
+        if (it != m_entityClickedCallbacks.end())
         {
             it->second();
         }

@@ -45,7 +45,7 @@ VisualObject::VisualObject(
     m_node->attachObject(m_entity);
     m_node->setScale(100.0, 100.0, 100.0);
 
-    input.addObjectRightClickCallback(*m_entity, std::bind(&VisualObject::rightClickedCallback, this));
+    input.addEntityClickedCallback(*m_entity, std::bind(&VisualObject::entityClickedCallback, this));
 
     try
     {
@@ -113,7 +113,7 @@ void VisualObject::update()
     updateLabel();
 }
 
-void VisualObject::rightClickedCallback()
+void VisualObject::entityClickedCallback()
 {
     if (m_rightClickCallback)
         m_rightClickCallback();

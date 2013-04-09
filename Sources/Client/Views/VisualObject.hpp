@@ -32,7 +32,7 @@ public:
     void update();
 
 private:
-    void rightClickedCallback();
+    void entityClickedCallback();
     void setEngineThrustEnabled(bool);
     void createLabel();
     void updateLabelText();
