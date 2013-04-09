@@ -194,7 +194,7 @@ void PilotView::updateOrientationPlane()
     m_orientationPlaneSceneNode->setVisible(m_camera.isUserOrientationChanging());
 
     auto orientation = m_camera.getOrientation();
-    auto offset = orientation * Ogre::Vector3(0, 0, -1000);
+    auto offset = orientation * Ogre::Vector3(0, -500, -1000);
     m_orientationPlaneSceneNode->setPosition(m_camera.getPosition() + offset);
     m_orientationPlaneSceneNode->setOrientation(orientation);
     m_orientationPlaneSceneNode->pitch(Ogre::Degree(20));
