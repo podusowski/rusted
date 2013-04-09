@@ -102,6 +102,7 @@ TEST(ActionsSct, AttackObject)
     connection1->receive<Common::Messages::GlobalCooldownExpired>();
 
     connection1->receive<Common::Messages::ActionFinished>();
+    connection1->receive<Common::Messages::EmitExplosionEffect>();
 
     // we should also receive shipinfo with condition after the attack
     auto shipInfo1 = connection1->receive<Common::Messages::ShipInfo>();
@@ -111,6 +112,7 @@ TEST(ActionsSct, AttackObject)
     // other player should also get this stuff
     connection2->receive<Common::Messages::EmitMovingMeshEffect>();
     connection2->receive<Common::Messages::AttackObject>();
+    connection2->receive<Common::Messages::EmitExplosionEffect>();
     connection2->receive<Common::Messages::ShipInfo>();
 }
 
