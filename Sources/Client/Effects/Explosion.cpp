@@ -17,10 +17,19 @@ Explosion::Explosion(Graphics::IGraphics & graphics, Common::Game::Position posi
 
     std::stringstream ss;
     ss << "explosion-particle-" << m_id++;
-    Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "EngineTail");
+    Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "Explosion");
 
     auto * psNode = scene.getRootSceneNode()->createChildSceneNode();
     psNode->setPosition(Ogre::Vector3(position.getX(), position.getY(), position.getZ()));
     psNode->attachObject(ps);
+}
+
+void Explosion::frameStarted()
+{
+}
+
+bool Explosion::isAlive()
+{
+    return true;
 }
 

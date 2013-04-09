@@ -19,3 +19,12 @@ void EffectsService::handle(const Common::Messages::EmitMovingMeshEffect & emitM
     m_effects.emitMovingMeshEffect(from, to, emitMovingMeshEffect.speed);
 }
 
+void EffectsService::handle(const Common::Messages::EmitExplosionEffect & emitExplosion)
+{
+    Common::Game::Position position(
+        emitExplosion.x, emitExplosion.y, emitExplosion.z
+    );
+
+    m_effects.emitExplosion(position);
+}
+

@@ -14,6 +14,8 @@ public:
     EffectsService(Effects::Effects &);
 
     void handle(const Common::Messages::EmitMovingMeshEffect &);
+    void handle(const Common::Messages::EmitExplosionEffect &);
+
     void handle(const Common::Messages::AbstractMessage &) {}
 
 private:

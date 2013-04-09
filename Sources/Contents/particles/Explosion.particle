@@ -1,0 +1,40 @@
+particle_system Explosion
+{
+    material        Flare
+    particle_width  150
+    particle_height 150
+    cull_each       false
+    quota           5000
+    billboard_type  point
+
+    emitter Cylinder
+    {
+        depth 0
+        width 0.5
+        height 0.5
+        angle 0
+
+        emission_rate 200
+        time_to_live   0.5
+        duration 1
+        direction       -1 0 0
+        velocity    2000
+        colour 1 0.5 0.5
+    }
+
+
+    // Fader
+    affector ColourFader
+    {
+        red -5
+        green -5
+        blue -5
+    }
+
+    affector Scaler
+    {
+        rate 350
+    }
+
+}
+

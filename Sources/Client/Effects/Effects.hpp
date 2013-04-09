@@ -17,6 +17,7 @@ public:
     Effects(Graphics::IGraphics &);
     void frameStarted();
     void emitMovingMeshEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed);
+    void emitExplosion(Common::Game::Position position);
 
 private:
     void addEffect(boost::shared_ptr<IEffect>);

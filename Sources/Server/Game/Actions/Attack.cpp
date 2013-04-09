@@ -36,6 +36,17 @@ Common::Game::TimeValue Attack::start()
 
 void Attack::finish()
 {
+    auto selectedShipPosition = m_selectedObject.getPosition();
+    Common::Messages::EmitExplosionEffect emitExplosion;
+    emitExplosion.x = selectedShipPosition.getX();
+    emitExplosion.y = selectedShipPosition.getY();
+    emitExplosion.z = selectedShipPosition.getZ();
+    auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
+    for (auto connection: connections)
+    {
+        connection->send(emitExplosion);
+    }
+
     unsigned integrity = m_selectedObject.getIntegrity();
     m_selectedObject.setIntegrity(integrity - 10);
 

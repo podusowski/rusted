@@ -1,6 +1,7 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
 #include "MovingMeshEffect.hpp"
+#include "Explosion.hpp"
 #include "Effects.hpp"
 
 using namespace Client::Effects;
@@ -22,6 +23,12 @@ void Effects::frameStarted()
 void Effects::emitMovingMeshEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed)
 {
     boost::shared_ptr<IEffect> effect(new MovingMeshEffect(m_graphics, start, end, speed));
+    addEffect(effect);
+}
+
+void Effects::emitExplosion(Common::Game::Position position)
+{
+    boost::shared_ptr<IEffect> effect(new Explosion(m_graphics, position));
     addEffect(effect);
 }
 
