@@ -193,13 +193,10 @@ void PilotView::updateOrientationPlane()
 {
     m_orientationPlaneSceneNode->setVisible(m_camera.isUserOrientationChanging());
 
-    auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
-    auto position = focusedShip.getPosition();
-    auto orientation = focusedShip.getOrientation();
-    m_orientationPlaneSceneNode->setPosition(position.getX(), position.getY(), position.getZ());
-    m_orientationPlaneSceneNode->setOrientation(m_camera.getOrientation());
-
-    // orintation
+    auto orientation = m_camera.getOrientation();
+    auto offset = orientation * Ogre::Vector3(0, 0, -1000);
+    m_orientationPlaneSceneNode->setPosition(m_camera.getPosition() + offset);
+    m_orientationPlaneSceneNode->setOrientation(orientation);
     m_orientationPlaneSceneNode->pitch(Ogre::Degree(20));
 }
 
