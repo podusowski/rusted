@@ -118,14 +118,22 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
 
 void PilotView::shipListBoxSelected(MyGUI::ListBox * listBox, size_t index)
 {
-    unsigned * id = listBox->getItemDataAt<unsigned>(index);
+    try
+    {
+        unsigned * id = listBox->getItemDataAt<unsigned>(index);
 
-    LOG_DEBUG << "Changing focus to: " << *id;
+        LOG_DEBUG << "Changing focus to: " << *id;
 
-    auto & ship = m_universe.getById<Common::Game::Object::Ship>(*id);
+        auto & ship = m_universe.getById<Common::Game::Object::Ship>(*id);
 
-    m_playerActionService.focusObject(ship);
-    m_playerActionService.fetchAvailableActions();
+        m_playerActionService.focusObject(ship);
+        m_playerActionService.fetchAvailableActions();
+    }
+    catch (...)
+    {
+        // if you find a better way to check listbox items, youre free
+        // to change it
+    }
 }
 
 void PilotView::playerShipsFetched()
