@@ -149,12 +149,14 @@ void Input::mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID i
 void Input::mouseMovedRaycast()
 {
     auto * entity = raycastFromMouseCursor();
+
+    mouseLeavedCallbackIfNeeded(entity);
+
     if (entity)
     {
         auto it = m_entityMouseMovedCallbacks.find(entity);
         if (it != m_entityMouseMovedCallbacks.end())
         {
-            mouseLeavedCallbackIfNeeded(entity);
             it->second();
         }
     }

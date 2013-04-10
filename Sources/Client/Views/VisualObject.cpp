@@ -46,6 +46,8 @@ VisualObject::VisualObject(
     m_node->setScale(100.0, 100.0, 100.0);
 
     input.addEntityClickedCallback(*m_entity, std::bind(&VisualObject::entityClickedCallback, this));
+    input.addEntityMouseMovedCallback(*m_entity, std::bind(&VisualObject::entityMouseMoved, this));
+    input.addEntityMouseLeavedCallback(*m_entity, std::bind(&VisualObject::entityMouseLeaved, this));
 
     try
     {
@@ -119,6 +121,16 @@ void VisualObject::entityClickedCallback()
         m_rightClickCallback();
 }
 
+void VisualObject::entityMouseMoved()
+{
+    m_label->setVisible(true);
+}
+
+void VisualObject::entityMouseLeaved()
+{
+    m_label->setVisible(false);
+}
+
 void VisualObject::setEngineThrustEnabled(bool v)
 {
     for (auto ps: m_engineThrustParticleSystems)
@@ -130,6 +142,7 @@ void VisualObject::setEngineThrustEnabled(bool v)
 void VisualObject::createLabel()
 {
     m_label = m_gui->createWidget<MyGUI::TextBox>("TextBox", MyGUI::IntCoord(10, 10, 50, 50), MyGUI::Align::Default, "Main");
+    m_label->setVisible(false);
 
     updateLabelText();
 
@@ -166,7 +179,7 @@ void VisualObject::updateLabel()
         auto position = std::get<1>(screenCoords);
         m_label->setPosition(MyGUI::IntPoint(position.x, position.y - 20));
     }
-    m_label->setVisible(std::get<0>(screenCoords));
+    //m_label->setVisible(std::get<0>(screenCoords));
 }
 
 void VisualObject::ownerNameFetched(unsigned id, const std::string & name)

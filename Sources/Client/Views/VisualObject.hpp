@@ -33,6 +33,8 @@ public:
 
 private:
     void entityClickedCallback();
+    void entityMouseMoved();
+    void entityMouseLeaved();
     void setEngineThrustEnabled(bool);
     void createLabel();
     void updateLabelText();
