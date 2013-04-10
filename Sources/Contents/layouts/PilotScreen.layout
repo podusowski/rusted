@@ -42,5 +42,13 @@
         <Widget type="ListBox" name="ShipListBox" skin="ListBox" position_real="0 0 1 1"/>
     </Widget>
 
+    <Widget type="Window" skin="Window" position="10 500 250 80" align="Left Bottom" layer="Main">
+        <Property key="Caption" value="Chat"/>
+        <Property key="Snap" value="false"/>
+        <Widget type="TextBox" skin="TextBox" name="ChatTextBox" align="Stretch" position_real="0.10 0.10 0.80 0.80">
+            <Property key="Caption" value="Chat messages goes here"/>
+        </Widget>
+    </Widget>
+
 </MyGUI>
 
