@@ -21,7 +21,8 @@ public:
 
 private:
     void sendShipInfoToClients();
-    void sendEffect();
+    void sendMovingMeshEffect();
+    void sendExplosionEffect();
 
     IPlayerContainer & m_playerContainer;
     Common::Game::Object::Ship & m_focusedShip;

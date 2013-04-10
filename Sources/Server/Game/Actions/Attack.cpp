@@ -21,7 +21,7 @@ Common::Game::TimeValue Attack::start()
         return Common::Game::TimeValue(0, 0);
     }
 
-    sendEffect();
+    sendMovingMeshEffect();
 
     auto focusedShipPosition = m_focusedShip.getPosition();
     auto selectedShipPosition = m_selectedObject.getPosition();
@@ -36,20 +36,10 @@ Common::Game::TimeValue Attack::start()
 
 void Attack::finish()
 {
-    auto selectedShipPosition = m_selectedObject.getPosition();
-    Common::Messages::EmitExplosionEffect emitExplosion;
-    emitExplosion.x = selectedShipPosition.getX();
-    emitExplosion.y = selectedShipPosition.getY();
-    emitExplosion.z = selectedShipPosition.getZ();
-    auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
-    for (auto connection: connections)
-    {
-        connection->send(emitExplosion);
-    }
-
     unsigned integrity = m_selectedObject.getIntegrity();
     m_selectedObject.setIntegrity(integrity - 10);
 
+    sendExplosionEffect();
     sendShipInfoToClients();
 }
 
@@ -62,7 +52,7 @@ void Attack::sendShipInfoToClients()
     }
 }
 
-void Attack::sendEffect()
+void Attack::sendMovingMeshEffect()
 {
     auto focusedShipPosition = m_focusedShip.getPosition();
     auto selectedShipPosition = m_selectedObject.getPosition();
@@ -85,6 +75,20 @@ void Attack::sendEffect()
     {
         connection->send(emitMovingMeshEffect);
         connection->send(attackObject);
+    }
+}
+
+void Attack::sendExplosionEffect()
+{
+    auto selectedShipPosition = m_selectedObject.getPosition();
+    Common::Messages::EmitExplosionEffect emitExplosion;
+    emitExplosion.x = selectedShipPosition.getX();
+    emitExplosion.y = selectedShipPosition.getY();
+    emitExplosion.z = selectedShipPosition.getZ();
+    auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
+    for (auto connection: connections)
+    {
+        connection->send(emitExplosion);
     }
 }
 
