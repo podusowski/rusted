@@ -105,7 +105,9 @@ std::string VisualObject::getString()
     if (m_object.is<Common::Game::Object::Ship>())
     {
         auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
-        ss << "Ship" << ship.getId() << " | INT: " << ship.getIntegrity();
+        ss << m_model.getValue<std::string>("name") << " (" << ship.getId() << ")\n"
+           << "Pilot: " << m_ownerName << "\n"
+           << "Integrity: " << ship.getIntegrity();
     }
     else if (m_object.is<Common::Game::Object::Asteroid>())
     {
@@ -163,7 +165,7 @@ void VisualObject::setEngineThrustEnabled(bool v)
 
 void VisualObject::createLabel()
 {
-    m_label = m_gui->createWidget<MyGUI::TextBox>("TextBox", MyGUI::IntCoord(10, 10, 50, 50), MyGUI::Align::Default, "Main");
+    m_label = m_gui->createWidget<MyGUI::TextBox>("TextBox", MyGUI::IntCoord(10, 10, 150, 50), MyGUI::Align::Default, "Main");
     m_label->setVisible(false);
 
     updateLabelText();
@@ -179,18 +181,7 @@ void VisualObject::createLabel()
 
 void VisualObject::updateLabelText()
 {
-    if (m_object.is<Common::Game::Object::Asteroid>())
-    {
-        m_label->setCaption("asteroid");
-    }
-    else if (m_object.is<Common::Game::Object::Ship>())
-    {
-        auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
-
-        std::stringstream ss;
-        ss << m_model.getValue<std::string>("name") << "\n" << m_ownerName;
-        m_label->setCaption(ss.str());
-    }
+    m_label->setCaption(getString());
 }
 
 void VisualObject::updateLabel()
