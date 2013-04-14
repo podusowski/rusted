@@ -90,38 +90,7 @@ void ObjectsView::updateSelectedObjectWindow()
 {
     if (m_selectedObject)
     {
-        Common::Game::Object::ObjectBase & object = (*m_selectedObject)->getGameObject();
-
-        std::stringstream ss;
-
-        if (object.is<Common::Game::Object::Ship>())
-        {
-            Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>((*m_selectedObject)->getGameObject());
-            ss << "Ship" << ship.getId() << " | INT: " << ship.getIntegrity();
-        }
-        else if (object.is<Common::Game::Object::Asteroid>())
-        {
-            auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(object);
-            ss << "Asteroid | " << formatResourcesString(asteroid);
-        }
-        else
-        {
-            ss << "Object <" << object.getId() << ">";
-        }
-
-        m_gui->findWidget<MyGUI::TextBox>("TargetTextBox")->setCaption(ss.str());
+        m_gui->findWidget<MyGUI::TextBox>("TargetTextBox")->setCaption((*m_selectedObject)->getString());
     }
-}
-
-std::string ObjectsView::formatResourcesString(Common::Game::Object::ObjectBase & object)
-{
-    std::stringstream ss;
-
-    object.visitCargoHold([&ss](Common::Game::Object::CargoHold & cargoHold) -> void
-    {
-        ss << "C:" << cargoHold.getCarbon() << " | H:" << cargoHold.getHelium();
-    });
-
-    return ss.str();
 }
 

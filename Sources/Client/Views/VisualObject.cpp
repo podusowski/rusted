@@ -98,6 +98,28 @@ Common::Game::Object::ObjectBase & VisualObject::getGameObject()
     return m_object;
 }
 
+std::string VisualObject::getString()
+{
+    std::stringstream ss;
+
+    if (m_object.is<Common::Game::Object::Ship>())
+    {
+        auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
+        ss << "Ship" << ship.getId() << " | INT: " << ship.getIntegrity();
+    }
+    else if (m_object.is<Common::Game::Object::Asteroid>())
+    {
+        auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(m_object);
+        ss << "Asteroid";
+    }
+    else
+    {
+        ss << "Object <" << m_object.getId() << ">";
+    }
+
+    return ss.str();
+}
+
 void VisualObject::update()
 {
     Common::Game::Position position = m_object.getPosition();
