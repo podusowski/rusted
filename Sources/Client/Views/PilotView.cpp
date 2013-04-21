@@ -11,7 +11,8 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
                      Services::ObjectService & objectService,
                      Client::Gui::Gui & gui,
                      Common::Game::Universe & universe,
-                     Common::Game::Player & player) :
+                     Common::Game::Player & player,
+                     VisualObjectContainer & visualObjectContainer) :
     m_graphics(graphics),
     m_input(input),
     m_playerActionService(playerActionService),
@@ -19,6 +20,7 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
     m_gui(gui),
     m_universe(universe),
     m_player(player),
+    m_visualObjectContainer(visualObjectContainer),
     m_camera(graphics, input, player)
 {
 }
@@ -171,15 +173,9 @@ void PilotView::updatePlayerShipsListBox()
 void PilotView::updateFocusedShipWindow()
 {
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
-
-    std::stringstream ss;
-
-    focusedShip.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
-    {
-        ss << "C: " << cargoHold.getCarbon() << " H: " << cargoHold.getHelium() << " / " << cargoHold.getCapacity();
-    });
-
-    m_gui->findWidget<MyGUI::TextBox>("FocusTextBox")->setCaption(ss.str());
+    auto obj = m_visualObjectContainer.find(focusedShip);
+    std::string s = obj->getString();
+    m_gui->findWidget<MyGUI::TextBox>("FocusTextBox")->setCaption(s);
 }
 
 void PilotView::createOrientationPlane()
