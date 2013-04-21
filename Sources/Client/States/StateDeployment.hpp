@@ -20,6 +20,7 @@
 #include "Client/Views/ObjectsView.hpp"
 #include "Client/Views/PilotView.hpp"
 #include "Client/Views/ActionsView.hpp"
+#include "Client/Views/VisualObjectContainer.hpp"
 
 namespace Client
 {
@@ -52,6 +53,8 @@ private:
     Services::PlayerActionService m_playerActionService;
     Services::ObjectService m_objectService;
     Services::EffectsService m_effectsService;
+
+    Views::VisualObjectContainer m_visualObjectContainer;
 
     Views::ObjectsView m_objectsView;
     Views::PilotView m_pilotView;

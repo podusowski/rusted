@@ -23,6 +23,7 @@ SOURCES+=Services/EffectsService.cpp
 SOURCES+=Views/ObjectsView.cpp
 SOURCES+=Views/Camera.cpp
 SOURCES+=Views/VisualObject.cpp
+SOURCES+=Views/VisualObjectContainer.cpp
 SOURCES+=Views/PilotView.cpp
 SOURCES+=Views/ActionsView.cpp
 
