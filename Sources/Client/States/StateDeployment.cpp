@@ -21,7 +21,7 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
 
     m_visualObjectContainer(graphics, gui, input, m_objectService),
 
-    m_objectsView(m_objectService, m_playerActionService, graphics, effects, input, gui, m_universe),
+    m_objectsView(m_objectService, m_playerActionService, graphics, effects, input, gui, m_universe, m_visualObjectContainer),
     m_pilotView(graphics, input, m_playerActionService, m_objectService, gui, m_universe, m_playerInfo),
     m_actionsView(m_playerActionService, gui),
 

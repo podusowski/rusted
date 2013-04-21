@@ -22,3 +22,12 @@ std::shared_ptr<VisualObject> VisualObjectContainer::add(Common::Game::Object::O
     return obj;
 }
 
+void VisualObjectContainer::update()
+{
+    for (auto o: m_objects)
+    {
+        o.second->update();
+    }
+}
+
+

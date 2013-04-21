@@ -15,14 +15,16 @@ ObjectsView::ObjectsView(Services::ObjectService & objectService,
                          Effects::Effects & effects,
                          Input::IInput & input,
                          Gui::Gui & gui,
-                         Common::Game::Universe & universe) :
+                         Common::Game::Universe & universe,
+                         VisualObjectContainer & visualObjectContainer) :
     m_objectService(objectService),
     m_playerActionService(playerActionService),
     m_graphics(graphics),
     m_effects(effects),
     m_input(input),
     m_gui(gui),
-    m_universe(universe)
+    m_universe(universe),
+    m_visualObjectContainer(visualObjectContainer)
 {
 }
 
@@ -51,11 +53,7 @@ void ObjectsView::deactivate()
 
 void ObjectsView::frameStarted()
 {
-    for (auto object: m_objects)
-    {
-        object->update();
-    }
-
+    m_visualObjectContainer.update();
     updateSelectedObjectWindow();
 }
 
@@ -63,9 +61,8 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
 {
     LOG_DEBUG << "New object:" << object;
 
-    boost::shared_ptr<VisualObject> obj(new VisualObject(m_graphics, m_gui, m_input, object, m_objectService));
+    auto obj = m_visualObjectContainer.add(object);
     obj->setRightClickCallback(std::bind(&ObjectsView::objectClicked, this, obj.get()));
-    m_objects.push_back(obj);
 }
 
 void ObjectsView::objectAttacked(unsigned attackerId, unsigned attackedId)

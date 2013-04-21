@@ -7,6 +7,7 @@
 #include "Effects/Effects.hpp"
 #include "Client/Gui/Gui.hpp"
 #include "VisualObject.hpp"
+#include "VisualObjectContainer.hpp"
 
 namespace Client
 {
@@ -22,7 +23,8 @@ public:
                 Effects::Effects &,
                 Input::IInput &,
                 Gui::Gui &,
-                Common::Game::Universe &);
+                Common::Game::Universe &,
+                VisualObjectContainer &);
 
     void activate();
     void deactivate();
@@ -42,7 +44,7 @@ private:
     Input::IInput & m_input;
     Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;
-    std::vector<boost::shared_ptr<VisualObject> > m_objects;
+    VisualObjectContainer & m_visualObjectContainer;
     boost::optional<VisualObject *> m_selectedObject;
 };
 
