@@ -98,7 +98,7 @@ Common::Game::Object::ObjectBase & VisualObject::getGameObject()
     return m_object;
 }
 
-std::string VisualObject::getString(VisualObject::StringType type)
+std::string VisualObject::getString(int type)
 {
     std::stringstream ss;
 
@@ -133,6 +133,20 @@ std::string VisualObject::getString(VisualObject::StringType type)
             }
 
             ss << "Integrity: " << ship.getIntegrity();
+            newLineNeeded = true;
+        }
+
+        if (type & StringType_CargoHold)
+        {
+            if (newLineNeeded)
+            {
+                ss << "\n";
+            }
+
+            ship.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+            {
+                ss << "C:" << cargoHold.getCarbon() << " H:" << cargoHold.getHelium() << " (" << cargoHold.getCapacity() << ")";
+            });
             newLineNeeded = true;
         }
     }

@@ -173,7 +173,10 @@ void PilotView::updateFocusedShipWindow()
 {
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
     auto obj = m_visualObjectContainer.find(focusedShip);
-    std::string s = obj->getString();
+    std::string s = obj->getString(
+        VisualObject::StringType_Class | 
+        VisualObject::StringType_Integrity | 
+        VisualObject::StringType_CargoHold);
     m_gui->findWidget<MyGUI::TextBox>("FocusTextBox")->setCaption(s);
 }
 

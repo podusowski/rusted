@@ -18,13 +18,11 @@ namespace Views
 class VisualObject
 {
 public:
-    enum StringType
-    {
-        StringType_All = 0xFF,
-        StringType_Class = 1 << 0,
-        StringType_Integrity = 1 << 1,
-        StringType_Pilot = 1 << 2
-    };
+    static const int StringType_All = 0xFF;
+    static const int StringType_Class = 1 << 0;
+    static const int StringType_Integrity = 1 << 1;
+    static const int StringType_Pilot = 1 << 2;
+    static const int StringType_CargoHold = 1 << 3;
 
     VisualObject(
         Client::Graphics::IGraphics &,
@@ -36,7 +34,7 @@ public:
     void setRightClickCallback(std::function<void()>);
     void setSelected(bool);
     Common::Game::Object::ObjectBase & getGameObject();
-    std::string getString(StringType type = StringType_All);
+    std::string getString(int type = StringType_All);
 
     void update();
 
