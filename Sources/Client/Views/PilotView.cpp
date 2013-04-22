@@ -164,9 +164,8 @@ void PilotView::updatePlayerShipsListBox()
     auto ships = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_player.getId());
     for (auto ship: ships)
     {
-        std::stringstream ss;
-        ss << "Ship " << ship->getId();
-        shipListBox->addItem(ss.str(), MyGUI::Any(ship->getId()));
+        auto visualObject = m_visualObjectContainer.find(*ship);
+        shipListBox->addItem(visualObject->getString(VisualObject::StringType_Class), MyGUI::Any(ship->getId()));
     }
 }
 

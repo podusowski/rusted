@@ -98,16 +98,43 @@ Common::Game::Object::ObjectBase & VisualObject::getGameObject()
     return m_object;
 }
 
-std::string VisualObject::getString()
+std::string VisualObject::getString(VisualObject::StringType type)
 {
     std::stringstream ss;
 
     if (m_object.is<Common::Game::Object::Ship>())
     {
         auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
-        ss << m_model.getValue<std::string>("name") << " (" << ship.getId() << ")\n"
-           << "Pilot: " << m_ownerName << "\n"
-           << "Integrity: " << ship.getIntegrity();
+
+        bool newLineNeeded = false;
+
+        if (type & StringType_Class)
+        {
+            ss << m_model.getValue<std::string>("name") << " (" << ship.getId() << ")";
+            newLineNeeded = true;
+        }
+
+        if (type & StringType_Pilot)
+        {
+            if (newLineNeeded)
+            {
+                ss << "\n";
+            }
+
+            ss << "Pilot: " << m_ownerName;
+            newLineNeeded = true;
+        }
+
+        if (type & StringType_Integrity)
+        {
+            if (newLineNeeded)
+            {
+                ss << "\n";
+            }
+
+            ss << "Integrity: " << ship.getIntegrity();
+            newLineNeeded = true;
+        }
     }
     else if (m_object.is<Common::Game::Object::Asteroid>())
     {

@@ -18,6 +18,14 @@ namespace Views
 class VisualObject
 {
 public:
+    enum StringType
+    {
+        StringType_All = 0xFF,
+        StringType_Class = 1 << 0,
+        StringType_Integrity = 1 << 1,
+        StringType_Pilot = 1 << 2
+    };
+
     VisualObject(
         Client::Graphics::IGraphics &,
         Gui::Gui &,
@@ -28,7 +36,7 @@ public:
     void setRightClickCallback(std::function<void()>);
     void setSelected(bool);
     Common::Game::Object::ObjectBase & getGameObject();
-    std::string getString();
+    std::string getString(StringType type = StringType_All);
 
     void update();
 
