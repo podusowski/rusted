@@ -1,10 +1,13 @@
+#include <set>
+
 #include "ActionsView.hpp"
 
 using namespace Client::Views;
 
 ActionsView::ActionsView(Services::PlayerActionService & playerActionService, Gui::Gui & gui) :
     m_playerActionService(playerActionService),
-    m_gui(gui)
+    m_gui(gui),
+    m_flatActionButtons(false)
 {
 }
 
@@ -83,20 +86,57 @@ void ActionsView::availableActionsFetched(std::vector<Common::Messages::Availabl
     }
     m_actionButtons.clear();
 
-    int buttonTop = 0;
-    for (auto & action: actions)
+    if (m_flatActionButtons)
     {
-        LOG_DEBUG << "  " << action.id << "/" << action.parameter;
+        int buttonTop = 0;
+        for (auto & action: actions)
+        {
+            LOG_DEBUG << "  " << action.id << "/" << action.parameter;
 
-        auto * actionButton = actionsPanel->createWidget<MyGUI::Button>("Button", MyGUI::IntCoord(0, buttonTop, 50, 50), MyGUI::Align::Default);
-        m_actionButtons.push_back(actionButton);
-        buttonTop += 50;
+            auto * actionButton = actionsPanel->createWidget<MyGUI::Button>("Button", MyGUI::IntCoord(0, buttonTop, 50, 50), MyGUI::Align::Default);
+            m_actionButtons.push_back(actionButton);
+            buttonTop += 50;
 
-        actionButton->setCaption(action.name);
-        actionButton->setUserData(action);
-        actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &ActionsView::actionClicked);
-        actionButton->eventMouseSetFocus += MyGUI::newDelegate(this, &ActionsView::actionMouseSetFocus);
-        actionButton->eventMouseLostFocus += MyGUI::newDelegate(this, &ActionsView::actionMouseLostFocus);
+            actionButton->setCaption(action.name);
+            actionButton->setUserData(action);
+            actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &ActionsView::actionClicked);
+            actionButton->eventMouseSetFocus += MyGUI::newDelegate(this, &ActionsView::actionMouseSetFocus);
+            actionButton->eventMouseLostFocus += MyGUI::newDelegate(this, &ActionsView::actionMouseLostFocus);
+        }
+    }
+    else
+    {
+        int buttonTop = 0;
+        int buttonLeft = 0;
+
+        std::set<int> actionGroups;
+        for (auto & action: actions)
+        {
+            actionGroups.insert(action.id);
+        }
+
+        for (int actionId: actionGroups)
+        {
+            for (auto & action: actions)
+            {
+                if (action.id == actionId)
+                {
+                    LOG_DEBUG << "  " << action.id << "/" << action.parameter;
+
+                    auto * actionButton = actionsPanel->createWidget<MyGUI::Button>("Button", MyGUI::IntCoord(buttonLeft, buttonTop, 50, 50), MyGUI::Align::Default);
+                    m_actionButtons.push_back(actionButton);
+                    buttonLeft += 50;
+
+                    actionButton->setCaption(action.name);
+                    actionButton->setUserData(action);
+                    actionButton->eventMouseButtonClick += MyGUI::newDelegate(this, &ActionsView::actionClicked);
+                    actionButton->eventMouseSetFocus += MyGUI::newDelegate(this, &ActionsView::actionMouseSetFocus);
+                    actionButton->eventMouseLostFocus += MyGUI::newDelegate(this, &ActionsView::actionMouseLostFocus);
+                }
+            }
+            buttonTop += 50;
+            buttonLeft = 0;
+        }
     }
 }
 

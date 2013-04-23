@@ -28,6 +28,7 @@ private:
     Services::PlayerActionService & m_playerActionService;
     Gui::Gui & m_gui;
     std::vector<MyGUI::Button *> m_actionButtons;
+    bool m_flatActionButtons;
 };
 
 }

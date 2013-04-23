@@ -25,7 +25,7 @@
         </Widget>
     </Widget>
 
-    <Widget type="Window" position="10 120 60 400" align="Left VStretch" layer="Main" name="ActionsPanel">
+    <Widget type="Window" position="10 120 600 400" align="Left VStretch" layer="Main" name="ActionsPanel">
         <Property key="Caption" value="Actions"/>
         <Property key="Snap" value="false"/>
     </Widget>
