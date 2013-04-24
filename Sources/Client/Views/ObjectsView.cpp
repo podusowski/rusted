@@ -16,7 +16,7 @@ ObjectsView::ObjectsView(Services::ObjectService & objectService,
                          Input::IInput & input,
                          Gui::Gui & gui,
                          Common::Game::Universe & universe,
-                         VisualObjectContainer & visualObjectContainer) :
+                         Visuals::VisualObjectContainer & visualObjectContainer) :
     m_objectService(objectService),
     m_playerActionService(playerActionService),
     m_graphics(graphics),
@@ -69,7 +69,7 @@ void ObjectsView::objectAttacked(unsigned attackerId, unsigned attackedId)
 {
 }
 
-void ObjectsView::objectClicked(VisualObject * object)
+void ObjectsView::objectClicked(Visuals::VisualObject * object)
 {
     LOG_DEBUG << "Object selected, id:" << object->getGameObject().getId();
 

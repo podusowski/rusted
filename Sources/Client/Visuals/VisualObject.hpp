@@ -12,7 +12,7 @@
 
 namespace Client
 {
-namespace Views
+namespace Visuals
 {
 
 class VisualObject

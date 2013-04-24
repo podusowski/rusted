@@ -12,7 +12,7 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
                      Client::Gui::Gui & gui,
                      Common::Game::Universe & universe,
                      Common::Game::Player & player,
-                     VisualObjectContainer & visualObjectContainer) :
+                     Visuals::VisualObjectContainer & visualObjectContainer) :
     m_graphics(graphics),
     m_input(input),
     m_playerActionService(playerActionService),
@@ -165,12 +165,14 @@ void PilotView::updatePlayerShipsListBox()
     for (auto ship: ships)
     {
         auto visualObject = m_visualObjectContainer.find(*ship);
-        shipListBox->addItem(visualObject->getString(VisualObject::StringType_Class), MyGUI::Any(ship->getId()));
+        shipListBox->addItem(visualObject->getString(Visuals::VisualObject::StringType_Class), MyGUI::Any(ship->getId()));
     }
 }
 
 void PilotView::updateFocusedShipWindow()
 {
+    using namespace Visuals;
+
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
     auto obj = m_visualObjectContainer.find(focusedShip);
     std::string s = obj->getString(

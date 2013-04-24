@@ -6,8 +6,8 @@
 #include "Graphics/IGraphics.hpp"
 #include "Effects/Effects.hpp"
 #include "Client/Gui/Gui.hpp"
-#include "VisualObject.hpp"
-#include "VisualObjectContainer.hpp"
+#include "Visuals/VisualObject.hpp"
+#include "Visuals/VisualObjectContainer.hpp"
 
 namespace Client
 {
@@ -24,7 +24,7 @@ public:
                 Input::IInput &,
                 Gui::Gui &,
                 Common::Game::Universe &,
-                VisualObjectContainer &);
+                Visuals::VisualObjectContainer &);
 
     void activate();
     void deactivate();
@@ -34,7 +34,7 @@ public:
     void objectAttacked(unsigned attacker, unsigned attacked);
 
 private:
-    void objectClicked(VisualObject * object);
+    void objectClicked(Visuals::VisualObject * object);
     void updateSelectedObjectWindow();
 
     Services::ObjectService & m_objectService;
@@ -44,8 +44,8 @@ private:
     Input::IInput & m_input;
     Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;
-    VisualObjectContainer & m_visualObjectContainer;
-    boost::optional<VisualObject *> m_selectedObject;
+    Visuals::VisualObjectContainer & m_visualObjectContainer;
+    boost::optional<Visuals::VisualObject *> m_selectedObject;
 };
 
 }

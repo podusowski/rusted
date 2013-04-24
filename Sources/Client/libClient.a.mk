@@ -22,10 +22,10 @@ SOURCES+=Services/ObjectService.cpp
 SOURCES+=Services/EffectsService.cpp
 SOURCES+=Views/ObjectsView.cpp
 SOURCES+=Views/Camera.cpp
-SOURCES+=Views/VisualObject.cpp
-SOURCES+=Views/VisualObjectContainer.cpp
 SOURCES+=Views/PilotView.cpp
 SOURCES+=Views/ActionsView.cpp
+SOURCES+=Visuals/VisualObject.cpp
+SOURCES+=Visuals/VisualObjectContainer.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../ 

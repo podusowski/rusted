@@ -8,7 +8,7 @@
 #include "Common/Game/Object/Ship.hpp"
 #include "VisualObject.hpp"
 
-using namespace Client::Views;
+using namespace Client::Visuals;
 
 VisualObject::VisualObject(
     Client::Graphics::IGraphics & graphics,

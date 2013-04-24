@@ -2,7 +2,7 @@
 
 #include "VisualObjectContainer.hpp"
 
-using namespace Client::Views;
+using namespace Client::Visuals;
 
 VisualObjectContainer::VisualObjectContainer(
     Client::Graphics::IGraphics & graphics, 
