@@ -254,6 +254,7 @@ void VisualObject::updateWreckedState()
         if (currentMaterial != m_naturalMaterial && !ship.isWrecked())
         {
             LOG_DEBUG << "Switching to normal material: " << m_naturalMaterial;
+            m_entity->getSubEntity(0)->setMaterialName(m_naturalMaterial);
         }
         else if (currentMaterial == m_naturalMaterial && ship.isWrecked())
         {
