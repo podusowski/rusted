@@ -69,6 +69,11 @@ Common::Math::Quaternion Ship::getOrientation()
     return m_trajectory->getOrientation();
 }
 
+bool Ship::isWrecked()
+{
+    return getIntegrity() == 0;
+}
+
 void Ship::setClass(unsigned shipClass)
 {
     m_class = shipClass;

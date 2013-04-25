@@ -47,6 +47,7 @@ private:
     void updateLabelText();
     void updateLabel();
     void ownerNameFetched(unsigned id, const std::string & name);
+    void updateWreckedState();
 
     Client::Graphics::IGraphics & m_graphics;
     Gui::Gui & m_gui;
@@ -59,6 +60,7 @@ private:
     MyGUI::TextBox * m_label;
     std::string m_ownerName;
     Cake::Serialization::Tms m_model;
+    std::string m_naturalMaterial;
 };
 
 }

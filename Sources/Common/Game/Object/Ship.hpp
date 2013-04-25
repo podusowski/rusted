@@ -32,6 +32,7 @@ public:
     unsigned getSpeed();
     void setIntegrity(unsigned); //override;
     Common::Math::Quaternion getOrientation();
+    bool isWrecked();
 
     virtual void setClass(unsigned);
     virtual unsigned getClass();

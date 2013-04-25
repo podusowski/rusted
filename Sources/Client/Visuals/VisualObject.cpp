@@ -78,6 +78,8 @@ VisualObject::VisualObject(
     {
         LOG_ERR << "Can't create engine thrust effect, reason: " << ex.what();
     }
+
+    m_naturalMaterial = m_entity->getSubEntity(0)->getMaterialName();
     
     createLabel();
     update();
@@ -178,6 +180,7 @@ void VisualObject::update()
 
     setEngineThrustEnabled(m_object.isMoving());
     updateLabel();
+    updateWreckedState();
 }
 
 void VisualObject::entityClickedCallback()
@@ -242,4 +245,21 @@ void VisualObject::ownerNameFetched(unsigned id, const std::string & name)
     updateLabelText();
 }
 
+void VisualObject::updateWreckedState()
+{
+    if (m_object.is<Common::Game::Object::Ship>())
+    {
+        auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
+        std::string currentMaterial = m_entity->getSubEntity(0)->getMaterialName();
+        if (currentMaterial != m_naturalMaterial && !ship.isWrecked())
+        {
+            LOG_DEBUG << "Switching to normal material: " << m_naturalMaterial;
+        }
+        else if (currentMaterial == m_naturalMaterial && ship.isWrecked())
+        {
+            LOG_DEBUG << "Switching to wrecked material";
+            m_entity->getSubEntity(0)->setMaterialName("Wrecked");
+        }
+    }
+}
 
