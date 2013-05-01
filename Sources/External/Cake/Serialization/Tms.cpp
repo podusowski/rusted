@@ -19,3 +19,8 @@ Tms::Tms(std::istream & stream)
     }
 }
 
+bool Tms::has(const std::string & name) const
+{
+    return m_data.find(name) != m_data.end();
+}
+

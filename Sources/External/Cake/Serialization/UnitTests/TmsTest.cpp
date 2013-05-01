@@ -45,4 +45,11 @@ TEST_F(TmsTest, Assign)
     EXPECT_EQ(1, tms3.getValue<unsigned>("variable1"));
 }
 
+TEST_F(TmsTest, Has)
+{
+    Cake::Serialization::Tms tms1(m_stream);
+    EXPECT_TRUE(tms1.has("variable1"));
+    EXPECT_FALSE(tms1.has("nonexisting"));
+}
+
 

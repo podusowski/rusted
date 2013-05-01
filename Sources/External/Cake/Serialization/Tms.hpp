@@ -30,6 +30,8 @@ public:
         throw std::runtime_error(ss.str());
     }
 
+    bool has(const std::string &) const;
+
 private:
     std::map<std::string, std::string> m_data;
 };
