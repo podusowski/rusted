@@ -74,6 +74,9 @@ TEST_F(AttackTest, AttackOtherShip_Finish)
     EXPECT_CALL(selectedShip, setIntegrity(90)).Times(1);
 
     EXPECT_CALL(connection, send(
+                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::EmitExplosionEffect))
+                )).Times(1);
+    EXPECT_CALL(connection, send(
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipInfo))
                 )).Times(1);
     EXPECT_CALL(connection, send(
