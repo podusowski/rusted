@@ -4,6 +4,7 @@
 #include "Common/Game/RustedTime.hpp"
 #include "Engine/Engine.hpp"
 #include "Common/Game/Object/FlightTrajectory.hpp"
+#include "Common/Math/Bezier3.hpp"
 
 void initDependencies(int argc, const char * argv[])
 {
@@ -17,6 +18,9 @@ void initDependencies(int argc, const char * argv[])
 
     forInterface<Common::Game::Object::IFlightTrajectory>()
         .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
+
+    forInterface<Common::Math::ISpline3>()
+        .useFactory<GenericFactory0<Common::Math::ISpline3, Common::Math::Bezier3>>();
 }
 
 int main(int argc, const char * argv[])

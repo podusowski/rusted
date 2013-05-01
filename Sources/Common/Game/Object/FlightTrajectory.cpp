@@ -6,6 +6,7 @@ using namespace Common::Game;
 
 FlightTrajectory::FlightTrajectory() : 
     m_speed(1),
+    m_acceleration(1),
     m_cachedOrientation(Common::Math::Quaternion(0, std::make_tuple(0, 0, 1)))
 {
 }
@@ -102,13 +103,18 @@ unsigned FlightTrajectory::getSpeed()
     return m_speed;
 }
 
+void FlightTrajectory::setAcceleration(unsigned acceleration)
+{
+    m_acceleration = acceleration;
+}
+
 bool FlightTrajectory::isMoving()
 {
     auto progress = calculateProgress(m_time->getCurrentTime());
     calculateCachedPositionAndOrientation(progress);
     revalidateProgress(progress);
     
-    return !m_bezier.empty();
+    return !m_spline->empty();
 }
 
 FlightTrajectory::Description FlightTrajectory::getDescription()
@@ -166,17 +172,17 @@ void FlightTrajectory::applyDescription(FlightTrajectory::Description descriptio
 
 Position FlightTrajectory::calculatePosition(float progress)
 {
-    if (m_bezier.empty())
+    if (m_spline->empty())
     {
         return m_cachedPosition;
     }
     else if (progress >= 1.0)
     {
-        return m_bezier(1.0);
+        return (*m_spline)(1.0);
     }
     else
     {
-        return m_bezier(progress);
+        return (*m_spline)(progress);
     }
 }
 
@@ -184,17 +190,17 @@ Common::Math::Quaternion FlightTrajectory::calculateOrientation(float progress)
 {
     Common::Math::Point3 derivative;
 
-    if (m_bezier.empty())
+    if (m_spline->empty())
     {
         return m_cachedOrientation;
     }
     else if (progress >= 1.0)
     {
-        derivative = m_bezier.derivative(1.0);
+        derivative = m_spline->derivative(1.0);
     }
     else
     {
-        derivative = m_bezier.derivative(progress);
+        derivative = m_spline->derivative(progress);
     }
 
     return Common::Math::Quaternion(std::make_tuple(derivative.getX(), derivative.getY(), derivative.getZ()));
@@ -202,29 +208,48 @@ Common::Math::Quaternion FlightTrajectory::calculateOrientation(float progress)
 
 float FlightTrajectory::calculateProgress(TimeValue time)
 {
-    if (m_bezier.empty())
+    if (m_spline->empty())
     {
         return 0.0;
     }
 
-    unsigned distance = m_bezier.getLength();
+    unsigned distance = m_spline->getLength();
     unsigned totalTripTime = distance / m_speed;
     TimeValue timeTakenSoFar = time - m_description.startTime;
     float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
 
-    return float(secondsTakenSoFar) / float(totalTripTime);
+    float progress = float(secondsTakenSoFar) / float(totalTripTime);
+
+    /*       A
+     * speed |   ____________
+     *       |  /            \
+     *       | /.  progress  .\
+     *       |/ .            . \
+     *       +---------------------->
+     *          a            b  time
+     */
+
+    float a = m_speed / m_acceleration;
+    float b = totalTripTime - a;
+
+    // we're in (0, a) part
+    if (secondsTakenSoFar < a)
+    {
+    }
+
+    return progress;
 }
 
 void FlightTrajectory::configureBezier()
 {
-    m_bezier.reset();
+    m_spline->reset();
     
     LOG_DEBUG << "Configuring bezier:";
 
     for (const auto & p : m_description.controlPoints)
     {
         LOG_DEBUG << "  " << p;
-        m_bezier.addControlPoint(p);
+        m_spline->addControlPoint(p);
     }
 }
 

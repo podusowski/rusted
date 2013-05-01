@@ -9,6 +9,7 @@
 #include "Cake/DependencyInjection/Registry.hpp"
 #include "Common/Game/UnitTests/RustedTimeStub.hpp"
 #include "Common/Game/Object/FlightTrajectory.hpp"
+#include "Math/UnitTests/Spline3Mock.hpp"
 
 namespace Server
 {
@@ -16,7 +17,8 @@ namespace Server
 class AbstractTest : public testing::Test
 {
 public:
-    AbstractTest()
+    AbstractTest() :
+        m_spline(new Common::Math::Spline3Mock)
     {
         using namespace Cake::DependencyInjection;
 
@@ -31,6 +33,8 @@ public:
 
         m_shipClassContainer = boost::shared_ptr<Game::IShipClassContainer>(new Game::ShipClassContainerMock());
         forInterface<Server::Game::IShipClassContainer>().use(m_shipClassContainer);
+
+        forInterface<Common::Math::ISpline3>().use(m_spline);
 
         ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(testing::Return(Common::Game::TimeValue()));
     }
@@ -55,10 +59,16 @@ public:
         return dynamic_cast<Server::Game::ShipClassContainerMock&>(*m_shipClassContainer);
     }
 
+    Common::Math::Spline3Mock & getSpline3Mock()
+    {
+        return *dynamic_cast<Common::Math::Spline3Mock*>(m_spline.get());
+    }
+
 private:
     boost::shared_ptr<Common::Game::IRustedTime> m_time;
     boost::shared_ptr<Server::Game::IObjectFactory> m_objectFactory;
     boost::shared_ptr<Server::Game::IShipClassContainer> m_shipClassContainer;
+    boost::shared_ptr<Common::Math::ISpline3> m_spline;
 };
 
 }

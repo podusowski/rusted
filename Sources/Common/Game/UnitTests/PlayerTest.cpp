@@ -1,9 +1,14 @@
 #include <gtest/gtest.h>
 
+#include "Common/UnitTests/AbstractTest.hpp"
 #include "Common/Game/Object/UnitTests/ShipMock.hpp"
 #include "Common/Game/Player.hpp"
 
-TEST(PlayerTest, Id)
+class PlayerTest : public Common::AbstractTest
+{
+};
+
+TEST_F(PlayerTest, Id)
 {
     Common::Game::Player player;
     EXPECT_ANY_THROW(player.getId());
@@ -11,7 +16,7 @@ TEST(PlayerTest, Id)
     EXPECT_EQ(1, player.getId());
 }
 
-TEST(PlayerTest, FocusedObject)
+TEST_F(PlayerTest, FocusedObject)
 {
     Common::Game::Object::ShipMock ship;
     Common::Game::Player player;
@@ -20,3 +25,4 @@ TEST(PlayerTest, FocusedObject)
     player.focusObject(ship);
     EXPECT_EQ(&ship, &player.getFocusedObject());
 }
+

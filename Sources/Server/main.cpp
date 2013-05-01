@@ -3,6 +3,7 @@
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Server/DataBase/DataBase.hpp"
 #include "Common/Game/Object/FlightTrajectory.hpp"
+#include "Common/Math/Bezier3.hpp"
 
 #include "Game/ObjectFactory.hpp"
 #include "Network/ServerController.hpp"
@@ -30,6 +31,9 @@ void initDependencies(int argc, const char * argv[])
 
     forInterface<Common::Game::Object::IFlightTrajectory>()
         .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
+
+    forInterface<Common::Math::ISpline3>()
+        .useFactory<GenericFactory0<Common::Math::ISpline3, Common::Math::Bezier3>>();
 }
 
 int main(int argc, const char * argv[])

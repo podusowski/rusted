@@ -2,7 +2,7 @@
 
 #include "Cake/DependencyInjection/Inject.hpp"
 #include "IFlightTrajectory.hpp"
-#include "Common/Math/Bezier3.hpp"
+#include "Common/Math/ISpline3.hpp"
 
 namespace Common
 {
@@ -29,6 +29,8 @@ public:
     void setSpeed(unsigned);
     unsigned getSpeed();
 
+    void setAcceleration(unsigned);
+
     bool isMoving();
 
     Description getDescription();
@@ -45,7 +47,8 @@ private:
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
     Description m_description;
     unsigned m_speed;
-    Common::Math::Bezier3 m_bezier;
+    unsigned m_acceleration;
+    Cake::DependencyInjection::Inject<Common::Math::ISpline3> m_spline;
 
     Position m_cachedPosition;
     Common::Math::Quaternion m_cachedOrientation;

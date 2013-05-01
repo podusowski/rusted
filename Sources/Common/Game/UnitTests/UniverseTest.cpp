@@ -4,34 +4,17 @@
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
 
-#include "Cake/DependencyInjection/Registry.hpp"
+#include "Common/UnitTests/AbstractTest.hpp"
 
 #include "Game/Object/Ship.hpp"
 #include "Game/Object/Asteroid.hpp"
 #include "Game/Universe.hpp"
 #include "Game/Object/FlightTrajectory.hpp"
 
-#include "Game/UnitTests/RustedTimeStub.hpp"
-
 using namespace testing;
 
-class UniverseTest : public Test
+class UniverseTest : public Common::AbstractTest
 {
-public:
-    void SetUp()
-    {
-        using namespace Cake::DependencyInjection;
-
-        Cake::DependencyInjection::clear();
-        m_time.reset(new RustedTimeStub);
-        Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_time);
-
-        forInterface<Common::Game::Object::IFlightTrajectory>()
-            .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
-    }
-
-private:
-    boost::shared_ptr<Common::Game::IRustedTime> m_time;
 };
 
 TEST_F(UniverseTest, GetByType)
