@@ -8,9 +8,14 @@ using namespace Common::Math;
 void Bezier3::addControlPoint(const PointType & point)
 {
     m_points.push_back(point);
+
+    if (m_points.size() >= 2)
+    {
+        calculateDerivativePoints();
+    }
 }
 
-std::vector<Bezier3::PointType> Bezier3::getControlPoints()
+std::vector<Bezier3::PointType> Bezier3::getControlPoints() const
 {
     return m_points;
 }
@@ -21,29 +26,24 @@ void Bezier3::reset()
     m_derivativePoints.clear();
 }
 
-bool Bezier3::empty()
+bool Bezier3::empty() const
 {
     return m_points.empty();
 }
 
-Bezier3::PointType Bezier3::operator()(float t)
+Bezier3::PointType Bezier3::operator()(float t) const
 {
     return bezierCurve(m_points, t);
 }
 
-Bezier3::PointType Bezier3::derivative(float t)
+Bezier3::PointType Bezier3::derivative(float t) const
 {
     // http://www.cs.mtu.edu/~shene/COURSES/cs3621/NOTES/spline/Bezier/bezier-der.html
-
-    if (m_derivativePoints.empty())
-    {
-        calculateDerivativePoints();
-    }
 
     return bezierCurve(m_derivativePoints, t);
 }
 
-unsigned Bezier3::getLength()
+unsigned Bezier3::getLength() const
 {
     // according to http://www.gamedev.net/topic/313018-calculating-the-length-of-a-bezier-curve/ there
     // is no way to calculate length of the Bezier curve so we need to "measure" it
@@ -61,7 +61,7 @@ unsigned Bezier3::getLength()
     return round(ret);
 }
 
-Bezier3::PointType Bezier3::bezierCurve(const std::vector<PointType> & points, CalcType t)
+Bezier3::PointType Bezier3::bezierCurve(const std::vector<PointType> & points, CalcType t) const
 {
     if (points.empty())
     {
@@ -83,7 +83,7 @@ Bezier3::PointType Bezier3::bezierCurve(const std::vector<PointType> & points, C
     return PointType(p[0], p[1], p[2]);
 }
 
-Bezier3::CalcType Bezier3::bernsteinPolynomial(unsigned i, unsigned n, CalcType t)
+Bezier3::CalcType Bezier3::bernsteinPolynomial(unsigned i, unsigned n, CalcType t) const
 {
     return (CalcType)(boost::math::binomial_coefficient<CalcType>((unsigned int)n, i)*pow(1.0-t, (double)n - i)*pow(t, i));
 }
