@@ -49,36 +49,34 @@ VisualObject::VisualObject(
     input.addEntityMouseMovedCallback(*m_entity, std::bind(&VisualObject::entityMouseMoved, this));
     input.addEntityMouseLeavedCallback(*m_entity, std::bind(&VisualObject::entityMouseLeaved, this));
 
-    try
+    for (int i = 1; i < 10; i++)
     {
-        for (int i = 1; i < 10; i++)
+        std::stringstream engineNameSs;
+        engineNameSs << "engine";
+        engineNameSs << i;
+
+        if (!m_model.has(engineNameSs.str() + ".thrust.x"))
         {
-            std::stringstream engineNameSs;
-            engineNameSs << "engine";
-            engineNameSs << i;
-
-            int x = m_model.getValue<int>(engineNameSs.str() + ".thrust.x");
-            int y = m_model.getValue<int>(engineNameSs.str() + ".thrust.y");
-            int z = m_model.getValue<int>(engineNameSs.str() + ".thrust.z");
-
-            LOG_DEBUG << "Engine" << i << " thrust at: " << x << ", " << y << ", " << z;
-
-            std::stringstream ss;
-            ss << "engine-particle-" << object.getId() << "-" << i;
-            Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "EngineTail");
-
-            auto * psNode = m_node->createChildSceneNode();
-            psNode->setPosition(Ogre::Vector3(x, y, z));
-            psNode->attachObject(ps);
-
-            m_engineThrustParticleSystems.push_back(ps);
+            break;
         }
-    }
-    catch (const std::exception & ex)
-    {
-        LOG_ERR << "Can't create engine thrust effect, reason: " << ex.what();
-    }
 
+        int x = m_model.getValue<int>(engineNameSs.str() + ".thrust.x");
+        int y = m_model.getValue<int>(engineNameSs.str() + ".thrust.y");
+        int z = m_model.getValue<int>(engineNameSs.str() + ".thrust.z");
+
+        LOG_DEBUG << "Engine" << i << " thrust at: " << x << ", " << y << ", " << z;
+
+        std::stringstream ss;
+        ss << "engine-particle-" << object.getId() << "-" << i;
+        Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "EngineTail");
+
+        auto * psNode = m_node->createChildSceneNode();
+        psNode->setPosition(Ogre::Vector3(x, y, z));
+        psNode->attachObject(ps);
+
+        m_engineThrustParticleSystems.push_back(ps);
+    }
+    
     m_naturalMaterial = m_entity->getSubEntity(0)->getMaterialName();
     
     createLabel();
