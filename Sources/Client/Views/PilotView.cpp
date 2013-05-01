@@ -12,7 +12,7 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
                      Client::Gui::Gui & gui,
                      Common::Game::Universe & universe,
                      Common::Game::Player & player,
-                     Visuals::VisualObjectContainer & visualObjectContainer) :
+                     Visuals::VisualUniverse & visualUniverse) :
     m_graphics(graphics),
     m_input(input),
     m_playerActionService(playerActionService),
@@ -20,7 +20,7 @@ PilotView::PilotView(Graphics::IGraphics & graphics,
     m_gui(gui),
     m_universe(universe),
     m_player(player),
-    m_visualObjectContainer(visualObjectContainer),
+    m_visualUniverse(visualUniverse),
     m_camera(graphics, input, player)
 {
 }
@@ -164,7 +164,7 @@ void PilotView::updatePlayerShipsListBox()
     auto ships = m_universe.getByOwnerId<Common::Game::Object::Ship>(m_player.getId());
     for (auto ship: ships)
     {
-        auto visualObject = m_visualObjectContainer.find(*ship);
+        auto visualObject = m_visualUniverse.find(*ship);
         shipListBox->addItem(visualObject->getString(Visuals::VisualObject::StringType_Class), MyGUI::Any(ship->getId()));
     }
 }
@@ -174,7 +174,7 @@ void PilotView::updateFocusedShipWindow()
     using namespace Visuals;
 
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
-    auto obj = m_visualObjectContainer.find(focusedShip);
+    auto obj = m_visualUniverse.find(focusedShip);
     std::string s = obj->getString(
         VisualObject::StringType_Class | 
         VisualObject::StringType_Integrity | 

@@ -21,7 +21,7 @@
 #include "Client/Views/PilotView.hpp"
 #include "Client/Views/ActionsView.hpp"
 
-#include "Client/Visuals/VisualObjectContainer.hpp"
+#include "Client/Visuals/VisualUniverse.hpp"
 
 namespace Client
 {
@@ -55,7 +55,7 @@ private:
     Services::ObjectService m_objectService;
     Services::EffectsService m_effectsService;
 
-    Visuals::VisualObjectContainer m_visualObjectContainer;
+    Visuals::VisualUniverse m_visualUniverse;
 
     Views::ObjectsView m_objectsView;
     Views::PilotView m_pilotView;

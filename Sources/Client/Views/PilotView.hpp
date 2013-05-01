@@ -7,7 +7,7 @@
 #include "Client/Services/PlayerActionService.hpp"
 #include "Client/Services/ObjectService.hpp"
 #include "Camera.hpp"
-#include "Visuals/VisualObjectContainer.hpp"
+#include "Visuals/VisualUniverse.hpp"
 
 namespace Client
 {
@@ -25,7 +25,7 @@ public:
               Gui::Gui &,
               Common::Game::Universe &,
               Common::Game::Player &,
-              Visuals::VisualObjectContainer &);
+              Visuals::VisualUniverse &);
 
     ~PilotView();
 
@@ -58,7 +58,7 @@ private:
     Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;
     Common::Game::Player & m_player;
-    Visuals::VisualObjectContainer & m_visualObjectContainer;
+    Visuals::VisualUniverse & m_visualUniverse;
     Camera m_camera;
     Ogre::SceneNode * m_orientationPlaneSceneNode;
 

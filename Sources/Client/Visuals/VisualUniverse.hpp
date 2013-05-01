@@ -14,10 +14,10 @@ namespace Client
 namespace Visuals 
 {
 
-class VisualObjectContainer
+class VisualUniverse
 {
 public:
-    VisualObjectContainer(Client::Graphics::IGraphics &, Client::Gui::Gui &, Client::Input::IInput &, Client::Services::ObjectService &);
+    VisualUniverse(Client::Graphics::IGraphics &, Client::Gui::Gui &, Client::Input::IInput &, Client::Services::ObjectService &);
     std::shared_ptr<VisualObject> add(Common::Game::Object::ObjectBase &);
     std::shared_ptr<VisualObject> find(Common::Game::Object::ObjectBase &);
     void update();

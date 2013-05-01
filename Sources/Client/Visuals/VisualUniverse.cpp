@@ -1,10 +1,10 @@
 #include <stdexcept>
 
-#include "VisualObjectContainer.hpp"
+#include "VisualUniverse.hpp"
 
 using namespace Client::Visuals;
 
-VisualObjectContainer::VisualObjectContainer(
+VisualUniverse::VisualUniverse(
     Client::Graphics::IGraphics & graphics, 
     Client::Gui::Gui & gui,
     Client::Input::IInput & input,
@@ -17,14 +17,14 @@ VisualObjectContainer::VisualObjectContainer(
 {
 }
 
-std::shared_ptr<VisualObject> VisualObjectContainer::add(Common::Game::Object::ObjectBase & object)
+std::shared_ptr<VisualObject> VisualUniverse::add(Common::Game::Object::ObjectBase & object)
 {
     std::shared_ptr<VisualObject> obj(new VisualObject(m_graphics, m_gui, m_input, object, m_objectService));
     m_objects.insert(std::make_pair(&object, obj));
     return obj;
 }
 
-std::shared_ptr<VisualObject> VisualObjectContainer::find(Common::Game::Object::ObjectBase & object)
+std::shared_ptr<VisualObject> VisualUniverse::find(Common::Game::Object::ObjectBase & object)
 {
     auto it = m_objects.find(&object);
     if (it != m_objects.end())
@@ -35,7 +35,7 @@ std::shared_ptr<VisualObject> VisualObjectContainer::find(Common::Game::Object::
     throw std::out_of_range("");
 }
 
-void VisualObjectContainer::update()
+void VisualUniverse::update()
 {
     for (auto o: m_objects)
     {

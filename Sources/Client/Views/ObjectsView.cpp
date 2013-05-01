@@ -6,6 +6,7 @@
 #include "Common/Game/Object/Asteroid.hpp"
 
 #include "Client/Views/ObjectsView.hpp"
+#include "Visuals/VisualUniverse.hpp"
 
 using namespace Client::Views;
 
@@ -16,7 +17,7 @@ ObjectsView::ObjectsView(Services::ObjectService & objectService,
                          Input::IInput & input,
                          Gui::Gui & gui,
                          Common::Game::Universe & universe,
-                         Visuals::VisualObjectContainer & visualObjectContainer) :
+                         Visuals::VisualUniverse & visualUniverse) :
     m_objectService(objectService),
     m_playerActionService(playerActionService),
     m_graphics(graphics),
@@ -24,7 +25,7 @@ ObjectsView::ObjectsView(Services::ObjectService & objectService,
     m_input(input),
     m_gui(gui),
     m_universe(universe),
-    m_visualObjectContainer(visualObjectContainer)
+    m_visualUniverse(visualUniverse)
 {
 }
 
@@ -53,7 +54,7 @@ void ObjectsView::deactivate()
 
 void ObjectsView::frameStarted()
 {
-    m_visualObjectContainer.update();
+    m_visualUniverse.update();
     updateSelectedObjectWindow();
 }
 
@@ -61,7 +62,7 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
 {
     LOG_DEBUG << "New object:" << object;
 
-    auto obj = m_visualObjectContainer.add(object);
+    auto obj = m_visualUniverse.add(object);
     obj->setRightClickCallback(std::bind(&ObjectsView::objectClicked, this, obj.get()));
 }
 

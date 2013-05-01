@@ -7,10 +7,15 @@
 #include "Effects/Effects.hpp"
 #include "Client/Gui/Gui.hpp"
 #include "Visuals/VisualObject.hpp"
-#include "Visuals/VisualObjectContainer.hpp"
 
 namespace Client
 {
+
+namespace Visuals
+{
+    class VisualUniverse;
+}
+
 namespace Views
 {
 
@@ -24,7 +29,7 @@ public:
                 Input::IInput &,
                 Gui::Gui &,
                 Common::Game::Universe &,
-                Visuals::VisualObjectContainer &);
+                Visuals::VisualUniverse &);
 
     void activate();
     void deactivate();
@@ -44,7 +49,7 @@ private:
     Input::IInput & m_input;
     Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;
-    Visuals::VisualObjectContainer & m_visualObjectContainer;
+    Visuals::VisualUniverse & m_visualUniverse;
     boost::optional<Visuals::VisualObject *> m_selectedObject;
 };
 

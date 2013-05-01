@@ -25,7 +25,7 @@ SOURCES+=Views/Camera.cpp
 SOURCES+=Views/PilotView.cpp
 SOURCES+=Views/ActionsView.cpp
 SOURCES+=Visuals/VisualObject.cpp
-SOURCES+=Visuals/VisualObjectContainer.cpp
+SOURCES+=Visuals/VisualUniverse.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../ 
