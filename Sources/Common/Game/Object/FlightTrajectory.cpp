@@ -227,7 +227,7 @@ float FlightTrajectory::calculateProgress(TimeValue time)
     TimeValue timeTakenSoFar = time - m_description.startTime;
     float t = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
     float a = float(m_speed) / float(m_acceleration);
-    float b = float(Tmax) - a;
+    float b = Tmax - a;
     float S = 0;
 
     if (t < a) // (0, a)

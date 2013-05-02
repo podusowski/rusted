@@ -26,11 +26,11 @@ public:
 
 TEST_F(FlightTrajectoryTest, FullMovement)
 {
-    /*
-     * T = Smax/Vmax * Vmax/a
-     * S = (T - Vmax/a) * Vmax (full movement)
-     * S = at2 / 2 (first triangle movement)
-     */
+    EXPECT_CALL(getSpline3Mock(), getLength()).Times(AtLeast(1)).WillRepeatedly(Return(100));
+    EXPECT_CALL(getSpline3Mock(), empty()).Times(AtLeast(1)).WillRepeatedly(Return(false));
+    EXPECT_CALL(getSpline3Mock(), reset()).Times(AtLeast(1));
+    EXPECT_CALL(getSpline3Mock(), addControlPoint(_)).Times(AtLeast(1));
+    EXPECT_CALL(getSpline3Mock(), derivative(_)).Times(AtLeast(1)).WillRepeatedly(Return(Position(0, 0, 1)));
 
     FlightTrajectory trajectory;
 
@@ -44,13 +44,43 @@ TEST_F(FlightTrajectoryTest, FullMovement)
 
     {
         InSequence s;
-        EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 100)));
-        // assume Smax = 1 because splice function operates on (0,1)
-        // 
-        EXPECT_CALL(getSpline3Mock(), operatorCall(0)).Times(1);
-    }
 
-    trajectory.getPosition();
+        // distance = 100
+        // acceleration = a = 10
+        // speed = 10
+
+
+        // acceleration phase
+        // S = at2/2
+        // x = S/distance (100)
+        {
+            // t = 0.1
+            // S = 10 * 0.1^2 / 2 = 0.05
+            // x = 0.05 / 100
+            EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 100)));
+            EXPECT_CALL(getSpline3Mock(), operatorCall(0.0005)).Times(1);
+            trajectory.getPosition();
+
+            // t = 0.5
+            // S = 10 * 0.5^2 / 2 = 1.25
+            // x = 1.25 / 100
+            EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 500)));
+            EXPECT_CALL(getSpline3Mock(), operatorCall(0.0125)).Times(1);
+            trajectory.getPosition();
+        }
+
+        // steady phase
+        // S = a * t1^2 / 2 + speed * (t - t1)
+        // t1 = speed / acceleration = 10 / 10 = 1
+        {
+            // t = 1.1
+            // S = 10 * 1 / 2 + 10 * (1.1 - 1) = 5 + 10 * 0.1 = 6
+            // x = 6 / 100 = 0.06
+            EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(1, 100)));
+            EXPECT_CALL(getSpline3Mock(), operatorCall(0.06)).Times(1);
+            trajectory.getPosition();
+        }
+    }
 }
 
 TEST_F(FlightTrajectoryTest, Stop)
