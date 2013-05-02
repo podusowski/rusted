@@ -16,12 +16,6 @@ public:
         ON_CALL(getSpline3Mock(), operatorCall(_)).WillByDefault(Return(Common::Math::ISpline3::PointType()));
         ON_CALL(getSpline3Mock(), derivative(_)).WillByDefault(Return(Common::Math::ISpline3::PointType()));
     }
-
-    int radianToDegree(float radians)
-    {
-        const float C_180_DIV_PI = 57.2958;
-        return round(radians * C_180_DIV_PI);
-    }
 };
 
 TEST_F(FlightTrajectoryTest, FullMovement)
