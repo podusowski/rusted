@@ -6,7 +6,7 @@ using namespace Common::Game;
 
 FlightTrajectory::FlightTrajectory() : 
     m_speed(1),
-    m_acceleration(1),
+    m_acceleration(100),
     m_cachedOrientation(Common::Math::Quaternion(0, std::make_tuple(0, 0, 1)))
 {
 }
@@ -213,31 +213,49 @@ float FlightTrajectory::calculateProgress(TimeValue time)
         return 0.0;
     }
 
-    unsigned distance = m_spline->getLength();
-    unsigned totalTripTime = distance / m_speed;
-    TimeValue timeTakenSoFar = time - m_description.startTime;
-    float secondsTakenSoFar = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
-
-    float progress = float(secondsTakenSoFar) / float(totalTripTime);
-
     /*       A
      * speed |   ____________
      *       |  /            \
-     *       | /.  progress  .\
+     *       | /.     S      .\
      *       |/ .            . \
      *       +---------------------->
-     *          a            b  time
+     *          a            b  Tmax
      */
 
-    float a = m_speed / m_acceleration;
-    float b = totalTripTime - a;
+    unsigned distance = m_spline->getLength();
+    float Tmax = (float(distance) / float(m_speed)) + (float(m_speed) / float(m_acceleration));
+    TimeValue timeTakenSoFar = time - m_description.startTime;
+    float t = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
+    float a = float(m_speed) / float(m_acceleration);
+    float b = float(Tmax) - a;
+    float S = 0;
 
-    // we're in (0, a) part
-    if (secondsTakenSoFar < a)
+    if (t < a) // (0, a)
     {
+        S = float(m_acceleration) * std::pow(t, 2) / 2.0;
     }
+    else if (t >= a && t < b) // (a, b)
+    {
+        S = (a * float(m_speed) / 2.0)
+                    + ((t - a) * float(m_speed));
+    }
+    else if (t <= Tmax)
+    {
+        float firstTriangle = a * float(m_speed) / 2.0;
+        float secondTriangle = firstTriangle;
+        secondTriangle -= float(m_acceleration) * std::pow(Tmax - t, 2) / 2.0;
 
-    return progress;
+        S = firstTriangle
+                    + ((b - a) * float(m_speed))
+                    + secondTriangle;
+    }
+    else
+    {
+        // make it higher than 1.0
+        return 1.1;
+    }
+    
+    return S / distance;
 }
 
 void FlightTrajectory::configureBezier()

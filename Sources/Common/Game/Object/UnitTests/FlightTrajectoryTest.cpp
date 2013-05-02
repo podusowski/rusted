@@ -24,23 +24,33 @@ public:
     }
 };
 
-TEST_F(FlightTrajectoryTest, Movement)
+TEST_F(FlightTrajectoryTest, FullMovement)
 {
+    /*
+     * T = Smax/Vmax * Vmax/a
+     * S = (T - Vmax/a) * Vmax (full movement)
+     * S = at2 / 2 (first triangle movement)
+     */
+
     FlightTrajectory trajectory;
 
-#if 0
     trajectory.setPosition(Position(0, 0, 0));
-    trajectory.setSpeed(10000);
-    trajectory.setAcceleration(100000);
+    trajectory.setSpeed(10);
+    trajectory.setAcceleration(10);
 
     EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 0)));
-    trajectory.fly(Position(0, 0, 10000));
+    trajectory.fly(Position(0, 0, 100));
     Mock::VerifyAndClear(&getTimeMock());
 
-    EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 500)));
-    ASSERT_GT(5000, trajectory.getPosition().getZ());
-    Mock::VerifyAndClear(&getTimeMock());
-#endif
+    {
+        InSequence s;
+        EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 100)));
+        // assume Smax = 1 because splice function operates on (0,1)
+        // 
+        EXPECT_CALL(getSpline3Mock(), operatorCall(0)).Times(1);
+    }
+
+    trajectory.getPosition();
 }
 
 TEST_F(FlightTrajectoryTest, Stop)
