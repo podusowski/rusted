@@ -4,7 +4,6 @@ TYPE:=application
 SOURCES=UnitTests/mainUT.cpp \
         RustedCodec/UnitTests/SimpleBufferTest.cpp \
 		Messages/UnitTests/MessagesTest.cpp \
-		RustedCodec/UnitTests/AsioBufferTest.cpp \
 
 CFLAGS+=-Wall -pedantic -g
 CFLAGS+=-I$(TARGET_BASE)
