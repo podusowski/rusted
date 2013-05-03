@@ -47,13 +47,16 @@ TEST_F(FlightTrajectoryTest, FullMovement)
         // acceleration phase
         // S = at2/2
         // x = S/distance (100)
+        // V = at
         {
             // t = 0.1
             // S = 10 * 0.1^2 / 2 = 0.05
+            // V = 10 * 0.1 = 1
             // x = 0.05 / 100
             EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 100)));
             EXPECT_CALL(getSpline3Mock(), operatorCall(0.0005)).Times(1);
             trajectory.getPosition();
+            //EXPECT_EQ(1, trajectory.getCurrentSpeed());
 
             // t = 0.5
             // S = 10 * 0.5^2 / 2 = 1.25

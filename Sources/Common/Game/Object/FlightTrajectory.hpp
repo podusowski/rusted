@@ -29,6 +29,8 @@ public:
     void setSpeed(unsigned);
     unsigned getSpeed();
 
+    unsigned getCurrentSpeed();
+
     void setAcceleration(unsigned);
 
     bool isMoving();

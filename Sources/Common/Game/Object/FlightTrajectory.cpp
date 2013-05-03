@@ -103,6 +103,11 @@ unsigned FlightTrajectory::getSpeed()
     return m_speed;
 }
 
+unsigned FlightTrajectory::getCurrentSpeed()
+{
+    return 0;
+}
+
 void FlightTrajectory::setAcceleration(unsigned acceleration)
 {
     m_acceleration = acceleration;
