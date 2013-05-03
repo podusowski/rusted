@@ -6,6 +6,7 @@
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/FlightTrajectory.hpp"
 #include "Common/Game/RustedTime.hpp"
+#include "Common/Math/Bezier3.hpp"
 
 #include "Client/Graphics/Graphics.hpp"
 #include "Gui/Gui.hpp"
@@ -62,6 +63,9 @@ int main(int argc, const char ** argv)
 
     forInterface<Common::Game::Object::IFlightTrajectory>()
         .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
+
+    forInterface<Common::Math::ISpline3>()
+        .useFactory<GenericFactory0<Common::Math::ISpline3, Common::Math::Bezier3>>();
 
     Graphics::Graphics graphics;
     //graphics.getSceneManager().setSkyBox(true, "SkyBox1", 8000);
