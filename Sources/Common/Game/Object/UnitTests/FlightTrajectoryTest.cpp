@@ -74,6 +74,12 @@ TEST_F(FlightTrajectoryTest, FullMovement)
             EXPECT_CALL(getSpline3Mock(), operatorCall(0.06)).Times(1);
             trajectory.getPosition();
         }
+
+        // deceleration phase
+        // first triangle: T1 = a * t1^2 / 2
+        // rectangle: R = speed * (t2 - t1)
+        // second triangle part: a * (Tmax - t)^2 / 2
+        // TODO
     }
 }
 
