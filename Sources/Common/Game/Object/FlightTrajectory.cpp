@@ -183,11 +183,11 @@ Position FlightTrajectory::calculatePosition(float progress)
     }
     else if (progress >= 1.0)
     {
-        return (*m_spline)(1.0);
+        return m_spline->value(1.0);
     }
     else
     {
-        return (*m_spline)(progress);
+        return m_spline->value(progress);
     }
 }
 

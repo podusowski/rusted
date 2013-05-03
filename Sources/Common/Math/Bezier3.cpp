@@ -31,7 +31,7 @@ bool Bezier3::empty() const
     return m_points.empty();
 }
 
-Bezier3::PointType Bezier3::operator()(float t) const
+Bezier3::PointType Bezier3::value(float t) const
 {
     return bezierCurve(m_points, t);
 }
@@ -53,8 +53,8 @@ unsigned Bezier3::getLength() const
 
     for (float i = step; i < 1.0f + step; i += step)
     {
-        PointType p1 = (*this)(i - step);
-        PointType p2 = (*this)(i);
+        PointType p1 = value(i - step);
+        PointType p2 = value(i);
         ret += PointType::distance(p1, p2);
     }
 

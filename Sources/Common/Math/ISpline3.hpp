@@ -20,7 +20,7 @@ public:
     virtual std::vector<PointType> getControlPoints() const = 0;
     virtual void reset() = 0;
     virtual bool empty() const = 0;
-    virtual PointType operator()(float t) const = 0;
+    virtual PointType value(float t) const = 0;
     virtual PointType derivative(float t) const = 0;
     virtual unsigned getLength() const = 0;
 };

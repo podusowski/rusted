@@ -13,7 +13,7 @@ class FlightTrajectoryTest : public Common::AbstractTest
 public:
     FlightTrajectoryTest()
     {
-        ON_CALL(getSpline3Mock(), operatorCall(_)).WillByDefault(Return(Common::Math::ISpline3::PointType()));
+        ON_CALL(getSpline3Mock(), value(_)).WillByDefault(Return(Common::Math::ISpline3::PointType()));
         ON_CALL(getSpline3Mock(), derivative(_)).WillByDefault(Return(Common::Math::ISpline3::PointType()));
     }
 };
@@ -54,7 +54,7 @@ TEST_F(FlightTrajectoryTest, FullMovement)
             // V = 10 * 0.1 = 1
             // x = 0.05 / 100
             EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 100)));
-            EXPECT_CALL(getSpline3Mock(), operatorCall(0.0005)).Times(1);
+            EXPECT_CALL(getSpline3Mock(), value(0.0005)).Times(1);
             trajectory.getPosition();
             //EXPECT_EQ(1, trajectory.getCurrentSpeed());
 
@@ -62,7 +62,7 @@ TEST_F(FlightTrajectoryTest, FullMovement)
             // S = 10 * 0.5^2 / 2 = 1.25
             // x = 1.25 / 100
             EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(0, 500)));
-            EXPECT_CALL(getSpline3Mock(), operatorCall(0.0125)).Times(1);
+            EXPECT_CALL(getSpline3Mock(), value(0.0125)).Times(1);
             trajectory.getPosition();
         }
 
@@ -74,7 +74,7 @@ TEST_F(FlightTrajectoryTest, FullMovement)
             // S = 10 * 1 / 2 + 10 * (1.1 - 1) = 5 + 10 * 0.1 = 6
             // x = 6 / 100 = 0.06
             EXPECT_CALL(getTimeMock(), getCurrentTime()).Times(1).WillOnce(Return(TimeValue(1, 100)));
-            EXPECT_CALL(getSpline3Mock(), operatorCall(0.06)).Times(1);
+            EXPECT_CALL(getSpline3Mock(), value(0.06)).Times(1);
             trajectory.getPosition();
         }
 

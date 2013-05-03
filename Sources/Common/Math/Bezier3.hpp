@@ -19,7 +19,7 @@ public:
     std::vector<PointType> getControlPoints() const;
     void reset();
     bool empty() const;
-    PointType operator()(float t) const;
+    PointType value(float t) const;
     PointType derivative(float t) const;
     unsigned getLength() const;
 
