@@ -15,6 +15,7 @@ SOURCES+=Math/UnitTests/Bezier3Test.cpp
 SOURCES+=Math/UnitTests/Matrix3Test.cpp
 SOURCES+=Math/UnitTests/DegreeTest.cpp
 SOURCES+=RustedCodec/UnitTests/SimpleBufferTest.cpp
+SOURCES+=Messages/UnitTests/MessagesTest.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../
@@ -26,3 +27,10 @@ LDFLAGS=-L. -L$(BUILD) -lCommon -lCake -lpthread -lboost_system -lxml2 -lgtest -
 
 DEPENDENCIES+=libCommon.a
 DEPENDENCIES+=libCake.a
+
+$(TARGET): $(TARGET_BASE)/Messages/UnitTests/MessagesTest.cpp
+
+$(TARGET_BASE)/Messages/UnitTests/MessagesTest.cpp: $(TARGET_BASE)/Messages/Messages.xml $(TARGET_BASE)/genMessages.py $(TARGET_BASE)/genMessagesUT.py
+	@mkdir -p $(TARGET_BASE)/Messages/UnitTests
+	cd $(TARGET_BASE) && ./genMessagesUT.py
+
