@@ -1,30 +1,11 @@
-#include <cppunit/TestFixture.h>
-#include <cppunit/extensions/HelperMacros.h>
+#include <gtest/gtest.h>
 
 #include <vector>
 
-#include <boost/assign.hpp>
+#include "RustedCodec/SimpleWriteBuffer.hpp"
+#include "RustedCodec/SimpleReadBuffer.hpp"
 
-#include <RustedCodec/SimpleWriteBuffer.hpp>
-#include <RustedCodec/SimpleReadBuffer.hpp>
-
-class SimpleBufferTest : public CPPUNIT_NS::TestFixture
-{
-	CPPUNIT_TEST_SUITE (SimpleBufferTest);
-	CPPUNIT_TEST (testSimpleWrite);
-	CPPUNIT_TEST (testSimpleRead);
-	CPPUNIT_TEST_SUITE_END ();
-
-public:
-
-protected:
-	void testSimpleWrite();
-	void testSimpleRead();
-};
-
-CPPUNIT_TEST_SUITE_REGISTRATION (SimpleBufferTest);
-
-void SimpleBufferTest::testSimpleWrite()
+TEST(SimpleBufferTest, SimpleWrite)
 {
 	using ::Common::RustedCodec::SimpleWriteBuffer;
 
@@ -35,22 +16,20 @@ void SimpleBufferTest::testSimpleWrite()
 
 	buffer.write(someData, 4);
 
-	CPPUNIT_ASSERT(::memcmp(someData, &(*rawBuffer.begin()), 4) == 0);
+	EXPECT_TRUE(::memcmp(someData, &(*rawBuffer.begin()), 4) == 0);
 }
 
-void SimpleBufferTest::testSimpleRead()
+TEST(SimpleBufferTest, SimpleRead)
 {
-	using namespace ::boost::assign;
 	using ::Common::RustedCodec::SimpleReadBuffer;
 
 	char * someData = new char[4];
-
-	std::vector<char> rawBuffer;
-	rawBuffer += 1, 2, 3, 4;
+	std::vector<char> rawBuffer{1, 2, 3, 4};
 
 	SimpleReadBuffer buffer(rawBuffer);
 
 	buffer.read(someData, 4);
 
-	CPPUNIT_ASSERT(::memcmp(someData, &(*rawBuffer.begin()), 4) == 0);
+	EXPECT_TRUE(::memcmp(someData, &(*rawBuffer.begin()), 4) == 0);
 }
+

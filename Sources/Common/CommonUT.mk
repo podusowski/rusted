@@ -2,7 +2,6 @@ TARGET:=CommonUT
 TYPE:=application
 		
 SOURCES=UnitTests/mainUT.cpp \
-        RustedCodec/UnitTests/SimpleBufferTest.cpp \
 		Messages/UnitTests/MessagesTest.cpp \
 
 CFLAGS+=-Wall -pedantic -g
