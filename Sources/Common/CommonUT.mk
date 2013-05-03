@@ -5,7 +5,6 @@ SOURCES=UnitTests/mainUT.cpp \
         RustedCodec/UnitTests/SimpleBufferTest.cpp \
 		Messages/UnitTests/MessagesTest.cpp \
 		RustedCodec/UnitTests/AsioBufferTest.cpp \
-		Game/Utilities/UnitTests/PasswordHashTest.cpp \
 
 CFLAGS+=-Wall -pedantic -g
 CFLAGS+=-I$(TARGET_BASE)
