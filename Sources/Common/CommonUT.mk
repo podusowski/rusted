@@ -1,7 +1,7 @@
-TARGET:=CommonGoogleTestUT
+TARGET:=CommonUT
 TYPE:=application
-		
-SOURCES+=UnitTests/mainGoogleTestUT.cpp
+
+SOURCES+=UnitTests/mainUT.cpp
 SOURCES+=Game/UnitTests/UniverseTest.cpp
 SOURCES+=Game/UnitTests/PlayerTest.cpp
 SOURCES+=Game/Object/UnitTests/ShipTest.cpp

@@ -1,7 +1,7 @@
 TARGET:=ServerUT
 TYPE:=application
 
-SOURCES+=../Common/UnitTests/mainGoogleTestUT.cpp
+SOURCES+=../Common/UnitTests/mainUT.cpp
 SOURCES+=Game/UnitTests/PlayerContainerTest.cpp
 SOURCES+=Game/Actions/UnitTests/AttackTest.cpp
 SOURCES+=Game/Actions/UnitTests/BuildShipTest.cpp

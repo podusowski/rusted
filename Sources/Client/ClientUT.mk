@@ -1,8 +1,7 @@
 TARGET:=ClientUT
 TYPE:=application
 
-SOURCES+=../Common/UnitTests/mainGoogleTestUT.cpp
-
+SOURCES+=../Common/UnitTests/mainUT.cpp
 
 CFLAGS:=-Wall -pedantic -g
 CFLAGS+=-I$(TARGET_BASE)
