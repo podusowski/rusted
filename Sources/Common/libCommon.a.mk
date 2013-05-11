@@ -23,6 +23,7 @@ SOURCES+=Game/Object/CargoHold.cpp
 SOURCES+=Math/Quaternion.cpp
 SOURCES+=Math/Bezier3.cpp
 SOURCES+=Math/Matrix3.cpp
+SOURCES+=Math/KinematicParticle.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/.. 

@@ -14,6 +14,7 @@ SOURCES+=Math/UnitTests/Point3Test.cpp
 SOURCES+=Math/UnitTests/Bezier3Test.cpp
 SOURCES+=Math/UnitTests/Matrix3Test.cpp
 SOURCES+=Math/UnitTests/DegreeTest.cpp
+SOURCES+=Math/UnitTests/KinematicParticleTest.cpp
 SOURCES+=RustedCodec/UnitTests/SimpleBufferTest.cpp
 SOURCES+=Messages/UnitTests/MessagesTest.cpp
 
