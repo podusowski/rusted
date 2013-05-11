@@ -1,5 +1,6 @@
 #include "Cake/Diagnostics/Logger.hpp"
 #include "FlightTrajectory.hpp"
+#include "Common/Math/KinematicParticle.hpp"
 
 using namespace Common::Game::Object;
 using namespace Common::Game;
@@ -218,49 +219,18 @@ float FlightTrajectory::calculateProgress(TimeValue time)
         return 0.0;
     }
 
-    /*       A
-     * speed |   ____________
-     *       |  /            \
-     *       | /.     S      .\
-     *       |/ .            . \
-     *       +---------------------->
-     *          a            b  Tmax
-     */
-
     unsigned distance = m_spline->getLength();
-    float Tmax = (float(distance) / float(m_speed)) + (float(m_speed) / float(m_acceleration));
     TimeValue timeTakenSoFar = time - m_description.startTime;
-    float t = timeTakenSoFar.getSeconds() + (timeTakenSoFar.getMiliseconds() / 1000.0);
-    float a = float(m_speed) / float(m_acceleration);
-    float b = Tmax - a;
-    float S = 0;
+    Common::Math::KinematicParticle kinematicParticle(m_speed, m_acceleration, distance);
 
-    if (t < a) // (0, a)
+    if (kinematicParticle.isInRange(timeTakenSoFar))
     {
-        S = float(m_acceleration) * std::pow(t, 2) / 2.0;
-    }
-    else if (t >= a && t < b) // (a, b)
-    {
-        S = (a * float(m_speed) / 2.0)
-                    + ((t - a) * float(m_speed));
-    }
-    else if (t <= Tmax)
-    {
-        float firstTriangle = a * float(m_speed) / 2.0;
-        float secondTriangle = firstTriangle;
-        secondTriangle -= float(m_acceleration) * std::pow(Tmax - t, 2) / 2.0;
-
-        S = firstTriangle
-                    + ((b - a) * float(m_speed))
-                    + secondTriangle;
+        return kinematicParticle.calculateDistance(timeTakenSoFar) / distance;
     }
     else
     {
-        // make it higher than 1.0
-        return 1.1;
+        return 1.1; // invalid value
     }
-    
-    return S / distance;
 }
 
 void FlightTrajectory::configureBezier()
