@@ -1,4 +1,5 @@
 #include <cmath>
+#include <stdexcept>
 
 #include "KinematicParticle.hpp"
 
@@ -13,15 +14,7 @@ KinematicParticle::KinematicParticle(float maxSpeed, float acceleration, float t
 
 float KinematicParticle::calculateDistance(Common::Game::TimeValue deltaTime)
 {
-    /*        speed
-     *          A
-     * maxSpeed |   ____________
-     *          |  /            \
-     *          | /.     S      .\
-     *          |/ .            . \
-     *          +----------------------> time
-     *             t1           t2 Tmax
-     */
+    // see unit tests for more description on the algorithm
 
     // TODO: precalculate some of those
     float t = deltaTime.getSeconds() + (deltaTime.getMiliseconds() / 1000.0);
@@ -39,6 +32,16 @@ float KinematicParticle::calculateDistance(Common::Game::TimeValue deltaTime)
     {
         S = t1 * m_maxSpeed / 2.0;
         S += (t - t1) * m_maxSpeed;
+    }
+    else if (t > t2 && t <= Tmax)
+    {
+        S = m_maxSpeed * t1;
+        S += m_maxSpeed * (t2 - t1);
+        S -= m_acceleration * std::pow(Tmax - t, 2) / 2.0;
+    }
+    else
+    {
+        throw std::out_of_range("deltaTime passes Tmax");
     }
 
     return S;

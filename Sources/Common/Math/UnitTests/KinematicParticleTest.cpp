@@ -5,6 +5,19 @@
 using namespace Common::Math;
 using Common::Game::TimeValue;
 
+/*
+
+         speed
+           A
+  maxSpeed |   ____________
+           |  /            \
+           | /.     S      .\
+           |/ .            . \
+           +----------------------> time
+              t1           t2 Tmax
+
+*/
+
 TEST(KinematicParticleTest, FullMovement)
 {
     float maxSpeed = 10.0;
@@ -14,6 +27,7 @@ TEST(KinematicParticleTest, FullMovement)
     KinematicParticle particle(maxSpeed, acceleration, targetDistance);
 
     // acceleration phase
+    //
     // S = at2/2
     // V = at
     {
@@ -22,8 +36,10 @@ TEST(KinematicParticleTest, FullMovement)
     }
 
     // steady phase
+    //
     // t1 - time when particle stops accelerating and has maximum speed
-    // t1 = maxSpeed / acceleration = 10 / 10 = 1
+    // t1 = maxSpeed / acceleration
+    // t1 = 1
     // S = (maxSpeed * t1) / 2 + // triangle
     //     maxSpeed * (t - t1)   // rect
     {
@@ -31,6 +47,30 @@ TEST(KinematicParticleTest, FullMovement)
         // S = 10 * 1 / 2 +
         //     10 * (1.1 - 1) = 5 + 1 = 6
         EXPECT_FLOAT_EQ(6, particle.calculateDistance(TimeValue(1, 100)));
+    }
+
+    // deceleration phase
+    //
+    // Tmax - total time which targetDistance should be traveled in
+    // Tmax = (targetDistance / maxSpeed) + (maxSpeed / acceleration)
+    // Tmax = 11
+    // t2 - time when particle starts to decelerate in order to met targetDistance
+    // t2 = Tmax - t1
+    // t2 = 10
+    //
+    // S = (maxSpeed * t1) +     // 2 triangles
+    //     maxSpeed * (t2 - t1)  // rect
+    //     - acceleration * (Tmax - t) ^ 2 / 2 // minus small right triangle
+    {
+        // t = 10.1
+        // S = 10 * 1 +
+        //     10 * 9 -
+        //     10 * (0.9^2) / 2
+        //   = 100 - (10 * 0.81) / 2
+        //   = 100 - 8.1 / 2
+        //   = 100 - 4.05
+        //   = 95.95
+        EXPECT_FLOAT_EQ(95.95, particle.calculateDistance(TimeValue(10, 100)));
     }
 }
 
