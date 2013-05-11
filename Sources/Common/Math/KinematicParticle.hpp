@@ -18,12 +18,18 @@ class KinematicParticle
 {
 public:
     KinematicParticle(float maxSpeed, float acceleration, float targetDistance);
-    float calculateDistance(Common::Game::TimeValue deltaTime);
+    float calculateDistance(Common::Game::TimeValue deltaTime) const;
+    bool isInRange(Common::Game::TimeValue deltaTime) const;
 
 private:
     float m_maxSpeed;
     float m_acceleration;
     float m_targetDistance;
+
+    // precalculated stuff
+    float m_Tmax;
+    float m_t1;
+    float m_t2;
 };
 
 }

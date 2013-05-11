@@ -74,3 +74,23 @@ TEST(KinematicParticleTest, FullMovement)
     }
 }
 
+TEST(KinematicParticle, IsInRange)
+{
+    float maxSpeed = 10;
+    float acceleration = 10;
+    float targetDistance = 100;
+
+    KinematicParticle particle(maxSpeed, acceleration, targetDistance);
+
+    // see above for formula
+    // Tmax = 11
+
+    EXPECT_TRUE(particle.isInRange(TimeValue(0, 0)));
+    EXPECT_TRUE(particle.isInRange(TimeValue(1, 0)));
+    EXPECT_TRUE(particle.isInRange(TimeValue(5, 0)));
+    EXPECT_TRUE(particle.isInRange(TimeValue(10, 0)));
+    EXPECT_TRUE(particle.isInRange(TimeValue(11, 0)));
+    EXPECT_FALSE(particle.isInRange(TimeValue(11, 1)));
+    EXPECT_ANY_THROW(particle.calculateDistance(TimeValue(11, 1)));
+}
+
