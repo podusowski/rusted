@@ -30,6 +30,7 @@ public:
     virtual void setCourse(Position course);
     virtual void setSpeed(unsigned speed);
     unsigned getSpeed();
+    unsigned getCurrentSpeed();
     void setIntegrity(unsigned); //override;
     Common::Math::Quaternion getOrientation();
     bool isWrecked();

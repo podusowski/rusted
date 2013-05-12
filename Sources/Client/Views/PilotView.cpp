@@ -61,7 +61,8 @@ void PilotView::updateShipPosition()
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
 
     std::stringstream ss;
-    ss << "Position: " << focusedShip.getPosition();
+    ss << "Position: " << focusedShip.getPosition()
+       << "\nSpeed: " << focusedShip.getCurrentSpeed();
 
     auto description = focusedShip.getTrajectoryDescription();
 

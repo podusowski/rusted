@@ -106,7 +106,23 @@ unsigned FlightTrajectory::getSpeed()
 
 unsigned FlightTrajectory::getCurrentSpeed()
 {
-    return 0;
+    if (m_spline->empty())
+    {
+        return 0;
+    }
+
+    unsigned distance = m_spline->getLength();
+    TimeValue timeTakenSoFar = m_time->getCurrentTime() - m_description.startTime;
+    Common::Math::KinematicParticle kinematicParticle(m_speed, m_acceleration, distance);
+
+    if (kinematicParticle.isInRange(timeTakenSoFar))
+    {
+        return kinematicParticle.calculateSpeed(timeTakenSoFar);
+    }
+    else
+    {
+        return 0;
+    }
 }
 
 void FlightTrajectory::setAcceleration(unsigned acceleration)

@@ -54,6 +54,11 @@ unsigned Ship::getSpeed()
     return m_trajectory->getSpeed();
 }
 
+unsigned Ship::getCurrentSpeed()
+{
+    return m_trajectory->getCurrentSpeed();
+}
+
 void Ship::setIntegrity(unsigned integrity)
 {
     ObjectBase::setIntegrity(integrity);

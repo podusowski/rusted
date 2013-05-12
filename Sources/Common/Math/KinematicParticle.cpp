@@ -48,6 +48,11 @@ float KinematicParticle::calculateDistance(Common::Game::TimeValue deltaTime) co
     return S;
 }
 
+float KinematicParticle::calculateSpeed(Common::Game::TimeValue deltaTime) const
+{
+    return 0;
+}
+
 bool KinematicParticle::isInRange(Common::Game::TimeValue deltaTime) const
 {
     float t = deltaTime.getSeconds() + (deltaTime.getMiliseconds() / 1000.0);
