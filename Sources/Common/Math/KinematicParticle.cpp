@@ -68,8 +68,6 @@ float KinematicParticle::calculateSpeed(Common::Game::TimeValue deltaTime) const
     {
         throw std::out_of_range("deltaTime passes Tmax");
     }
-
-    return 0;
 }
 
 bool KinematicParticle::isInRange(Common::Game::TimeValue deltaTime) const
