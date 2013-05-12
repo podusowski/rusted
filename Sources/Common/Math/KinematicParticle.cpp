@@ -21,7 +21,7 @@ float KinematicParticle::calculateDistance(Common::Game::TimeValue deltaTime) co
 {
     // see unit tests for more description on the algorithm
 
-    float t = deltaTime.getSeconds() + (deltaTime.getMiliseconds() / 1000.0);
+    float t = getTimeInSeconds(deltaTime);
 
     float S = 0;
 
@@ -50,12 +50,36 @@ float KinematicParticle::calculateDistance(Common::Game::TimeValue deltaTime) co
 
 float KinematicParticle::calculateSpeed(Common::Game::TimeValue deltaTime) const
 {
+    float t = getTimeInSeconds(deltaTime);
+
+    if (t < m_t1)
+    {
+        return t * m_acceleration;
+    }
+    else if (t >= m_t1 && t < m_t2)
+    {
+        return m_maxSpeed;
+    }
+    else if (t > m_t2 && t <= m_Tmax)
+    {
+        return (m_Tmax - t) * m_acceleration;
+    }
+    else
+    {
+        throw std::out_of_range("deltaTime passes Tmax");
+    }
+
     return 0;
 }
 
 bool KinematicParticle::isInRange(Common::Game::TimeValue deltaTime) const
 {
-    float t = deltaTime.getSeconds() + (deltaTime.getMiliseconds() / 1000.0);
+    float t = getTimeInSeconds(deltaTime);
     return t <= m_Tmax;
+}
+
+float KinematicParticle::getTimeInSeconds(Common::Game::TimeValue time) const
+{
+    return time.getSeconds() + (time.getMiliseconds() / 1000.0);
 }
 

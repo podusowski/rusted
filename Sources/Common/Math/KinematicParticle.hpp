@@ -23,6 +23,8 @@ public:
     bool isInRange(Common::Game::TimeValue deltaTime) const;
 
 private:
+    float getTimeInSeconds(Common::Game::TimeValue time) const;
+
     float m_maxSpeed;
     float m_acceleration;
     float m_targetDistance;

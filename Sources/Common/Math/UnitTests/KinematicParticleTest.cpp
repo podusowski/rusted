@@ -8,12 +8,13 @@ using Common::Game::TimeValue;
 /*
 
          speed
-           A
-  maxSpeed |   ____________
+           ^
+           |
+  maxSpeed |   ------------
            |  /            \
            | /.     S      .\
            |/ .            . \
-           +----------------------> time
+           '----------------------> time
               t1           t2 Tmax
 
 */
@@ -32,7 +33,10 @@ TEST(KinematicParticleTest, FullMovement)
     // V = at
     {
         EXPECT_FLOAT_EQ(0.05, particle.calculateDistance(TimeValue(0, 100)));
+        EXPECT_FLOAT_EQ(1, particle.calculateSpeed(TimeValue(0, 100)));
+
         EXPECT_FLOAT_EQ(1.25, particle.calculateDistance(TimeValue(0, 500)));
+        EXPECT_FLOAT_EQ(5, particle.calculateSpeed(TimeValue(0, 500)));
     }
 
     // steady phase
@@ -42,11 +46,13 @@ TEST(KinematicParticleTest, FullMovement)
     // t1 = 1
     // S = (maxSpeed * t1) / 2 + // triangle
     //     maxSpeed * (t - t1)   // rect
+    // V = maxSpeed
     {
         // t = 1.1
         // S = 10 * 1 / 2 +
         //     10 * (1.1 - 1) = 5 + 1 = 6
         EXPECT_FLOAT_EQ(6, particle.calculateDistance(TimeValue(1, 100)));
+        EXPECT_FLOAT_EQ(10, particle.calculateSpeed(TimeValue(1, 100)));
     }
 
     // deceleration phase
@@ -61,6 +67,7 @@ TEST(KinematicParticleTest, FullMovement)
     // S = (maxSpeed * t1) +     // 2 triangles
     //     maxSpeed * (t2 - t1)  // rect
     //     - acceleration * (Tmax - t) ^ 2 / 2 // minus small right triangle
+    // V = (Tmax - t) * a
     {
         // t = 10.1
         // S = 10 * 1 +
@@ -71,6 +78,7 @@ TEST(KinematicParticleTest, FullMovement)
         //   = 100 - 4.05
         //   = 95.95
         EXPECT_FLOAT_EQ(95.95, particle.calculateDistance(TimeValue(10, 100)));
+        EXPECT_FLOAT_EQ(9, particle.calculateSpeed(TimeValue(10, 100)));
     }
 }
 
@@ -92,5 +100,6 @@ TEST(KinematicParticle, IsInRange)
     EXPECT_TRUE(particle.isInRange(TimeValue(11, 0)));
     EXPECT_FALSE(particle.isInRange(TimeValue(11, 1)));
     EXPECT_ANY_THROW(particle.calculateDistance(TimeValue(11, 1)));
+    EXPECT_ANY_THROW(particle.calculateSpeed(TimeValue(11, 1)));
 }
 
