@@ -17,6 +17,19 @@ KinematicParticle::KinematicParticle(float maxSpeed, float acceleration, float t
 {
 }
 
+KinematicParticle::KinematicParticle(float maxSpeed, float acceleration, float targetDistance, float initialSpeed) :
+    m_maxSpeed(maxSpeed),
+    m_acceleration(acceleration),
+    m_targetDistance(targetDistance),
+    m_initialSpeed(initialSpeed),
+
+    // precalculated stuff
+    m_Tmax(m_targetDistance / m_maxSpeed + (m_maxSpeed / m_acceleration)),
+    m_t1(m_maxSpeed / m_acceleration),
+    m_t2(m_Tmax - m_t1)
+{
+}
+
 float KinematicParticle::calculateDistance(Common::Game::TimeValue deltaTime) const
 {
     // see unit tests for more description on the algorithm

@@ -18,6 +18,8 @@ class KinematicParticle
 {
 public:
     KinematicParticle(float maxSpeed, float acceleration, float targetDistance);
+    KinematicParticle(float maxSpeed, float acceleration, float targetDistance, float initialSpeed);
+
     float calculateDistance(Common::Game::TimeValue deltaTime) const;
     float calculateSpeed(Common::Game::TimeValue deltaTime) const;
     bool isInRange(Common::Game::TimeValue deltaTime) const;
@@ -28,6 +30,7 @@ private:
     float m_maxSpeed;
     float m_acceleration;
     float m_targetDistance;
+    float m_initialSpeed;
 
     // precalculated stuff
     float m_Tmax;

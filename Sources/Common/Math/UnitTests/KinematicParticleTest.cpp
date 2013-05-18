@@ -6,7 +6,6 @@ using namespace Common::Math;
 using Common::Game::TimeValue;
 
 /*
-
          speed
            ^
            |
@@ -16,9 +15,7 @@ using Common::Game::TimeValue;
            |/ .            . \
            '----------------------> time
               t1           t2 Tmax
-
 */
-
 TEST(KinematicParticleTest, FullMovement)
 {
     float maxSpeed = 10.0;
@@ -82,7 +79,71 @@ TEST(KinematicParticleTest, FullMovement)
     }
 }
 
-TEST(KinematicParticle, IsInRange)
+/*
+              speed
+                ^
+                |
+       maxSpeed | ------------
+                |/            \
+   initialSpeed |.     S      .\
+                |.            . \
+                '--------------------> time
+                 t1           t2 Tmax
+*/
+TEST(KinematicParticleTest, MovementWithInitialSpeed)
+{
+    float maxSpeed = 10;
+    float acceleration = 10;
+    float targetDistance = 100;
+    float initialSpeed = 5;
+
+    KinematicParticle particle(maxSpeed, acceleration, targetDistance, initialSpeed);
+
+    // acceleration
+    //
+    // t1 - as above
+    // t1 = (maxSpeed - initialSpeed) / acceleration
+    // t1 = 5 / 10 = 0.5
+    //
+    // S = (initialSpeed * t) + (acceleration * t^2) / 2 (done on paper)
+    {
+        EXPECT_FLOAT_EQ(0, particle.calculateDistance(TimeValue(0, 0)));
+
+        // t = 0.1
+        // S = (5 * 0.1) + (10 * 0.1^2) / 2
+        //   = 0.5 + (10 * 0.01) / 2
+        //   = 0.5 + 0.1 / 2
+        //   = 0.5 + 0.05
+        //   = 0.55
+        EXPECT_FLOAT_EQ(0.55, particle.calculateDistance(TimeValue(0, 100)));
+    }
+
+    // steady
+    //
+    // S = (initialSpeed * t1) + (acceleration * t1^2) / 2 +
+    //     maxSpeed * (t - t1)
+    {
+        // t = 1
+        // S = (5 * 0.5) + (10 * 0.5^2) / 2 +
+        //     10 * (1 - 0.5)
+        //   = 2.5 + (10 * 0.25 / 2) +
+        //     10 * 0.5
+        //   = 1.5 + (10.25 / 2) +
+        //     10.5
+        //   = 1.5 + 5.125 + 10.5
+        //   = 17.125
+        EXPECT_FLOAT_EQ(17.125, particle.calculateDistance(TimeValue(1, 0)));
+    }
+
+    // deceleration
+    //
+    // S = (initialSpeed * t1) + (acceleration * t1^2) / 2 +   // first triangle
+    //     (maxSpeed * (t2 - t1)) +                            // middle rectangle
+    //     (maxSpeed * (Tmax - t2)) / 2                        // second triangle
+    //     - ???
+}
+
+TEST(KinematicParticleTest, IsInRange)
 {
     float maxSpeed = 10;
     float acceleration = 10;
