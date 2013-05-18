@@ -17,8 +17,7 @@ namespace Math
 class KinematicParticle
 {
 public:
-    KinematicParticle(float maxSpeed, float acceleration, float targetDistance);
-    KinematicParticle(float maxSpeed, float acceleration, float targetDistance, float initialSpeed);
+    KinematicParticle(float maxSpeed, float acceleration, float targetDistance, float initialSpeed = 0);
 
     float calculateDistance(Common::Game::TimeValue deltaTime) const;
     float calculateSpeed(Common::Game::TimeValue deltaTime) const;

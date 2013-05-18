@@ -108,6 +108,7 @@ TEST(KinematicParticleTest, MovementWithInitialSpeed)
     // S = (initialSpeed * t) + (acceleration * t^2) / 2 (done on paper)
     {
         EXPECT_FLOAT_EQ(0, particle.calculateDistance(TimeValue(0, 0)));
+        //EXPECT_FLOAT_EQ(5, particle.calculateSpeed(TimeValue(0, 0)));
 
         // t = 0.1
         // S = (5 * 0.1) + (10 * 0.1^2) / 2
@@ -120,19 +121,30 @@ TEST(KinematicParticleTest, MovementWithInitialSpeed)
 
     // steady
     //
-    // S = (initialSpeed * t1) + (acceleration * t1^2) / 2 +
-    //     maxSpeed * (t - t1)
+    // S = initialSpeed * t1
+    //     + (acceleration * t1^2) / 2
+    //     + maxSpeed * (t - t1)
     {
         // t = 1
-        // S = (5 * 0.5) + (10 * 0.5^2) / 2 +
-        //     10 * (1 - 0.5)
-        //   = 2.5 + (10 * 0.25 / 2) +
-        //     10 * 0.5
-        //   = 1.5 + (10.25 / 2) +
-        //     10.5
-        //   = 1.5 + 5.125 + 10.5
-        //   = 17.125
-        EXPECT_FLOAT_EQ(17.125, particle.calculateDistance(TimeValue(1, 0)));
+        // S = (5 * 0.5)
+        //     + (10 * 0.5^2) / 2
+        //     + 10 * (1 - 0.5)
+        //
+        //   = 2.5
+        //     + 10 * 0.25 / 2
+        //     + 10 * 0.5
+        //
+        //   = 2.5
+        //     + 2.5 / 2
+        //     + 5
+        //
+        //   = 2.5
+        //     + 1.25
+        //     + 5
+        //
+        //   = 7.5 + 1.25
+        //   = 8.75
+        EXPECT_FLOAT_EQ(8.75, particle.calculateDistance(TimeValue(1, 0)));
     }
 
     // deceleration
@@ -140,7 +152,19 @@ TEST(KinematicParticleTest, MovementWithInitialSpeed)
     // S = (initialSpeed * t1) + (acceleration * t1^2) / 2 +   // first triangle
     //     (maxSpeed * (t2 - t1)) +                            // middle rectangle
     //     (maxSpeed * (Tmax - t2)) / 2                        // second triangle
-    //     - ???
+    //     - acceleration * (Tmax - t) ^ 2 / 2                 // minus small right triangle
+    //
+    // Tmax = (targetDistance / maxSpeed) + (maxSpeed / acceleration) - (initialSpeed / (maxSpeed * a))
+    // Tmax = 100 / 10 + 10 / 10 - 5 / (10 * 10)
+    //      = 10 + 1 - 0.05
+    //      = 10.95
+    //
+    // t2 = Tmax - maxSpeed/acceleration
+    // t2 = 10.95 - 10/10
+    //    = 9.95
+    {
+
+    }
 }
 
 TEST(KinematicParticleTest, IsInRange)

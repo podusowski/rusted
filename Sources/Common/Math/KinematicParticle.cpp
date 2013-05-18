@@ -5,18 +5,6 @@
 
 using namespace Common::Math;
 
-KinematicParticle::KinematicParticle(float maxSpeed, float acceleration, float targetDistance) :
-    m_maxSpeed(maxSpeed),
-    m_acceleration(acceleration),
-    m_targetDistance(targetDistance),
-
-    // precalculated stuff
-    m_Tmax(m_targetDistance / m_maxSpeed + (m_maxSpeed / m_acceleration)),
-    m_t1(m_maxSpeed / m_acceleration),
-    m_t2(m_Tmax - m_t1)
-{
-}
-
 KinematicParticle::KinematicParticle(float maxSpeed, float acceleration, float targetDistance, float initialSpeed) :
     m_maxSpeed(maxSpeed),
     m_acceleration(acceleration),
@@ -25,8 +13,8 @@ KinematicParticle::KinematicParticle(float maxSpeed, float acceleration, float t
 
     // precalculated stuff
     m_Tmax(m_targetDistance / m_maxSpeed + (m_maxSpeed / m_acceleration)),
-    m_t1(m_maxSpeed / m_acceleration),
-    m_t2(m_Tmax - m_t1)
+    m_t1((m_maxSpeed - m_initialSpeed) / m_acceleration),
+    m_t2(m_Tmax - (m_maxSpeed / m_acceleration))
 {
 }
 
@@ -40,11 +28,13 @@ float KinematicParticle::calculateDistance(Common::Game::TimeValue deltaTime) co
 
     if (t < m_t1)
     {
-        S = m_acceleration * std::pow(t, 2) / 2.0;
+        S = m_initialSpeed * t;
+        S += m_acceleration * std::pow(t, 2) / 2.0;
     }
     else if (t >= m_t1 && t < m_t2)
     {
-        S = m_t1 * m_maxSpeed / 2.0;
+        S = m_initialSpeed * m_t1;
+        S += m_acceleration * std::pow(m_t1, 2) / 2;
         S += (t - m_t1) * m_maxSpeed;
     }
     else if (t > m_t2 && t <= m_Tmax)
