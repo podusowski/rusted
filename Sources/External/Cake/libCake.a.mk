@@ -20,6 +20,9 @@ SOURCES+=Networking/ServerSocket.cpp
 SOURCES+=Networking/Socket.cpp
 SOURCES+=Networking/SocketStream.cpp
 
+SOURCES+=Networking/Protocol/BinaryCoder.cpp
+SOURCES+=Networking/Protocol/BinaryDecoder.cpp
+
 SOURCES+=Serialization/Tms.cpp
 
 SOURCES+=System/AtomicSyscall.cpp
