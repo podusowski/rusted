@@ -56,42 +56,19 @@ boost::shared_ptr<IAction> ActionFactory::create(
     return ret;
 }
 
-std::string ActionFactory::getActionName(unsigned id, unsigned parameter)
+ActionDescription ActionFactory::getActionDescription(unsigned id, unsigned parameter)
 {
-    switch (id)
-    {
-        case ActionType_Attack:
-        {
-            return "attack";
-        }
-        case ActionType_BuildShip:
-        {
-            std::stringstream ss;
-            ss << "build" << parameter;
-            return ss.str();
-        }
-        case ActionType_Gather:
-        {
-            return "gather";
-        }
-        case ActionType_Transfer:
-        {
-            return "transfer";
-        }
-        default:
-        {
-            throw std::runtime_error("unknown action");
-        }
-    }
-}
+    ActionDescription ret;
+    ret.id = id;
+    ret.parameter = parameter;
 
-std::string ActionFactory::getActionDescription(unsigned id, unsigned parameter)
-{
     switch (id)
     {
         case ActionType_Attack:
         {
-            return "attack selected ship with\nsome default gun";
+            ret.name = "attack";
+            ret.description = "attack selected ship with\nsome default gun";
+            break;
         }
         case ActionType_BuildShip:
         {
@@ -100,19 +77,31 @@ std::string ActionFactory::getActionDescription(unsigned id, unsigned parameter)
             ss << "build " << shipClass.getName() 
                << " (carbon: " << shipClass.getRequiredCarbon()
                << ", helium: " << shipClass.getRequiredHelium() << ")";
-            return ss.str();
+
+            ret.name = "build";
+            ret.description = ss.str();
+            break;
         }
         case ActionType_Gather:
         {
-            return "gather carbon and helium\nfrom selected asteroid";
+            ret.name = "gather";
+            ret.description = "gather carbon and helium\nfrom selected asteroid";
+            break;
         }
         case ActionType_Transfer:
         {
-            return "transfer 10C and 10H to selected ship";
+            ret.name = "transfer";
+            ret.description = "transfer 10C and 10H to selected ship";
+            break;
         }
         default:
         {
-            throw std::runtime_error("unknown action");
+            std::stringstream ss;
+            ss << "unknown action: " << id;
+            throw std::runtime_error(ss.str());
         }
     }
+
+    return ret;
 }
+

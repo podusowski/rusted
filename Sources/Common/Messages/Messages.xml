@@ -157,6 +157,10 @@ actions
     <param type="int32" name="shipId" />
 </message>
 
+<struct id="AvailableActionPlayerParameter">
+    <param type="string" name="name" />
+</struct>
+
 <struct id="AvailableAction">
     <param type="int32" name="id" />
     <param type="int32" name="parameter" />

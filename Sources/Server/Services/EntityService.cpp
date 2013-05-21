@@ -88,19 +88,18 @@ void EntityService::handle(const Common::Messages::FetchAvailableActions &, Netw
     auto actions = shipClass.getAvailableActions();
 
     Common::Messages::AvailableActions availableActions;
-    LOG_DEBUG << "Filling actions for ship:" << object.getId() << " (class:" << shipClass.getId() << ")";
+    LOG_DEBUG << "Filling available actions for ship:" << object.getId() << " (class:" << shipClass.getId() << ")";
     for (auto action: actions)
     {
-        std::string name = m_actionFactory.getActionName(action.type, action.parameter);
-        std::string description = m_actionFactory.getActionDescription(action.type, action.parameter);
+        auto description = m_actionFactory.getActionDescription(action.type, action.parameter);
 
-        LOG_DEBUG << "  name:" << name << ", type:" << action.type << ", parameter:" << action.parameter;
+        LOG_DEBUG << "  name:" << description.name << ", type:" << action.type << ", parameter:" << action.parameter;
 
         Common::Messages::AvailableAction availableAction;
         availableAction.id = action.type;
-        availableAction.name = name;
-        availableAction.parameter = action.parameter;
-        availableAction.description = description;
+        availableAction.name = description.name;
+        availableAction.parameter = description.parameter;
+        availableAction.description = description.description;
 
         availableActions.actions.push_back(availableAction);
     }

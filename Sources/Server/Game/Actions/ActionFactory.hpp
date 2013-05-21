@@ -10,6 +10,7 @@
 #include "Common/Game/Universe.hpp"
 #include "Common/Game/Object/Ship.hpp"
 #include "IActionFactory.hpp"
+#include "ActionDescription.hpp"
 
 namespace Server
 {
@@ -29,8 +30,7 @@ public:
         unsigned id,
         unsigned parameter);
 
-    std::string getActionName(unsigned id, unsigned parameter);
-    std::string getActionDescription(unsigned id, unsigned parameter);
+    ActionDescription getActionDescription(unsigned id, unsigned parameter);
 
 private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
