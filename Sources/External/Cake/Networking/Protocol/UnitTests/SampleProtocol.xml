@@ -1,6 +1,20 @@
 <messages>
 
-<message id="SimpleNonParameter" />
+<struct id="SimpleStruct">
+    <param type="int32" name="integer" />
+</struct>
+
+<struct id="ComplexStruct">
+    <list type="SimpleStruct" name="list" />
+    <param type="string" name="string" />
+</struct>
+
+<message id="SimpleParameters">
+    <param type="int32" name="integer" />
+    <param type="string" name="string" />
+    <list type="SimpleStruct" name="list" />
+    <list type="ComplexStruct" name="complexList" />
+</message>
 
 </messages>
 

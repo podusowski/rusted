@@ -1,7 +1,7 @@
 TARGET:=CakeUT
 TYPE:=application
 
-CFLAGS+=-I$(TARGET_BASE)
+CFLAGS+=-I. -I.. -I$(TARGET_BASE) -I$(TARGET_BASE)/..
 LDFLAGS+=-L. -L$(BUILD) -lCommon -lCake -lpthread -lgtest -lgmock
 
 SOURCES+=Serialization/UnitTests/TmsTest.cpp

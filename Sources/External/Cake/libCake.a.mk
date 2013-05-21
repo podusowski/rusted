@@ -22,6 +22,8 @@ SOURCES+=Networking/SocketStream.cpp
 
 SOURCES+=Networking/Protocol/BinaryCoder.cpp
 SOURCES+=Networking/Protocol/BinaryDecoder.cpp
+SOURCES+=Networking/Protocol/CharVectorReadBuffer.cpp
+SOURCES+=Networking/Protocol/CharVectorWriteBuffer.cpp
 
 SOURCES+=Serialization/Tms.cpp
 
