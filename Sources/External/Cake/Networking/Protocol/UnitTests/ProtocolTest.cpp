@@ -1,4 +1,5 @@
 #include <gtest/gtest.h>
+#include <gmock/gmock.h>
 
 #include "SampleProtocol.hpp"
 
@@ -7,11 +8,12 @@
 #include "Networking/Protocol/CharVectorReadBuffer.hpp"
 #include "Networking/Protocol/CharVectorWriteBuffer.hpp"
 
+using namespace testing;
 using namespace Cake::Networking::Protocol;
 
 TEST(ProtocolTest, SimpleParameters)
 {
-    Cake::Networking::Protocol::SimpleParameters m1;
+    SimpleParameters m1;
     m1.integer = 1;
     m1.string = "string";
 
@@ -48,5 +50,31 @@ TEST(ProtocolTest, SimpleParameters)
     ASSERT_EQ(1, m2.complexList[0].list.size());
     EXPECT_EQ(s2.integer, m2.complexList[0].list[0].integer);
     EXPECT_EQ("string", m2.complexList[0].string);
+}
+
+class SampleServiceMock
+{
+public:
+    MOCK_METHOD1(handle, void(const SimpleParameters &));
+    MOCK_METHOD1(handle, void(const AbstractMessage &));
+};
+
+TEST(ProtocolTest, HandlerCaller)
+{
+    SimpleParameters m1;
+
+    std::vector<char> raw;
+    CharVectorWriteBuffer writeBuffer(raw);
+    m1.serialize(writeBuffer);
+
+    CharVectorReadBuffer readBuffer(raw);
+    boost::shared_ptr<AbstractMessage> abstract = MessageFactory::create(readBuffer);
+
+    SampleServiceMock serviceMock;
+
+    EXPECT_CALL(serviceMock, handle(An<const SimpleParameters &>())).Times(1);
+
+    HandlerCaller0<SampleServiceMock> caller(serviceMock);
+    caller.call(*abstract);
 }
 
