@@ -29,6 +29,8 @@ TEST(KinematicParticleTest, FullMovement)
     // S = at2/2
     // V = at
     {
+        EXPECT_FLOAT_EQ(0, particle.calculateDistance(TimeValue(0, 0)));
+
         EXPECT_FLOAT_EQ(0.05, particle.calculateDistance(TimeValue(0, 100)));
         EXPECT_FLOAT_EQ(1, particle.calculateSpeed(TimeValue(0, 100)));
 
@@ -76,6 +78,9 @@ TEST(KinematicParticleTest, FullMovement)
         //   = 95.95
         EXPECT_FLOAT_EQ(95.95, particle.calculateDistance(TimeValue(10, 100)));
         EXPECT_FLOAT_EQ(9, particle.calculateSpeed(TimeValue(10, 100)));
+
+        // Tmax check
+        EXPECT_FLOAT_EQ(100, particle.calculateDistance(TimeValue(11, 0)));
     }
 }
 
@@ -145,25 +150,39 @@ TEST(KinematicParticleTest, MovementWithInitialSpeed)
         //   = 7.5 + 1.25
         //   = 8.75
         EXPECT_FLOAT_EQ(8.75, particle.calculateDistance(TimeValue(1, 0)));
+
+        // V = maxSpeed = 10
+        EXPECT_FLOAT_EQ(10, particle.calculateSpeed(TimeValue(1, 0)));
     }
 
     // deceleration
     //
-    // S = (initialSpeed * t1) + (acceleration * t1^2) / 2 +   // first triangle
+    // S = (initialSpeed * t1) + [(acceleration * t1^2) / 2] +   // first triangle
     //     (maxSpeed * (t2 - t1)) +                            // middle rectangle
     //     (maxSpeed * (Tmax - t2)) / 2                        // second triangle
-    //     - acceleration * (Tmax - t) ^ 2 / 2                 // minus small right triangle
+    //     - [acceleration * ((Tmax - t) ^ 2)] / 2                 // minus small right triangle
     //
-    // Tmax = (targetDistance / maxSpeed) + (maxSpeed / acceleration) - (initialSpeed / (maxSpeed * a))
-    // Tmax = 100 / 10 + 10 / 10 - 5 / (10 * 10)
-    //      = 10 + 1 - 0.05
-    //      = 10.95
+    // Tmax = (targetDistance / maxSpeed)
+    //        - (t1 * initialSpeed) / (2 * maxSpeed)
+    //        + t1 / 2
+    //
+    // Tmax = 10.125
     //
     // t2 = Tmax - maxSpeed/acceleration
-    // t2 = 10.95 - 10/10
-    //    = 9.95
+    // t2 = 10.125 - 10/10
+    //    = 9.125
     {
+        // t = 10
+        // S = [5 * 0.5] + [(10 * 0.25)/2]
+        //     + 10 * (9.125 - 0.5)
+        //     + [10 * (10.125 - 9.125)] / 2
+        //     - [10 * (10.125 - 10)^2] / 2
+        //   = 2.5 + (2.5 / 2)
+        //     + 10 * 8.625
+        //     + 10 / 2
 
+        // Tmax check
+        EXPECT_FLOAT_EQ(100, particle.calculateDistance(TimeValue(10, 95)));
     }
 }
 
