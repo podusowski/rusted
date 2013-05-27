@@ -9,7 +9,7 @@
         </Widget>
     </Widget>
 
-    <Widget type="Window" skin="Window" position="590 10 200 100" align="Right Top" layer="Main">
+    <Widget type="Window" skin="Window" position="380 10 200 100" align="Right Top" layer="Main">
         <Property key="Caption" value="Target"/>
         <Property key="Snap" value="false"/>
         <Widget type="TextBox" skin="TextBox" name="TargetTextBox" position_real="0.10 0.10 0.80 0.80">
@@ -17,7 +17,7 @@
         </Widget>
     </Widget>
 
-    <Widget type="Window" skin="Window" position="380 10 200 100" align="Right Top" layer="Main">
+    <Widget type="Window" skin="Window" position="590 10 200 100" align="Right Top" layer="Main">
         <Property key="Caption" value="Focus" />
         <Property key="Snap" value="false"/>
         <Widget type="TextBox" skin="TextBox" name="FocusTextBox" position_real="0.10 0.10 0.80 0.80">
