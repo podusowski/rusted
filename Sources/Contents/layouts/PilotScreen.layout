@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MyGUI type="Layout" version="3.2.0">
 
+    <!-- navigation -->
     <Widget type="Window" skin="Window" position="10 10 250 100" align="Left Top" layer="Main">
         <Property key="Caption" value="Navigation"/>
         <Property key="Snap" value="false"/>
@@ -9,6 +10,7 @@
         </Widget>
     </Widget>
 
+    <!-- selected object -->
     <Widget type="Window" skin="Window" position="380 10 200 100" align="Right Top" layer="Main">
         <Property key="Caption" value="Target"/>
         <Property key="Snap" value="false"/>
@@ -21,6 +23,7 @@
         </Widget>
     </Widget>
 
+    <!-- focused object -->
     <Widget type="Window" skin="Window" position="590 10 200 100" align="Right Top" layer="Main">
         <Property key="Caption" value="Focus" />
         <Property key="Snap" value="false"/>
@@ -40,12 +43,14 @@
         <Property key="Caption" value="Build Gatherer\nGatherer is cool ship which can gather stuff from asteroids"/>
     </Widget>
 
+    <!-- fleet -->
     <Widget type="Window" skin="Window" position="690 120 100 400" align="Right Top" layer="Main">
         <Property key="Caption" value="Fleet"/>
         <Property key="Snap" value="false"/>
         <Widget type="ListBox" name="ShipListBox" skin="ListBox" position_real="0 0 1 1"/>
     </Widget>
 
+    <!-- console window -->
     <Widget type="Window" skin="Window" position="10 500 250 80" align="Left Bottom" layer="Main">
         <Property key="Caption" value="Chat"/>
         <Property key="Snap" value="false"/>
