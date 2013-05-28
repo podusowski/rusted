@@ -15,6 +15,10 @@
         <Widget type="TextBox" skin="TextBox" name="TargetTextBox" position_real="0.10 0.10 0.80 0.80">
             <Property key="Caption" value="<no target>"/>
         </Widget>
+
+        <Widget type="Button" skin="Button" name="FlyToTargetButton" position_real="0.70 0.70 0.25 0.25">
+            <Property key="Caption" value="fly"/>
+        </Widget>
     </Widget>
 
     <Widget type="Window" skin="Window" position="590 10 200 100" align="Right Top" layer="Main">
