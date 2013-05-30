@@ -55,7 +55,8 @@ private:
     Common::Game::Object::ObjectBase & m_object;
     Client::Services::ObjectService & m_objectService;
     Ogre::Entity * m_entity;
-    Ogre::SceneNode * m_node;
+    Ogre::SceneNode * m_mainNode;
+    Ogre::SceneNode * m_meshNode;
     std::function<void()> m_rightClickCallback;
     std::vector<Ogre::ParticleSystem *> m_engineThrustParticleSystems;
     MyGUI::TextBox * m_label;

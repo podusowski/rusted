@@ -41,9 +41,12 @@ VisualObject::VisualObject(
 
     std::string mesh = m_model.getValue<std::string>("mesh");
     m_entity = scene.createEntity(mesh);
-    m_node = scene.getRootSceneNode()->createChildSceneNode();
-    m_node->attachObject(m_entity);
-    m_node->setScale(100.0, 100.0, 100.0);
+
+    m_mainNode = scene.getRootSceneNode()->createChildSceneNode();
+    m_mainNode->setScale(100.0, 100.0, 100.0);
+
+    m_meshNode = m_mainNode->createChildSceneNode();
+    m_meshNode->attachObject(m_entity);
 
     input.addEntityClickedCallback(*m_entity, std::bind(&VisualObject::entityClickedCallback, this));
     input.addEntityMouseMovedCallback(*m_entity, std::bind(&VisualObject::entityMouseMoved, this));
@@ -64,7 +67,7 @@ void VisualObject::setRightClickCallback(std::function<void()> callback)
 
 void VisualObject::setSelected(bool selected)
 {
-    m_node->showBoundingBox(selected);
+    m_meshNode->showBoundingBox(selected);
 }
 
 Common::Game::Object::ObjectBase & VisualObject::getGameObject()
@@ -142,13 +145,13 @@ void VisualObject::update()
     Common::Game::Position position = m_object.getPosition();
     auto orientation = m_object.getOrientation();
 
-    m_node->setPosition(position.getX(), position.getY(), position.getZ());
-    m_node->setOrientation(m_graphics.toOgreQuaternion(orientation));
+    m_mainNode->setPosition(position.getX(), position.getY(), position.getZ());
+    m_mainNode->setOrientation(m_graphics.toOgreQuaternion(orientation));
 
     // apply Blender coordinations patch
     //m_node->roll(Ogre::Degree(90));
     //m_node->pitch(Ogre::Degree(90));
-    m_node->yaw(Ogre::Degree(-90));
+    m_mainNode->yaw(Ogre::Degree(-90));
 
     setEngineThrustEnabled(m_object.isMoving());
     updateLabel();
@@ -236,7 +239,7 @@ void VisualObject::createEngineThrustEffect()
         ss << "engine-particle-" << m_object.getId() << "-" << i;
         Ogre::ParticleSystem * ps = scene.createParticleSystem(ss.str(), "EngineTail");
 
-        auto * psNode = m_node->createChildSceneNode();
+        auto * psNode = m_mainNode->createChildSceneNode();
         psNode->setPosition(Ogre::Vector3(x, y, z));
         psNode->attachObject(ps);
 
