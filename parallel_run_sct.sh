@@ -2,10 +2,12 @@ green="\033[1;32m"
 red="\033[1;31m"
 reset="\033[0;m"
 
-tool=""
+tool="none"
 pattern='.*'
 root=`pwd`
 log_dir=$root/_build/sct/
+build_dir=$root/_build/linux-debug/
+binary=ServerSCT
 
 while getopts 't:p:' opt; do
     case $opt in
@@ -18,10 +20,9 @@ while getopts 't:p:' opt; do
     esac
 done
 
-echo "Running ServerSCT"
-echo tool: $tool
+echo "Running $binary using $tool"
 
-pushd _build > /dev/null
+pushd $build_dir > /dev/null
 
 function run_single_test()
 {
@@ -40,7 +41,7 @@ function run_single_test()
         export SERVER_SCT_WAIT_FOR_APP_TIME=10
     fi
 
-    SERVER_SCT_PORT=$port $wrapper ./ServerSCT --gtest_filter=$name > $log_dir/$name.out 2> $log_dir/$name.err
+    SERVER_SCT_PORT=$port $wrapper ./$binary --gtest_filter=$name > $log_dir/$name.out 2> $log_dir/$name.err
 
     if grep FAILED $log_dir/$name.out > /dev/null; then
         result="  ${red}fail$reset "
@@ -53,7 +54,7 @@ function run_single_test()
 
 function read_testcases()
 {
-    ./ServerSCT --gtest_list_tests | while read line 
+    ./$binary --gtest_list_tests | while read line 
     do
         if echo $line | grep "\." > /dev/null; then
             prefix=$line
@@ -65,13 +66,12 @@ function read_testcases()
 
 function cleanup()
 {
-    echo "cleanup"
-
-    kill `jobs -p`
+    sleep 0.5
+    kill `jobs -p` 2> /dev/null
 
     sleep 0.3
     if [ -n "`jobs -p`" ]; then
-        kill -KILL `jobs -p`
+        kill -KILL `jobs -p` 2> /dev/null
     fi
 }
 
@@ -84,7 +84,7 @@ port=3000
 for testcase in $testcases; do
     port=$((port+1))
     run_single_test $testcase $port &
-        
+
     while test `jobs | wc -l` -gt 6; do
         sleep 1
     done
