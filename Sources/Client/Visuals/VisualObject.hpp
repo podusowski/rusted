@@ -46,6 +46,7 @@ private:
     void createLabel();
     void updateLabelText();
     void updateLabel();
+    void createEngineThrustEffect();
     void ownerNameFetched(unsigned id, const std::string & name);
     void updateWreckedState();
 
