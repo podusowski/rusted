@@ -2,10 +2,11 @@ TARGET:=CakeUT
 TYPE:=application
 
 CFLAGS+=-I. -I.. -I$(TARGET_BASE) -I$(TARGET_BASE)/..
-LDFLAGS+=-L. -L$(BUILD) -lCommon -lCake -lpthread -lgtest -lgmock
+LDFLAGS+=-L. -L$(BUILD) -lCake -lpthread -lgtest -lgmock
 
 SOURCES+=Serialization/UnitTests/TmsTest.cpp
 SOURCES+=Networking/Protocol/UnitTests/ProtocolTest.cpp
+SOURCES+=Utils/UnitTests/StringListTest.cpp
 SOURCES+=mainUT.cpp
 
 DEPENDENCIES+=libCake.a

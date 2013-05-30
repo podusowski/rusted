@@ -31,3 +31,6 @@ SOURCES+=System/AtomicSyscall.cpp
 SOURCES+=System/ShellResult.cpp
 SOURCES+=System/Shell.cpp
 SOURCES+=System/Time.cpp
+
+SOURCES+=Utils/StringList.cpp
+
