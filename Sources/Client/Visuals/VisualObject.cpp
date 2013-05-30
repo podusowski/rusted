@@ -130,7 +130,22 @@ std::string VisualObject::getString(int type)
     else if (m_object.is<Common::Game::Object::Asteroid>())
     {
         auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(m_object);
+
+        bool newLineNeeded = true;
         ss << "Asteroid";
+
+        if (type & StringType_CargoHold)
+        {
+            if (newLineNeeded)
+            {
+                ss << "\n";
+            }
+
+            asteroid.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+            {
+                ss << "C:" << cargoHold.getCarbon() << " H:" << cargoHold.getHelium() << " (" << cargoHold.getCapacity() << ")";
+            });
+        }
     }
     else
     {
