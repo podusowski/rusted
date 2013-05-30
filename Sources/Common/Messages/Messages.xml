@@ -67,14 +67,28 @@ Ship
 </message>
 
 <message id="ShipInfo">
-	<param type="int32" name="id" />
-	<param type="int32" name="player_id" description="id of the player owning this entity" />
-	<param type="string" name="model" />
-	<param type="int32" name="integrity" />
-	<param type="int32" name="speed" />
-	<param type="int32" name="x" />
-	<param type="int32" name="y" />
-	<param type="int32" name="z" />
+    <param type="int32" name="id" />
+    <param type="int32" name="player_id" description="id of the player owning this entity" />
+    <param type="string" name="model" />
+    <param type="int32" name="integrity" />
+    <param type="int32" name="speed" />
+
+    <!-- position -->
+    <param type="int32" name="x" />
+    <param type="int32" name="y" />
+    <param type="int32" name="z" />
+
+    <!-- orientation 
+    <param type="int32" name="orientationW" />
+    <param type="int32" name="orientationX" />
+    <param type="int32" name="orientationY" />
+    <param type="int32" name="orientationZ" />
+    -->
+</message>
+
+<message id="ObjectIntegrity">
+    <param type="int32" name="id" />
+    <param type="int32" name="integrity" />
 </message>
 
 <message id="ChangeShipCourse">

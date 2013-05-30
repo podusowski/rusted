@@ -33,6 +33,7 @@ public:
     void handle(const Common::Messages::AsteroidInfo &);
     void handle(const Common::Messages::ShipCourseInfo &);
     void handle(const Common::Messages::ObjectCargoInfo &);
+    void handle(const Common::Messages::ObjectIntegrity &);
     void handle(const Common::Messages::PlayerName &);
 
     void handle(const Common::Messages::AbstractMessage &) {}

@@ -48,7 +48,7 @@ void Attack::sendShipInfoToClients()
     auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
-        m_servicesUtils.sendObjectInfo(m_selectedObject, *connection);
+        m_servicesUtils.sendObjectIntegrity(m_selectedObject, *connection);
     }
 }
 

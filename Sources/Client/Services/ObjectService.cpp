@@ -163,6 +163,21 @@ void ObjectService::handle(const Common::Messages::ObjectCargoInfo & objectCargo
     });
 }
 
+void ObjectService::handle(const Common::Messages::ObjectIntegrity & objectIntegrity)
+{
+    LOG_DEBUG << "Updating integrity for: " << objectIntegrity.id << " with: " << objectIntegrity.integrity;
+
+    if (m_universe.has(objectIntegrity.id))
+    {
+        auto & object = m_universe.getById<Common::Game::Object::ObjectBase>(objectIntegrity.id);
+        object.setIntegrity(objectIntegrity.integrity);
+    }
+    else
+    {
+        LOG_DEBUG << "  not found";
+    }
+}
+
 void ObjectService::handle(const Common::Messages::PlayerName & playerName)
 {
     auto it = m_playerNameSignals.find(playerName.id);

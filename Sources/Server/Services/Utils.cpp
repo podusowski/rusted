@@ -98,3 +98,12 @@ void Utils::sendObjectCargoInfo(Common::Game::Object::ObjectBase & object, Netwo
     connection.send(objectCargoInfo);
 }
 
+void Utils::sendObjectIntegrity(Common::Game::Object::ObjectBase & object, Network::IConnection & connection)
+{
+    Common::Messages::ObjectIntegrity objectIntegrity;
+    objectIntegrity.id = object.getId();
+    objectIntegrity.integrity = object.getIntegrity();
+
+    connection.send(objectIntegrity);
+}
+

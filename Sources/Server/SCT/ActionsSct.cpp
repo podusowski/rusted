@@ -17,7 +17,7 @@ using namespace Common::Messages;
 
 TEST(ActionsSct, FetchAvailableActions)
 {
-	SCT::Component component("SampleDataBase.xml");
+    SCT::Component component("SampleDataBase.xml");
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -105,15 +105,15 @@ TEST(ActionsSct, AttackObject)
     connection1->receive<Common::Messages::EmitExplosionEffect>();
 
     // we should also receive shipinfo with condition after the attack
-    auto shipInfo1 = connection1->receive<Common::Messages::ShipInfo>();
-    ASSERT_EQ(5, shipInfo1->id);
-    ASSERT_EQ(90, shipInfo1->integrity);
+    auto objectIntegrity = connection1->receive<Common::Messages::ObjectIntegrity>();
+    ASSERT_EQ(5, objectIntegrity->id);
+    ASSERT_EQ(90, objectIntegrity->integrity);
 
     // other player should also get this stuff
     connection2->receive<Common::Messages::EmitMovingMeshEffect>();
     connection2->receive<Common::Messages::AttackObject>();
     connection2->receive<Common::Messages::EmitExplosionEffect>();
-    connection2->receive<Common::Messages::ShipInfo>();
+    connection2->receive<Common::Messages::ObjectIntegrity>();
 }
 
 TEST(ActionsSct, BuildShip)
