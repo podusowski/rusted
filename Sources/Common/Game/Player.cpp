@@ -1,10 +1,11 @@
 #include <stdexcept>
 
+#include "Cake/Diagnostics/Logger.hpp"
 #include "Player.hpp"
 
 using namespace Common::Game;
 
-Player::Player() : m_focusedObject(nullptr)
+Player::Player() : m_selectedObject(nullptr), m_focusedObject(nullptr)
 {
 }
 
@@ -38,6 +39,7 @@ void Player::setState(PlayerState state)
 
 void Player::selectObject(Common::Game::Object::ObjectBase & object)
 {
+    LOG_DEBUG << "Selecting: " << object;
     m_selectedObject = &object;
 }
 

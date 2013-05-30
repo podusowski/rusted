@@ -65,6 +65,7 @@ void PlayerActionService::selectObject(Common::Game::Object::ObjectBase & object
     m_connection.send(selectObject);
 
     m_selectedObject = &object;
+    m_player.selectObject(object);
 }
 
 void PlayerActionService::fetchAvailableActions()

@@ -41,6 +41,7 @@ public:
 
 private:
     void shipListBoxSelected(MyGUI::ListBox *, size_t);
+    void flyToTargetButtonClicked(MyGUI::WidgetPtr);
     void playerShipsFetched();
     void objectAdded(Common::Game::Object::ObjectBase &);
     void updatePlayerShipsListBox();

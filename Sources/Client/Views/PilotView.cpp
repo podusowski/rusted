@@ -39,6 +39,9 @@ void PilotView::activate()
     MyGUI::ListBox * shipListBox = m_gui->findWidget<MyGUI::ListBox>("ShipListBox");
     shipListBox->eventListChangePosition += MyGUI::newDelegate(this, &PilotView::shipListBoxSelected);
 
+    MyGUI::Button * flyToTargetButton = m_gui->findWidget<MyGUI::Button>("FlyToTargetButton");
+    flyToTargetButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::flyToTargetButtonClicked);
+
     createOrientationPlane();
     createCourseMarker();
 }
@@ -136,6 +139,30 @@ void PilotView::shipListBoxSelected(MyGUI::ListBox * listBox, size_t index)
     {
         // if you find a better way to check listbox items, youre free
         // to change it
+    }
+}
+
+void PilotView::flyToTargetButtonClicked(MyGUI::WidgetPtr)
+{
+    try
+    {
+        auto & target = m_player.getSelectedObject();
+        auto & focus = m_player.getFocusedObject();
+
+        LOG_DEBUG << "Flying to: " << target;
+
+        auto delta = target.getPosition() - focus.getPosition();
+        delta.normalize();
+        delta *= 2000;
+
+        Common::Game::Position destination = target.getPosition() - delta;
+
+        m_playerActionService.setFocusedObjectCourse(destination);
+        m_camera.resetUserOrientation();
+    }
+    catch (std::exception & ex)
+    {
+        LOG_DEBUG << "Cant fly there, reson: " << ex.what();
     }
 }
 
