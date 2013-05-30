@@ -4,6 +4,11 @@
 
 using namespace Cake::Utils;
 
+StringList::NewLineStream StringList::add()
+{
+    return StringList::NewLineStream(*this);
+}
+
 void StringList::add(const std::string & line)
 {
     m_lines.push_back(line);
@@ -26,4 +31,9 @@ std::string StringList::toString() const
         needNewLine = true;
     }
     return ret.str();
+}
+
+unsigned StringList::size() const
+{
+    return m_lines.size();
 }
