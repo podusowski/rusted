@@ -3,6 +3,7 @@
 #include <OgreParticleSystem.h>
 
 #include "Cake/Diagnostics/Logger.hpp"
+#include "Cake/Utils/StringList.hpp"
 
 #include "Common/Game/Object/Asteroid.hpp"
 #include "Common/Game/Object/Ship.hpp"
@@ -77,82 +78,55 @@ Common::Game::Object::ObjectBase & VisualObject::getGameObject()
 
 std::string VisualObject::getString(int type)
 {
-    std::stringstream ss;
+    Cake::Utils::StringList ret;
 
     if (m_object.is<Common::Game::Object::Ship>())
     {
         auto & ship = dynamic_cast<Common::Game::Object::Ship&>(m_object);
 
-        bool newLineNeeded = false;
-
         if (type & StringType_Class)
         {
-            ss << m_model.getValue<std::string>("name") << " (" << ship.getId() << ")";
-            newLineNeeded = true;
+            ret.add() << m_model.getValue<std::string>("name") << " (" << ship.getId() << ")";
         }
 
         if (type & StringType_Pilot)
         {
-            if (newLineNeeded)
-            {
-                ss << "\n";
-            }
-
-            ss << "Pilot: " << m_ownerName;
-            newLineNeeded = true;
+            ret.add() << "Pilot: " << m_ownerName;
         }
 
         if (type & StringType_Integrity)
         {
-            if (newLineNeeded)
-            {
-                ss << "\n";
-            }
-
-            ss << "Integrity: " << ship.getIntegrity();
-            newLineNeeded = true;
+            ret.add() << "Integrity: " << ship.getIntegrity();
         }
 
         if (type & StringType_CargoHold)
         {
-            if (newLineNeeded)
-            {
-                ss << "\n";
-            }
-
             ship.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
             {
-                ss << "C:" << cargoHold.getCarbon() << " H:" << cargoHold.getHelium() << " (" << cargoHold.getCapacity() << ")";
+                ret.add() << "C:" << cargoHold.getCarbon() << " H:" << cargoHold.getHelium() << " (" << cargoHold.getCapacity() << ")";
             });
-            newLineNeeded = true;
         }
     }
     else if (m_object.is<Common::Game::Object::Asteroid>())
     {
         auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid&>(m_object);
 
-        bool newLineNeeded = true;
-        ss << "Asteroid";
+        ret.add() << "Asteroid";
 
         if (type & StringType_CargoHold)
         {
-            if (newLineNeeded)
-            {
-                ss << "\n";
-            }
-
             asteroid.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
             {
-                ss << "C:" << cargoHold.getCarbon() << " H:" << cargoHold.getHelium() << " (" << cargoHold.getCapacity() << ")";
+                ret.add() << "C:" << cargoHold.getCarbon() << " H:" << cargoHold.getHelium() << " (" << cargoHold.getCapacity() << ")";
             });
         }
     }
     else
     {
-        ss << "Object <" << m_object.getId() << ">";
+        ret.add() << "Object <" << m_object.getId() << ">";
     }
 
-    return ss.str();
+    return ret.toString();
 }
 
 void VisualObject::update()
