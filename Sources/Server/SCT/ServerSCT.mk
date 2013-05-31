@@ -21,7 +21,7 @@ CFLAGS+=-I$(TARGET_BASE)/../../External
 CFLAGS+=-I/usr/include/libxml2
 
 LDFLAGS=-L. -L$(BUILD) 
-LDFLAGS+=-lCommon -lCake -lpthread -lboost_system -lxml2
+LDFLAGS+=-lCommon -lCake -lpthread -lxml2
 LDFLAGS+=-lgtest
 
 RESOURCES+=SampleDataBase.xml

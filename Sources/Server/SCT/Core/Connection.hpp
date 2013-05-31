@@ -1,11 +1,11 @@
 #pragma once
 
 #include <string>
-#include <boost/asio.hpp>
 
 #include "Cake/Diagnostics/Logger.hpp"
+#include "Cake/Networking/Socket.hpp"
 
-#include "Common/RustedCodec/AsioReadBuffer.hpp"
+#include "Common/RustedCodec/CakeReadBuffer.hpp"
 #include "Common/Messages/Messages.hpp"
 
 using ::Common::Messages::AbstractMessage;
@@ -16,15 +16,16 @@ namespace SCT
 class Connection
 {
 public:
-	Connection(const std::string & addr, unsigned port);
+    Connection(const std::string & addr, unsigned port);
     ~Connection();
-	void send(::Common::Messages::AbstractMessage & message);
+
+    void send(::Common::Messages::AbstractMessage & message);
 
     template<class T> boost::shared_ptr<T> receive()
     {
         LOG_INFO << "Waiting for " << TYPENAME(T);
 
-        Common::RustedCodec::AsioReadBuffer buffer(m_socket);
+        Common::RustedCodec::CakeReadBuffer buffer(*m_socket);
         boost::shared_ptr<T> message;
 
         try
@@ -50,8 +51,7 @@ public:
     }
 
 private:
-	::boost::asio::io_service io_service;
-	::boost::asio::ip::tcp::socket m_socket;
+    boost::shared_ptr<Cake::Networking::Socket> m_socket;
     static int s_port;
 };
 

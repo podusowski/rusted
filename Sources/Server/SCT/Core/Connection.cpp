@@ -1,20 +1,16 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
-#include <Common/RustedCodec/AsioWriteBuffer.hpp>
-#include <Common/RustedCodec/AsioReadBuffer.hpp>
+#include "Common/RustedCodec/CakeWriteBuffer.hpp"
+#include "Common/RustedCodec/CakeReadBuffer.hpp"
 
 #include "Connection.hpp"
 
-using namespace ::SCT;
-using namespace ::boost::asio;
-using namespace ::boost::asio::ip;
-using namespace ::Common::Messages;
+using namespace SCT;
+using namespace Common::Messages;
 
-Connection::Connection(const std::string & addr, unsigned port) :
-    m_socket(io_service)
+Connection::Connection(const std::string & addr, unsigned port)
 {
-	tcp::endpoint endpoint(address_v4::from_string(addr.c_str()), port);
-	m_socket.connect(endpoint);
+    m_socket = Cake::Networking::Socket::connectToTcpSocket(addr, port);
 }
 
 Connection::~Connection()
@@ -26,7 +22,7 @@ void Connection::send(::Common::Messages::AbstractMessage & message)
 {
     LOG_INFO << "Sending " << message;
 
-    Common::RustedCodec::AsioWriteBuffer buffer(m_socket);
+    Common::RustedCodec::CakeWriteBuffer buffer(*m_socket);
 
     try
     {
