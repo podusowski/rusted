@@ -85,6 +85,7 @@ void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
         auto & ship = m_universe.getById<Common::Game::Object::Ship>(shipInfo.id);
         ship.setOwnerId(shipInfo.player_id);
         ship.setPosition(Common::Game::Position(shipInfo.x, shipInfo.y, shipInfo.z));
+        ship.setOrientation(Common::Math::Quaternion(shipInfo.orientationW, shipInfo.orientationX, shipInfo.orientationY, shipInfo.orientationZ));
         ship.setIntegrity(shipInfo.integrity);
         ship.setModel(shipInfo.model);
 
@@ -99,6 +100,7 @@ void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
         ship.setId(shipInfo.id);
         ship.setOwnerId(shipInfo.player_id);
         ship.setPosition(Common::Game::Position(shipInfo.x, shipInfo.y, shipInfo.z));
+        ship.setOrientation(Common::Math::Quaternion(shipInfo.orientationW, shipInfo.orientationX, shipInfo.orientationY, shipInfo.orientationZ));
         ship.setIntegrity(shipInfo.integrity);
         ship.setSpeed(shipInfo.speed);
         ship.setModel(shipInfo.model);

@@ -33,6 +33,7 @@ public:
     virtual Common::Math::Quaternion getCourseMarkerOrientation() = 0;
 
     virtual Common::Math::Quaternion getOrientation() = 0;
+    virtual void setOrientation(const Common::Math::Quaternion &) = 0;
 
     virtual void setSpeed(unsigned) = 0;
     virtual unsigned getSpeed() = 0;

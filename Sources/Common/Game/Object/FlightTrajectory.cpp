@@ -94,6 +94,11 @@ Common::Math::Quaternion FlightTrajectory::getOrientation()
     return m_cachedOrientation;
 }
 
+void FlightTrajectory::setOrientation(const Common::Math::Quaternion & orientation)
+{
+    m_cachedOrientation = orientation;
+}
+
 void FlightTrajectory::setSpeed(unsigned speed)
 {
     m_speed = speed;

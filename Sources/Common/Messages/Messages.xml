@@ -78,12 +78,11 @@ Ship
     <param type="int32" name="y" />
     <param type="int32" name="z" />
 
-    <!-- orientation 
-    <param type="int32" name="orientationW" />
-    <param type="int32" name="orientationX" />
-    <param type="int32" name="orientationY" />
-    <param type="int32" name="orientationZ" />
-    -->
+    <!-- orientation -->
+    <param type="real" name="orientationW" />
+    <param type="real" name="orientationX" />
+    <param type="real" name="orientationY" />
+    <param type="real" name="orientationZ" />
 </message>
 
 <message id="ObjectIntegrity">

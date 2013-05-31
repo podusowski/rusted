@@ -25,6 +25,7 @@ public:
     Position getCourseMarkerPosition();
     Common::Math::Quaternion getCourseMarkerOrientation();
     Common::Math::Quaternion getOrientation();
+    void setOrientation(const Common::Math::Quaternion &);
 
     void setSpeed(unsigned);
     unsigned getSpeed();

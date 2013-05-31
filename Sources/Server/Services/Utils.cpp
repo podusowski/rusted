@@ -50,7 +50,7 @@ void Utils::sendShipCourseInfo(Common::Game::Object::Ship & ship, Network::IConn
 
     Common::Messages::ShipCourseInfo shipCourseInfo;
     shipCourseInfo.objectId = ship.getId();
-   
+
     for (const auto & point : description.controlPoints)
     {
         Common::Messages::Position p;
@@ -79,6 +79,12 @@ void Utils::sendShipInfo(Common::Game::Object::Ship & ship, Network::IConnection
     shipInfo.z = position.getZ();
     shipInfo.integrity = ship.getIntegrity();
     shipInfo.speed = ship.getSpeed();
+
+    auto orientation = ship.getOrientation();
+    shipInfo.orientationW = orientation.getW();
+    shipInfo.orientationX = orientation.getX();
+    shipInfo.orientationY = orientation.getY();
+    shipInfo.orientationZ = orientation.getZ();
 
     connection.send(shipInfo);
 }

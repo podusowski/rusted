@@ -33,6 +33,7 @@ public:
     virtual void setIntegrity(unsigned integrity);
 
     virtual Common::Math::Quaternion getOrientation();
+    virtual void setOrientation(const Common::Math::Quaternion &);
 
     void visitCargoHold(std::function<void(CargoHold &)>);
 

@@ -43,6 +43,10 @@ Common::Math::Quaternion ObjectBase::getOrientation()
     return Common::Math::Quaternion();
 }
 
+void ObjectBase::setOrientation(const Common::Math::Quaternion &)
+{
+}
+
 void ObjectBase::visitCargoHold(std::function<void(CargoHold &)> visitor)
 {
     visitor(m_cargoHold);
