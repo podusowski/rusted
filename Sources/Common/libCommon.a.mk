@@ -1,14 +1,6 @@
 TARGET:=libCommon.a
 TYPE:=static_library
 
-SOURCES+=RustedCodec/RustedAbstractCoder.cpp
-SOURCES+=RustedCodec/RustedAbstractDecoder.cpp
-SOURCES+=RustedCodec/SimpleWriteBuffer.cpp
-SOURCES+=RustedCodec/SimpleReadBuffer.cpp
-SOURCES+=RustedCodec/AsioReadBuffer.cpp
-SOURCES+=RustedCodec/AsioWriteBuffer.cpp
-SOURCES+=RustedCodec/CakeWriteBuffer.cpp
-SOURCES+=RustedCodec/CakeReadBuffer.cpp
 SOURCES+=Game/RustedTime.cpp
 SOURCES+=Game/TimeValue.cpp
 SOURCES+=Game/Utilities/PasswordHash.cpp
