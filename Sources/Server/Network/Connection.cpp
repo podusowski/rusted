@@ -4,9 +4,9 @@
 
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Cake/Threading/ScopedLock.hpp"
+#include "Cake/Networking/Protocol/CakeReadBuffer.hpp"
+#include "Cake/Networking/Protocol/CakeWriteBuffer.hpp"
 
-#include "Common/RustedCodec/CakeReadBuffer.hpp"
-#include "Common/RustedCodec/CakeWriteBuffer.hpp"
 #include "Common/Messages/Messages.hpp"
 
 #include "Connection.hpp"
@@ -39,7 +39,7 @@ void Connection::send(const Common::Messages::AbstractMessage & message)
 
     Cake::Threading::ScopedLock lock(m_socketMutex);
 
-    Common::RustedCodec::CakeWriteBuffer buffer(m_socket);
+    Cake::Networking::Protocol::CakeWriteBuffer buffer(m_socket);
     message.serialize(buffer);
 }
 
@@ -47,7 +47,7 @@ void Connection::run()
 {
     using namespace ::Common::Messages;
 
-    Common::RustedCodec::CakeReadBuffer buffer(m_socket);
+    Cake::Networking::Protocol::CakeReadBuffer buffer(m_socket);
 
     try
     {

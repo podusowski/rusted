@@ -1,7 +1,8 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
-#include "Common/RustedCodec/CakeReadBuffer.hpp"
-#include "Common/RustedCodec/CakeWriteBuffer.hpp"
+#include "Cake/Networking/Protocol/CakeReadBuffer.hpp"
+#include "Cake/Networking/Protocol/CakeWriteBuffer.hpp"
+
 #include "Network/Connection.hpp"
 
 using namespace Client::Network;
@@ -21,7 +22,7 @@ void Connection::run()
     {
         using namespace Common::Messages;
 
-        Common::RustedCodec::CakeReadBuffer buffer(*m_socket);
+        Cake::Networking::Protocol::CakeReadBuffer buffer(*m_socket);
         boost::shared_ptr<AbstractMessage> message = MessageFactory::create(buffer);
 
         LOG_DEBUG << "Message received: " << *message << ", putting it on the queue";
@@ -50,7 +51,7 @@ void Connection::addListener(IConnectionListener & listener)
 void Connection::send(Common::Messages::AbstractMessage & message)
 {
     LOG_DEBUG << "Sending message: " << message;
-    Common::RustedCodec::CakeWriteBuffer buffer(*m_socket);
+    Cake::Networking::Protocol::CakeWriteBuffer buffer(*m_socket);
     message.serialize(buffer);
 }
 
@@ -63,7 +64,7 @@ void Connection::yield()
         auto message = m_messages.front();
         m_messages.pop();
 
-        BOOST_FOREACH(IConnectionListener * listener, m_listeners)
+        for (IConnectionListener * listener : m_listeners)
         {
             listener->messageReceived(*message);
         }

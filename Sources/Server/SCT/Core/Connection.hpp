@@ -5,7 +5,7 @@
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Cake/Networking/Socket.hpp"
 
-#include "Common/RustedCodec/CakeReadBuffer.hpp"
+#include "Cake/Networking/Protocol/CakeReadBuffer.hpp"
 #include "Common/Messages/Messages.hpp"
 
 using ::Common::Messages::AbstractMessage;
@@ -25,7 +25,7 @@ public:
     {
         LOG_INFO << "Waiting for " << TYPENAME(T);
 
-        Common::RustedCodec::CakeReadBuffer buffer(*m_socket);
+        Cake::Networking::Protocol::CakeReadBuffer buffer(*m_socket);
         boost::shared_ptr<T> message;
 
         try

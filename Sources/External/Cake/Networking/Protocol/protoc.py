@@ -95,10 +95,10 @@ class CppOutput:
             "#include <ostream>\n"
             "#include <sstream>\n"
             "#include <boost/shared_ptr.hpp>\n\n"
-            "#include <Networking/Protocol/IWriteBuffer.hpp>\n"
-            "#include <Networking/Protocol/IReadBuffer.hpp>\n"
-            "#include \"Networking/Protocol/BinaryCoder.hpp\"\n"
-            "#include \"Networking/Protocol/BinaryDecoder.hpp\"\n")
+            "#include <Cake/Networking/Protocol/IWriteBuffer.hpp>\n"
+            "#include <Cake/Networking/Protocol/IReadBuffer.hpp>\n"
+            "#include \"Cake/Networking/Protocol/BinaryCoder.hpp\"\n"
+            "#include \"Cake/Networking/Protocol/BinaryDecoder.hpp\"\n")
 
         for namespace in self.namespace:
             self.f.write("namespace " + namespace + "{\n")

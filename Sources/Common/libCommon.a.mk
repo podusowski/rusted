@@ -32,5 +32,9 @@ CFLAGS+=-I/usr/include/libxml2
 
 $(TARGET): $(TARGET_BASE)/Messages/Messages.hpp
 
-$(TARGET_BASE)/Messages/Messages.hpp: $(TARGET_BASE)/Messages/Messages.xml $(TARGET_BASE)/genMessages.py
-	cd $(TARGET_BASE) && ./genMessages.py
+LIBCOMMON_PROTOC:=$(TARGET_BASE)/../External/Cake/Networking/Protocol/protoc.py
+LIBCOMMON_PROTO_XML:=$(TARGET_BASE)/Messages/Messages.xml
+
+$(TARGET_BASE)/Messages/Messages.hpp: $(LIBCOMMON_PROTO_XML) $(LIBCOMMON_PROTOC)
+	$(LIBCOMMON_PROTOC) --output $@ --namespace Common::Messages $(LIBCOMMON_PROTO_XML)
+

@@ -1,7 +1,7 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
-#include "Common/RustedCodec/CakeWriteBuffer.hpp"
-#include "Common/RustedCodec/CakeReadBuffer.hpp"
+#include "Cake/Networking/Protocol/CakeWriteBuffer.hpp"
+#include "Cake/Networking/Protocol/CakeReadBuffer.hpp"
 
 #include "Connection.hpp"
 
@@ -22,7 +22,7 @@ void Connection::send(::Common::Messages::AbstractMessage & message)
 {
     LOG_INFO << "Sending " << message;
 
-    Common::RustedCodec::CakeWriteBuffer buffer(*m_socket);
+    Cake::Networking::Protocol::CakeWriteBuffer buffer(*m_socket);
 
     try
     {
