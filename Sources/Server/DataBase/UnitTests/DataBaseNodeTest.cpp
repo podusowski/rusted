@@ -33,7 +33,8 @@ TEST(DataBaseNodeTest, Iterators)
 
     EXPECT_TRUE(node.getChilds().begin() != node.getChilds().end());
 
-    DataBaseNode::iterator it = node.getChilds().begin();
+    auto childs = node.getChilds();
+    auto it = childs.begin();
 
     EXPECT_EQ(1, (*it)->getValue<int>("id"));
 

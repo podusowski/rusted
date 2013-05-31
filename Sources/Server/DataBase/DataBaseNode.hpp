@@ -4,6 +4,7 @@
 #include <map>
 #include <vector>
 #include <stdexcept>
+#include <memory>
 
 #include <boost/lexical_cast.hpp>
 
@@ -12,18 +13,16 @@ namespace Server
 namespace DataBase
 {
 
-class DataBaseNodeSelection;
-
 class DataBaseNode
 {
 public:
     typedef std::vector<DataBaseNode *>::iterator iterator;
+    typedef std::vector<std::shared_ptr<DataBaseNode>> NodeVector;
 
     DataBaseNode(const std::string & name);
-    ~DataBaseNode();
     DataBaseNode & createChild(const std::string & name);
     DataBaseNode & getFirstChild(const std::string & name);
-    DataBaseNodeSelection getChilds();
+    NodeVector getChilds();
     size_t getChildCount();
 
     template <typename T>
@@ -56,18 +55,7 @@ public:
 private:
     std::string m_name;
     std::map<std::string, std::string> m_values;
-    std::vector<DataBaseNode *> m_childs;
-};
-
-class DataBaseNodeSelection
-{
-public:
-    DataBaseNodeSelection(std::vector<DataBaseNode *> & nodes);
-    DataBaseNode::iterator begin();
-    DataBaseNode::iterator end();
-
-private:
-    std::vector<DataBaseNode *> & m_nodes;
+    NodeVector m_childs;
 };
 
 }
