@@ -1,6 +1,5 @@
 #include <stdexcept>
 #include <memory>
-#include <boost/foreach.hpp>
 
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Cake/Threading/ScopedLock.hpp"
@@ -54,7 +53,7 @@ void Connection::run()
         while (true)
         {
             // handle listeners operations
-            BOOST_FOREACH( IConnectionListener * listener, m_listenersToAdd )
+            for (IConnectionListener * listener : m_listenersToAdd)
             {
                 m_listeners.push_back(listener);
             }

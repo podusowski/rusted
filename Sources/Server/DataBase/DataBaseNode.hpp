@@ -16,7 +16,6 @@ namespace DataBase
 class DataBaseNode
 {
 public:
-    typedef std::vector<DataBaseNode *>::iterator iterator;
     typedef std::vector<std::shared_ptr<DataBaseNode>> NodeVector;
 
     DataBaseNode(const std::string & name);

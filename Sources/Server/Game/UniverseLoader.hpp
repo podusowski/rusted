@@ -13,6 +13,7 @@ class UniverseLoader
 {
 public:
     void load(Common::Game::Universe &, Server::DataBase::DataBase &);
+    void save(Common::Game::Universe &, Server::DataBase::DataBase &);
 
 private:
     Cake::DependencyInjection::Inject<IObjectFactory> m_objectFactory;

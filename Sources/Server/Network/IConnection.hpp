@@ -13,9 +13,11 @@ class IConnectionListener;
 class IConnection
 {
 public:
+    virtual ~IConnection() {}
     virtual void send(const Common::Messages::AbstractMessage & message) = 0;
     virtual void addListener(IConnectionListener & listener) = 0;
 };
 
 }
 }
+
