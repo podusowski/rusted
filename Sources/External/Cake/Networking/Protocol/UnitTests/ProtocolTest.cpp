@@ -16,6 +16,7 @@ TEST(ProtocolTest, SimpleParameters)
     SimpleParameters m1;
     m1.integer = 1;
     m1.string = "string";
+    m1.real = 1.1234;
 
     SimpleStruct s1;
     s1.integer = 2;
@@ -42,6 +43,7 @@ TEST(ProtocolTest, SimpleParameters)
 
     EXPECT_EQ(m1.integer, m2.integer);
     EXPECT_EQ(m1.string, m2.string);
+    EXPECT_FLOAT_EQ(m1.real, m2.real);
 
     ASSERT_EQ(1, m2.list.size());
     EXPECT_EQ(s1.integer, m2.list[0].integer);

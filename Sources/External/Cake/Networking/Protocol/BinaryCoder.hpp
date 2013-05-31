@@ -21,6 +21,7 @@ public:
     BinaryCoder & operator << (const unsigned);
     BinaryCoder & operator << (const bool p_value);
     BinaryCoder & operator << (const std::string & p_str);
+    BinaryCoder & operator << (const float);
 
     template <class A>
     BinaryCoder & operator << (const std::vector<A> & vector)

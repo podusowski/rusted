@@ -5,15 +5,17 @@ import argparse
 from xml.dom import minidom
 
 def convertToCppType(xmlType):
-	if xmlType == "boolean":
-		return "bool"
-	elif xmlType == "string":
-		return "std::string"
-	elif xmlType == "int32":
-		return "int"
-	else:
-		print "unknown param type: " + xmlType + "!"
-		sys.exit(1)
+    if xmlType == "boolean":
+        return "bool"
+    elif xmlType == "string":
+        return "std::string"
+    elif xmlType == "int32":
+        return "int"
+    elif xmlType == "real":
+        return "float";
+    else:
+        print "unknown param type: " + xmlType
+        sys.exit(1)
 
 class Param:
     def __init__(self, xml_node):

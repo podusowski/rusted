@@ -1,4 +1,5 @@
 #include <cstring>
+#include <cmath>
 
 #include "BinaryCoder.hpp"
 
@@ -33,5 +34,11 @@ BinaryCoder & BinaryCoder::operator << (const unsigned p_value)
 {
     m_buffer.write(&p_value, sizeof(p_value));
     return *this;
+}
+
+BinaryCoder & BinaryCoder::operator << (const float value)
+{
+    int decimal = std::round(value * 10000);
+    return *this << decimal;
 }
 

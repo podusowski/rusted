@@ -36,3 +36,12 @@ BinaryDecoder & BinaryDecoder::operator >> (std::string & p_str)
     return *this;
 }
 
+BinaryDecoder & BinaryDecoder::operator >> (float & value)
+{
+    int decimal;
+    *this >> decimal;
+    value = decimal / 10000.0;
+
+    return *this;
+}
+

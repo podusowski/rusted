@@ -21,6 +21,7 @@ public:
     BinaryDecoder & operator >> (unsigned &);
     BinaryDecoder & operator >> (bool &);
     BinaryDecoder & operator >> (std::string &);
+    BinaryDecoder & operator >> (float &);
 
     template <class A>
     BinaryDecoder & operator >> (std::vector<A> & vector)

@@ -12,6 +12,7 @@
 <message id="SimpleParameters">
     <param type="int32" name="integer" />
     <param type="string" name="string" />
+    <param type="real" name="real" />
     <list type="SimpleStruct" name="list" />
     <list type="ComplexStruct" name="complexList" />
 </message>
