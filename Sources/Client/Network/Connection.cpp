@@ -1,17 +1,13 @@
-#include <exception>
-
 #include "Cake/Diagnostics/Logger.hpp"
 
-#include "Common/RustedCodec/AsioReadBuffer.hpp"
-#include "Common/RustedCodec/AsioWriteBuffer.hpp"
+#include "Common/RustedCodec/CakeReadBuffer.hpp"
+#include "Common/RustedCodec/CakeWriteBuffer.hpp"
 #include "Network/Connection.hpp"
 
-using namespace boost::asio;
 using namespace Client::Network;
 
-Connection::Connection(Cake::Configuration::Configuration & cfg) : 
-    m_cfg(cfg),
-    m_socket(io_service)
+Connection::Connection(Cake::Configuration::Configuration & cfg) :
+    m_cfg(cfg)
 {
     // better keep getValue on this in constructor, they're serving as asserts
     LOG_INFO << "Server address is " << m_cfg.getValue<std::string>("network.address")
@@ -25,10 +21,10 @@ void Connection::run()
     {
         using namespace Common::Messages;
 
-        Common::RustedCodec::AsioReadBuffer buffer(m_socket);
+        Common::RustedCodec::CakeReadBuffer buffer(*m_socket);
         boost::shared_ptr<AbstractMessage> message = MessageFactory::create(buffer);
-        
-        LOG_DEBUG << "Message received, " << TYPENAME(*message) << ", putting it on the queue";
+
+        LOG_DEBUG << "Message received: " << *message << ", putting it on the queue";
         m_messages.push(message);
         //FIXME: make a lock here
     }
@@ -37,36 +33,12 @@ void Connection::run()
 void Connection::connect()
 {
     std::string address = m_cfg.getValue<std::string>("network.address");
+    unsigned port = m_cfg.getValue<unsigned>("network.port");
 
-    // following asio's naming convention...
-    std::string serviceName = m_cfg.getValue<std::string>("network.port");
+    LOG_INFO << "Connecting to host";
+    m_socket = Cake::Networking::Socket::connectToTcpSocket(address, port);
 
-    tcp::resolver resolver(io_service);
-    tcp::resolver::query query(address, serviceName);
-
-    LOG_INFO << "Resolving " << address << ":" << serviceName;
-    tcp::resolver::iterator endpointIterator = resolver.resolve(query);
-    tcp::resolver::iterator end;
-
-    boost::system::error_code error = boost::asio::error::host_not_found;
-
-    while (error && endpointIterator != end)
-    {
-        LOG_INFO << "Connecting to host";
-        m_socket.close();
-        m_socket.connect(*endpointIterator, error);
-        endpointIterator++;
-    }
-
-    if (error)
-    {
-        LOG_ERR << "Can't connect to the server";
-        throw std::exception();
-    }
-    else
-    {
-        LOG_INFO << "Connected";
-    }
+    LOG_INFO << "Connected to " << address << ":" << port;
 }
 
 void Connection::addListener(IConnectionListener & listener)
@@ -77,8 +49,8 @@ void Connection::addListener(IConnectionListener & listener)
 
 void Connection::send(Common::Messages::AbstractMessage & message)
 {
-    LOG_DEBUG << "Sending " << TYPENAME(message);
-    Common::RustedCodec::AsioWriteBuffer buffer(m_socket);
+    LOG_DEBUG << "Sending message: " << message;
+    Common::RustedCodec::CakeWriteBuffer buffer(*m_socket);
     message.serialize(buffer);
 }
 

@@ -1,15 +1,13 @@
 #pragma once
 
 #include <queue>
-#include <boost/asio.hpp>
 #include <boost/shared_ptr.hpp>
 
 #include "Cake/Configuration/Configuration.hpp"
 #include "Cake/Threading/IRunnable.hpp"
+#include "Cake/Networking/Socket.hpp"
 #include "IConnection.hpp"
 #include "IConnectionListener.hpp"
-
-using boost::asio::ip::tcp;
 
 namespace Client
 {
@@ -25,7 +23,7 @@ class Connection : public IConnection, public Cake::Threading::IRunnable
 {
 public:
     Connection(Cake::Configuration::Configuration & cfg);
-	void run();
+    void run();
     void connect();
     void addListener(IConnectionListener &);
     void send(Common::Messages::AbstractMessage &);
@@ -33,8 +31,7 @@ public:
 
 private:
     Cake::Configuration::Configuration & m_cfg;
-    boost::asio::io_service io_service;
-    tcp::socket m_socket;
+    boost::shared_ptr<Cake::Networking::Socket> m_socket;
     std::vector<IConnectionListener *> m_listeners;
     std::queue<boost::shared_ptr<Common::Messages::AbstractMessage>> m_messages;
 };

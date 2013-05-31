@@ -10,7 +10,6 @@ LDFLAGS+=-lOIS
 LDFLAGS+=-lCommon
 LDFLAGS+=-lCake
 LDFLAGS+=-lpthread
-LDFLAGS+=-lboost_system
 LDFLAGS+=-lxml2
 LDFLAGS+=-lMyGUIEngine
 LDFLAGS+=-lMyGUI.OgrePlatform
