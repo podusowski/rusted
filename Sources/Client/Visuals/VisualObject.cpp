@@ -101,7 +101,11 @@ std::string VisualObject::getString(int type)
 
         if (type & StringType_Position)
         {
-            ret.add() << "Position: " << ship.getPosition();
+            auto position = ship.getPosition();
+            ret.add() << "Position: "
+                      << std::round(position.getX()) << ", "
+                      << std::round(position.getY()) << ", "
+                      << std::round(position.getZ());
         }
 
         if (type & StringType_Speed)
