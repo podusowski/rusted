@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 
 #include <fstream>
+#include <cstdio>
 
 #include "DataBase/DataBase.hpp"
 #include "DataBase/XmlDataProvider.hpp"
@@ -11,9 +12,9 @@ using namespace Server::DataBase;
 class XmlDataProviderTest : public Test
 {
 public:
-    void SetUp()
+    XmlDataProviderTest() : m_xmlFile("/var/tmp/XmlDataProviderTest.db1.xml")
     {
-        std::ofstream db1("/var/tmp/XmlDataProviderTest.db1.xml");
+        std::ofstream db1(m_xmlFile);
         db1 <<
             "<root>\n"
             "<entities>\n"
@@ -22,12 +23,19 @@ public:
             "</root>\n";
         db1.flush();
     }
+
+    ~XmlDataProviderTest()
+    {
+        std::remove(m_xmlFile.c_str());
+    }
+
+    const std::string m_xmlFile;
 };
 
-TEST(XmlDataProviderTest, DataBaseLoad)
+TEST_F(XmlDataProviderTest, DataBaseLoad)
 {
     DataBase db;
-    XmlDataProvider xmlProvider(db, "/var/tmp/XmlDataProviderTest.db1.xml");
+    XmlDataProvider xmlProvider(db, m_xmlFile);
     xmlProvider.load();
 
     EXPECT_EQ(1, db.getRoot()
