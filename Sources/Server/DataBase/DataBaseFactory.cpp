@@ -16,15 +16,16 @@ boost::shared_ptr<DataBase> DataBaseFactory::create()
     boost::shared_ptr<DataBase> ret(new DataBase);
 
     try
-    {        
+    {
         if (m_cfg.getValue<std::string>("database.provider") == "xml")
         {
             LOG_INFO << "XmlDataProvider will be used as DB storage";
             XmlDataProvider provider(*ret, m_cfg.getValue<std::string>("database.xml.filename"));
+            provider.load();
         }
         else
         {
-            throw std::out_of_range("");
+            throw std::out_of_range("no known database.provider specified in config");
         }
     }
     catch (...)

@@ -7,17 +7,27 @@
 
 using namespace Server::DataBase;
 
-XmlDataProvider::XmlDataProvider(DataBase & db, const std::string & xmlFile) : m_db(db)
+XmlDataProvider::XmlDataProvider(DataBase & db, const std::string & xmlFile) : 
+    m_db(db),
+    m_xmlFile(xmlFile)
 {
-    LOG_INFO << "Loading db from " << xmlFile;
+}
 
-    m_stack.push(&db.getRoot());
+void XmlDataProvider::load()
+{
+    LOG_INFO << "Loading db from " << m_xmlFile;
+
+    m_stack.push(&m_db.getRoot());
 
     memset(&m_saxHandlersTable, 0, sizeof(xmlSAXHandler));
     m_saxHandlersTable.startElement = &startElement;
     m_saxHandlersTable.endElement = &endElement;
 
-    xmlSAXUserParseFile(&m_saxHandlersTable, &m_stack, xmlFile.c_str());
+    xmlSAXUserParseFile(&m_saxHandlersTable, &m_stack, m_xmlFile.c_str());
+}
+
+void XmlDataProvider::save()
+{
 }
 
 void XmlDataProvider::startElement(void * ctx, const xmlChar * name, const xmlChar ** atts)

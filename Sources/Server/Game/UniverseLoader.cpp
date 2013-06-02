@@ -8,7 +8,10 @@ void UniverseLoader::load(Common::Game::Universe & universe, Server::DataBase::D
 
     auto & objects = db.getRoot().getFirstChild("objects");
 
-    for (auto it = objects.getChilds().begin(); it != objects.getChilds().end(); it++)
+    LOG_INFO << "  " << objects.getChildCount() << " objects";
+
+    auto childs = objects.getChilds();
+    for (auto it = childs.begin(); it != childs.end(); it++)
     {
         Server::DataBase::DataBaseNode & node = **it;
         universe.add(m_objectFactory->create(node));
