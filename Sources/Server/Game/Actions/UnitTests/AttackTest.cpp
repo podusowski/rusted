@@ -77,13 +77,7 @@ TEST_F(AttackTest, AttackOtherShip_Finish)
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::EmitExplosionEffect))
                 )).Times(1);
     EXPECT_CALL(connection, send(
-                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipInfo))
-                )).Times(1);
-    EXPECT_CALL(connection, send(
-                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ShipCourseInfo))
-                )).Times(1);
-    EXPECT_CALL(connection, send(
-                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ObjectCargoInfo))
+                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ObjectIntegrity))
                 )).Times(1);
 
     Server::Game::Actions::Attack attack(playerContainer, focusedShip, selectedShip);
