@@ -28,6 +28,7 @@ TEST(XmlDataProviderTest, DataBaseLoad)
 {
     DataBase db;
     XmlDataProvider xmlProvider(db, "/var/tmp/XmlDataProviderTest.db1.xml");
+    xmlProvider.load();
 
     EXPECT_EQ(1, db.getRoot()
                  .getFirstChild("entities")

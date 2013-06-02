@@ -44,7 +44,7 @@ TEST(DataBaseNodeTest, Iterators)
 
     it++;
 
-    EXPECT_TRUE(it == node.getChilds().end());
+    EXPECT_TRUE(it == childs.end());
 }
 
 /*

@@ -18,6 +18,7 @@ public:
     void SetUp()
     {
         ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(Return(Common::Game::TimeValue()));
+        ON_CALL(getSpline3Mock(), empty()).WillByDefault(Return(true));
     }
 };
 
