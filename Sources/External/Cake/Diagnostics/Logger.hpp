@@ -14,6 +14,15 @@ namespace Cake
 namespace Diagnostics
 {
 
+class DummyLogStream
+{
+public:
+    template<typename T> DummyLogStream & operator << (const T &)
+    {
+        return *this;
+    }
+};
+
 enum LogLevel
 {
     DEBUG,
@@ -29,9 +38,14 @@ public:
     void setAppName(const std::string &);
     std::string demangle(const std::string & name);
 
-    LogMessage log(LogLevel level, 
-                       const std::string & file, 
+    LogMessage log(LogLevel level,
+                       const std::string & file,
                        unsigned line);
+
+    DummyLogStream dummyLog()
+    {
+        return DummyLogStream();
+    }
 
     void flush(const std::string &);
 
@@ -50,8 +64,14 @@ private:
 }
 
 #define LOG(level) Cake::Diagnostics::Logger::getInstance().log(level, __FILE__, __LINE__)
+#define DUMMY_LOG Cake::Diagnostics::Logger::getInstance().dummyLog()
 
-#define LOG_DEBUG LOG(Cake::Diagnostics::DEBUG)
+#ifdef NDEBUG
+    #define LOG_DEBUG DUMMY_LOG
+#else
+    #define LOG_DEBUG LOG(Cake::Diagnostics::DEBUG)
+#endif
+
 #define LOG_INFO LOG(Cake::Diagnostics::INFO)
 #define LOG_WARN LOG(Cake::Diagnostics::WARNING)
 #define LOG_ERR LOG(Cake::Diagnostics::ERROR)
