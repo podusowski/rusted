@@ -99,6 +99,16 @@ std::string VisualObject::getString(int type)
             ret.add() << "Integrity: " << ship.getIntegrity();
         }
 
+        if (type & StringType_Position)
+        {
+            ret.add() << "Position: " << ship.getPosition();
+        }
+
+        if (type & StringType_Speed)
+        {
+            ret.add() << "Speed: " << ship.getCurrentSpeed();
+        }
+
         if (type & StringType_CargoHold)
         {
             ship.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void

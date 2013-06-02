@@ -62,21 +62,12 @@ void PilotView::frameStarted()
 void PilotView::updateShipPosition()
 {
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
+    auto visualObject = m_visualUniverse.find(focusedShip);
 
-    std::stringstream ss;
-    ss << "Position: " << focusedShip.getPosition()
-       << "\nSpeed: " << focusedShip.getCurrentSpeed();
+    std::string caption;
+    caption = visualObject->getString(Visuals::VisualObject::StringType_Position | Visuals::VisualObject::StringType_Speed);
 
-    auto description = focusedShip.getTrajectoryDescription();
-
-    /*
-    if (focusedShip.getPosition() != description.destination)
-    {
-        ss << "\nDestination: " << description.destination;
-    }
-    */
-
-    m_gui->findWidget<MyGUI::TextBox>("NavigationTextBox")->setCaption(ss.str());
+    m_gui->findWidget<MyGUI::TextBox>("NavigationTextBox")->setCaption(caption);
 }
 
 void PilotView::mouseMoved(const OIS::MouseState & state)

@@ -23,6 +23,8 @@ public:
     static const int StringType_Integrity = 1 << 1;
     static const int StringType_Pilot = 1 << 2;
     static const int StringType_CargoHold = 1 << 3;
+    static const int StringType_Position = 1 << 4;
+    static const int StringType_Speed = 1 << 5;
 
     VisualObject(
         Client::Graphics::IGraphics &,
