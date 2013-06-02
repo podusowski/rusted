@@ -32,6 +32,7 @@ TEST_F(BuildShipTest, Build)
 
     Common::Game::Position focusedShipPosition(10, 20, 30);
     ON_CALL(focusedShip, getPosition()).WillByDefault(Return(focusedShipPosition));
+    ON_CALL(focusedShip, getOrientation()).WillByDefault(Return(Common::Math::Quaternion()));
 
     ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(focusedShip));
 
@@ -43,6 +44,7 @@ TEST_F(BuildShipTest, Build)
 
     // this stuff is called by utilities to send new ship's info to clients
     ON_CALL(createdShip, getPosition()).WillByDefault(Return(Common::Game::Position()));
+    ON_CALL(createdShip, getOrientation()).WillByDefault(Return(Common::Math::Quaternion()));
     ON_CALL(createdShip, getTrajectoryDescription()).WillByDefault(Return(Common::Game::Object::IFlightTrajectory::Description()));
 
     // newly created ship is flying a bit from the creator ship

@@ -15,6 +15,7 @@ class ShipMock : public Ship
 {
 public:
     MOCK_METHOD0(getPosition, Position());
+    MOCK_METHOD0(getOrientation, Common::Math::Quaternion());
     MOCK_METHOD1(setCourse, void(Position));
     MOCK_METHOD1(setSpeed, void(unsigned));
     MOCK_METHOD0(getIntegrity, unsigned());
