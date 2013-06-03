@@ -42,6 +42,15 @@ void Connection::send(const Common::Messages::AbstractMessage & message)
     message.serialize(buffer);
 }
 
+void Connection::processPendingListeners()
+{
+    for (IConnectionListener * listener : m_listenersToAdd)
+    {
+        m_listeners.push_back(listener);
+    }
+    m_listenersToAdd.clear();
+}
+
 void Connection::run()
 {
     using namespace ::Common::Messages;
@@ -52,21 +61,14 @@ void Connection::run()
     {
         while (true)
         {
-            // handle listeners operations
-            for (IConnectionListener * listener : m_listenersToAdd)
-            {
-                m_listeners.push_back(listener);
-            }
-            m_listenersToAdd.clear();
+            processPendingListeners();
 
-            // receive message
-            boost::shared_ptr<AbstractMessage> message = MessageFactory::create(buffer);
-
+            auto message = MessageFactory::create(buffer);
             LOG_DEBUG << "<connection:" << this << "> Received: " << *message;
 
-            for (std::vector< IConnectionListener * >::iterator it = m_listeners.begin(); it != m_listeners.end(); it++)
+            for (IConnectionListener * listener : m_listeners)
             {
-                (*it)->messageReceived(*this, *message);
+                listener->messageReceived(*this, *message);
             }
         }
     }
