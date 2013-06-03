@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstring>
+#include <fstream>
 
 #include "Cake/Diagnostics/Logger.hpp"
 
@@ -28,6 +29,11 @@ void XmlDataProvider::load()
 
 void XmlDataProvider::save()
 {
+    LOG_INFO << "Saving db to " << m_xmlFile;
+    std::fstream f(m_xmlFile);
+
+    f << "<root>\n";
+    f << "</root>\n";
 }
 
 void XmlDataProvider::startElement(void * ctx, const xmlChar * name, const xmlChar ** atts)

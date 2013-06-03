@@ -17,12 +17,16 @@ class DataBaseNode
 {
 public:
     typedef std::vector<std::shared_ptr<DataBaseNode>> NodeVector;
+    typedef std::map<std::string, std::string> ValuesMap;
 
     DataBaseNode(const std::string & name);
+    std::string getName() const;
     DataBaseNode & createChild(const std::string & name);
     DataBaseNode & getFirstChild(const std::string & name);
     NodeVector getChilds();
     size_t getChildCount();
+
+    ValuesMap getValues() const;
 
     template <typename T>
     void setValue(const std::string & name, const T value)
@@ -53,7 +57,7 @@ public:
 
 private:
     std::string m_name;
-    std::map<std::string, std::string> m_values;
+    ValuesMap m_values;
     NodeVector m_childs;
 };
 

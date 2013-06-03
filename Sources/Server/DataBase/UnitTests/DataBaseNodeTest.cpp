@@ -11,6 +11,7 @@ TEST(DataBaseNodeTest, BasicTree)
     DataBaseNode root("root");
     DataBaseNode & entities = root.createChild("entities");
 
+    EXPECT_EQ("root", root.getName());
     EXPECT_EQ(1u, root.getChildCount());
 
     DataBaseNode & entity1 = entities.createChild("entity");
@@ -45,6 +46,17 @@ TEST(DataBaseNodeTest, Iterators)
     it++;
 
     EXPECT_TRUE(it == childs.end());
+}
+
+TEST(DataBaseNodeTest, IterateTroughValues)
+{
+    DataBaseNode node("node");
+
+    node.setValue("val1", 1);
+
+    auto values = node.getValues();
+    ASSERT_EQ(1u, values.size());
+    EXPECT_EQ("1", values["val1"]);
 }
 
 /*

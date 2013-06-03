@@ -9,6 +9,11 @@ DataBaseNode::DataBaseNode(const std::string & name) : m_name(name)
 {
 }
 
+std::string DataBaseNode::getName() const
+{
+    return m_name;
+}
+
 DataBaseNode & DataBaseNode::createChild(const std::string & name)
 {
     auto node = std::shared_ptr<DataBaseNode>(new DataBaseNode(name));
@@ -38,3 +43,7 @@ size_t DataBaseNode::getChildCount()
     return m_childs.size();
 }
 
+DataBaseNode::ValuesMap DataBaseNode::getValues() const
+{
+    return m_values;
+}
