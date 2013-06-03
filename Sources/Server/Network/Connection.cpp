@@ -15,7 +15,6 @@ using namespace Server::Network;
 Connection::Connection(Cake::Networking::Socket & socket, Services::IServiceDeployment & serviceDeployment) :
         m_socket(socket)
 {
-    serviceDeployment.deployNewConnection(*this);
 }
 
 Connection::~Connection()

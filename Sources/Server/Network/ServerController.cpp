@@ -13,11 +13,11 @@ ServerController::ServerController() :
     m_playerContainer(*m_db),
     m_serviceDeployment(*m_cfg, *m_db, m_playerContainer)
 {
-	struct sigaction sigact;
-	memset(&sigact, 0, sizeof(sigact));
+    struct sigaction sigact;
+    memset(&sigact, 0, sizeof(sigact));
 
-	sigact.sa_handler = handleSignal;
-	::sigaction(15, &sigact, 0);
+    sigact.sa_handler = handleSignal;
+    ::sigaction(15, &sigact, 0);
 }
 
 int ServerController::start()
@@ -43,6 +43,7 @@ int ServerController::start()
             boost::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket, m_serviceDeployment));
             m_connections.push_back(connectionContext);
             m_playerContainer.add(connectionContext->getConnection());
+            m_serviceDeployment.deployNewConnection(connectionContext->getConnection());
             connectionContext->getThread().start();
         }
     }
@@ -53,7 +54,7 @@ int ServerController::start()
 
     LOG_INFO << "Server is done";
 
-	return 0;
+    return 0;
 }
 
 void ServerController::gc()
