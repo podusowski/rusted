@@ -70,6 +70,10 @@ void Component::start()
     {
         setConfigValue("--network.port", boost::lexical_cast<std::string>(m_port));
 
+        std::stringstream administrationSocketPath;
+        administrationSocketPath << "/var/tmp/rusted_sct_" << m_port;
+        setConfigValue("--network.administration_socket_path", administrationSocketPath.str());
+
         char ** argv = new char*[m_cmdLineOptions.size() * 2 + 2];
         argv[0] = const_cast<char *>(filename.c_str());
         argv[m_cmdLineOptions.size() * 2 + 1] = 0;

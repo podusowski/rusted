@@ -3,6 +3,7 @@
 
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Cake/Networking/ServerSocket.hpp"
+#include "Cake/Networking/ServerSocketPool.hpp"
 
 #include "Server/Network/ServerController.hpp"
 
@@ -23,28 +24,43 @@ ServerController::ServerController() :
 int ServerController::start()
 {
     int tcpPort = m_cfg->getValue<int>("network.port");
+    std::string administrationSocketPath = m_cfg->getValue<std::string>("network.administration_socket_path");
 
-    LOG_INFO << "I will listen on TCP/" << tcpPort;
+    LOG_INFO << "Setting up player socket on TCP/" << tcpPort;
+    auto server = Cake::Networking::ServerSocket::createTcpServer(tcpPort);
 
-    boost::shared_ptr<Cake::Networking::ServerSocket> server =
-        Cake::Networking::ServerSocket::createTcpServer(tcpPort);
+    LOG_INFO << "Setting up administrative socket on UNIX/" << administrationSocketPath;
+    auto administrationServer = Cake::Networking::ServerSocket::createUnixServer(administrationSocketPath);
 
-    LOG_INFO << "Server is up and running";
+    Cake::Networking::ServerSocketPool serverPool;
+    serverPool.add(server);
+    serverPool.add(administrationServer);
+
+    LOG_INFO << "Accepting connections";
 
     try
     {
         while (true)
         {
             gc();
-            boost::shared_ptr<Cake::Networking::Socket> socket = server->accept();
 
-            LOG_DEBUG << "New connection established";
+            auto socket = serverPool.accept();
 
-            boost::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket, m_serviceDeployment));
-            m_connections.push_back(connectionContext);
-            m_playerContainer.add(connectionContext->getConnection());
-            m_serviceDeployment.deployNewConnection(connectionContext->getConnection());
-            connectionContext->getThread().start();
+            if (socket.second == server)
+            {
+                LOG_DEBUG << "New connection established";
+
+                boost::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket.first, m_serviceDeployment));
+
+                m_connections.push_back(connectionContext);
+                m_playerContainer.add(connectionContext->getConnection());
+                m_serviceDeployment.deployNewConnection(connectionContext->getConnection());
+                connectionContext->getThread().start();
+            }
+            else
+            {
+                LOG_ERR << "Administration connection not implemented";
+            }
         }
     }
     catch (std::exception & ex)
