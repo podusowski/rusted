@@ -18,6 +18,8 @@ int PlayerContainer::authorize(const std::string & login,
                                const std::string & password, 
                                Network::IConnection & connection)
 {
+    LOG_DEBUG << "Connection: " << &connection << " wants to authorize as player: " << login;
+
     Cake::Threading::ScopedLock lock(m_mutex);
 
     auto it = m_connectionMap.find(&connection);
@@ -37,7 +39,7 @@ int PlayerContainer::authorize(const std::string & login,
 
 void PlayerContainer::add(Network::IConnection & connection)
 {
-    LOG_DEBUG << "Adding player";
+    LOG_DEBUG << "Adding new connection: " << &connection << " and assiociating it with new player";
 
     boost::shared_ptr<Common::Game::Player> player(new Common::Game::Player());
 
