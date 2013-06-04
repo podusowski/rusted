@@ -32,8 +32,38 @@ void XmlDataProvider::save()
     LOG_INFO << "Saving db to " << m_xmlFile;
     std::fstream f(m_xmlFile);
 
-    f << "<root>\n";
-    f << "</root>\n";
+    saveNode(m_db.getRoot(), f);
+}
+
+void XmlDataProvider::saveNode(DataBaseNode & node, std::fstream & f)
+{
+    LOG_DEBUG << "  " << node.getName();
+
+    auto values = node.getValues();
+
+    if (values.size() > 0)
+    {
+        f << "\t<" << node.getName() << " ";
+
+        for (auto value : values)
+        {
+            f << value.first << "=\"" << value.second << "\"";
+        }
+
+        f << ">";
+    }
+    else
+    {
+        f << "\t<" << node.getName() << ">\n";
+    }
+
+    auto childs = node.getChilds();
+    for (auto child : childs)
+    {
+        saveNode(*child, f);
+    }
+
+    f << "\t</" << node.getName() << ">\n";
 }
 
 void XmlDataProvider::startElement(void * ctx, const xmlChar * name, const xmlChar ** atts)

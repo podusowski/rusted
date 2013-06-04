@@ -44,3 +44,26 @@ TEST_F(XmlDataProviderTest, DataBaseLoad)
                  .getValue<int>("id"));
 }
 
+TEST_F(XmlDataProviderTest, Save)
+{
+    DataBase db;
+    XmlDataProvider xmlProvider(db, m_xmlFile);
+
+    auto & child1 = db.getRoot().createChild("child1");
+    child1.setValue("param1", 1);
+
+    auto & subchild1 = child1.createChild("subchild1");
+    subchild1.setValue("param2", 2);
+
+    xmlProvider.save();
+
+    db.reset();
+
+    ASSERT_EQ(0u, db.getRoot().getChildCount());
+
+    xmlProvider.load();
+
+    EXPECT_EQ(1, db.getRoot().getFirstChild("child1").getValue<int>("param1"));
+    EXPECT_EQ(2, db.getRoot().getFirstChild("child1").getFirstChild("subchild1").getValue<int>("param2"));
+}
+

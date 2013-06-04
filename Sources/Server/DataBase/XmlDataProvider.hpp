@@ -25,6 +25,8 @@ private:
     xmlSAXHandler m_saxHandlersTable;
     std::stack<DataBaseNode *> m_stack;
 
+    void saveNode(DataBaseNode &, std::fstream &);
+
     static void startElement(void * ctx, const xmlChar * name, const xmlChar ** atts);
     static void endElement(void * ctx, const xmlChar * name);
 };
