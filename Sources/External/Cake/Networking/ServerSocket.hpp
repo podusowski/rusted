@@ -16,9 +16,9 @@ public:
     static boost::shared_ptr<ServerSocket> createUnixServer(const std::string & path);
 
     boost::shared_ptr<Socket> accept();
+    int getNativeHandle() const;
 
 private:
-
     ServerSocket(int sockFd);
     int m_sockFd;
 };

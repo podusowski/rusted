@@ -86,3 +86,8 @@ boost::shared_ptr<Socket> ServerSocket::accept()
 
     return boost::shared_ptr<Socket>(new Socket(sockFd));
 }
+
+int ServerSocket::getNativeHandle() const
+{
+    return m_sockFd;
+}

@@ -17,6 +17,7 @@ SOURCES+=Networking/Detail/SocketDescriptor.cpp
 SOURCES+=Networking/DnsResolver.cpp
 SOURCES+=Networking/GenericPacket.cpp
 SOURCES+=Networking/ServerSocket.cpp
+SOURCES+=Networking/ServerSocketPool.cpp
 SOURCES+=Networking/Socket.cpp
 SOURCES+=Networking/SocketStream.cpp
 
