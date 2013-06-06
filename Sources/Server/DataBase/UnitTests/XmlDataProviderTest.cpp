@@ -57,6 +57,10 @@ TEST_F(XmlDataProviderTest, Save)
     auto & subchild1 = child1.createChild("subchild1");
     subchild1.setValue("param2", 2);
 
+    std::string weirdCharacters = "~!@#$%^*()_+|}{\"'><?/";
+    //std::string weirdCharacters = "&~!@#$%^*()_+|}{\"'><?/"; FIXME: some bug with & character, no xss though?
+    subchild1.setValue("param3", weirdCharacters);
+
     xmlProvider.save();
 
     {
@@ -79,5 +83,6 @@ TEST_F(XmlDataProviderTest, Save)
 
     EXPECT_EQ(1, db.getRoot().getFirstChild("child1").getValue<int>("param1"));
     EXPECT_EQ(2, db.getRoot().getFirstChild("child1").getFirstChild("subchild1").getValue<int>("param2"));
+    EXPECT_EQ(weirdCharacters, db.getRoot().getFirstChild("child1").getFirstChild("subchild1").getValue<std::string>("param3"));
 }
 
