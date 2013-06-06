@@ -14,9 +14,9 @@ using namespace Server::DataBase;
 class XmlDataProviderTest : public Test
 {
 public:
-    XmlDataProviderTest() : m_xmlFile("/var/tmp/XmlDataProviderTest.db1.xml")
+    XmlDataProviderTest() : m_xmlFile1("/var/tmp/XmlDataProviderTest.db1.xml")
     {
-        std::ofstream db1(m_xmlFile);
+        std::ofstream db1(m_xmlFile1);
         db1 <<
             "<root>\n"
             "<entities>\n"
@@ -24,22 +24,39 @@ public:
             "</entities>\n"
             "</root>\n";
         db1.flush();
+
     }
 
     ~XmlDataProviderTest()
     {
-        std::remove(m_xmlFile.c_str());
+        std::remove(m_xmlFile1.c_str());
     }
 
-    const std::string m_xmlFile;
+    const std::string m_xmlFile1;
 };
 
 TEST_F(XmlDataProviderTest, DataBaseLoad)
 {
     DataBase db;
-    XmlDataProvider xmlProvider(db, m_xmlFile);
+    XmlDataProvider xmlProvider(db, m_xmlFile1);
     xmlProvider.load();
 
+    EXPECT_EQ(1, db.getRoot()
+                 .getFirstChild("entities")
+                 .getFirstChild("entity")
+                 .getValue<int>("id"));
+}
+
+TEST_F(XmlDataProviderTest, LoadResetLoad)
+{
+    DataBase db;
+    XmlDataProvider xmlProvider(db, m_xmlFile1);
+    xmlProvider.load();
+
+    db.reset();
+    xmlProvider.load();
+
+    ASSERT_EQ(1u, db.getRoot().getChildCount());
     EXPECT_EQ(1, db.getRoot()
                  .getFirstChild("entities")
                  .getFirstChild("entity")
@@ -49,7 +66,7 @@ TEST_F(XmlDataProviderTest, DataBaseLoad)
 TEST_F(XmlDataProviderTest, Save)
 {
     DataBase db;
-    XmlDataProvider xmlProvider(db, m_xmlFile);
+    XmlDataProvider xmlProvider(db, m_xmlFile1);
 
     auto & child1 = db.getRoot().createChild("child1");
     child1.setValue("param1", 1);
@@ -64,9 +81,9 @@ TEST_F(XmlDataProviderTest, Save)
     xmlProvider.save();
 
     {
-        LOG_INFO << m_xmlFile << " contents:";
+        LOG_INFO << m_xmlFile1 << " contents:";
 
-        std::fstream f(m_xmlFile);
+        std::fstream f(m_xmlFile1);
         std::string line;
         while (f.good())
         {
