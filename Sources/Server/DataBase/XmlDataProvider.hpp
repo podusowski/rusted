@@ -3,7 +3,8 @@
 #include <string>
 #include <stack>
 
-#include <libxml2/libxml/parser.h>
+#include <libxml/parser.h>
+#include <libxml/xmlwriter.h>
 
 #include "DataBase/DataBase.hpp"
 
@@ -25,7 +26,7 @@ private:
     xmlSAXHandler m_saxHandlersTable;
     std::stack<DataBaseNode *> m_stack;
 
-    void saveNode(DataBaseNode &, std::fstream &);
+    void saveNode(DataBaseNode &, xmlTextWriterPtr);
 
     static void startElement(void * ctx, const xmlChar * name, const xmlChar ** atts);
     static void endElement(void * ctx, const xmlChar * name);

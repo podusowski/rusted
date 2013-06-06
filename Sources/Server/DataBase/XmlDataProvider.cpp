@@ -30,40 +30,64 @@ void XmlDataProvider::load()
 void XmlDataProvider::save()
 {
     LOG_INFO << "Saving db to " << m_xmlFile;
-    std::fstream f(m_xmlFile);
 
-    saveNode(m_db.getRoot(), f);
+    int rc;
+    xmlTextWriterPtr writer = xmlNewTextWriterFilename(m_xmlFile.c_str(), 0);
+
+    if (!writer)
+    {
+        throw std::runtime_error("libxml error");
+    }
+
+    rc = xmlTextWriterStartDocument(writer, NULL, "UTF-8", NULL);
+    if (rc < 0)
+    {
+        throw std::runtime_error("libxml error");
+    }
+
+    saveNode(m_db.getRoot(), writer);
+
+    rc = xmlTextWriterEndDocument(writer);
+    if (rc < 0)
+    {
+        throw std::runtime_error("libxml error");
+    }
+
+    xmlFreeTextWriter(writer);
 }
 
-void XmlDataProvider::saveNode(DataBaseNode & node, std::fstream & f)
+void XmlDataProvider::saveNode(DataBaseNode & node, xmlTextWriterPtr writer)
 {
     LOG_DEBUG << "  " << node.getName();
 
+    int rc;
+
+    rc = xmlTextWriterStartElement(writer, BAD_CAST node.getName().c_str());
+    if (rc < 0)
+    {
+        throw std::runtime_error("libxml error");
+    }
+
     auto values = node.getValues();
 
-    if (values.size() > 0)
+    for (auto value : values)
     {
-        f << "\t<" << node.getName() << " ";
-
-        for (auto value : values)
-        {
-            f << value.first << "=\"" << value.second << "\"";
-        }
-
-        f << ">";
-    }
-    else
-    {
-        f << "\t<" << node.getName() << ">\n";
+        rc = xmlTextWriterWriteAttribute(writer,
+            BAD_CAST value.first.c_str(),
+            BAD_CAST value.second.c_str());
     }
 
     auto childs = node.getChilds();
     for (auto child : childs)
     {
-        saveNode(*child, f);
+        saveNode(*child, writer);
     }
 
-    f << "\t</" << node.getName() << ">\n";
+    rc = xmlTextWriterEndElement(writer);
+    if (rc < 0)
+    {
+        throw std::runtime_error("libxml error");
+    }
 }
 
 void XmlDataProvider::startElement(void * ctx, const xmlChar * name, const xmlChar ** atts)

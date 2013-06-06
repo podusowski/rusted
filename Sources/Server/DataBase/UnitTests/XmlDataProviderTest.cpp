@@ -3,6 +3,8 @@
 #include <fstream>
 #include <cstdio>
 
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "DataBase/DataBase.hpp"
 #include "DataBase/XmlDataProvider.hpp"
 
@@ -56,6 +58,18 @@ TEST_F(XmlDataProviderTest, Save)
     subchild1.setValue("param2", 2);
 
     xmlProvider.save();
+
+    {
+        LOG_INFO << m_xmlFile << " contents:";
+
+        std::fstream f(m_xmlFile);
+        std::string line;
+        while (f.good())
+        {
+            std::getline(f, line);
+            LOG_INFO << line;
+        }
+    }
 
     db.reset();
 
