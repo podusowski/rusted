@@ -33,6 +33,7 @@ void XmlDataProvider::save()
 
     int rc;
     xmlTextWriterPtr writer = xmlNewTextWriterFilename(m_xmlFile.c_str(), 0);
+    xmlTextWriterSetIndent(writer, true);
 
     if (!writer)
     {
