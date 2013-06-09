@@ -15,7 +15,7 @@ XmlDataProvider::XmlDataProvider(const std::string & xmlFile) :
 
 void XmlDataProvider::load(DataBaseNode & root)
 {
-    LOG_INFO << "Loading db from " << m_xmlFile;
+    LOG_INFO << "Loading " << m_xmlFile << " to " << root.getName();
 
     m_stack.push(&root);
 
@@ -28,7 +28,7 @@ void XmlDataProvider::load(DataBaseNode & root)
 
 void XmlDataProvider::save(DataBaseNode & root)
 {
-    LOG_INFO << "Saving db to " << m_xmlFile;
+    LOG_INFO << "Writing " << root.getName() << " to " << m_xmlFile;
 
     int rc;
     xmlTextWriterPtr writer = xmlNewTextWriterFilename(m_xmlFile.c_str(), 0);
