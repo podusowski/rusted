@@ -17,7 +17,7 @@ public:
 
 TEST_F(ShipSct, ChangeShipCourse)
 {
-	SCT::Component component("SampleDataBase.xml");
+    SCT::Component component("SampleDataBase.xml");
     component.start();
 
     auto connection = authorizeUser(component, "user1", "password");
@@ -61,11 +61,7 @@ TEST_F(ShipSct, ChangeShipCourse)
 
 TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
 {
-    std::string dbFile = "SampleDataBase.xml";
-
-	SCT::Component component;
-    component.setConfigValue("--database.provider", "xml");
-    component.setConfigValue("--database.xml.filename", dbFile);
+    SCT::Component component("SampleDataBase.xml");
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -92,11 +88,7 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
 
 TEST_F(ShipSct, ChangeShipCourseAnotherPlayerWasConnectedEarlier)
 {
-    std::string dbFile = "SampleDataBase.xml";
-
-	SCT::Component component;
-    component.setConfigValue("--database.provider", "xml");
-    component.setConfigValue("--database.xml.filename", dbFile);
+    SCT::Component component("SampleDataBase.xml");
     component.start();
 
     {

@@ -7,31 +7,24 @@
 
 TEST(ServerVersionSct, testServerVersion)
 {
-	using namespace Common::Messages;
+    using namespace Common::Messages;
 
-    std::string dbFile = "SampleDataBase.xml";
-
-	SCT::Component component;
-    component.setConfigValue("--database.provider", "xml");
-    component.setConfigValue("--database.xml.filename", dbFile);
+    SCT::Component component("SampleDataBase.xml");
     component.start();
-	boost::shared_ptr<SCT::Connection> connection = component.createConnection();
 
-	Common::Messages::ServerVersionReq msg;
-	connection->send(msg);
+    boost::shared_ptr<SCT::Connection> connection = component.createConnection();
 
-	connection->receive<Common::Messages::ServerVersionResp>();
+    Common::Messages::ServerVersionReq msg;
+    connection->send(msg);
+
+    connection->receive<Common::Messages::ServerVersionResp>();
 }
 
 TEST(ServerVersionSct, FewConnections)
 {
-	using namespace Common::Messages;
+    using namespace Common::Messages;
 
-    std::string dbFile = "SampleDataBase.xml";
-
-	SCT::Component component;
-    component.setConfigValue("--database.provider", "xml");
-    component.setConfigValue("--database.xml.filename", dbFile);
+    SCT::Component component("SampleDataBase.xml");
     component.start();
 
     for (int i = 0; i < 5; i++)
@@ -41,6 +34,6 @@ TEST(ServerVersionSct, FewConnections)
         Common::Messages::ServerVersionReq msg;
         connection->send(msg);
         connection->receive<Common::Messages::ServerVersionResp>();
-	}
+    }
 }
 

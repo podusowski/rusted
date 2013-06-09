@@ -7,37 +7,34 @@
 
 TEST(UserSct, Authorize)
 {
-	using namespace ::Common::Messages;
+    using namespace ::Common::Messages;
 
-    std::string dbFile = "SampleDataBase.xml";
-
-	SCT::Component component;
-    component.setConfigValue("--database.provider", "xml");
-    component.setConfigValue("--database.xml.filename", dbFile);
+    SCT::Component component("SampleDataBase.xml");
     component.start();
-	boost::shared_ptr<SCT::Connection> connection = component.createConnection();
 
-	// authorize user
-	{
-		Common::Messages::UserAuthorizationReq msg;
-		msg.login = "user1";
-		msg.password = "password";
-		connection->send(msg);
+    boost::shared_ptr<SCT::Connection> connection = component.createConnection();
 
-		auto resp = connection->receive<Common::Messages::UserAuthorizationResp>();
-		EXPECT_EQ(true, resp->success);
-		EXPECT_EQ(1, resp->player_id);
-	}
+    // authorize user
+    {
+        Common::Messages::UserAuthorizationReq msg;
+        msg.login = "user1";
+        msg.password = "password";
+        connection->send(msg);
 
-	// check player's resources
-	{
-		Common::Messages::GetPlayerResourcesInfo getPlayerResourcesInfo;
-		connection->send(getPlayerResourcesInfo);
+        auto resp = connection->receive<Common::Messages::UserAuthorizationResp>();
+        EXPECT_EQ(true, resp->success);
+        EXPECT_EQ(1, resp->player_id);
+    }
 
-		auto playerResourcesInfo = connection->receive<Common::Messages::PlayerResourcesInfo>();
-		EXPECT_EQ(0xf00d, playerResourcesInfo->helium);
-		EXPECT_EQ(0xf00d, playerResourcesInfo->carbon);
-	}
+    // check player's resources
+    {
+        Common::Messages::GetPlayerResourcesInfo getPlayerResourcesInfo;
+        connection->send(getPlayerResourcesInfo);
+
+        auto playerResourcesInfo = connection->receive<Common::Messages::PlayerResourcesInfo>();
+        EXPECT_EQ(0xf00d, playerResourcesInfo->helium);
+        EXPECT_EQ(0xf00d, playerResourcesInfo->carbon);
+    }
 }
 
 TEST(UserSct, InvalidPassword)
@@ -58,11 +55,7 @@ TEST(UserSct, InvalidPassword)
 
 TEST(UserSct, TwoUsersEntitiesStatusReq)
 {
-    std::string dbFile = "SampleDataBase.xml";
-
-	SCT::Component component;
-    component.setConfigValue("--database.provider", "xml");
-    component.setConfigValue("--database.xml.filename", dbFile);
+    SCT::Component component("SampleDataBase.xml");
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -87,3 +80,4 @@ TEST(UserSct, TwoUsersEntitiesStatusReq)
         ASSERT_EQ(3, playerShips->ships.size()); 
     }
 }
+
