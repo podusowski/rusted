@@ -18,7 +18,8 @@ class AbstractTest : public testing::Test
 {
 public:
     AbstractTest() :
-        m_spline(new Common::Math::Spline3Mock)
+        m_spline(new Common::Math::Spline3Mock),
+        m_cfg(new Cake::Configuration::Configuration)
     {
         using namespace Cake::DependencyInjection;
 
@@ -35,6 +36,7 @@ public:
         forInterface<Server::Game::IShipClassContainer>().use(m_shipClassContainer);
 
         forInterface<Common::Math::ISpline3>().use(m_spline);
+        forInterface<Cake::Configuration::Configuration>().use(m_cfg);
 
         ON_CALL(getTimeMock(), getCurrentTime()).WillByDefault(testing::Return(Common::Game::TimeValue()));
     }
@@ -69,6 +71,7 @@ private:
     boost::shared_ptr<Server::Game::IObjectFactory> m_objectFactory;
     boost::shared_ptr<Server::Game::IShipClassContainer> m_shipClassContainer;
     boost::shared_ptr<Common::Math::ISpline3> m_spline;
+    boost::shared_ptr<Cake::Configuration::Configuration> m_cfg;
 };
 
 }

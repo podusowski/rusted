@@ -6,22 +6,22 @@
 #include <libxml/parser.h>
 #include <libxml/xmlwriter.h>
 
-#include "DataBase/DataBase.hpp"
+#include "DataBase/DataBaseNode.hpp"
+#include "IDataProvider.hpp"
 
 namespace Server 
 {
 namespace DataBase
 {
 
-class XmlDataProvider
+class XmlDataProvider : public IDataProvider
 {
 public:
-    XmlDataProvider(DataBase & db, const std::string & xmlFile);
-    void load();
-    void save();
+    XmlDataProvider(const std::string & xmlFile);
+    void load(DataBaseNode &);
+    void save(DataBaseNode &);
 
 private:
-    DataBase & m_db;
     std::string m_xmlFile;
     xmlSAXHandler m_saxHandlersTable;
     std::stack<DataBaseNode *> m_stack;

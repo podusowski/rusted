@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "UnitTests/AbstractTest.hpp"
 #include "Common/Game/Utilities/PasswordHash.hpp"
 #include "DataBase/DataBase.hpp"
 #include "Network/UnitTests/ConnectionMock.hpp"
@@ -9,7 +10,11 @@ using namespace testing;
 using namespace Server::Game;
 using namespace Common;
 
-TEST(PlayerContainerTest, AddPlayerAndReferenceByConnection)
+class PlayerContainerTest : public Server::AbstractTest
+{
+};
+
+TEST_F(PlayerContainerTest, AddPlayerAndReferenceByConnection)
 {
     Server::DataBase::DataBase db;
     Server::DataBase::DataBaseNode & playersNode = db.getRoot().createChild("users");

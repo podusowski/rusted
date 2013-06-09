@@ -2,11 +2,16 @@
 
 #include <stdexcept>
 
+#include "UnitTests/AbstractTest.hpp"
 #include "DataBase/DataBaseNode.hpp"
 
 using namespace Server::DataBase;
 
-TEST(DataBaseNodeTest, BasicTree)
+class DataBaseNodeTest : public Server::AbstractTest
+{
+};
+
+TEST_F(DataBaseNodeTest, BasicTree)
 {
     DataBaseNode root("root");
     DataBaseNode & entities = root.createChild("entities");
@@ -20,13 +25,13 @@ TEST(DataBaseNodeTest, BasicTree)
     EXPECT_EQ(1, root.getFirstChild("entities").getFirstChild("entity").getValue<int>("id"));
 }
 
-TEST(DataBaseNodeTest, NonExistingNode)
+TEST_F(DataBaseNodeTest, NonExistingNode)
 {
     DataBaseNode node("node");
     EXPECT_THROW(node.getFirstChild("nonExistingChild"), std::out_of_range);
 }
 
-TEST(DataBaseNodeTest, Iterators)
+TEST_F(DataBaseNodeTest, Iterators)
 {
     DataBaseNode node("node");
     node.createChild("child").setValue("id", 1);
@@ -48,7 +53,7 @@ TEST(DataBaseNodeTest, Iterators)
     EXPECT_TRUE(it == childs.end());
 }
 
-TEST(DataBaseNodeTest, IterateTroughValues)
+TEST_F(DataBaseNodeTest, IterateTroughValues)
 {
     DataBaseNode node("node");
 

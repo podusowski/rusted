@@ -3,11 +3,16 @@
 #include <fstream>
 #include <boost/shared_ptr.hpp>
 
+#include "UnitTests/AbstractTest.hpp"
 #include "Cake/Configuration/Configuration.hpp"
 #include "DataBase/DataBase.hpp"
 #include "DataBase/DataBaseFactory.hpp"
 
-TEST(DataBaseModuleTest, XmlDataBaseRead)
+class DataBaseModuleTest : public Server::AbstractTest
+{
+};
+
+TEST_F(DataBaseModuleTest, XmlDataBaseRead)
 {
     std::ofstream db1("/var/tmp/database.xml");
     db1 <<

@@ -5,13 +5,14 @@
 
 #include "Cake/Diagnostics/Logger.hpp"
 
+#include "UnitTests/AbstractTest.hpp"
 #include "DataBase/DataBase.hpp"
 #include "DataBase/XmlDataProvider.hpp"
 
 using namespace testing;
 using namespace Server::DataBase;
 
-class XmlDataProviderTest : public Test
+class XmlDataProviderTest : public Server::AbstractTest
 {
 public:
     XmlDataProviderTest() : m_xmlFile1("/var/tmp/XmlDataProviderTest.db1.xml")
@@ -38,8 +39,8 @@ public:
 TEST_F(XmlDataProviderTest, DataBaseLoad)
 {
     DataBase db;
-    XmlDataProvider xmlProvider(db, m_xmlFile1);
-    xmlProvider.load();
+    XmlDataProvider xmlProvider(m_xmlFile1);
+    xmlProvider.load(db.getRoot());
 
     EXPECT_EQ(1, db.getRoot()
                  .getFirstChild("entities")
@@ -50,11 +51,11 @@ TEST_F(XmlDataProviderTest, DataBaseLoad)
 TEST_F(XmlDataProviderTest, LoadResetLoad)
 {
     DataBase db;
-    XmlDataProvider xmlProvider(db, m_xmlFile1);
-    xmlProvider.load();
+    XmlDataProvider xmlProvider(m_xmlFile1);
+    xmlProvider.load(db.getRoot());
 
     db.reset();
-    xmlProvider.load();
+    xmlProvider.load(db.getRoot());
 
     ASSERT_EQ(1u, db.getRoot().getChildCount());
     EXPECT_EQ(1, db.getRoot()
@@ -66,7 +67,7 @@ TEST_F(XmlDataProviderTest, LoadResetLoad)
 TEST_F(XmlDataProviderTest, Save)
 {
     DataBase db;
-    XmlDataProvider xmlProvider(db, m_xmlFile1);
+    XmlDataProvider xmlProvider(m_xmlFile1);
 
     auto & child1 = db.getRoot().createChild("child1");
     child1.setValue("param1", 1);
@@ -78,7 +79,7 @@ TEST_F(XmlDataProviderTest, Save)
     //std::string weirdCharacters = "&~!@#$%^*()_+|}{\"'><?/"; FIXME: some bug with & character, no xss though?
     subchild1.setValue("param3", weirdCharacters);
 
-    xmlProvider.save();
+    xmlProvider.save(db.getRoot());
 
     {
         LOG_INFO << m_xmlFile1 << " contents:";
@@ -96,7 +97,7 @@ TEST_F(XmlDataProviderTest, Save)
 
     ASSERT_EQ(0u, db.getRoot().getChildCount());
 
-    xmlProvider.load();
+    xmlProvider.load(db.getRoot());
 
     EXPECT_EQ(1, db.getRoot().getFirstChild("child1").getValue<int>("param1"));
     EXPECT_EQ(2, db.getRoot().getFirstChild("child1").getFirstChild("subchild1").getValue<int>("param2"));

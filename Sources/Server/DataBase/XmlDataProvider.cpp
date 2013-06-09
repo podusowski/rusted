@@ -8,17 +8,16 @@
 
 using namespace Server::DataBase;
 
-XmlDataProvider::XmlDataProvider(DataBase & db, const std::string & xmlFile) : 
-    m_db(db),
+XmlDataProvider::XmlDataProvider(const std::string & xmlFile) :
     m_xmlFile(xmlFile)
 {
 }
 
-void XmlDataProvider::load()
+void XmlDataProvider::load(DataBaseNode & root)
 {
     LOG_INFO << "Loading db from " << m_xmlFile;
 
-    m_stack.push(&m_db.getRoot());
+    m_stack.push(&root);
 
     memset(&m_saxHandlersTable, 0, sizeof(xmlSAXHandler));
     m_saxHandlersTable.startElement = &startElement;
@@ -27,7 +26,7 @@ void XmlDataProvider::load()
     xmlSAXUserParseFile(&m_saxHandlersTable, &m_stack, m_xmlFile.c_str());
 }
 
-void XmlDataProvider::save()
+void XmlDataProvider::save(DataBaseNode & root)
 {
     LOG_INFO << "Saving db to " << m_xmlFile;
 
@@ -46,7 +45,7 @@ void XmlDataProvider::save()
         throw std::runtime_error("libxml error");
     }
 
-    saveNode(m_db.getRoot(), writer);
+    saveNode(root, writer);
 
     rc = xmlTextWriterEndDocument(writer);
     if (rc < 0)

@@ -25,6 +25,7 @@ SOURCES+=Game/Actions/ActionFactory.cpp
 SOURCES+=Game/Actions/ActionPerformer.cpp
 SOURCES+=DataBase/DataBase.cpp
 SOURCES+=DataBase/DataBaseNode.cpp
+SOURCES+=DataBase/DataProviderFactory.cpp
 SOURCES+=DataBase/XmlDataProvider.cpp
 SOURCES+=DataBase/DataBaseFactory.cpp
 
