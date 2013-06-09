@@ -17,53 +17,5 @@
         <object id="100" type="Asteroid" model="Asteroid.model" x="2000" y="1"    z="1"    integrity="100" carbon="100" helium="100" />
         <object id="101" type="Asteroid" model="Asteroid.model" x="4000" y="4000" z="2000" integrity="100" carbon="100" helium="100" />
    </objects>
-
-    <ship_classes>
-
-        <!-- figter -->
-        <ship_class id="1" speed="500" integrity="1000" model="Fighter.model" name="Fighter" capacity="100" required_carbon="10" required_helium="5">
-            <actions>
-                <action type="1" parameter="1" />
-                <action type="1" parameter="2" />
-                <action type="4" parameter="1" />
-            </actions>
-        </ship_class>
-
-        <!-- Carnwennan -->
-        <ship_class id="5" speed="5000" integrity="50" model="Carnwennan.model" name="Carnwennan" capacity="100" required_carbon="10" required_helium="5">
-            <actions>
-                <action type="1" parameter="1" />
-                <action type="1" parameter="2" />
-                <action type="4" parameter="1" />
-            </actions>
-        </ship_class>
-
-        <!-- fregate -->
-        <ship_class id="4" speed="80" integrity="100" model="Fregate.model" name="Fregate" capacity="1000" required_carbon="1" required_helium="1">
-            <actions>
-                <action type="1" parameter="1" />
-                <action type="4" parameter="1" />
-            </actions>
-        </ship_class>
-
-        <!-- construction ship -->
-        <ship_class id="2" speed="100" integrity="100" model="Constructor.model" name="Constructor" capacity="10000" required_carbon="100" required_helium="100">
-            <actions>
-                <action type="2" parameter="1" />
-                <action type="2" parameter="2" />
-                <action type="2" parameter="3" />
-                <action type="4" parameter="1" />
-            </actions>
-        </ship_class>
-
-        <!-- gatherer -->
-        <ship_class id="3" speed="100" integrity="100" model="Gatherer.model" name="Gatherer" capacity="1000" required_carbon="1" required_helium="1">
-            <actions>
-                <action type="3" parameter="1" />
-                <action type="4" parameter="1" />
-            </actions>
-        </ship_class>
-
-    </ship_classes>
 </root>
 

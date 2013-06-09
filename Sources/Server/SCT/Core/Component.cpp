@@ -23,8 +23,8 @@ Component::Component()
 
 Component::Component(const std::string & database)
 {
-    setConfigValue("--database.provider", "xml");
-    setConfigValue("--database.xml.filename", database);
+    setConfigValue("--database.provider1.type", "xml");
+    setConfigValue("--database.provider1.url", database);
 
     std::cout << "\n";
 }

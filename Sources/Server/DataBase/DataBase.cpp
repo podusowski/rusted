@@ -7,7 +7,6 @@ using namespace Server::DataBase;
 
 DataBase::DataBase()
 {
-    reset();
     reload();
 }
 
@@ -24,20 +23,24 @@ void DataBase::reset()
 
 void DataBase::reload()
 {
-    if (m_cfg->hasValue("database.provider"))
-    {
-        std::string provider = m_cfg->getValue<std::string>("database.provider");
-        std::string url = m_cfg->getValue<std::string>("database.xml.filename");
+    reset();
 
-        LOG_INFO << "Reloading database using: " << provider << "/" << url;
-
-        DataProviderFactory providerFactory;
-        auto dataProvider = providerFactory.create(provider, url);
-        dataProvider->load(*m_root);
-    }
-    else
+    for (int i = 1; i < 100; i++)
     {
-        LOG_WARN << "No database provider defined";
+        std::stringstream providerPrefix;
+        providerPrefix << "database.provider" << i;
+
+        if (m_cfg->hasValue(providerPrefix.str() + ".type"))
+        {
+            std::string provider = m_cfg->getValue<std::string>(providerPrefix.str() + ".type");
+            std::string url = m_cfg->getValue<std::string>(providerPrefix.str() + ".url");
+
+            LOG_INFO << "Reading data from provider #" << i << ":" << provider << "/" << url;
+
+            DataProviderFactory providerFactory;
+            auto dataProvider = providerFactory.create(provider, url);
+            dataProvider->load(*m_root);
+        }
     }
 }
 

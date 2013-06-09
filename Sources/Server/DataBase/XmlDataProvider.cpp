@@ -23,7 +23,11 @@ void XmlDataProvider::load(DataBaseNode & root)
     m_saxHandlersTable.startElement = &startElement;
     m_saxHandlersTable.endElement = &endElement;
 
-    xmlSAXUserParseFile(&m_saxHandlersTable, &m_stack, m_xmlFile.c_str());
+    int rc = xmlSAXUserParseFile(&m_saxHandlersTable, &m_stack, m_xmlFile.c_str());
+    if (rc < 0)
+    {
+        throw std::runtime_error("libxml error");
+    }
 }
 
 void XmlDataProvider::save(DataBaseNode & root)
