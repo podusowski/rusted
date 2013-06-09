@@ -27,7 +27,6 @@ SOURCES+=DataBase/DataBase.cpp
 SOURCES+=DataBase/DataBaseNode.cpp
 SOURCES+=DataBase/DataProviderFactory.cpp
 SOURCES+=DataBase/XmlDataProvider.cpp
-SOURCES+=DataBase/DataBaseFactory.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/..

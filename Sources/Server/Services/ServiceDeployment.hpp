@@ -14,7 +14,6 @@
 #include "Server/Services/AuthorizationService.hpp"
 #include "Server/Services/PlayerService.hpp"
 #include "Server/Services/EntityService.hpp"
-#include "DataBase/DataBaseFactory.hpp"
 
 #include "Common/Game/Universe.hpp"
 
