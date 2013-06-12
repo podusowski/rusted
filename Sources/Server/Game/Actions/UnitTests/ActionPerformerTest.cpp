@@ -17,11 +17,18 @@ class ActionPerformerTest : public Server::AbstractTest
 {
 public:
     ActionPerformerTest() :
-        action(new Server::Game::Actions::ActionMock)
+        action(new Server::Game::Actions::ActionMock),
+        ship1(new Common::Game::Object::ShipMock()),
+        ship2(new Common::Game::Object::ShipMock())
     {
-        ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(ship1));
-        ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(ship2));
+        ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(*ship1));
+        ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(*ship2));
         ON_CALL(player, getId()).WillByDefault(Return(PLAYER_ID));
+
+        ON_CALL(*ship1, getOwnerId()).WillByDefault(Return(PLAYER_ID));
+
+        universe.add(ship1);
+        universe.add(ship2);
     }
 
     ~ActionPerformerTest()
@@ -36,8 +43,8 @@ public:
     Server::Game::Actions::ActionFactoryMock actionFactory;
     boost::shared_ptr<Server::Game::Actions::IAction> action;
     Common::Game::Universe universe;
-    Common::Game::Object::ShipMock ship1;
-    Common::Game::Object::ShipMock ship2;
+    boost::shared_ptr<Common::Game::Object::ShipMock> ship1;
+    boost::shared_ptr<Common::Game::Object::ShipMock> ship2;
 
     static const int ATTACK_ID = 1;
     static const int ATTACK_PARAMETER = 2;

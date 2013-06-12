@@ -21,6 +21,7 @@ public:
     MOCK_METHOD0(getIntegrity, unsigned());
     MOCK_METHOD1(setIntegrity, void(unsigned));
     MOCK_METHOD1(setModel, void(std::string));
+    MOCK_METHOD0(getOwnerId, unsigned());
     MOCK_METHOD0(getTrajectoryDescription, IFlightTrajectory::Description());
 };
 

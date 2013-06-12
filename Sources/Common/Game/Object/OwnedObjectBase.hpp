@@ -10,8 +10,8 @@ namespace Object
 class OwnedObjectBase
 {
 public:
-    void setOwnerId(unsigned id) { m_owner = id; }
-    unsigned getOwnerId() { return m_owner; }
+    virtual void setOwnerId(unsigned id) { m_owner = id; }
+    virtual unsigned getOwnerId() { return m_owner; }
 
     virtual ~OwnedObjectBase() {}
 

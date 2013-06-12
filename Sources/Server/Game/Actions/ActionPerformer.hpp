@@ -27,8 +27,8 @@ public:
         unsigned parameter);
 
 private:
-    void aquireGlobalCooldown(unsigned playerId);
-    void globalCooldownExpired(unsigned playerId);
+    void aquireGlobalCooldown(unsigned shipIp);
+    void globalCooldownExpired(unsigned shipId);
 
     void actionTimerExpired(unsigned internalId, unsigned playerId, unsigned objectId, unsigned actionId);
 
