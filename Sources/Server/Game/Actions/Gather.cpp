@@ -18,10 +18,10 @@ Common::Game::TimeValue Gather::start()
     return Common::Game::TimeValue(5, 0);
 }
 
-void Gather::finish()
+Common::Game::TimeValue Gather::finish()
 {
     using namespace Common::Game::Object;
-    
+
     auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid &>(m_player.getSelectedObject());
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getFocusedObject());
 
@@ -38,6 +38,8 @@ void Gather::finish()
     });
 
     sendCargoInfoToClients();
+
+    return Common::Game::TimeValue(1, 0);
 }
 
 void Gather::sendCargoInfoToClients()

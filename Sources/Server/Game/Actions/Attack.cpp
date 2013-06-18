@@ -34,13 +34,15 @@ Common::Game::TimeValue Attack::start()
     return Common::Game::TimeValue(seconds, miliseconds);
 }
 
-void Attack::finish()
+Common::Game::TimeValue Attack::finish()
 {
     unsigned integrity = m_selectedObject.getIntegrity();
     m_selectedObject.setIntegrity(integrity - 10);
 
     sendExplosionEffect();
     sendShipInfoToClients();
+
+    return Common::Game::TimeValue(1, 0);
 }
 
 void Attack::sendShipInfoToClients()

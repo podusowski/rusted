@@ -17,7 +17,7 @@ ActionPerformer::ActionPerformer(
 }
 
 void ActionPerformer::perform(Server::Network::IConnection & connection, 
-    Common::Game::IPlayer & player, unsigned id, unsigned parameter)
+    Common::Game::IPlayer & player, unsigned id, unsigned parameter, bool loop)
 {
     // TODO: lock
     auto focusedShipId = player.getFocusedObject().getId();
@@ -35,6 +35,10 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
     else
     {
         LOG_DEBUG << "Action started, will be finished after " << timeToFinish << "secs";
+        if (loop)
+        {
+            LOG_DEBUG << "Action is being executed in a loop";
+        }
 
         auto & selectedObject = player.getFocusedObject();
 

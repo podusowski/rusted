@@ -12,8 +12,11 @@ namespace Actions
 class IAction
 {
 public:
+    /* @returns Time after which finish() is expected to call */
     virtual Common::Game::TimeValue start() = 0;
-    virtual void finish() = 0;
+
+    /* @returns Time when another action of this type can be executed */
+    virtual Common::Game::TimeValue finish() = 0;
 
     virtual ~IAction() {}
 };

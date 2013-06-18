@@ -24,7 +24,8 @@ public:
         Server::Network::IConnection & connection,
         Common::Game::IPlayer &,
         unsigned id,
-        unsigned parameter);
+        unsigned parameter,
+        bool loop);
 
 private:
     void aquireGlobalCooldown(unsigned shipIp);

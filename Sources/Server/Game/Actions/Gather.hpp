@@ -20,7 +20,7 @@ class Gather : public IAction
 public:
     Gather(Server::Network::IConnection &, IPlayerContainer &, Common::Game::IPlayer &);
     Common::Game::TimeValue start();
-    void finish();
+    Common::Game::TimeValue finish();
 
 private:
     void sendCargoInfoToClients();

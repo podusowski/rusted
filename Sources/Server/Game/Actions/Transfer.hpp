@@ -20,7 +20,7 @@ class Transfer : public IAction
 public:
     Transfer(Server::Network::IConnection &, IPlayerContainer &, Common::Game::IPlayer &);
     Common::Game::TimeValue start();
-    void finish();
+    Common::Game::TimeValue finish();
 
 private:
     Server::Network::IConnection & m_connection;

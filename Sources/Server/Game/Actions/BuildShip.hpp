@@ -22,7 +22,7 @@ class BuildShip : public IAction
 public:
     BuildShip(Common::Game::Universe &, Common::Game::IPlayer &, Server::Game::IPlayerContainer &, unsigned shipClass);
     Common::Game::TimeValue start();
-    void finish();
+    Common::Game::TimeValue finish();
 
 private:
     void updateCargoHold();

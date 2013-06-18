@@ -41,7 +41,7 @@ Common::Game::TimeValue Transfer::start()
     return Common::Game::TimeValue();
 }
 
-void Transfer::finish()
+Common::Game::TimeValue Transfer::finish()
 {
 }
 

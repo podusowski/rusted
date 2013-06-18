@@ -25,7 +25,7 @@ Common::Game::TimeValue BuildShip::start()
     return Common::Game::TimeValue(2, 0);
 }
 
-void BuildShip::finish()
+Common::Game::TimeValue BuildShip::finish()
 {
     auto object = m_objectFactory->createShip(m_shipClass, m_player.getId());
 
@@ -47,6 +47,8 @@ void BuildShip::finish()
     {
         m_servicesUtils.sendObjectInfo(ship, *connection);
     }
+
+    return Common::Game::TimeValue(1, 0);
 }
 
 void BuildShip::updateCargoHold()
