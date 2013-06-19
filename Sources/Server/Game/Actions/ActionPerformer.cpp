@@ -27,25 +27,22 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
     auto action = m_actionFactory.create(connection, player, id, parameter);
     auto timeToFinish = action->start();
 
+    auto & selectedObject = player.getFocusedObject();
+
+    Common::Messages::ActionStarted actionStarted;
+    actionStarted.actionId = id;
+    actionStarted.objectId = selectedObject.getId();
+    connection.send(actionStarted);
+
     if (timeToFinish == Common::Game::TimeValue(0, 0))
     {
         LOG_DEBUG << "Action doesn't have execution time and will be finished immidiately";
-        action->finish();
+
+        actionFinished(action, player.getId(), selectedObject.getId(), id);
     }
     else
     {
-        LOG_DEBUG << "Action started, will be finished after " << timeToFinish << "secs";
-        if (loop)
-        {
-            LOG_DEBUG << "Action is being executed in a loop";
-        }
-
-        auto & selectedObject = player.getFocusedObject();
-
-        Common::Messages::ActionStarted actionStarted;
-        actionStarted.actionId = id;
-        actionStarted.objectId = selectedObject.getId();
-        connection.send(actionStarted);
+        LOG_DEBUG << "Action started, will be finished after " << timeToFinish << "secs, loop: " << loop;
 
         unsigned internalId = 0;
         {
@@ -101,16 +98,24 @@ void ActionPerformer::actionTimerExpired(unsigned internalId, unsigned playerId,
     }
 
     // TODO: shrink critical section
+    boost::shared_ptr<IAction> action = it->second;
+
+    m_ongoingActions.erase(it);
+
+    actionFinished(action, playerId, objectId, actionId);
+}
+
+void ActionPerformer::actionFinished(
+    boost::shared_ptr<Server::Game::Actions::IAction> action,
+    unsigned playerId, unsigned objectId, unsigned actionId)
+{
+    action->finish();
+
     Common::Messages::ActionFinished actionFinished;
     actionFinished.objectId = objectId;
     actionFinished.actionId = actionId;
 
     auto & connection = m_playerContainer.getConnectionById(playerId);
     connection.send(actionFinished);
-
-    boost::shared_ptr<IAction> action = it->second;
-    action->finish();
-
-    m_ongoingActions.erase(it);
 }
 

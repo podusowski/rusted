@@ -30,8 +30,13 @@ public:
 private:
     void aquireGlobalCooldown(unsigned shipIp);
     void globalCooldownExpired(unsigned shipId);
-
     void actionTimerExpired(unsigned internalId, unsigned playerId, unsigned objectId, unsigned actionId);
+
+    void actionFinished(
+        boost::shared_ptr<Server::Game::Actions::IAction> action,
+        unsigned playerId,
+        unsigned objectId,
+        unsigned actionId);
 
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     IActionFactory & m_actionFactory;

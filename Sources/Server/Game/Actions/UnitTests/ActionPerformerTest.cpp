@@ -53,15 +53,18 @@ public:
     static const int PLAYER_ID = 2;
 };
 
-TEST_F(ActionPerformerTest, Perform)
+TEST_F(ActionPerformerTest, Perform_DontFinish)
 {
-    boost::function<void()> timerCallback;
-    EXPECT_CALL(getTimeMock(), createTimer(_, _)).Times(1).WillRepeatedly(SaveArg<1>(&timerCallback));
+    boost::function<void()> globalCooldownTimerCallback;
+    boost::function<void()> actionExecuteTimerCallback;
+
+    EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
+    EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(2, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&actionExecuteTimerCallback));
     EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER)).Times(1).WillRepeatedly(Return(action1));
 
     auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
-    EXPECT_CALL(actionMock, start()).Times(1).WillRepeatedly(Return(Common::Game::TimeValue()));
-    EXPECT_CALL(actionMock, finish()).Times(1).WillOnce(Return(Common::Game::TimeValue(1, 0)));
+    EXPECT_CALL(actionMock, start()).Times(1).WillRepeatedly(Return(Common::Game::TimeValue(2, 0)));
+    EXPECT_CALL(actionMock, finish()).Times(0);
 
     Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
     performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, false);
@@ -69,13 +72,16 @@ TEST_F(ActionPerformerTest, Perform)
 
 TEST_F(ActionPerformerTest, GlobalCooldown)
 {
-    boost::function<void()> timerCallback;
-    EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(2).WillRepeatedly(SaveArg<1>(&timerCallback));
-    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(1).WillOnce(ReturnRef(connection));
+    boost::function<void()> globalCooldownTimerCallback;
+    boost::function<void()> actionExecuteTimerCallback;
+
+    EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(2).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
+    EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(2, 0), _)).Times(2).WillRepeatedly(SaveArg<1>(&actionExecuteTimerCallback));
+    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(1).WillRepeatedly(ReturnRef(connection));
     EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER)).Times(2).WillRepeatedly(Return(action1));
 
     auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
-    ON_CALL(actionMock, start()).WillByDefault(Return(Common::Game::TimeValue()));
+    ON_CALL(actionMock, start()).WillByDefault(Return(Common::Game::TimeValue(2, 0)));
     ON_CALL(actionMock, finish()).WillByDefault(Return(Common::Game::TimeValue()));
 
     Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
@@ -84,7 +90,7 @@ TEST_F(ActionPerformerTest, GlobalCooldown)
     // global cooldown timer is not expired yet
     EXPECT_ANY_THROW(performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, false));
 
-    timerCallback();
+    globalCooldownTimerCallback();
 
     // global cooldown has passed so we can do some action again without exception
     performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, false);
@@ -98,7 +104,9 @@ TEST_F(ActionPerformerTest, ActionExecutionFinishAfterTimerExpired)
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(2, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&actionExecuteTimerCallback));
     EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER)).Times(1).WillRepeatedly(Return(action1));
-    ON_CALL(playerContainer, getConnectionById(PLAYER_ID)).WillByDefault(ReturnRef(connection));
+    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(1).WillOnce(ReturnRef(connection));
+    EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ActionStarted)))).Times(1);
+    EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ActionFinished)))).Times(1);
 
     auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
     EXPECT_CALL(actionMock, start()).Times(1).WillRepeatedly(Return(Common::Game::TimeValue(2, 0)));
@@ -108,6 +116,24 @@ TEST_F(ActionPerformerTest, ActionExecutionFinishAfterTimerExpired)
     performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, false);
 
     actionExecuteTimerCallback();
+}
+
+TEST_F(ActionPerformerTest, ActionExecutionFinishAfterTimerExpired_ActionTimeIsZero)
+{
+    boost::function<void()> globalCooldownTimerCallback;
+
+    EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
+    EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER)).Times(1).WillRepeatedly(Return(action1));
+    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(1).WillOnce(ReturnRef(connection));
+    EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ActionStarted)))).Times(1);
+    EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ActionFinished)))).Times(1);
+
+    auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
+    EXPECT_CALL(actionMock, start()).Times(1).WillRepeatedly(Return(Common::Game::TimeValue(0, 0)));
+    EXPECT_CALL(actionMock, finish()).Times(1).WillOnce(Return(Common::Game::TimeValue()));
+
+    Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
+    performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, false);
 }
 
 TEST_F(ActionPerformerTest, ActionExecutionNotFinishedUntilTimerExpires)
