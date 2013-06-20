@@ -16,7 +16,7 @@ RustedTime::RustedTime() :
 
 boost::posix_time::ptime RustedTime::getRustedEpoch()
 {
-   return m_epoch; 
+   return m_epoch;
 }
 
 unsigned RustedTime::getSeconds()
@@ -94,8 +94,6 @@ void RustedTime::run()
 {
     while (true)
     {
-        //Cake::Threading::ScopedLock lock(m_timersMutex);
-
         m_timersMutex.aquire();
         if (m_timers.empty())
         {
