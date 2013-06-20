@@ -70,19 +70,24 @@ TEST_F(ActionPerformerTest, Perform_DontFinish)
     performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, false);
 }
 
-TEST_F(ActionPerformerTest, GlobalCooldown)
+TEST_F(ActionPerformerTest, VariousActionCooldowns)
 {
     boost::function<void()> globalCooldownTimerCallback;
     boost::function<void()> actionExecuteTimerCallback;
+    boost::function<void()> actionCooldownTimerCallback;
 
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(2).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(2, 0), _)).Times(2).WillRepeatedly(SaveArg<1>(&actionExecuteTimerCallback));
-    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(1).WillRepeatedly(ReturnRef(connection));
+    EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(3, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&actionCooldownTimerCallback));
+
+    // action finished, global cooldown expired
+    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(2).WillRepeatedly(ReturnRef(connection));
+
     EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER)).Times(2).WillRepeatedly(Return(action1));
 
     auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
     ON_CALL(actionMock, start()).WillByDefault(Return(Common::Game::TimeValue(2, 0)));
-    ON_CALL(actionMock, finish()).WillByDefault(Return(Common::Game::TimeValue()));
+    ON_CALL(actionMock, finish()).WillByDefault(Return(Common::Game::TimeValue(3, 0)));
 
     Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
     performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, false);
@@ -92,7 +97,17 @@ TEST_F(ActionPerformerTest, GlobalCooldown)
 
     globalCooldownTimerCallback();
 
-    // global cooldown has passed so we can do some action again without exception
+    // action is not finished yet, so we can't execute another
+    EXPECT_ANY_THROW(performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, false));
+
+    actionExecuteTimerCallback();
+
+    // after action cooldown isn't expired yet so we can't execute the same action
+    EXPECT_ANY_THROW(performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, false));
+
+    actionCooldownTimerCallback();
+
+    // action is finished and its cooldown expired so we can perform it again
     performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, false);
 }
 

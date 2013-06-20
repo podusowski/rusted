@@ -22,7 +22,13 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
     // TODO: lock
     auto focusedShipId = player.getFocusedObject().getId();
 
+    if (isGlobalCooldownActive(focusedShipId) || isActionOngoingOrCooling(focusedShipId, id))
+    {
+        throw std::runtime_error("global/action cooldown active or action ongoing");
+    }
+
     aquireGlobalCooldown(focusedShipId);
+    aquireOngoingOrCooling(focusedShipId, id);
 
     auto action = m_actionFactory.create(connection, player, id, parameter);
     auto timeToFinish = action->start();
@@ -71,6 +77,11 @@ void ActionPerformer::aquireGlobalCooldown(unsigned shipId)
     }
 }
 
+bool ActionPerformer::isGlobalCooldownActive(unsigned shipId)
+{
+    return m_playerGlobalCooldowns.find(shipId) != m_playerGlobalCooldowns.end();
+}
+
 void ActionPerformer::globalCooldownExpired(unsigned shipId)
 {
     LOG_DEBUG << "Global cooldown expired for ship: " << shipId;
@@ -105,11 +116,41 @@ void ActionPerformer::actionTimerExpired(unsigned internalId, unsigned playerId,
     actionFinished(action, playerId, objectId, actionId);
 }
 
+void ActionPerformer::aquireOngoingOrCooling(unsigned shipId, unsigned actionId)
+{
+    auto ret = m_ongogingOrCoolingActions.insert(std::make_pair(shipId, actionId));
+    if (ret.second)
+    {
+        LOG_DEBUG << "Action addes as ongoing or waiting for cooldown, ship:" << shipId << ", action:" << actionId;
+    }
+    else
+    {
+        LOG_WARN << "Action is ongoing or waiting for cooldown";
+        throw std::runtime_error("action is ongoing or waiting for cooldown");
+    }
+}
+
+bool ActionPerformer::isActionOngoingOrCooling(unsigned shipId, unsigned actionId)
+{
+    return m_ongogingOrCoolingActions.find(std::make_pair(shipId, actionId)) != m_ongogingOrCoolingActions.end();
+}
+
+void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId, unsigned actionId)
+{
+    LOG_DEBUG << "Action cooldown finished for player:" << playerId << ", object:" << objectId;
+
+    size_t elementsErased = m_ongogingOrCoolingActions.erase(std::make_pair(objectId, actionId));
+    if (elementsErased == 0)
+    {
+        throw std::runtime_error("action cooldown expired but no such cooldon registered");
+    }
+}
+
 void ActionPerformer::actionFinished(
     boost::shared_ptr<Server::Game::Actions::IAction> action,
     unsigned playerId, unsigned objectId, unsigned actionId)
 {
-    action->finish();
+    auto actionCooldown = action->finish();
 
     Common::Messages::ActionFinished actionFinished;
     actionFinished.objectId = objectId;
@@ -117,5 +158,16 @@ void ActionPerformer::actionFinished(
 
     auto & connection = m_playerContainer.getConnectionById(playerId);
     connection.send(actionFinished);
+
+    if (actionCooldown != Common::Game::TimeValue())
+    {
+        m_time->createTimer(actionCooldown, boost::bind(
+            &ActionPerformer::actionCooldownExpired, this,
+            playerId, objectId, actionId));
+    }
+    else
+    {
+        actionCooldownExpired(playerId, objectId, actionId);
+    }
 }
 
