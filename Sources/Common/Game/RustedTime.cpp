@@ -94,8 +94,9 @@ void RustedTime::run()
 {
     while (true)
     {
-        Cake::Threading::ScopedLock lock(m_timersMutex);
+        //Cake::Threading::ScopedLock lock(m_timersMutex);
 
+        m_timersMutex.aquire();
         if (m_timers.empty())
         {
             LOG_DEBUG << "Timer queue is empty, waiting";
@@ -109,6 +110,8 @@ void RustedTime::run()
         {
             LOG_DEBUG << "Timer id:" << firstTimer.m_id << " expired";
 
+            m_timersMutex.release();
+
             try
             {
                 firstTimer.callback();
@@ -118,15 +121,19 @@ void RustedTime::run()
                 LOG_WARN << "Exception during timer callback: " << ex.what();
             }
 
+            m_timersMutex.aquire();
+
             m_timers.erase(m_timers.begin());
         }
         else
         {
             TimeValue timeToWait = firstTimer.expiration - t;
             LOG_DEBUG << "Timer thread as awake but there is no expiration yet, waiting:" << timeToWait << ", now:" << getCurrentTime();
-            
+
             m_timersCondition.timedWait(timeToWait.getSeconds(), timeToWait.getMiliseconds());
         }
+
+        m_timersMutex.release();
     }
 }
 

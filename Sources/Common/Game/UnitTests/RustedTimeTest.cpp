@@ -73,3 +73,19 @@ TEST(RustedTimeTest, TimersStress)
     Cake::Threading::Thread::wait(1, 500);
 }
 
+TEST(RustedTimeTest, Bug_DeadlockWhenStartingTimerInExpirationHandler)
+{
+    Common::Game::RustedTime time;
+    TimerCallbackMock callback;
+
+    EXPECT_CALL(callback, expired(_)).Times(1);
+
+    time.createTimer(TimeValue(0, 1), [&]() -> void
+    {
+        time.createTimer(TimeValue(0, 1), boost::bind(&TimerCallbackMock::expired, &callback, 1));
+    });
+
+    // ugly hack to avoid object destruction
+    Cake::Threading::Thread::wait(0, 500);
+}
+
