@@ -17,7 +17,12 @@ ConditionVariable::~ConditionVariable()
 
 void ConditionVariable::wait()
 {
-    pthread_cond_wait(&m_condition, m_mutex.getNativeHandle());
+    int ret = pthread_cond_wait(&m_condition, m_mutex.getNativeHandle());
+
+    if (ret == EPERM)
+    {
+        throw std::runtime_error("condition variable mutex in not locked");
+    }
 }
 
 ETimedWaitResult ConditionVariable::timedWait(unsigned seconds, unsigned miliseconds)
