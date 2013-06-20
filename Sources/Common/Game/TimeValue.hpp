@@ -15,6 +15,7 @@ public:
     unsigned getSeconds() const;
     unsigned getMiliseconds() const;
     bool operator==(const TimeValue & val) const;
+    bool operator!=(const TimeValue & val) const;
     TimeValue operator-(const TimeValue & val) const;
     TimeValue operator+(const TimeValue & val) const;
     bool operator<(const TimeValue & val) const;

@@ -38,6 +38,11 @@ bool TimeValue::operator==(const TimeValue & val) const
     return m_seconds == val.m_seconds && m_miliseconds == val.m_miliseconds;
 }
 
+bool TimeValue::operator!=(const TimeValue & val) const
+{
+    return !(*this == val);
+}
+
 TimeValue TimeValue::operator-(const TimeValue & val) const
 {
     return TimeValue(m_miliseconds >= val.m_miliseconds ? m_seconds - val.m_seconds: m_seconds - val.m_seconds - 1 ,
