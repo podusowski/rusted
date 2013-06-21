@@ -144,7 +144,6 @@ TEST(ActionsSct, BuildShip)
 
     connection1->receive<Common::Messages::ActionStarted>();
     connection1->receive<Common::Messages::GlobalCooldownExpired>();
-    connection1->receive<Common::Messages::ActionFinished>();
 
     // receive info about newly created ship
     auto shipInfo = connection1->receive<Common::Messages::ShipInfo>();
@@ -152,9 +151,12 @@ TEST(ActionsSct, BuildShip)
     EXPECT_EQ(200, shipInfo->integrity);
 
     connection1->receive<Common::Messages::ShipCourseInfo>();
+    connection1->receive<Common::Messages::ObjectCargoInfo>();
+    connection1->receive<Common::Messages::ActionFinished>();
 
     connection2->receive<Common::Messages::ShipInfo>();
     connection2->receive<Common::Messages::ShipCourseInfo>();
+    connection2->receive<Common::Messages::ObjectCargoInfo>();
 }
 
 TEST(ActionsSct, Gather)
@@ -182,7 +184,6 @@ TEST(ActionsSct, Gather)
 
     connection1->receive<Common::Messages::ActionStarted>();
     connection1->receive<Common::Messages::GlobalCooldownExpired>();
-    connection1->receive<Common::Messages::ActionFinished>();
 
     // receive info about player ship cargohold
     auto shipCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
@@ -195,6 +196,8 @@ TEST(ActionsSct, Gather)
     EXPECT_EQ(3, asteroidCargoInfo->id);
     EXPECT_EQ(90, asteroidCargoInfo->carbon);
     EXPECT_EQ(90, asteroidCargoInfo->helium);
+
+    connection1->receive<Common::Messages::ActionFinished>();
 }
 
 TEST(ActionsSct, Transfer)
