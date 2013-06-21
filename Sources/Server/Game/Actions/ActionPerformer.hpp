@@ -30,7 +30,7 @@ public:
         bool loop);
 
 private:
-    void aquireGlobalCooldown(unsigned shipIp);
+    void aquireGlobalCooldown(unsigned shipIp, Network::IConnection &);
     bool isGlobalCooldownActive(unsigned shipId);
     void globalCooldownExpired(unsigned shipId);
 

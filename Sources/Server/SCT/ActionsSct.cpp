@@ -79,6 +79,8 @@ TEST(ActionsSct, AttackObject)
     executeAction.id = 1;
     connection1->send(executeAction);
 
+    connection1->receive<Common::Messages::GlobalCooldownActivated>();
+
     // clients should receive emit effect requests
     auto emitMovingMeshEffect = connection1->receive<Common::Messages::EmitMovingMeshEffect>();
     EXPECT_EQ(1, emitMovingMeshEffect->fromX);
@@ -136,6 +138,8 @@ TEST(ActionsSct, BuildShip)
     executeAction.parameter = 2;
     connection1->send(executeAction);
 
+    connection1->receive<Common::Messages::GlobalCooldownActivated>();
+
     // receive cargo info of focused object since some resources
     // were used to build new ship
     auto objectCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
@@ -182,6 +186,7 @@ TEST(ActionsSct, Gather)
     //executeAction.parameter = 2;
     connection1->send(executeAction);
 
+    connection1->receive<Common::Messages::GlobalCooldownActivated>();
     connection1->receive<Common::Messages::ActionStarted>();
     connection1->receive<Common::Messages::GlobalCooldownExpired>();
 
@@ -222,6 +227,8 @@ TEST(ActionsSct, Transfer)
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = 4;
     connection1->send(executeAction);
+
+    connection1->receive<Common::Messages::GlobalCooldownActivated>();
 
     // cargo info
     connection1->receive<Common::Messages::ObjectCargoInfo>();

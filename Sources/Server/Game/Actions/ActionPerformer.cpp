@@ -27,7 +27,7 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
         throw std::runtime_error("global/action cooldown active or action ongoing");
     }
 
-    aquireGlobalCooldown(focusedShipId);
+    aquireGlobalCooldown(focusedShipId, connection);
     aquireOngoingOrCooling(focusedShipId, id);
 
     auto action = m_actionFactory.create(connection, player, id, parameter);
@@ -62,13 +62,16 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
     }
 }
 
-void ActionPerformer::aquireGlobalCooldown(unsigned shipId)
+void ActionPerformer::aquireGlobalCooldown(unsigned shipId, Network::IConnection & connection)
 {
     auto ret = m_playerGlobalCooldowns.insert(shipId);
     if (ret.second)
     {
         LOG_DEBUG << "Global cooldown activated on ship: " << shipId;
         m_time->createTimer(Common::Game::TimeValue(1, 0), boost::bind(&ActionPerformer::globalCooldownExpired, this, shipId));
+
+        Common::Messages::GlobalCooldownActivated globalCooldownActivated;
+        connection.send(globalCooldownActivated);
     }
     else
     {
