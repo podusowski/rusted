@@ -23,29 +23,21 @@ public:
 
     template<class T> boost::shared_ptr<T> receive()
     {
-        LOG_INFO << "Waiting for " << TYPENAME(T);
+        LOG_INFO << "<connection:" << this << "> Waiting for " << TYPENAME(T);
 
         Cake::Networking::Protocol::CakeReadBuffer buffer(*m_socket);
-        boost::shared_ptr<T> message;
+        auto raw = Common::Messages::MessageFactory::create(buffer);
 
-        try
-        {
-            auto raw = Common::Messages::MessageFactory::create(buffer);
-            message = boost::dynamic_pointer_cast<T>(raw);
-            if (!message)
-            {
-                std::stringstream ss;
-                ss << TYPENAME(*raw) << " received while " << TYPENAME(T) << " expected"; 
-                throw std::runtime_error(ss.str());
-            }
-        }
-        catch (...)
-        {
-            LOG_INFO << "Server droped the connection";
-            throw;
-        }
+        LOG_INFO << "<connection:" << this << "> Received " << *raw;
 
-        LOG_INFO << "Received " << *message;
+        auto message = boost::dynamic_pointer_cast<T>(raw);
+        if (!message)
+        {
+            std::stringstream ss;
+            ss << TYPENAME(*raw) << " received while " << TYPENAME(T) << " expected"; 
+            LOG_ERR << "<connection:" << this << "> " << ss.str();
+            throw std::runtime_error(ss.str());
+        }
 
         return message;
     }
