@@ -101,13 +101,14 @@ TEST(ActionsSct, AttackObject)
     // some time will pass so global cooldown will expire at this point
     connection1->receive<Common::Messages::GlobalCooldownExpired>();
 
-    connection1->receive<Common::Messages::ActionFinished>();
     connection1->receive<Common::Messages::EmitExplosionEffect>();
 
     // we should also receive shipinfo with condition after the attack
     auto objectIntegrity = connection1->receive<Common::Messages::ObjectIntegrity>();
     ASSERT_EQ(5, objectIntegrity->id);
     ASSERT_EQ(90, objectIntegrity->integrity);
+
+    connection1->receive<Common::Messages::ActionFinished>();
 
     // other player should also get this stuff
     connection2->receive<Common::Messages::EmitMovingMeshEffect>();
