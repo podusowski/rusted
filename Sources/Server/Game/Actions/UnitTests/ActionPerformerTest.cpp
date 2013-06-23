@@ -81,7 +81,7 @@ TEST_F(ActionPerformerTest, VariousActionCooldowns)
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(3, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&actionCooldownTimerCallback));
 
     // action finished, global cooldown expired
-    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(2).WillRepeatedly(ReturnRef(connection));
+    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(3).WillRepeatedly(ReturnRef(connection));
 
     EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER)).Times(2).WillRepeatedly(Return(action1));
 
@@ -119,9 +119,13 @@ TEST_F(ActionPerformerTest, ActionExecutionFinishAfterTimerExpired)
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(2, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&actionExecuteTimerCallback));
     EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER)).Times(1).WillRepeatedly(Return(action1));
-    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(1).WillOnce(ReturnRef(connection));
+    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(2).WillRepeatedly(ReturnRef(connection));
+
+    // network
+    EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::GlobalCooldownActivated)))).Times(1);
     EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ActionStarted)))).Times(1);
     EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ActionFinished)))).Times(1);
+    EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ActionCooldownExpired)))).Times(1);
 
     auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
     EXPECT_CALL(actionMock, start()).Times(1).WillRepeatedly(Return(Common::Game::TimeValue(2, 0)));
@@ -139,9 +143,13 @@ TEST_F(ActionPerformerTest, ActionExecutionFinishAfterTimerExpired_ActionTimeIsZ
 
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
     EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER)).Times(1).WillRepeatedly(Return(action1));
-    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(1).WillOnce(ReturnRef(connection));
+    EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(2).WillRepeatedly(ReturnRef(connection));
+
+    // network
+    EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::GlobalCooldownActivated)))).Times(1);
     EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ActionStarted)))).Times(1);
     EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ActionFinished)))).Times(1);
+    EXPECT_CALL(connection, send(Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::ActionCooldownExpired)))).Times(1);
 
     auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
     EXPECT_CALL(actionMock, start()).Times(1).WillRepeatedly(Return(Common::Game::TimeValue(0, 0)));

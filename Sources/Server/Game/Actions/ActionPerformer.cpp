@@ -142,6 +142,10 @@ void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId
 {
     LOG_DEBUG << "Action cooldown finished for player:" << playerId << ", object:" << objectId;
 
+    Common::Messages::ActionCooldownExpired actionCooldownExpired;
+    auto & connection = m_playerContainer.getConnectionById(playerId);
+    connection.send(actionCooldownExpired);
+
     size_t elementsErased = m_ongogingOrCoolingActions.erase(std::make_pair(objectId, actionId));
     if (elementsErased == 0)
     {

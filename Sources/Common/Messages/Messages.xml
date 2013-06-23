@@ -200,6 +200,10 @@ actions
     <param type="int32" name="actionId" />
 </message>
 
+<message id="ActionCooldownExpired">
+    <param type="int32" name="actionId" />
+</message>
+
 <message id="GlobalCooldownActivated" />
 <message id="GlobalCooldownExpired" />
 
