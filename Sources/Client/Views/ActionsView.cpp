@@ -13,6 +13,7 @@ ActionsView::ActionsView(Services::PlayerActionService & playerActionService, Gu
 
 void ActionsView::activate()
 {
+    m_playerActionService.addGlobalCooldownActivatedSlot(boost::bind(&ActionsView::disableActionButtons, this));
     m_playerActionService.addGlobalCooldownExpiredSlot(boost::bind(&ActionsView::enableActionButtons, this));
     m_playerActionService.addAvailableActionsFetchedSlot(boost::bind(&ActionsView::availableActionsFetched, this, _1));
     m_playerActionService.fetchAvailableActions();
@@ -32,8 +33,6 @@ void ActionsView::actionClicked(MyGUI::Widget * widget)
 
     auto * action = widget->getUserData<Common::Messages::AvailableAction>();
     m_playerActionService.executeAction(action->id, action->parameter);
-
-    disableActionButtons();
 }
 
 void ActionsView::actionMouseSetFocus(MyGUI::Widget * sender, MyGUI::Widget * old)

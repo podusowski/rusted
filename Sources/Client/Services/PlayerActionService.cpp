@@ -19,6 +19,11 @@ boost::signals2::connection PlayerActionService::addAvailableActionsFetchedSlot(
     return m_availableActionsFetchedSignal.connect(slot);
 }
 
+boost::signals2::connection PlayerActionService::addGlobalCooldownActivatedSlot(GlobalCooldownActivatedSignal::slot_type slot)
+{
+    return m_globalColldownActivatedSignal.connect(slot);
+}
+
 boost::signals2::connection PlayerActionService::addGlobalCooldownExpiredSlot(GlobalCooldownExpiredSignal::slot_type slot)
 {
     return m_globalColldownExpiredSignal.connect(slot);
@@ -95,6 +100,14 @@ void PlayerActionService::handle(const Common::Messages::AvailableActions & avai
     LOG_DEBUG << "Got available actions";
 
     m_availableActionsFetchedSignal(availableActions.actions);
+}
+
+// TODO: global cooldown is per ship?
+void PlayerActionService::handle(const Common::Messages::GlobalCooldownActivated & globalCooldownActivated)
+{
+    LOG_DEBUG << "Global cooldown activated";
+
+    m_globalColldownActivatedSignal();
 }
 
 void PlayerActionService::handle(const Common::Messages::GlobalCooldownExpired &)
