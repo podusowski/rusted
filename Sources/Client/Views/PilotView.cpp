@@ -1,7 +1,16 @@
 #include <OgreEntity.h>
 
 #include "Cake/Diagnostics/Logger.hpp"
-#include "Client/Views/PilotView.hpp"
+
+#include "Common/Game/Universe.hpp"
+#include "Common/Game/Object/Ship.hpp"
+
+#include "Services/ObjectService.hpp"
+#include "Services/PlayerActionService.hpp"
+#include "Visuals/VisualUniverse.hpp"
+#include "Visuals/VisualObject.hpp"
+
+#include "PilotView.hpp"
 
 using namespace Client::Views;
 

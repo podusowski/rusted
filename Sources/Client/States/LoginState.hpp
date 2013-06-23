@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Forwards.hpp"
+
 #include "Client/States/IState.hpp"
 #include "Client/States/IStateManagerStack.hpp"
 #include "Client/Graphics/IGraphics.hpp"

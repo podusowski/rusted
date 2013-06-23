@@ -1,5 +1,7 @@
 #include <set>
 
+#include "Services/PlayerActionService.hpp"
+
 #include "ActionsView.hpp"
 
 using namespace Client::Views;

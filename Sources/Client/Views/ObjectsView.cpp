@@ -5,8 +5,15 @@
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/Asteroid.hpp"
 
-#include "Client/Views/ObjectsView.hpp"
+#include "Graphics/IGraphics.hpp"
+
+#include "Services/ObjectService.hpp"
+#include "Services/PlayerActionService.hpp"
+
 #include "Visuals/VisualUniverse.hpp"
+#include "Visuals/VisualObject.hpp"
+
+#include "Client/Views/ObjectsView.hpp"
 
 using namespace Client::Views;
 

@@ -1,20 +1,12 @@
 #pragma once
 
+#include "Forwards.hpp"
+
 #include "Views/IView.hpp"
-#include "Services/ObjectService.hpp"
-#include "Services/PlayerActionService.hpp"
-#include "Graphics/IGraphics.hpp"
-#include "Effects/Effects.hpp"
 #include "Client/Gui/Gui.hpp"
-#include "Visuals/VisualObject.hpp"
 
 namespace Client
 {
-
-namespace Visuals
-{
-    class VisualUniverse;
-}
 
 namespace Views
 {

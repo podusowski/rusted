@@ -1,13 +1,12 @@
 #pragma once
 
+#include "Common/Forwards.hpp"
+#include "Forwards.hpp"
+
+#include "Gui/Gui.hpp"
 #include "Client/Views/IView.hpp"
-#include "Client/Graphics/IGraphics.hpp"
 #include "Client/Input/IInput.hpp"
-#include "Gui/Gui.hpp" 
-#include "Client/Services/PlayerActionService.hpp"
-#include "Client/Services/ObjectService.hpp"
 #include "Camera.hpp"
-#include "Visuals/VisualUniverse.hpp"
 
 namespace Client
 {

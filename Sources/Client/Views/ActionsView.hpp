@@ -1,6 +1,11 @@
 #pragma once
 
-#include "Services/PlayerActionService.hpp"
+#include <vector>
+
+#include "Common/Messages/Messages.hpp"
+
+#include "Forwards.hpp"
+
 #include "Gui/Gui.hpp"
 #include "Views/IView.hpp"
 
