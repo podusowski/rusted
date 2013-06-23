@@ -111,6 +111,7 @@ TEST(ActionsSct, AttackObject)
     ASSERT_EQ(90, objectIntegrity->integrity);
 
     connection1->receive<Common::Messages::ActionFinished>();
+    connection1->receive<Common::Messages::ActionCooldownExpired>();
 
     // other player should also get this stuff
     connection2->receive<Common::Messages::EmitMovingMeshEffect>();
@@ -157,6 +158,7 @@ TEST(ActionsSct, BuildShip)
     connection1->receive<Common::Messages::ShipCourseInfo>();
     connection1->receive<Common::Messages::ObjectCargoInfo>();
     connection1->receive<Common::Messages::ActionFinished>();
+    connection1->receive<Common::Messages::ActionCooldownExpired>();
 
     connection2->receive<Common::Messages::ShipInfo>();
     connection2->receive<Common::Messages::ShipCourseInfo>();
@@ -188,6 +190,7 @@ TEST(ActionsSct, Gather)
 
     connection1->receive<Common::Messages::GlobalCooldownActivated>();
     connection1->receive<Common::Messages::ActionStarted>();
+
     connection1->receive<Common::Messages::GlobalCooldownExpired>();
 
     // receive info about player ship cargohold
@@ -203,6 +206,7 @@ TEST(ActionsSct, Gather)
     EXPECT_EQ(90, asteroidCargoInfo->helium);
 
     connection1->receive<Common::Messages::ActionFinished>();
+    connection1->receive<Common::Messages::ActionCooldownExpired>();
 }
 
 TEST(ActionsSct, Transfer)
@@ -233,5 +237,8 @@ TEST(ActionsSct, Transfer)
     // cargo info
     connection1->receive<Common::Messages::ObjectCargoInfo>();
     connection2->receive<Common::Messages::ObjectCargoInfo>();
+
+    connection1->receive<Common::Messages::ActionFinished>();
+    connection1->receive<Common::Messages::ActionCooldownExpired>();
 }
 
