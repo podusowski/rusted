@@ -1,0 +1,4 @@
+PROFILE:=windows-mingw-i586
+CC:=i586-mingw32msvc-g++
+CFLAGS:=-O3 -std=gnu++0x -Wall -pedantic -DNDEBUG
+
