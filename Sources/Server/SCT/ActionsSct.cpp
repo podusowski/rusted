@@ -101,9 +101,10 @@ TEST(ActionsSct, AttackObject)
     connection1->receive<Common::Messages::ActionStarted>();
 
     // some time will pass so global cooldown will expire at this point
-    connection1->receive<Common::Messages::GlobalCooldownExpired>();
-
-    connection1->receive<Common::Messages::EmitExplosionEffect>();
+    connection1->interleave(
+        [] (Common::Messages::GlobalCooldownExpired &) -> void {},
+        [] (Common::Messages::EmitExplosionEffect &) -> void {}
+    );
 
     // we should also receive shipinfo with condition after the attack
     auto objectIntegrity = connection1->receive<Common::Messages::ObjectIntegrity>();
