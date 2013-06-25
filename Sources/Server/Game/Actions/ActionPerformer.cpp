@@ -31,20 +31,19 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
     aquireOngoingOrCooling(focusedShipId, id);
 
     auto action = m_actionFactory.create(connection, player, id, parameter);
-    auto timeToFinish = action->start();
-
-    auto & selectedObject = player.getFocusedObject();
 
     Common::Messages::ActionStarted actionStarted;
     actionStarted.actionId = id;
-    actionStarted.objectId = selectedObject.getId();
+    actionStarted.objectId = focusedShipId;
     connection.send(actionStarted);
+
+    auto timeToFinish = action->start();
 
     if (timeToFinish == Common::Game::TimeValue(0, 0))
     {
         LOG_DEBUG << "Action doesn't have execution time and will be finished immidiately";
 
-        actionFinished(action, player.getId(), selectedObject.getId(), id);
+        actionFinished(action, player.getId(), focusedShipId, id);
     }
     else
     {
@@ -58,7 +57,7 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
         }
         m_time->createTimer(timeToFinish, boost::bind(
             &ActionPerformer::actionTimerExpired, this,
-            internalId, player.getId(), selectedObject.getId(), id));
+            internalId, player.getId(), focusedShipId, id));
     }
 }
 
@@ -157,7 +156,17 @@ void ActionPerformer::actionFinished(
     boost::shared_ptr<Server::Game::Actions::IAction> action,
     unsigned playerId, unsigned objectId, unsigned actionId)
 {
-    auto actionCooldown = action->finish();
+    Common::Game::TimeValue actionCooldown;
+
+    try
+    {
+        actionCooldown = action->finish();
+    }
+    catch (std::exception & ex)
+    {
+        LOG_WARN << "Action is not completed successfully, reason: " << ex.what();
+        throw;
+    }
 
     Common::Messages::ActionFinished actionFinished;
     actionFinished.objectId = objectId;

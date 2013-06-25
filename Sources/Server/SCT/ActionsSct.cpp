@@ -80,6 +80,7 @@ TEST(ActionsSct, AttackObject)
     connection1->send(executeAction);
 
     connection1->receive<Common::Messages::GlobalCooldownActivated>();
+    connection1->receive<Common::Messages::ActionStarted>();
 
     // clients should receive emit effect requests
     auto emitMovingMeshEffect = connection1->receive<Common::Messages::EmitMovingMeshEffect>();
@@ -97,8 +98,6 @@ TEST(ActionsSct, AttackObject)
     auto attackObject1 = connection1->receive<Common::Messages::AttackObject>();
     ASSERT_EQ(1, attackObject1->attackerId);
     ASSERT_EQ(5, attackObject1->attackedId);
-
-    connection1->receive<Common::Messages::ActionStarted>();
 
     // some time will pass so global cooldown will expire at this point
     connection1->interleave(
@@ -141,6 +140,7 @@ TEST(ActionsSct, BuildShip)
     connection1->send(executeAction);
 
     connection1->receive<Common::Messages::GlobalCooldownActivated>();
+    connection1->receive<Common::Messages::ActionStarted>();
 
     // receive cargo info of focused object since some resources
     // were used to build new ship
@@ -148,7 +148,6 @@ TEST(ActionsSct, BuildShip)
     EXPECT_EQ(0, objectCargoInfo->carbon);
     EXPECT_EQ(5, objectCargoInfo->helium);
 
-    connection1->receive<Common::Messages::ActionStarted>();
     connection1->receive<Common::Messages::GlobalCooldownExpired>();
 
     // receive info about newly created ship
@@ -234,12 +233,17 @@ TEST(ActionsSct, Transfer)
     connection1->send(executeAction);
 
     connection1->receive<Common::Messages::GlobalCooldownActivated>();
+    connection1->receive<Common::Messages::ActionStarted>();
 
     // cargo info
     connection1->receive<Common::Messages::ObjectCargoInfo>();
     connection2->receive<Common::Messages::ObjectCargoInfo>();
 
     connection1->receive<Common::Messages::ActionFinished>();
-    connection1->receive<Common::Messages::ActionCooldownExpired>();
+
+    connection1->interleave(
+        [](Common::Messages::GlobalCooldownExpired &) -> void {},
+        [](Common::Messages::ActionCooldownExpired &) -> void {}
+    );
 }
 

@@ -16,7 +16,7 @@ Transfer::Transfer(
 Common::Game::TimeValue Transfer::start()
 {
     using namespace Common::Game::Object;
-    
+
     auto & selectedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getSelectedObject());
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getFocusedObject());
 
@@ -43,5 +43,6 @@ Common::Game::TimeValue Transfer::start()
 
 Common::Game::TimeValue Transfer::finish()
 {
+    return Common::Game::TimeValue();
 }
 
