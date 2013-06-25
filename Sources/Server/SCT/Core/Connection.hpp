@@ -17,32 +17,36 @@ namespace SCT
 
 namespace Detail
 {
+    // http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda
 
-// http://stackoverflow.com/questions/7943525/is-it-possible-to-figure-out-the-parameter-type-and-return-type-of-a-lambda
-
-// For generic types, directly use the result of the signature of its 'operator()'
-template <typename T>
-struct function_traits : public function_traits<decltype(&T::operator())>
-{
-};
-
-// we specialize for pointers to member function
-template <typename ClassType, typename ReturnType, typename... Args>
-struct function_traits<ReturnType(ClassType::*)(Args...) const>
-{
-    // arity is the number of arguments.
-    enum { arity = sizeof...(Args) };
-
-    typedef ReturnType result_type;
-
-    template <size_t i> struct arg
+    // For generic types, directly use the result of the signature of its 'operator()'
+    template <typename T>
+    struct function_traits : public function_traits<decltype(&T::operator())>
     {
-        // the i-th argument is equivalent to the i-th tuple element of a tuple
-        // composed of those arguments.
-        typedef typename std::tuple_element<i, std::tuple<Args...>>::type type;
     };
-};
 
+    // we specialize for pointers to member function
+    template <typename ClassType, typename ReturnType, typename... Args>
+    struct function_traits<ReturnType(ClassType::*)(Args...) const>
+    {
+        // arity is the number of arguments.
+        enum { arity = sizeof...(Args) };
+
+        typedef ReturnType result_type;
+
+        template <size_t i> struct arg
+        {
+            // the i-th argument is equivalent to the i-th tuple element of a tuple
+            // composed of those arguments.
+            typedef typename std::tuple_element<i, std::tuple<Args...>>::type type;
+        };
+    };
+
+    template<typename LambdaType>
+    struct GetMessageType
+    {
+        typedef typename std::remove_reference<typename Detail::function_traits<LambdaType>::template arg<0>::type>::type type;
+    };
 }
 
 class Connection
@@ -90,8 +94,8 @@ public:
 
             LOG_INFO << "<connection:" << this << "> Received " << *raw;
 
-            typedef typename std::remove_reference<typename Detail::function_traits<T1>::template arg<0>::type>::type Message1Type;
-            typedef typename std::remove_reference<typename Detail::function_traits<T2>::template arg<0>::type>::type Message2Type;
+            typedef typename Detail::GetMessageType<T1>::type Message1Type;
+            typedef typename Detail::GetMessageType<T2>::type Message2Type;
 
             auto message1 = boost::dynamic_pointer_cast<Message1Type>(raw);
             auto message2 = boost::dynamic_pointer_cast<Message2Type>(raw);
