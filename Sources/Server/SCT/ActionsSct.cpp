@@ -77,6 +77,7 @@ TEST(ActionsSct, AttackObject)
     // execute action 1 - attack 
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = 1;
+    executeAction.loop = false;
     connection1->send(executeAction);
 
     connection1->receive<Common::Messages::GlobalCooldownActivated>();
@@ -137,6 +138,7 @@ TEST(ActionsSct, BuildShip)
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = 2;
     executeAction.parameter = 2;
+    executeAction.loop = false;
     connection1->send(executeAction);
 
     connection1->receive<Common::Messages::GlobalCooldownActivated>();
@@ -186,6 +188,7 @@ TEST(ActionsSct, Gather)
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = 3;
     //executeAction.parameter = 2;
+    executeAction.loop = false;
     connection1->send(executeAction);
 
     connection1->receive<Common::Messages::GlobalCooldownActivated>();
@@ -230,6 +233,7 @@ TEST(ActionsSct, Transfer)
     // execute action 4 - transfer
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = 4;
+    executeAction.loop = false;
     connection1->send(executeAction);
 
     connection1->receive<Common::Messages::GlobalCooldownActivated>();
@@ -245,5 +249,47 @@ TEST(ActionsSct, Transfer)
         [](Common::Messages::GlobalCooldownExpired &) -> void {},
         [](Common::Messages::ActionCooldownExpired &) -> void {}
     );
+}
+
+TEST(ActionsSct, ExecuteActionInLoop)
+{
+    SCT::Component component("SampleDataBase.xml");
+    component.start();
+
+    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+
+    // client has to focus its own gather capable object 
+    Common::Messages::FocusObject focusObject;
+    focusObject.id = 1;
+    connection1->send(focusObject);
+
+    // select asteroid
+    Common::Messages::SelectObject selectObject;
+    selectObject.id = 3;
+    connection1->send(selectObject);
+
+    // execute action 3 - gather
+    Common::Messages::ExecuteAction executeAction;
+    executeAction.id = 3;
+    //executeAction.parameter = 2;
+    executeAction.loop = true;
+    connection1->send(executeAction);
+
+    for (int i = 0; i < 2; i++)
+    {
+        connection1->receive<Common::Messages::GlobalCooldownActivated>();
+        connection1->receive<Common::Messages::ActionStarted>();
+
+        connection1->receive<Common::Messages::GlobalCooldownExpired>();
+
+        // receive info about player ship cargohold
+        connection1->receive<Common::Messages::ObjectCargoInfo>();
+
+        // receive info about asteroid cargohold
+        connection1->receive<Common::Messages::ObjectCargoInfo>();
+
+        connection1->receive<Common::Messages::ActionFinished>();
+        connection1->receive<Common::Messages::ActionCooldownExpired>();
+    }
 }
 

@@ -115,7 +115,7 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
 
     try
     {
-        m_actionPerformer.perform(connection, player, executeAction.id, executeAction.parameter, false);
+        m_actionPerformer.perform(connection, player, executeAction.id, executeAction.parameter, executeAction.loop);
     }
     catch (const std::exception & ex)
     {

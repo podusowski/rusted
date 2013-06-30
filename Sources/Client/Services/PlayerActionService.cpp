@@ -91,6 +91,7 @@ void PlayerActionService::executeAction(unsigned actionId, unsigned actionParame
     Common::Messages::ExecuteAction executeAction;
     executeAction.id = actionId;
     executeAction.parameter = actionParameter;
+    executeAction.loop = false;
 
     m_connection.send(executeAction);
 }
