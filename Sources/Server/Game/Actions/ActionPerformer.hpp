@@ -17,6 +17,29 @@ namespace Game
 namespace Actions
 {
 
+namespace Detail
+{
+    struct OngoingOrCoolingAction
+    {
+        int actionId;
+        int actionParameter;
+        int objectId;
+        bool loop;
+
+        bool operator < (const OngoingOrCoolingAction & other) const
+        {
+            if (actionId == other.actionId)
+            {
+                return objectId < other.objectId;
+            }
+            else
+            {
+                return actionId < other.actionId;
+            }
+        }
+    };
+}
+
 class ActionPerformer
 {
 public:
@@ -36,7 +59,7 @@ private:
 
     void actionTimerExpired(unsigned internalId, unsigned playerId, unsigned objectId, unsigned actionId);
 
-    void aquireOngoingOrCooling(unsigned shipId, unsigned actionId);
+    void aquireOngoingOrCooling(unsigned shipId, unsigned actionId, unsigned actionParameter, bool loop);
     bool isActionOngoingOrCooling(unsigned shipId, unsigned actionId);
     void actionCooldownExpired(unsigned playerId, unsigned objectId, unsigned actionId);
 
@@ -52,7 +75,7 @@ private:
     Server::Game::IPlayerContainer & m_playerContainer;
     std::set<unsigned> m_playerGlobalCooldowns;
     std::map<unsigned, boost::shared_ptr<IAction> > m_ongoingActions;
-    std::set<std::pair<unsigned /* objectId */, unsigned /* actionId */> > m_ongogingOrCoolingActions;
+    std::set<Detail::OngoingOrCoolingAction> m_ongogingOrCoolingActions;
     Cake::Threading::Mutex m_ongoingActionsMutex;
     Common::Game::Utilities::IdGenerator m_idGenerator;
 };

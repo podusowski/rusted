@@ -16,19 +16,24 @@ ActionPerformer::ActionPerformer(
 {
 }
 
-void ActionPerformer::perform(Server::Network::IConnection & connection, 
+void ActionPerformer::perform(Server::Network::IConnection & connection,
     Common::Game::IPlayer & player, unsigned id, unsigned parameter, bool loop)
 {
     // TODO: lock
     auto focusedShipId = player.getFocusedObject().getId();
 
-    if (isGlobalCooldownActive(focusedShipId) || isActionOngoingOrCooling(focusedShipId, id))
+    if (isGlobalCooldownActive(focusedShipId))
     {
-        throw std::runtime_error("global/action cooldown active or action ongoing");
+        throw std::runtime_error("global cooldown is active for ship");
+    }
+
+    if (isActionOngoingOrCooling(focusedShipId, id))
+    {
+        throw std::runtime_error("action cooldown active or action ongoing");
     }
 
     aquireGlobalCooldown(focusedShipId, connection);
-    aquireOngoingOrCooling(focusedShipId, id);
+    aquireOngoingOrCooling(focusedShipId, id, parameter, loop);
 
     auto action = m_actionFactory.create(connection, player, id, parameter);
 
@@ -118,9 +123,10 @@ void ActionPerformer::actionTimerExpired(unsigned internalId, unsigned playerId,
     actionFinished(action, playerId, objectId, actionId);
 }
 
-void ActionPerformer::aquireOngoingOrCooling(unsigned shipId, unsigned actionId)
+void ActionPerformer::aquireOngoingOrCooling(unsigned shipId, unsigned actionId, unsigned actionParameter, bool loop)
 {
-    auto ret = m_ongogingOrCoolingActions.insert(std::make_pair(shipId, actionId));
+    Detail::OngoingOrCoolingAction ongoingOnCoolingAction = { actionId, actionParameter, shipId, loop };
+    auto ret = m_ongogingOrCoolingActions.insert(ongoingOnCoolingAction);
     if (ret.second)
     {
         LOG_DEBUG << "Action addes as ongoing or waiting for cooldown, ship:" << shipId << ", action:" << actionId;
@@ -134,7 +140,14 @@ void ActionPerformer::aquireOngoingOrCooling(unsigned shipId, unsigned actionId)
 
 bool ActionPerformer::isActionOngoingOrCooling(unsigned shipId, unsigned actionId)
 {
-    return m_ongogingOrCoolingActions.find(std::make_pair(shipId, actionId)) != m_ongogingOrCoolingActions.end();
+    for (auto ongoingOrCoolingAction : m_ongogingOrCoolingActions)
+    {
+        if (ongoingOrCoolingAction.actionId == actionId && ongoingOrCoolingAction.objectId == shipId)
+        {
+            return true;
+        }
+    }
+    return false;
 }
 
 void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId, unsigned actionId)
@@ -145,8 +158,27 @@ void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId
     auto & connection = m_playerContainer.getConnectionById(playerId);
     connection.send(actionCooldownExpired);
 
-    size_t elementsErased = m_ongogingOrCoolingActions.erase(std::make_pair(objectId, actionId));
-    if (elementsErased == 0)
+    auto itToDelete = std::find_if(
+        m_ongogingOrCoolingActions.begin(),
+        m_ongogingOrCoolingActions.end(),
+        [&](const Detail::OngoingOrCoolingAction & a) -> bool
+        {
+            return a.actionId == actionId && a.objectId == objectId;
+        });
+
+    if (itToDelete != m_ongogingOrCoolingActions.end())
+    {
+        // save the data and delete from container
+        auto ongoingOrCoolingAction = *itToDelete;
+        m_ongogingOrCoolingActions.erase(itToDelete);
+
+        if (itToDelete->loop)
+        {
+            LOG_DEBUG << "Loop is active, restarting action";
+            perform(connection, m_playerContainer.getBy(connection), ongoingOrCoolingAction.actionId, ongoingOrCoolingAction.actionParameter, true);
+        }
+    }
+    else
     {
         throw std::runtime_error("action cooldown expired but no such cooldon registered");
     }
