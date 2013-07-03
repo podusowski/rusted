@@ -29,7 +29,7 @@ void IdGenerator::reserve(unsigned id)
 
     if (!ret.second)
     {
-        throw std::runtime_error("id is reserved");
+        throw std::runtime_error("id is already reserved");
     }
 }
 
