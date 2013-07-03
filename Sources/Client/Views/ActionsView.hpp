@@ -8,6 +8,7 @@
 
 #include "Gui/Gui.hpp"
 #include "Views/IView.hpp"
+#include "Input/IInput.hpp"
 
 namespace Client
 {
@@ -17,7 +18,7 @@ namespace Views
 class ActionsView : public IView
 {
 public:
-    ActionsView(Services::PlayerActionService &, Gui::Gui &);
+    ActionsView(Services::PlayerActionService &, Gui::Gui &, Input::IInput &);
     void activate();
     void deactivate();
     void frameStarted();
@@ -32,6 +33,7 @@ private:
 
     Services::PlayerActionService & m_playerActionService;
     Gui::Gui & m_gui;
+    Input::IInput & m_input;
     std::vector<MyGUI::Button *> m_actionButtons;
     bool m_flatActionButtons;
 };

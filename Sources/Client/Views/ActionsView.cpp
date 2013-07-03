@@ -6,9 +6,10 @@
 
 using namespace Client::Views;
 
-ActionsView::ActionsView(Services::PlayerActionService & playerActionService, Gui::Gui & gui) :
+ActionsView::ActionsView(Services::PlayerActionService & playerActionService, Gui::Gui & gui, Input::IInput & input) :
     m_playerActionService(playerActionService),
     m_gui(gui),
+    m_input(input),
     m_flatActionButtons(false)
 {
 }
@@ -34,7 +35,7 @@ void ActionsView::actionClicked(MyGUI::Widget * widget)
     LOG_DEBUG << "Action clicked";
 
     auto * action = widget->getUserData<Common::Messages::AvailableAction>();
-    m_playerActionService.executeAction(action->id, action->parameter);
+    m_playerActionService.executeAction(action->id, action->parameter, m_input.isShiftDown());
 }
 
 void ActionsView::actionMouseSetFocus(MyGUI::Widget * sender, MyGUI::Widget * old)

@@ -133,6 +133,21 @@ void Input::addEntityMouseLeavedCallback(Ogre::Entity & entity, std::function<vo
     m_entityMouseLeavedCallbacks.insert(std::make_pair(&entity, callback));
 }
 
+bool Input::isShiftDown()
+{
+    return m_oisKeyboard->isModifierDown(OIS::Keyboard::Shift);
+}
+
+bool Input::isCtrlDown()
+{
+    return m_oisKeyboard->isModifierDown(OIS::Keyboard::Ctrl);
+}
+
+bool Input::isAltDown()
+{
+    return m_oisKeyboard->isModifierDown(OIS::Keyboard::Alt);
+}
+
 void Input::mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID id)
 {
     auto * entity = raycastFromMouseCursor();

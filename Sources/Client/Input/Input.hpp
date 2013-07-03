@@ -36,6 +36,10 @@ public:
     void addEntityMouseMovedCallback(Ogre::Entity & entity, std::function<void()> callback);
     void addEntityMouseLeavedCallback(Ogre::Entity & entity, std::function<void()> callback);
 
+    bool isShiftDown();
+    bool isCtrlDown();
+    bool isAltDown();
+
 private:
     void mousePressedRaycast(const OIS::MouseEvent &arg, OIS::MouseButtonID id);
     void mouseMovedRaycast();

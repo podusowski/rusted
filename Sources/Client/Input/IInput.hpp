@@ -17,6 +17,9 @@ public:
     virtual void addEntityClickedCallback(Ogre::Entity &, std::function<void()>) = 0;
     virtual void addEntityMouseMovedCallback(Ogre::Entity & entity, std::function<void()> callback) = 0;
     virtual void addEntityMouseLeavedCallback(Ogre::Entity & entity, std::function<void()> callback) = 0;
+    virtual bool isShiftDown() = 0;
+    virtual bool isCtrlDown() = 0;
+    virtual bool isAltDown() = 0;
 
     virtual ~IInput() {}
 };
