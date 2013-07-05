@@ -6,6 +6,7 @@
 #include "Cake/DependencyInjection/Inject.hpp"
 #include "Common/Game/Position.hpp"
 #include "CargoHold.hpp"
+#include "Common/Game/Utilities/Id.hpp"
 
 namespace Common
 {
@@ -17,6 +18,8 @@ namespace Object
 class ObjectBase
 {
 public:
+    typedef Common::Game::Utilities::Id<ObjectBase> Id;
+
     ObjectBase();
 
     unsigned getId();
