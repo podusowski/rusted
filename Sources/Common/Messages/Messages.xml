@@ -6,7 +6,7 @@ common signalling
 
 <message id="ServerVersionReq"></message>
 <message id="ServerVersionResp">
-	<param type="string" name="version" />
+    <param type="string" name="version" />
 </message>
 
 <message id="Exception">
@@ -17,20 +17,20 @@ common signalling
 player specific
 -->
 <message id="UserAuthorizationReq">
-	<param type="string" name="login" />
-	<param type="string" name="password" description="user password, type of this param should be reconsidered" />
+    <param type="string" name="login" />
+    <param type="string" name="password" description="user password, type of this param should be reconsidered" />
 </message>
 
 <message id="UserAuthorizationResp">
-	<param type="boolean" name="success" />
-	<param type="int32" name="player_id" />
+    <param type="boolean" name="success" />
+    <param type="int32" name="player_id" />
 </message>
 
 <message id="GetPlayerResourcesInfo" />
 
 <message id="PlayerResourcesInfo">
-	<param type="int32" name="helium" />
-	<param type="int32" name="carbon" />
+    <param type="int32" name="helium" />
+    <param type="int32" name="carbon" />
 </message>
 
 <message id="RustedTimeEpochReq" />
@@ -95,11 +95,6 @@ Ship
 	<param type="int32" name="x" />
 	<param type="int32" name="y" />
 	<param type="int32" name="z" />
-</message>
-
-<message id="AttackObject">
-    <param type="int32" name="attackerId" />
-    <param type="int32" name="attackedId" />
 </message>
 
 <struct id="Position">

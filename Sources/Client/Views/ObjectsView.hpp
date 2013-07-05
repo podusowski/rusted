@@ -28,7 +28,6 @@ public:
     void frameStarted();
 
     void objectAdded(Common::Game::Object::ObjectBase &);
-    void objectAttacked(unsigned attacker, unsigned attacked);
 
 private:
     void objectClicked(Visuals::VisualObject * object);

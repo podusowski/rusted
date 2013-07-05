@@ -47,8 +47,6 @@ void ObjectsView::activate()
     m_universe.addObjectAddedCallback(boost::bind(&ObjectsView::objectAdded, this, _1));
     m_objectService.fetchVisibleObjects();
 
-    m_playerActionService.addObjectAttackedSlot(boost::bind(&ObjectsView::objectAttacked, this, _1, _2));
-
     Ogre::Light* pointLight = m_graphics.getSceneManager().createLight("pointLight");
     pointLight->setType(Ogre::Light::LT_POINT);
     pointLight->setPosition(Ogre::Vector3(0, 150, 250));
@@ -71,10 +69,6 @@ void ObjectsView::objectAdded(Common::Game::Object::ObjectBase & object)
 
     auto obj = m_visualUniverse.add(object);
     obj->setRightClickCallback(std::bind(&ObjectsView::objectClicked, this, obj.get()));
-}
-
-void ObjectsView::objectAttacked(unsigned attackerId, unsigned attackedId)
-{
 }
 
 void ObjectsView::objectClicked(Visuals::VisualObject * object)

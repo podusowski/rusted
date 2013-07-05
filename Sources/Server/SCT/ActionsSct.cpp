@@ -95,11 +95,6 @@ TEST(ActionsSct, AttackObject)
 
     EXPECT_EQ(1000, emitMovingMeshEffect->speed);
 
-    // user1 should also receive AttackObject to know what he has done
-    auto attackObject1 = connection1->receive<Common::Messages::AttackObject>();
-    ASSERT_EQ(1, attackObject1->attackerId);
-    ASSERT_EQ(5, attackObject1->attackedId);
-
     // some time will pass so global cooldown will expire at this point
     connection1->interleave(
         [] (Common::Messages::GlobalCooldownExpired &) -> void {},
@@ -116,7 +111,6 @@ TEST(ActionsSct, AttackObject)
 
     // other player should also get this stuff
     connection2->receive<Common::Messages::EmitMovingMeshEffect>();
-    connection2->receive<Common::Messages::AttackObject>();
     connection2->receive<Common::Messages::EmitExplosionEffect>();
     connection2->receive<Common::Messages::ObjectIntegrity>();
 }

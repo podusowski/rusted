@@ -68,15 +68,10 @@ void Attack::sendMovingMeshEffect()
     emitMovingMeshEffect.toZ = selectedShipPosition.getZ();
     emitMovingMeshEffect.speed = m_speed;
 
-    Common::Messages::AttackObject attackObject;
-    attackObject.attackerId = m_focusedShip.getId();
-    attackObject.attackedId = m_selectedObject.getId();
-
     auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
         connection->send(emitMovingMeshEffect);
-        connection->send(attackObject);
     }
 }
 

@@ -32,10 +32,6 @@ TEST_F(AttackTest, AttackOtherShip)
                     Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::EmitMovingMeshEffect))
                 )).Times(1);
 
-    EXPECT_CALL(connection, send(
-                    Property(&Common::Messages::AbstractMessage::getId, Eq(Common::Messages::Id::AttackObject))
-                )).Times(1);
-
     // doesn't matter if this is called, might be cached or something
     // the thing is what to return if it's called
     ON_CALL(selectedShip, getIntegrity()).WillByDefault(Return(100));
