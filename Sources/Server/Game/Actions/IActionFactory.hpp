@@ -5,6 +5,7 @@
 #include "Server/Game/Actions/IAction.hpp"
 #include "Server/Network/IConnection.hpp"
 #include "Server/Game/IPlayerContainer.hpp"
+#include "ActionParameters.hpp"
 
 namespace Server
 {
@@ -21,10 +22,7 @@ public:
     virtual boost::shared_ptr<Server::Game::Actions::IAction> create(
         Server::Network::IConnection &,
         Common::Game::IPlayer &,
-        unsigned id,
-        unsigned parameter,
-        Common::Game::Object::ObjectBase::StrictId focusedObjectId,
-        Common::Game::Object::ObjectBase::Id selectedObjectId) = 0;
+        const ActionParameters &) = 0;
 };
 
 }

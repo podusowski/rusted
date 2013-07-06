@@ -22,7 +22,8 @@ public:
         ship1(new Common::Game::Object::ShipMock()),
         ship2(new Common::Game::Object::ShipMock()),
         FOCUSED_OBJECT_ID(3),
-        SELECTED_OBJECT_ID(4)
+        SELECTED_OBJECT_ID(4),
+        ACTION_PARAMETERS(ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID)
     {
         ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(*ship1));
         ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(*ship2));
@@ -58,6 +59,7 @@ public:
     static const int PLAYER_ID = 2;
     const Common::Game::Object::ObjectBase::StrictId FOCUSED_OBJECT_ID;
     const Common::Game::Object::ObjectBase::Id SELECTED_OBJECT_ID;
+    const Server::Game::Actions::ActionParameters ACTION_PARAMETERS;
 };
 
 TEST_F(ActionPerformerTest, Perform_DontFinish)
@@ -67,7 +69,7 @@ TEST_F(ActionPerformerTest, Perform_DontFinish)
 
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(2, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&actionExecuteTimerCallback));
-    EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID)).Times(1).WillRepeatedly(Return(action1));
+    EXPECT_CALL(actionFactory, create(_, _, ACTION_PARAMETERS)).Times(1).WillRepeatedly(Return(action1));
 
     auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
     EXPECT_CALL(actionMock, start()).Times(1).WillRepeatedly(Return(Common::Game::TimeValue(2, 0)));
@@ -90,7 +92,7 @@ TEST_F(ActionPerformerTest, VariousActionCooldowns)
     // action finished, global cooldown expired
     EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(3).WillRepeatedly(ReturnRef(connection));
 
-    EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID)).Times(2).WillRepeatedly(Return(action1));
+    EXPECT_CALL(actionFactory, create(_, _, ACTION_PARAMETERS)).Times(2).WillRepeatedly(Return(action1));
 
     auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
     ON_CALL(actionMock, start()).WillByDefault(Return(Common::Game::TimeValue(2, 0)));
@@ -125,7 +127,7 @@ TEST_F(ActionPerformerTest, ActionExecutionFinishAfterTimerExpired)
 
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(2, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&actionExecuteTimerCallback));
-    EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID)).Times(1).WillRepeatedly(Return(action1));
+    EXPECT_CALL(actionFactory, create(_, _, ACTION_PARAMETERS)).Times(1).WillRepeatedly(Return(action1));
     EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(2).WillRepeatedly(ReturnRef(connection));
 
     // network
@@ -149,7 +151,7 @@ TEST_F(ActionPerformerTest, ActionExecutionFinishAfterTimerExpired_ActionTimeIsZ
     boost::function<void()> globalCooldownTimerCallback;
 
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
-    EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID)).Times(1).WillRepeatedly(Return(action1));
+    EXPECT_CALL(actionFactory, create(_, _, ACTION_PARAMETERS)).Times(1).WillRepeatedly(Return(action1));
     EXPECT_CALL(playerContainer, getConnectionById(PLAYER_ID)).Times(2).WillRepeatedly(ReturnRef(connection));
 
     // network
@@ -173,7 +175,7 @@ TEST_F(ActionPerformerTest, ActionExecutionNotFinishedUntilTimerExpires)
 
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(1, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&globalCooldownTimerCallback));
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(2, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&actionExecuteTimerCallback));
-    EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID)).Times(1).WillRepeatedly(Return(action1));
+    EXPECT_CALL(actionFactory, create(_, _, ACTION_PARAMETERS)).Times(1).WillRepeatedly(Return(action1));
     ON_CALL(playerContainer, getConnectionById(PLAYER_ID)).WillByDefault(ReturnRef(connection));
 
     auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
@@ -194,7 +196,7 @@ TEST_F(ActionPerformerTest, ActionExecuteWithLoop)
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(2, 0), _)).Times(2).WillRepeatedly(SaveArg<1>(&actionExecuteTimerCallback));
     EXPECT_CALL(getTimeMock(), createTimer(Common::Game::TimeValue(3, 0), _)).Times(1).WillRepeatedly(SaveArg<1>(&actionCooldownTimerCallback));
 
-    EXPECT_CALL(actionFactory, create(_, _, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID)).Times(2).WillRepeatedly(Return(action1));
+    EXPECT_CALL(actionFactory, create(_, _, ACTION_PARAMETERS)).Times(2).WillRepeatedly(Return(action1));
 
     ON_CALL(playerContainer, getConnectionById(PLAYER_ID)).WillByDefault(ReturnRef(connection));
 

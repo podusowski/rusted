@@ -38,7 +38,8 @@ void ActionPerformer::perform(
     aquireGlobalCooldown(focusedObjectId.get(), connection);
     aquireOngoingOrCooling(focusedObjectId.get(), selectedObjectId, id, parameter, loop);
 
-    auto action = m_actionFactory.create(connection, player, id, parameter, focusedObjectId, selectedObjectId);
+    ActionParameters actionParameters = { id, parameter, focusedObjectId, selectedObjectId };
+    auto action = m_actionFactory.create(connection, player, actionParameters);
 
     Common::Messages::ActionStarted actionStarted;
     actionStarted.actionId = id;

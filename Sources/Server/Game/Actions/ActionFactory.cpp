@@ -18,24 +18,21 @@ ActionFactory::ActionFactory(Common::Game::Universe & universe, Server::Game::IP
 boost::shared_ptr<IAction> ActionFactory::create(
     Server::Network::IConnection & connection,
     Common::Game::IPlayer & player,
-    unsigned id,
-    unsigned parameter,
-    Common::Game::Object::ObjectBase::StrictId focusedObjectId,
-    Common::Game::Object::ObjectBase::Id selectedObjectId)
+    const ActionParameters & actionParameters)
 {
     boost::shared_ptr<IAction> ret;
 
     auto & focusedObject = player.getFocusedObject();
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(focusedObject);
 
-    switch (id)
+    switch (actionParameters.actionId)
     {
         case ActionType_Attack:
             ret = boost::shared_ptr<IAction>(new Attack(m_playerContainer, focusedShip, player.getSelectedObject()));
             break;
 
         case ActionType_BuildShip:
-            ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer, parameter));
+            ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer, actionParameters.actionParameter));
             break;
 
         case ActionType_Gather:
@@ -52,7 +49,7 @@ boost::shared_ptr<IAction> ActionFactory::create(
 
     if (ret)
     {
-        LOG_DEBUG << "Constructed action: " << id << "/" << CAKE_DEPENDENCY_INJECTION_TYPENAME(*ret);
+        LOG_DEBUG << "Constructed action: " << actionParameters.actionId << "/" << CAKE_DEPENDENCY_INJECTION_TYPENAME(*ret);
     }
 
     return ret;
