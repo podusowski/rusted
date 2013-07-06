@@ -43,3 +43,10 @@ struct ActionParameters
 }
 }
 
+inline std::ostream & operator << (std::ostream & os, const Server::Game::Actions::ActionParameters & actionParameters)
+{
+    return os << "action:" << actionParameters.actionId << "/" << actionParameters.actionParameter
+              << ", focusedObject:" << actionParameters.focusedObjectId
+              << ", selectedObject:" << actionParameters.selectedObjectId;
+}
+

@@ -35,10 +35,11 @@ void ActionPerformer::perform(
         throw std::runtime_error("action cooldown active or action ongoing");
     }
 
-    aquireGlobalCooldown(focusedObjectId.get(), connection);
-    aquireOngoingOrCooling(focusedObjectId.get(), selectedObjectId, id, parameter, loop);
-
     ActionParameters actionParameters = { id, parameter, focusedObjectId, selectedObjectId };
+
+    aquireGlobalCooldown(focusedObjectId.get(), connection);
+    aquireOngoingOrCooling(actionParameters, loop);
+
     auto action = m_actionFactory.create(connection, player, actionParameters);
 
     Common::Messages::ActionStarted actionStarted;
@@ -128,21 +129,23 @@ void ActionPerformer::actionTimerExpired(unsigned internalId, unsigned playerId,
 }
 
 void ActionPerformer::aquireOngoingOrCooling(
-    Common::Game::Object::ObjectBase::StrictId focusedObjectId,
-    Common::Game::Object::ObjectBase::Id selectedObjectId,
-    unsigned actionId,
-    unsigned actionParameter,
+    const ActionParameters & actionParameters,
     bool loop)
 {
-    Detail::OngoingOrCoolingAction ongoingOrCoolingAction = { actionId, actionParameter, focusedObjectId, selectedObjectId, loop };
+    Detail::OngoingOrCoolingAction ongoingOrCoolingAction = {
+        actionParameters,
+        loop
+    };
+
     auto ret = m_ongogingOrCoolingActions.insert(ongoingOrCoolingAction);
+
     if (ret.second)
     {
-        LOG_DEBUG << "Action added as ongoing or waiting for cooldown, ship:" << focusedObjectId << ", action:" << actionId;
+        LOG_DEBUG << "Action added as ongoing or waiting for cooldown: " << actionParameters;
     }
     else
     {
-        LOG_WARN << "Action is ongoing or waiting for cooldown";
+        LOG_WARN << "Action is ongoing or waiting for cooldown: " << actionParameters;
         throw std::runtime_error("action is ongoing or waiting for cooldown");
     }
 }
@@ -151,7 +154,8 @@ bool ActionPerformer::isActionOngoingOrCooling(unsigned shipId, unsigned actionI
 {
     for (auto ongoingOrCoolingAction : m_ongogingOrCoolingActions)
     {
-        if (ongoingOrCoolingAction.actionId == actionId && ongoingOrCoolingAction.focusedObjectId == shipId)
+        if (ongoingOrCoolingAction.actionParameters.actionId == actionId &&
+            ongoingOrCoolingAction.actionParameters.focusedObjectId == shipId)
         {
             return true;
         }
@@ -172,7 +176,8 @@ void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId
         m_ongogingOrCoolingActions.end(),
         [&](const Detail::OngoingOrCoolingAction & a) -> bool
         {
-            return a.actionId == actionId && a.focusedObjectId == objectId;
+            return a.actionParameters.actionId == actionId &&
+                   a.actionParameters.focusedObjectId == objectId;
         });
 
     if (itToDelete != m_ongogingOrCoolingActions.end())
@@ -187,10 +192,10 @@ void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId
             perform(
                 connection,
                 m_playerContainer.getBy(connection),
-                ongoingOrCoolingAction.actionId,
-                ongoingOrCoolingAction.actionParameter,
-                ongoingOrCoolingAction.focusedObjectId,
-                ongoingOrCoolingAction.selectedObjectId,
+                ongoingOrCoolingAction.actionParameters.actionId,
+                ongoingOrCoolingAction.actionParameters.actionParameter,
+                ongoingOrCoolingAction.actionParameters.focusedObjectId,
+                ongoingOrCoolingAction.actionParameters.selectedObjectId,
                 true);
         }
     }

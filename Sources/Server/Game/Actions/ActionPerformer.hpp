@@ -21,10 +21,7 @@ namespace Detail
 {
     struct OngoingOrCoolingAction
     {
-        unsigned actionId;
-        unsigned actionParameter;
-        Common::Game::Object::ObjectBase::StrictId focusedObjectId;
-        Common::Game::Object::ObjectBase::Id selectedObjectId;
+        ActionParameters actionParameters;
         bool loop;
 
         bool operator < (const OngoingOrCoolingAction & other) const
@@ -32,14 +29,14 @@ namespace Detail
             // NOTE: selectedObjectId is intentionaly excluded from comparision
             return
                 std::tie(
-                    actionId,
-                    actionParameter,
-                    focusedObjectId) <
+                    actionParameters.actionId,
+                    actionParameters.actionParameter,
+                    actionParameters.focusedObjectId) <
 
                 std::tie(
-                    other.actionId,
-                    other.actionParameter,
-                    other.focusedObjectId);
+                    other.actionParameters.actionId,
+                    other.actionParameters.actionParameter,
+                    other.actionParameters.focusedObjectId);
         }
     };
 }
@@ -66,10 +63,7 @@ private:
     void actionTimerExpired(unsigned internalId, unsigned playerId, unsigned objectId, unsigned actionId);
 
     void aquireOngoingOrCooling(
-        Common::Game::Object::ObjectBase::StrictId focusedObjectId,
-        Common::Game::Object::ObjectBase::Id selectedObjectId,
-        unsigned actionId,
-        unsigned actionParameter,
+        const ActionParameters & actionParameters,
         bool loop);
 
     bool isActionOngoingOrCooling(unsigned shipId, unsigned actionId);

@@ -97,17 +97,17 @@ template<class T> std::ostream & operator << (std::ostream & os, const Common::G
 {
     if (id.valid())
     {
-        os << TYPENAME(T) << ":" << id.get();
+        os << id.get();
     }
     else
     {
-        os << TYPENAME(T) << ":invalid";
+        os << "invalid";
     }
     return os;
 }
 
 template<class T> std::ostream & operator << (std::ostream & os, const Common::Game::Utilities::StrictId<T> id)
 {
-    return os << TYPENAME(T) << ":" << id.get();
+    return os << id.get();
 }
 
