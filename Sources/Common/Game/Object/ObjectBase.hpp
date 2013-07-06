@@ -19,11 +19,12 @@ class ObjectBase
 {
 public:
     typedef Common::Game::Utilities::Id<ObjectBase> Id;
+    typedef Common::Game::Utilities::StrictId<ObjectBase> StrictId;
 
     ObjectBase();
 
-    unsigned getId();
-    void setId(unsigned id);
+    virtual unsigned getId();
+    virtual void setId(unsigned id);
 
     virtual void setModel(std::string mesh);
     virtual std::string getModel();

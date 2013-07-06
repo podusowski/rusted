@@ -33,7 +33,7 @@ TEST_F(ActionFactoryTest, BuildAttack)
     ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(ship2));
 
     Server::Game::Actions::ActionFactory factory(universe, playerContainer);
-    auto attackAction = factory.create(connection, player, ATTACK_ID, ATTACK_PARAMETER);
+    auto attackAction = factory.create(connection, player, ATTACK_ID, ATTACK_PARAMETER, 1, 2);
 
     ASSERT_EQ(typeid(Server::Game::Actions::Attack), typeid(*attackAction));
 }

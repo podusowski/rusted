@@ -14,6 +14,7 @@ namespace Object
 class ShipMock : public Ship
 {
 public:
+    MOCK_METHOD0(getId, unsigned());
     MOCK_METHOD0(getPosition, Position());
     MOCK_METHOD0(getOrientation, Common::Math::Quaternion());
     MOCK_METHOD1(setCourse, void(Position));

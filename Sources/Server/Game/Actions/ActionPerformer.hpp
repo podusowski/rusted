@@ -21,21 +21,25 @@ namespace Detail
 {
     struct OngoingOrCoolingAction
     {
-        int actionId;
-        int actionParameter;
-        int objectId;
+        unsigned actionId;
+        unsigned actionParameter;
+        Common::Game::Object::ObjectBase::StrictId focusedObjectId;
+        Common::Game::Object::ObjectBase::Id selectedObjectId;
         bool loop;
 
         bool operator < (const OngoingOrCoolingAction & other) const
         {
-            if (actionId == other.actionId)
-            {
-                return objectId < other.objectId;
-            }
-            else
-            {
-                return actionId < other.actionId;
-            }
+            // NOTE: selectedObjectId is intentionaly excluded from comparision
+            return
+                std::tie(
+                    actionId,
+                    actionParameter,
+                    focusedObjectId) <
+
+                std::tie(
+                    other.actionId,
+                    other.actionParameter,
+                    other.focusedObjectId);
         }
     };
 }
@@ -50,6 +54,8 @@ public:
         Common::Game::IPlayer &,
         unsigned id,
         unsigned parameter,
+        Common::Game::Object::ObjectBase::StrictId focusedObjectId,
+        Common::Game::Object::ObjectBase::Id selectedObjectId,
         bool loop);
 
 private:
@@ -59,7 +65,13 @@ private:
 
     void actionTimerExpired(unsigned internalId, unsigned playerId, unsigned objectId, unsigned actionId);
 
-    void aquireOngoingOrCooling(unsigned shipId, unsigned actionId, unsigned actionParameter, bool loop);
+    void aquireOngoingOrCooling(
+        Common::Game::Object::ObjectBase::StrictId focusedObjectId,
+        Common::Game::Object::ObjectBase::Id selectedObjectId,
+        unsigned actionId,
+        unsigned actionParameter,
+        bool loop);
+
     bool isActionOngoingOrCooling(unsigned shipId, unsigned actionId);
     void actionCooldownExpired(unsigned playerId, unsigned objectId, unsigned actionId);
 

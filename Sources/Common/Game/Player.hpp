@@ -24,9 +24,11 @@ public:
 
     void selectObject(Common::Game::Object::ObjectBase &);
     Common::Game::Object::ObjectBase & getSelectedObject();
+    Common::Game::Object::ObjectBase::Id getSelectedObjectId();
 
     void focusObject(Common::Game::Object::ObjectBase &);
     Common::Game::Object::ObjectBase & getFocusedObject();
+    Common::Game::Object::ObjectBase::Id getFocusedObjectId();
 
     unsigned getHelium();
     void setHelium(unsigned);

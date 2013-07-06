@@ -113,9 +113,12 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
     LOG_DEBUG << "Player " << player.getId() << " is executing action id:" 
               << executeAction.id << ", parameter:" << executeAction.parameter;
 
+    Common::Game::Object::ObjectBase::StrictId focusedObjectId = player.getFocusedObjectId().get();
+    Common::Game::Object::ObjectBase::Id selectedObjectId = player.getSelectedObjectId();
+
     try
     {
-        m_actionPerformer.perform(connection, player, executeAction.id, executeAction.parameter, executeAction.loop);
+        m_actionPerformer.perform(connection, player, executeAction.id, executeAction.parameter, focusedObjectId, selectedObjectId, executeAction.loop);
     }
     catch (const std::exception & ex)
     {

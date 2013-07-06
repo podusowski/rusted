@@ -28,7 +28,9 @@ public:
         Server::Network::IConnection & connection,
         Common::Game::IPlayer &,
         unsigned id,
-        unsigned parameter);
+        unsigned parameter,
+        Common::Game::Object::ObjectBase::StrictId focusedObjectId,
+        Common::Game::Object::ObjectBase::Id selectedObjectId);
 
     ActionDescription getActionDescription(unsigned id, unsigned parameter);
 

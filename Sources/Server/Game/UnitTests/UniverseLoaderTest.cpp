@@ -31,7 +31,8 @@ TEST_F(UniverseLoaderTest, LoadShip)
 
     Common::Game::Universe universe;
 
-    boost::shared_ptr<Common::Game::Object::Ship> ship(new Common::Game::Object::ShipMock);
+    boost::shared_ptr<Common::Game::Object::ShipMock> ship(new Common::Game::Object::ShipMock);
+    ON_CALL(*ship, getId()).WillByDefault(Return(1));
     EXPECT_CALL(getObjectFactoryMock(), create(_)).Times(1).WillRepeatedly(Return(ship));
 
     Server::Game::UniverseLoader loader;

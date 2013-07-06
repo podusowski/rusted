@@ -22,7 +22,9 @@ public:
         Server::Network::IConnection &,
         Common::Game::IPlayer &,
         unsigned id,
-        unsigned parameter) = 0;
+        unsigned parameter,
+        Common::Game::Object::ObjectBase::StrictId focusedObjectId,
+        Common::Game::Object::ObjectBase::Id selectedObjectId) = 0;
 };
 
 }

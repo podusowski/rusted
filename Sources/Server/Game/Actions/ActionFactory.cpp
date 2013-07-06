@@ -16,10 +16,12 @@ ActionFactory::ActionFactory(Common::Game::Universe & universe, Server::Game::IP
 }
 
 boost::shared_ptr<IAction> ActionFactory::create(
-        Server::Network::IConnection & connection,
-        Common::Game::IPlayer & player,
-        unsigned id,
-        unsigned parameter)
+    Server::Network::IConnection & connection,
+    Common::Game::IPlayer & player,
+    unsigned id,
+    unsigned parameter,
+    Common::Game::Object::ObjectBase::StrictId focusedObjectId,
+    Common::Game::Object::ObjectBase::Id selectedObjectId)
 {
     boost::shared_ptr<IAction> ret;
 

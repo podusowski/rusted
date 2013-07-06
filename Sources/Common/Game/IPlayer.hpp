@@ -26,9 +26,11 @@ public:
 
     virtual void selectObject(Common::Game::Object::ObjectBase &) = 0;
     virtual Common::Game::Object::ObjectBase & getSelectedObject() = 0;
+    virtual Common::Game::Object::ObjectBase::Id getSelectedObjectId() = 0;
 
     virtual void focusObject(Common::Game::Object::ObjectBase &) = 0;
     virtual Common::Game::Object::ObjectBase & getFocusedObject() = 0;
+    virtual Common::Game::Object::ObjectBase::Id getFocusedObjectId() = 0;
 };
 
 }

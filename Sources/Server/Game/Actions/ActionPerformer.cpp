@@ -16,30 +16,33 @@ ActionPerformer::ActionPerformer(
 {
 }
 
-void ActionPerformer::perform(Server::Network::IConnection & connection,
-    Common::Game::IPlayer & player, unsigned id, unsigned parameter, bool loop)
+void ActionPerformer::perform(
+    Server::Network::IConnection & connection,
+    Common::Game::IPlayer & player,
+    unsigned id,
+    unsigned parameter,
+    Common::Game::Object::ObjectBase::StrictId focusedObjectId,
+    Common::Game::Object::ObjectBase::Id selectedObjectId,
+    bool loop)
 {
-    // TODO: lock
-    auto focusedShipId = player.getFocusedObject().getId();
-
-    if (isGlobalCooldownActive(focusedShipId))
+    if (isGlobalCooldownActive(focusedObjectId.get()))
     {
         throw std::runtime_error("global cooldown is active for ship");
     }
 
-    if (isActionOngoingOrCooling(focusedShipId, id))
+    if (isActionOngoingOrCooling(focusedObjectId.get(), id))
     {
         throw std::runtime_error("action cooldown active or action ongoing");
     }
 
-    aquireGlobalCooldown(focusedShipId, connection);
-    aquireOngoingOrCooling(focusedShipId, id, parameter, loop);
+    aquireGlobalCooldown(focusedObjectId.get(), connection);
+    aquireOngoingOrCooling(focusedObjectId.get(), selectedObjectId, id, parameter, loop);
 
-    auto action = m_actionFactory.create(connection, player, id, parameter);
+    auto action = m_actionFactory.create(connection, player, id, parameter, focusedObjectId, selectedObjectId);
 
     Common::Messages::ActionStarted actionStarted;
     actionStarted.actionId = id;
-    actionStarted.objectId = focusedShipId;
+    actionStarted.objectId = focusedObjectId.get();
     connection.send(actionStarted);
 
     auto timeToFinish = action->start();
@@ -48,7 +51,7 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
     {
         LOG_DEBUG << "Action doesn't have execution time and will be finished immidiately";
 
-        actionFinished(action, player.getId(), focusedShipId, id);
+        actionFinished(action, player.getId(), focusedObjectId.get(), id);
     }
     else
     {
@@ -62,7 +65,7 @@ void ActionPerformer::perform(Server::Network::IConnection & connection,
         }
         m_time->createTimer(timeToFinish, boost::bind(
             &ActionPerformer::actionTimerExpired, this,
-            internalId, player.getId(), focusedShipId, id));
+            internalId, player.getId(), focusedObjectId.get(), id));
     }
 }
 
@@ -123,13 +126,18 @@ void ActionPerformer::actionTimerExpired(unsigned internalId, unsigned playerId,
     actionFinished(action, playerId, objectId, actionId);
 }
 
-void ActionPerformer::aquireOngoingOrCooling(unsigned shipId, unsigned actionId, unsigned actionParameter, bool loop)
+void ActionPerformer::aquireOngoingOrCooling(
+    Common::Game::Object::ObjectBase::StrictId focusedObjectId,
+    Common::Game::Object::ObjectBase::Id selectedObjectId,
+    unsigned actionId,
+    unsigned actionParameter,
+    bool loop)
 {
-    Detail::OngoingOrCoolingAction ongoingOnCoolingAction = { actionId, actionParameter, shipId, loop };
-    auto ret = m_ongogingOrCoolingActions.insert(ongoingOnCoolingAction);
+    Detail::OngoingOrCoolingAction ongoingOrCoolingAction = { actionId, actionParameter, focusedObjectId, selectedObjectId, loop };
+    auto ret = m_ongogingOrCoolingActions.insert(ongoingOrCoolingAction);
     if (ret.second)
     {
-        LOG_DEBUG << "Action addes as ongoing or waiting for cooldown, ship:" << shipId << ", action:" << actionId;
+        LOG_DEBUG << "Action added as ongoing or waiting for cooldown, ship:" << focusedObjectId << ", action:" << actionId;
     }
     else
     {
@@ -142,7 +150,7 @@ bool ActionPerformer::isActionOngoingOrCooling(unsigned shipId, unsigned actionI
 {
     for (auto ongoingOrCoolingAction : m_ongogingOrCoolingActions)
     {
-        if (ongoingOrCoolingAction.actionId == actionId && ongoingOrCoolingAction.objectId == shipId)
+        if (ongoingOrCoolingAction.actionId == actionId && ongoingOrCoolingAction.focusedObjectId == shipId)
         {
             return true;
         }
@@ -163,7 +171,7 @@ void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId
         m_ongogingOrCoolingActions.end(),
         [&](const Detail::OngoingOrCoolingAction & a) -> bool
         {
-            return a.actionId == actionId && a.objectId == objectId;
+            return a.actionId == actionId && a.focusedObjectId == objectId;
         });
 
     if (itToDelete != m_ongogingOrCoolingActions.end())
@@ -175,7 +183,14 @@ void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId
         if (itToDelete->loop)
         {
             LOG_DEBUG << "Loop is active, restarting action";
-            perform(connection, m_playerContainer.getBy(connection), ongoingOrCoolingAction.actionId, ongoingOrCoolingAction.actionParameter, true);
+            perform(
+                connection,
+                m_playerContainer.getBy(connection),
+                ongoingOrCoolingAction.actionId,
+                ongoingOrCoolingAction.actionParameter,
+                ongoingOrCoolingAction.focusedObjectId,
+                ongoingOrCoolingAction.selectedObjectId,
+                true);
         }
     }
     else

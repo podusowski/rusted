@@ -51,6 +51,18 @@ Common::Game::Object::ObjectBase & Player::getSelectedObject()
     return *m_selectedObject;
 }
 
+Common::Game::Object::ObjectBase::Id Player::getSelectedObjectId()
+{
+    if (m_selectedObject)
+    {
+        return m_selectedObject->getId();
+    }
+    else
+    {
+        return Common::Game::Object::ObjectBase::Id();
+    }
+}
+
 void Player::focusObject(Common::Game::Object::ObjectBase & object)
 {
     m_focusedObject = &object;
@@ -63,6 +75,18 @@ Common::Game::Object::ObjectBase & Player::getFocusedObject()
         throw std::runtime_error("no object focused");
     }
     return *m_focusedObject;
+}
+
+Common::Game::Object::ObjectBase::Id Player::getFocusedObjectId()
+{
+    if (m_focusedObject)
+    {
+        return m_focusedObject->getId();
+    }
+    else
+    {
+        return Common::Game::Object::ObjectBase::Id();
+    }
 }
 
 unsigned Player::getHelium()
