@@ -42,7 +42,15 @@ Common::Game::TimeValue Attack::finish()
     auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());
 
     unsigned integrity = selectedObject.getIntegrity();
-    selectedObject.setIntegrity(integrity - 10);
+
+    if (integrity > 0)
+    {
+        selectedObject.setIntegrity(integrity - 10);
+    }
+    else
+    {
+        LOG_DEBUG << "Tried to attack destroyed object";
+    }
 
     sendExplosionEffect();
     sendShipInfoToClients();
