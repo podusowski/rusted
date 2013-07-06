@@ -3,17 +3,20 @@
 
 using namespace Server::Game::Actions;
 
-Attack::Attack(IPlayerContainer & playerContainer, Common::Game::Object::Ship & focusedShip, Common::Game::Object::ObjectBase & selectedObject) :
+Attack::Attack(Common::Game::Universe & universe, IPlayerContainer & playerContainer, const ActionParameters & actionParameters) :
+    m_universe(universe),
     m_playerContainer(playerContainer),
-    m_focusedShip(focusedShip),
-    m_selectedObject(selectedObject),
+    m_actionParameters(actionParameters),
     m_speed(1000)
 {
 }
 
 Common::Game::TimeValue Attack::start()
 {
-    unsigned integrity = m_selectedObject.getIntegrity();
+    auto & focusedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.focusedObjectId.get());
+    auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());
+
+    unsigned integrity = selectedObject.getIntegrity();
 
     if (integrity == 0)
     {
@@ -23,8 +26,8 @@ Common::Game::TimeValue Attack::start()
 
     sendMovingMeshEffect();
 
-    auto focusedShipPosition = m_focusedShip.getPosition();
-    auto selectedShipPosition = m_selectedObject.getPosition();
+    auto focusedShipPosition = focusedObject.getPosition();
+    auto selectedShipPosition = selectedObject.getPosition();
 
     auto distance = Common::Game::Position::distance(focusedShipPosition, selectedShipPosition);
     float time = float(distance) / float(m_speed);
@@ -36,8 +39,10 @@ Common::Game::TimeValue Attack::start()
 
 Common::Game::TimeValue Attack::finish()
 {
-    unsigned integrity = m_selectedObject.getIntegrity();
-    m_selectedObject.setIntegrity(integrity - 10);
+    auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());
+
+    unsigned integrity = selectedObject.getIntegrity();
+    selectedObject.setIntegrity(integrity - 10);
 
     sendExplosionEffect();
     sendShipInfoToClients();
@@ -47,17 +52,22 @@ Common::Game::TimeValue Attack::finish()
 
 void Attack::sendShipInfoToClients()
 {
+    auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());
+
     auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
-        m_servicesUtils.sendObjectIntegrity(m_selectedObject, *connection);
+        m_servicesUtils.sendObjectIntegrity(selectedObject, *connection);
     }
 }
 
 void Attack::sendMovingMeshEffect()
 {
-    auto focusedShipPosition = m_focusedShip.getPosition();
-    auto selectedShipPosition = m_selectedObject.getPosition();
+    auto & focusedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.focusedObjectId.get());
+    auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());
+
+    auto focusedShipPosition = focusedObject.getPosition();
+    auto selectedShipPosition = selectedObject.getPosition();
 
     Common::Messages::EmitMovingMeshEffect emitMovingMeshEffect;
     emitMovingMeshEffect.fromX = focusedShipPosition.getX();
@@ -77,7 +87,9 @@ void Attack::sendMovingMeshEffect()
 
 void Attack::sendExplosionEffect()
 {
-    auto selectedShipPosition = m_selectedObject.getPosition();
+    auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());
+    auto selectedShipPosition = selectedObject.getPosition();
+
     Common::Messages::EmitExplosionEffect emitExplosion;
     emitExplosion.x = selectedShipPosition.getX();
     emitExplosion.y = selectedShipPosition.getY();

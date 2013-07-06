@@ -4,6 +4,7 @@
 #include "Server/Game/IPlayerContainer.hpp"
 #include "Common/Game/Object/Ship.hpp"
 #include "Server/Services/Utils.hpp"
+#include "ActionParameters.hpp"
 
 namespace Server
 {
@@ -15,7 +16,7 @@ namespace Actions
 class Attack : public IAction
 {
 public:
-    Attack(IPlayerContainer &, Common::Game::Object::Ship & focusedShip, Common::Game::Object::ObjectBase & selectedObject);
+    Attack(Common::Game::Universe & universe, IPlayerContainer &, const ActionParameters & actionParameters);
     Common::Game::TimeValue start();
     Common::Game::TimeValue finish();
 
@@ -24,9 +25,9 @@ private:
     void sendMovingMeshEffect();
     void sendExplosionEffect();
 
+    Common::Game::Universe & m_universe;
     IPlayerContainer & m_playerContainer;
-    Common::Game::Object::Ship & m_focusedShip;
-    Common::Game::Object::ObjectBase & m_selectedObject;
+    ActionParameters m_actionParameters;
     Server::Services::Utils m_servicesUtils;
     int m_speed;
 };

@@ -28,7 +28,7 @@ boost::shared_ptr<IAction> ActionFactory::create(
     switch (actionParameters.actionId)
     {
         case ActionType_Attack:
-            ret = boost::shared_ptr<IAction>(new Attack(m_playerContainer, focusedShip, player.getSelectedObject()));
+            ret = boost::shared_ptr<IAction>(new Attack(m_universe, m_playerContainer, actionParameters));
             break;
 
         case ActionType_BuildShip:
