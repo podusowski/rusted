@@ -64,3 +64,30 @@ TEST(SmokeSct, Smoke)
     thread2.join();
 }
 
+TEST(SmokeSct, BigDataBase)
+{
+    SCT::Component component("BigDataBase.xml");
+    component.start();
+
+    boost::shared_ptr<SCT::Connection> connection1;
+
+    for (int i = 0; i < 10000; i++)
+    {
+        try
+        {
+            Cake::Threading::Thread::wait(1, 0);
+            connection1 = authorizeUser(component, "user1", "password");
+            break;
+        }
+        catch(...)
+        {
+        }
+    }
+
+    Common::Messages::GetVisibleObjects getVisibleObjects;
+    connection1->send(getVisibleObjects);
+
+    auto visibleObjects = connection1->receive<Common::Messages::VisibleObjects>();
+    EXPECT_EQ(10000, visibleObjects->objects.size());
+}
+
