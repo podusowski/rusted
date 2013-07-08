@@ -23,6 +23,7 @@ SOURCES+=Game/Actions/Gather.cpp
 SOURCES+=Game/Actions/Transfer.cpp
 SOURCES+=Game/Actions/ActionFactory.cpp
 SOURCES+=Game/Actions/ActionPerformer.cpp
+SOURCES+=DataBase/SociSessionFactory.cpp
 SOURCES+=DataBase/DataBase.cpp
 SOURCES+=DataBase/DataBaseNode.cpp
 SOURCES+=DataBase/DataProviderFactory.cpp

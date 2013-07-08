@@ -1,5 +1,7 @@
 #pragma once
 
+#include <soci.h>
+
 #include "Game/Universe.hpp"
 #include "DataBase/DataBase.hpp"
 #include "Game/IObjectFactory.hpp"
@@ -17,6 +19,7 @@ public:
 
 private:
     Cake::DependencyInjection::Inject<IObjectFactory> m_objectFactory;
+    Cake::DependencyInjection::Inject<soci::session> m_sociSession;
 };
 
 }
