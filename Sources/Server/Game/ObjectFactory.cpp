@@ -52,7 +52,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(Server
         // set unlimited capacity for asteroids
         object->visitCargoHold([](Common::Game::Object::CargoHold & cargoHold) -> void
         {
-            cargoHold.setCapacity(99999999); 
+            cargoHold.setCapacity(99999999);
         });
 
         return object;
