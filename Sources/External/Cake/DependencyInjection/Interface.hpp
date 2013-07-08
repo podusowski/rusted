@@ -70,6 +70,11 @@ public:
         m_factory = boost::shared_ptr<IFactory>(new Factory()); 
     }
 
+    void useFactory(boost::shared_ptr<IFactory> factory)
+    {
+        m_factory = factory;
+    }
+
     boost::shared_ptr<IFactory> get_factory()
     {
         if (!m_factory.get())
