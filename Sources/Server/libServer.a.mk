@@ -33,5 +33,6 @@ CFLAGS+=-I$(TARGET_BASE)/..
 CFLAGS+=-I$(TARGET_BASE)/../Common
 CFLAGS+=-I$(TARGET_BASE)/../External
 CFLAGS+=-I/usr/include/libxml2
+CFLAGS+=-I$(BUILD)/SOCI/core
 
-DEPENDENCIES+=libCommon.a
+DEPENDENCIES+=libCommon.a SOCI
