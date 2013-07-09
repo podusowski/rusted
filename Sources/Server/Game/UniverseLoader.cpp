@@ -6,15 +6,15 @@ void UniverseLoader::load(Common::Game::Universe & universe, Server::DataBase::D
 {
     LOG_INFO << "Loading universe state from db";
 
-    auto & objects = db.getRoot().getFirstChild("objects");
+    int objectCount;
+    m_sociSession->once << "SELECT COUNT(*) FROM objects", soci::into(objectCount);
+    LOG_INFO << "  " << objectCount << " objects";
 
-    LOG_INFO << "  " << objects.getChildCount() << " objects";
+    soci::rowset<soci::row> objects = (m_sociSession->prepare << "SELECT * FROM objects");
 
-    auto childs = objects.getChilds();
-    for (auto it = childs.begin(); it != childs.end(); it++)
+    for (auto it = objects.begin(); it != objects.end(); it++)
     {
-        Server::DataBase::DataBaseNode & node = **it;
-        universe.add(m_objectFactory->create(node));
+        universe.add(m_objectFactory->create(*it));
     }
 }
 
