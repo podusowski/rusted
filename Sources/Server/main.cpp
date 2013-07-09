@@ -23,6 +23,10 @@ void initDependencies(int argc, const char * argv[])
     forInterface<Cake::Configuration::Configuration>()
         .use(configuration);
 
+    boost::shared_ptr<IFactory> sociSessionFactory(new Server::DataBase::SociSessionFactory);
+    forInterface<soci::session>()
+        .useFactory(sociSessionFactory);
+
     boost::shared_ptr<Server::DataBase::DataBase> db(new Server::DataBase::DataBase());
     forInterface<Server::DataBase::DataBase>()
         .use(db);
@@ -40,10 +44,6 @@ void initDependencies(int argc, const char * argv[])
 
     forInterface<Common::Math::ISpline3>()
         .useFactory<GenericFactory0<Common::Math::ISpline3, Common::Math::Bezier3>>();
-
-    boost::shared_ptr<IFactory> sociSessionFactory(new Server::DataBase::SociSessionFactory);
-    forInterface<soci::session>()
-        .useFactory(sociSessionFactory);
 }
 
 int main(int argc, const char * argv[])

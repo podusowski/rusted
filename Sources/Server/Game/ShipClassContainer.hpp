@@ -1,5 +1,9 @@
 #pragma once
 
+#include <soci.h>
+
+#include "Cake/DependencyInjection/Inject.hpp"
+
 #include "IShipClassContainer.hpp"
 #include "DataBase/DataBase.hpp"
 #include "ShipClass.hpp"
@@ -22,6 +26,8 @@ private:
 
     DataBase::DataBase & m_db;
     std::map<unsigned, boost::shared_ptr<ShipClass> > m_shipClassMap;
+
+    Cake::DependencyInjection::Inject<soci::session> m_sociSession;
 };
 
 }
