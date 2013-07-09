@@ -17,6 +17,7 @@ CREATE TABLE ship_classes(
     id INT PRIMARY KEY,
     speed INT,
     max_integrity INT,
+    name TEXT,
     model TEXT,
     max_capacity INT,
     required_carbon INT,

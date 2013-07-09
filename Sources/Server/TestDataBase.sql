@@ -17,12 +17,12 @@ INSERT INTO objects VALUES(15,  "Ship",     5,     1,    7000, 10000, 2,    100,
 INSERT INTO objects VALUES(100, "Asteroid", 1,     2000, 1,    1,     NULL, 100,      1000,  1000);
 INSERT INTO objects VALUES(101, "Asteroid", 1,     2000, 1000, 1,     NULL, 100,      1000,  1000);
 
-/*                              id   speed   max_integrity   model                 max_capacity  required_carbon  required_helium */
-INSERT INTO ship_classes VALUES(1,   500,    1000,           "Fighter.model",      100,          10,              5);
-INSERT INTO ship_classes VALUES(5,   5000,   100,            "Carnwennan.model",   100,          10,              5);
-INSERT INTO ship_classes VALUES(4,   80,     10000,          "Fregate.model",      1000,         1000,            50);
-INSERT INTO ship_classes VALUES(2,   100,    1000,           "Constructor.model",  10000,        1000,            50);
-INSERT INTO ship_classes VALUES(3,   100,    1000,           "Gatherer.model",     1000,         100,             50);
+/*                              id   speed   max_integrity  name             model                 max_capacity  required_carbon  required_helium */
+INSERT INTO ship_classes VALUES(1,   500,    1000,          "Figter",        "Fighter.model",      100,          10,              5);
+INSERT INTO ship_classes VALUES(5,   5000,   100,           "Carnwennan",    "Carnwennan.model",   100,          10,              5);
+INSERT INTO ship_classes VALUES(4,   80,     10000,         "Fregate",       "Fregate.model",      1000,         1000,            50);
+INSERT INTO ship_classes VALUES(2,   100,    1000,          "Constructor",   "Constructor.model",  10000,        1000,            50);
+INSERT INTO ship_classes VALUES(3,   100,    1000,          "Gatherer",      "Gatherer.model",     1000,         100,             50);
 
 /*                                      id  ship_class_id  action_id  action_parameter */
 /* Fighter */

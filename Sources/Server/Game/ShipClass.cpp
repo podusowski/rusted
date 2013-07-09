@@ -4,15 +4,15 @@
 
 using namespace Server::Game;
 
-ShipClass::ShipClass(DataBase::DataBaseNode & node) :
-    m_id(node.getValue<unsigned>("id")),
-    m_name(node.getValue<std::string>("name")),
-    m_speed(node.getValue<unsigned>("speed")),
-    m_integrity(node.getValue<unsigned>("integrity")),
-    m_model(node.getValue<std::string>("model")),
-    m_capacity(node.getValue<unsigned>("capacity", 0)),
-    m_requiredCarbon(node.getValue<unsigned>("required_carbon", 0)),
-    m_requiredHelium(node.getValue<unsigned>("required_helium", 0))
+ShipClass::ShipClass(const soci::row & row) :
+    m_id(row.get<int>("id")),
+    m_name(row.get<std::string>("name")),
+    m_speed(row.get<int>("speed")),
+    m_integrity(row.get<int>("max_integrity")),
+    m_model(row.get<std::string>("model")),
+    m_capacity(row.get<int>("max_capacity")),
+    m_requiredCarbon(row.get<int>("required_carbon")),
+    m_requiredHelium(row.get<int>("required_helium"))
 {
     LOG_DEBUG << "Ship class loaded, id: " << m_id 
               << ", name: " << m_name
@@ -25,11 +25,13 @@ ShipClass::ShipClass(DataBase::DataBaseNode & node) :
     {
         LOG_DEBUG << "Loading available actions";
 
-        for (auto & actionNode: node.getFirstChild("actions").getChilds())
+        soci::rowset<soci::row> actions = (m_sociSession->prepare << "SELECT * FROM ship_classes_actions WHERE ship_class_id=:id", soci::use(m_id));
+
+        for (auto it = actions.begin(); it != actions.end(); it++)
         {
             AvailableAction action;
-            action.type = actionNode->getValue<unsigned>("type");
-            action.parameter = actionNode->getValue<unsigned>("parameter");
+            action.type = it->get<int>("action_id");
+            action.parameter = it->get<int>("action_parameter");
             m_availableActions.push_back(action);
 
             LOG_DEBUG << "  available action: " << action.type << ", parameter: " << action.parameter;

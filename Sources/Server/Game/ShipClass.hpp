@@ -1,7 +1,9 @@
 #pragma once
 
+#include <soci.h>
+
+#include "Cake/DependencyInjection/Inject.hpp"
 #include "Common/Game/Object/Ship.hpp"
-#include "DataBase/DataBaseNode.hpp"
 #include "IShipClass.hpp"
 
 namespace Server
@@ -12,7 +14,7 @@ namespace Game
 class ShipClass : public IShipClass
 {
 public:
-    ShipClass(DataBase::DataBaseNode &);
+    ShipClass(const soci::row &);
 
     void applyTo(Common::Game::Object::Ship &);
     std::vector<AvailableAction> getAvailableActions();
@@ -31,6 +33,8 @@ private:
     unsigned m_requiredCarbon;
     unsigned m_requiredHelium;
     std::vector<AvailableAction> m_availableActions;
+
+    Cake::DependencyInjection::Inject<soci::session> m_sociSession;
 };
 
 }

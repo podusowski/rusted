@@ -34,11 +34,11 @@ void ShipClassContainer::loadFromDataBase()
 {
     LOG_INFO << "Loading ship classes from db";
 
-    auto shipClassesNode = m_db.getRoot().getFirstChild("ship_classes").getChilds();
+    soci::rowset<soci::row> classes = (m_sociSession->prepare << "SELECT * FROM ship_classes");
 
-    for (auto it = shipClassesNode.begin(); it != shipClassesNode.end(); it++)
+    for (auto it = classes.begin(); it != classes.end(); it++)
     {
-        boost::shared_ptr<ShipClass> shipClass(new ShipClass(**it));
+        boost::shared_ptr<ShipClass> shipClass(new ShipClass(*it));
         auto ret = m_shipClassMap.insert(std::make_pair(shipClass->getId(), shipClass));
         if (!ret.second)
         {
