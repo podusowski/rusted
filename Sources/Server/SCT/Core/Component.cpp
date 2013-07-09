@@ -21,10 +21,11 @@ Component::Component()
     std::cout << "\n";
 }
 
-Component::Component(const std::string & database)
+Component::Component(const std::string & database, const std::string & sociDataBase)
 {
     setConfigValue("--database.provider1.type", "xml");
     setConfigValue("--database.provider1.url", database);
+    setConfigValue("--database.url", sociDataBase);
 
     std::cout << "\n";
 }

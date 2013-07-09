@@ -1,7 +1,7 @@
 TARGET:=Server
 TYPE:=application
 
-LDFLAGS:=-L$(BUILD) -lServer -lCommon -lCake -lpthread -lboost_system -lxml2
+LDFLAGS:=-L$(BUILD) -lServer -lCommon -lCake -lpthread -lboost_system -lxml2 -lsoci_core
 
 RESOURCES:=Server.cfg TestDataBase.xml ShipClasses.xml runTestServer TestDataBase.sqlite3
 DEPENDENCIES+=libServer.a libCommon.a libCake.a

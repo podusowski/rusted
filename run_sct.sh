@@ -24,6 +24,7 @@ if [ "$tool" = "memcheck" ]; then
     rm -f $root/memcheck*
 fi
 
+export LD_LIBRARY_PATH=.
 $wrapper ./ServerSCT $@
 
 popd

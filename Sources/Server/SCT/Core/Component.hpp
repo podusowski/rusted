@@ -14,7 +14,7 @@ class Component
 {
 public:
 	Component();
-    Component(const std::string & database);
+    Component(const std::string & database, const std::string & sociDataBase = "sqlite3://SampleDataBase.sqlite3");
 	~Component();
     void setConfigValue(const std::string & name, const std::string & value);
     void start();
