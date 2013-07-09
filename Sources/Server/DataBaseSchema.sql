@@ -13,3 +13,20 @@ CREATE TABLE objects(
     helium INT
 );
 
+CREATE TABLE ship_classes(
+    id INT PRIMARY KEY,
+    speed INT,
+    max_integrity INT,
+    model TEXT,
+    max_capacity INT,
+    required_carbon INT,
+    required_helium INT
+);
+
+CREATE TABLE ship_classes_actions(
+    id INT PRIMARY KEY,
+    ship_class_id INT,
+    action_id INT,
+    action_parameter INT
+);
+
