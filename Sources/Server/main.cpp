@@ -3,7 +3,6 @@
 #include "Cake/DependencyInjection/Registry.hpp"
 #include "Cake/Configuration/Configuration.hpp"
 #include "Cake/Diagnostics/Logger.hpp"
-#include "Server/DataBase/DataBase.hpp"
 #include "Common/Game/Object/FlightTrajectory.hpp"
 #include "Common/Math/Bezier3.hpp"
 

@@ -8,7 +8,6 @@
 #include "Cake/Threading/Mutex.hpp"
 #include "Cake/DependencyInjection/Inject.hpp"
 
-#include "DataBase/DataBase.hpp"
 #include "IPlayerContainer.hpp"
 
 namespace Server

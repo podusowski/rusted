@@ -1,7 +1,6 @@
 #pragma once
 
 #include "Common/Game/Object/Ship.hpp"
-#include "DataBase/DataBaseNode.hpp"
 
 namespace Server
 {

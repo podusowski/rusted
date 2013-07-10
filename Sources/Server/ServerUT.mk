@@ -6,8 +6,6 @@ SOURCES+=Game/Actions/UnitTests/AttackTest.cpp
 SOURCES+=Game/Actions/UnitTests/BuildShipTest.cpp
 SOURCES+=Game/Actions/UnitTests/ActionFactoryTest.cpp
 SOURCES+=Game/Actions/UnitTests/ActionPerformerTest.cpp
-SOURCES+=DataBase/UnitTests/DataBaseNodeTest.cpp
-SOURCES+=DataBase/UnitTests/XmlDataProviderTest.cpp
 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../

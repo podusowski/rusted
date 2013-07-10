@@ -4,7 +4,6 @@
 #include <soci.h>
 
 #include "Common/Game/Object/ObjectBase.hpp"
-#include "DataBase/DataBase.hpp"
 
 namespace Server
 {

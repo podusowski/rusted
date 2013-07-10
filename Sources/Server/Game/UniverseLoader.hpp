@@ -3,7 +3,6 @@
 #include <soci.h>
 
 #include "Game/Universe.hpp"
-#include "DataBase/DataBase.hpp"
 #include "Game/IObjectFactory.hpp"
 
 namespace Server
