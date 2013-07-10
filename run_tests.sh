@@ -1,85 +1,162 @@
-#!/bin/bash
+set -u
 
-FONT_COLOR_GREEN="\033[1;32m"
-FONT_COLOR_RED="\033[1;31m"
-FONT_RESET="\033[0;m"
+green="\033[1;32m"
+red="\033[1;31m"
+red2="\033[31m"
+yellow="\033[1;32m"
+bold="\033[1;24m"
+reset="\033[0;m"
 
-verbose=0
-compile=0
-memcheck=0
+tool=""
+pattern='.*'
+binary=""
+fast=0
 
-while getopts 'vcm' opt; do
+while getopts 't:p:b:f' opt; do
     case $opt in
-        v)
-            verbose=1
+        t)
+            tool=$OPTARG
             ;;
-        c)
-            compile=1
+        p)
+            pattern=$OPTARG
             ;;
-        m)
-            memcheck=1
+        b)
+            binary=$OPTARG
+            ;;
+        f)
+            fast=1
             ;;
     esac
 done
 
-if [ $compile = "1" ]; then
-    make all || exit 1
-fi
-
-if [ ! -d _build ]; then 
-    echo "no _build directory, project was not built or you are not in working directory"
+if [ "$tool" != "" -a "$tool" != "helgrind" -a "$tool" != "memcheck" ]; then
+    echo unknown tool: $tool
     exit 1
 fi
 
-function run_test()
+function run_test_binary()
 {
-    test_name=$1
+    local binary=$1
+    local testcases=`read_testcases $binary`
 
-    stdout=`tempfile`
-    stderr=`tempfile`
+    port=3000
+    for testcase in $testcases; do
+        port=$((port+1))
 
-    if [ $memcheck = "1" ]; then
-        valgrind_log_file="valgrind-memcheck-$test_name.log"
-        binary_wrapper="valgrind --tool=memcheck --log-file=$valgrind_log_file"
-    fi
-
-    if [ $verbose = "1" ]; then
-        LD_LIBRARY_PATH=. $binary_wrapper ./$test_name
-    else
-        LD_LIBRARY_PATH=. $binary_wrapper ./$test_name > $stdout 2> $stderr
-    fi
-
-    if [ "$?" = "0" ]; then
-        echo -en "${FONT_COLOR_GREEN}pass$FONT_RESET $test_name"
-    else
-        echo -e "${FONT_COLOR_RED}fail$FONT_RESET $test_name"
-        if [ $verbose != "1" ]; then
-            cat $stdout $stderr
+        if [ $fast = "1" ]; then
+            ( run_single_test $binary $testcase $port ) &
+        else
+            ( run_single_test $binary $testcase $port )
         fi
-        echo -e "${FONT_COLOR_RED}no further tests will be executed${FONT_RESET}"
-        exit 1
-    fi
-    echo 
 
-    rm $stdout $stderr
+        while test `jobs | wc -l` -gt 6; do
+            sleep 1
+        done
+    done
+
+    wait
 }
 
-pushd _build/linux-debug > /dev/null
+function run_single_test()
+{
+    local binary=$1
+    local name=$2
+    local port=$3
 
-result=0
+    local log_dir=$PWD/`dirname $binary`/../tests/`basename $binary`/
+    local log_file=$log_dir/$name.log
+    local binary_dir=$PWD/`dirname $binary`
 
-for i in *UT; do
-   if [ -f $i ]; then
-       run_test $i
-   fi
-done
+    mkdir -p $log_dir
 
-for i in *SCT; do
-   if [ -f $i ]; then
-       run_test $i
-   fi
-done
+    pushd `dirname $binary` > /dev/null
 
-popd > /dev/null
+    local wrapper=""
+    local tool_log=""
+    local tool_output=""
+    if [ "$tool" = "helgrind" -o "$tool" = "memcheck" ]; then
+        tool_log=$log_dir/$name.$tool
+        wrapper="valgrind --tool=$tool --log-file=$tool_log --trace-children=yes --child-silent-after-fork=yes"
+        export SERVER_SCT_WAIT_FOR_APP_TIME=10
+    fi
 
-exit $result
+    LD_LIBRARY_PATH=. SERVER_SCT_PORT=$port $wrapper ./`basename $binary` --gtest_filter=$name &> $log_file
+
+    if grep FAILED $log_file > /dev/null; then
+        result="  ${red}fail$reset "
+    else
+        result="  ${green}pass$reset "
+    fi
+
+    if [ "$tool" = "helgrind" -o "$tool" = "memcheck" ]; then
+        tool_output=`grep 'ERROR SUMMARY' $tool_log | grep -v 'ERROR SUMMARY: 0'`
+    fi
+
+    local failure_details=`grep Failure $log_file`
+    local prefix=""
+    if [ -n "$failure_details" ]; then
+        failure_details="\n$failure_details\nsee ${red}`readlink -f $log_file`${reset}\n"
+        prefix="\n"
+    fi
+
+    echo -e "${prefix}$result $bold`basename $binary`$reset.$name ${red2}${failure_details}${reset} ${red}${tool_output}${reset}"
+
+    popd > /dev/null
+}
+
+function read_testcases()
+{
+    local binary=$1
+
+    LD_LIBRARY_PATH=`dirname $binary` $binary --gtest_list_tests | while read line
+    do
+        if echo $line | grep "\." > /dev/null; then
+            prefix=$line
+        else
+            local name="$prefix$line"
+
+            if [ -n "$pattern" ]; then
+                if echo $binary.$name | grep "$pattern" > /dev/null; then
+                    echo -n "$name "
+                fi
+            else
+                echo -n "$name "
+            fi
+        fi
+    done
+}
+
+function cleanup()
+{
+    sleep 0.2
+    pkill -P `jobs -p` 2> /dev/null > /dev/null
+
+    sleep 0.1
+    if [ -n "`jobs -p`" ]; then
+        pkill -KILL -P `jobs -p` 2> /dev/null > /dev/null
+    fi
+
+    wait
+}
+
+trap "cleanup" EXIT TERM
+
+if [ -n "$binary" ]; then
+    run_test_binary $binary
+else
+    root_dir=`dirname $0`/_build/linux-debug/
+    for b in $root_dir/*UT $root_dir/*SCT; do
+        if [ -f $b -a -x $b ]; then
+            if [ $fast = "1" ]; then
+                run_test_binary $b &
+            else
+                run_test_binary $b
+            fi
+        fi
+    done
+
+    wait
+fi
+
+echo
+cleanup
