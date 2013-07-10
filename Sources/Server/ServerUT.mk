@@ -2,13 +2,10 @@ TARGET:=ServerUT
 TYPE:=application
 
 SOURCES+=../Common/UnitTests/mainUT.cpp
-SOURCES+=Game/UnitTests/PlayerContainerTest.cpp
 SOURCES+=Game/Actions/UnitTests/AttackTest.cpp
 SOURCES+=Game/Actions/UnitTests/BuildShipTest.cpp
 SOURCES+=Game/Actions/UnitTests/ActionFactoryTest.cpp
 SOURCES+=Game/Actions/UnitTests/ActionPerformerTest.cpp
-SOURCES+=Game/UnitTests/UniverseLoaderTest.cpp
-SOURCES+=Game/UnitTests/ShipClassContainerTest.cpp
 SOURCES+=DataBase/UnitTests/DataBaseNodeTest.cpp
 SOURCES+=DataBase/UnitTests/XmlDataProviderTest.cpp
 
