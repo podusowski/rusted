@@ -43,7 +43,7 @@ function run_single_test()
         tool_output=`grep 'ERROR SUMMARY' $log | grep -v 'ERROR SUMMARY: 0'`
     fi
 
-    SERVER_SCT_PORT=$port $wrapper ./$binary --gtest_filter=$name > $log_dir/$name.out 2> $log_dir/$name.err
+    LD_LIBRARY_PATH=. SERVER_SCT_PORT=$port $wrapper ./$binary --gtest_filter=$name > $log_dir/$name.out 2> $log_dir/$name.err
 
     if grep FAILED $log_dir/$name.out > /dev/null; then
         result="  ${red}fail$reset "
