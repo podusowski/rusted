@@ -24,8 +24,12 @@ LDFLAGS=-L. -L$(BUILD)
 LDFLAGS+=-lCommon -lCake -lpthread -lxml2
 LDFLAGS+=-lgtest
 
-RESOURCES+=SampleDataBase.xml
+RESOURCES+=SampleDataBase.xml SctDataBase.sqlite3
 
 DEPENDENCIES+=Server
 DEPENDENCIES+=libCommon.a
 DEPENDENCIES+=libCake.a
+
+$(TARGET_BASE)/SctDataBase.sqlite3: $(TARGET_BASE)/../DataBaseSchema.sql $(TARGET_BASE)/SctDataBase.sql
+	@rm -f $@
+	cat $^ | sqlite3 $@
