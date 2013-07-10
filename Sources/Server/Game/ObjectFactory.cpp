@@ -47,7 +47,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(const 
         boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
 
         object->setId(row.get<int>("id"));
-        //object->setModel(row.get<std::string>("model"));
+        object->setModel(row.get<std::string>("model"));
         object->setPosition(extractPosition(row));
         object->setIntegrity(row.get<int>("integrity"));
 

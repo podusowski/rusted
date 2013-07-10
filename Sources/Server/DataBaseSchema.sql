@@ -4,6 +4,7 @@ CREATE TABLE objects(
     id INT PRIMARY KEY,
     type TEXT,
     class INT,
+    model TEXT,
     x INT,
     y INT,
     z INT,

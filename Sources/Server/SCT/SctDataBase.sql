@@ -2,13 +2,13 @@ INSERT INTO users VALUES(1, "user1", "passwordhash");
 INSERT INTO users VALUES(2, "user2", "passwordhash");
 INSERT INTO users VALUES(3, "user3", "passwordhash");
 
-/*                         id   type        class  x     y     z      owner integrity carbon helium */
-INSERT INTO objects VALUES(1,   "Ship",     1,     1,    1,    1,     1,    100,      10,    10);
-INSERT INTO objects VALUES(2,   "Ship",     2,     1,    1,    1,     2,    100,      11,     6);
-INSERT INTO objects VALUES(4,   "Ship",     1,     1,    1,    1,     2,    100,      0,     0);
-INSERT INTO objects VALUES(5,   "Ship",     1,     10000,1,    1,     2,    100,      0,     0);
+/*                         id   type        class  model             x     y     z      owner integrity carbon helium */
+INSERT INTO objects VALUES(1,   "Ship",     1,     NULL,             1,    1,    1,     1,    100,      10,    10);
+INSERT INTO objects VALUES(2,   "Ship",     2,     NULL,             1,    1,    1,     2,    100,      11,     6);
+INSERT INTO objects VALUES(4,   "Ship",     1,     NULL,             1,    1,    1,     2,    100,      0,     0);
+INSERT INTO objects VALUES(5,   "Ship",     1,     NULL,             10000,1,    1,     2,    100,      0,     0);
 
-INSERT INTO objects VALUES(3,   "Asteroid", 1,     100,  100,  100,   NULL, 100,      100,   100);
+INSERT INTO objects VALUES(3,   "Asteroid", 1,     "Asteroid.model", 100,  100,  100,   NULL, 100,      100,   100);
 
 /*                              id   speed   max_integrity  name             model                 max_capacity  required_carbon  required_helium */
 INSERT INTO ship_classes VALUES(1,   1,      100,           "Ship1",         "Ship1.model",        1000,         10,              5);
