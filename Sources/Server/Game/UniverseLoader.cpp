@@ -2,7 +2,7 @@
 
 using namespace Server::Game;
 
-void UniverseLoader::load(Common::Game::Universe & universe, Server::DataBase::DataBase & db)
+void UniverseLoader::load(Common::Game::Universe & universe)
 {
     LOG_INFO << "Loading universe state from db";
 
@@ -18,7 +18,7 @@ void UniverseLoader::load(Common::Game::Universe & universe, Server::DataBase::D
     }
 }
 
-void UniverseLoader::save(Common::Game::Universe & universe, Server::DataBase::DataBase & db)
+void UniverseLoader::save(Common::Game::Universe & universe)
 {
     LOG_INFO << "Saving universe state from db";
     LOG_ERR << "Not implemented";

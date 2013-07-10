@@ -14,8 +14,8 @@ namespace Game
 class UniverseLoader
 {
 public:
-    void load(Common::Game::Universe &, Server::DataBase::DataBase &);
-    void save(Common::Game::Universe &, Server::DataBase::DataBase &);
+    void load(Common::Game::Universe &);
+    void save(Common::Game::Universe &);
 
 private:
     Cake::DependencyInjection::Inject<IObjectFactory> m_objectFactory;

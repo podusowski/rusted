@@ -6,7 +6,7 @@
 
 using namespace Server::Game;
 
-ShipClassContainer::ShipClassContainer(Server::DataBase::DataBase & db) : m_db(db)
+ShipClassContainer::ShipClassContainer()
 {
     loadFromDataBase();
 }

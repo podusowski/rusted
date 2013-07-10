@@ -28,7 +28,6 @@ private:
     int m_lastConnectionId;
 
     Cake::DependencyInjection::Inject<Cake::Configuration::Configuration> m_cfg;
-    Cake::DependencyInjection::Inject<Server::DataBase::DataBase> m_db;
     Server::Game::PlayerContainer m_playerContainer;
     Server::Services::ServiceDeployment m_serviceDeployment;
 };

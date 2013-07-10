@@ -19,7 +19,7 @@ namespace Game
 class PlayerContainer : public IPlayerContainer
 {
 public:
-    PlayerContainer(Server::DataBase::DataBase & db);
+    PlayerContainer();
 
     int authorize(const std::string & login,
                    const std::string & password, 
@@ -42,7 +42,6 @@ private:
     int checkCredentials(const std::string & login, const std::string & password);
 
     std::map<Network::IConnection *, boost::shared_ptr<Common::Game::Player> > m_connectionMap;
-    Server::DataBase::DataBase & m_db;
 
     Cake::Threading::Mutex m_mutex;
 

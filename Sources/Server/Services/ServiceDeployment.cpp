@@ -5,16 +5,14 @@
 
 using namespace Server::Services;
 
-ServiceDeployment::ServiceDeployment(Cake::Configuration::Configuration & cfg, Server::DataBase::DataBase & db, Server::Game::PlayerContainer & playerContainer) :
-    m_db(db),
-
+ServiceDeployment::ServiceDeployment(Cake::Configuration::Configuration & cfg, Server::Game::PlayerContainer & playerContainer) :
     m_rustedTimeService(*m_time),
     m_authorizationService(playerContainer, *this),
     m_playerService(m_universe, playerContainer),
     m_entityService(m_universe, playerContainer)
 {
     Server::Game::UniverseLoader loader;
-    loader.load(m_universe, m_db);
+    loader.load(m_universe);
 }
 
 void ServiceDeployment::deployNewConnection(Server::Network::IConnection & connection)

@@ -27,15 +27,11 @@ void initDependencies(int argc, const char * argv[])
     forInterface<soci::session>()
         .useFactory(sociSessionFactory);
 
-    boost::shared_ptr<Server::DataBase::DataBase> db(new Server::DataBase::DataBase());
-    forInterface<Server::DataBase::DataBase>()
-        .use(db);
-
-    boost::shared_ptr<Server::Game::IShipClassContainer> shipClassContainer(new Server::Game::ShipClassContainer(*db));
+    boost::shared_ptr<Server::Game::IShipClassContainer> shipClassContainer(new Server::Game::ShipClassContainer());
     forInterface<Server::Game::IShipClassContainer>()
         .use(shipClassContainer);
 
-    boost::shared_ptr<Server::Game::IObjectFactory> objectFactory(new Server::Game::ObjectFactory(*db, *shipClassContainer));
+    boost::shared_ptr<Server::Game::IObjectFactory> objectFactory(new Server::Game::ObjectFactory(*shipClassContainer));
     forInterface<Server::Game::IObjectFactory>()
         .use(objectFactory);
 
