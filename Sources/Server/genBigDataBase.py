@@ -10,20 +10,19 @@ options = parser.parse_args()
 f = open(options.output, "w")
 
 f.write(
-    "<root>\n"
-    "   <users>\n"
-    "       <user id=\"1\" login=\"user1\" password=\"passwordhash\" />\n"
-    "   </users>\n"
-    "   <objects>\n")
+    'BEGIN;\n'
+    'INSERT INTO users VALUES(1, "user1", "passwordhash");\n'
+)
 
 for i in xrange(10000):
+    #                               id              type        class  model             x     y     z      owner integrity carbon helium
     f.write(
-        "       <object id=\"" + str(i+1) + "\" type=\"Ship\" class=\"1\" x=\"1\" y=\"1\" z=\"1\" owner=\"1\" />\n"
+        'INSERT INTO objects VALUES('+ str(i+1) +', "Ship",     1,     NULL,             1,    1,    1,     1,    100,      10,    10);\n'
     )
 
 f.write(
-    "   </objects>\n"
-    "   <ship_classes>\n"
-    '       <ship_class id="1" speed="20" integrity="200" name="Ship2" model="Ship2.mesh" capacity="1000" required_carbon="10" required_helium="5" />\n'
-    '   </ship_classes>\n'
-    "</root>\n")
+    '/*                              id   speed   max_integrity  name             model                 max_capacity  required_carbon  required_helium */\n'
+    'INSERT INTO ship_classes VALUES(1,   1,      100,           "Ship1",         "Ship1.model",        1000,         10,              5);\n'
+    'COMMIT;\n'
+)
+
