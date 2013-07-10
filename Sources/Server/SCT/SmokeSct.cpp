@@ -66,7 +66,7 @@ TEST(SmokeSct, Smoke)
 
 TEST(SmokeSct, BigDataBase)
 {
-    SCT::Component component("BigDataBase.xml");
+    SCT::Component component("", "sqlite3://BigDataBase.sqlite3");
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection1;

@@ -157,23 +157,26 @@ PlayerSummary PlayerContainer::getPlayerSummary(int id)
 
 int PlayerContainer::checkCredentials(const std::string & login, const std::string & password)
 {
-    auto players = m_db.getRoot().getFirstChild("users").getChilds();
+    std::string realPassword;
+    int id;
+    soci::indicator ind;
+    m_sociSession->once << "SELECT id, password FROM users WHERE login=:login", soci::into(id, ind), soci::into(realPassword), soci::use(login);
 
-    for (auto it = players.begin(); it != players.end(); it++)
+    if (ind == soci::i_ok)
     {
-        if ((*it)->getValue<std::string>("login") == login)
+        Common::Game::Utilities::PasswordHash hash;
+        if (realPassword == hash.generate(password))
         {
-            Common::Game::Utilities::PasswordHash hash;
-            if ((*it)->getValue<std::string>("password") == hash.generate(password))
-            {
-                return (*it)->getValue<int>("id");
-            }
-            else
-            {
-                throw std::out_of_range("invalid password for player \"" + login + "\"");
-            }
+            return id;
+        }
+        else
+        {
+            throw std::out_of_range("invalid password for player \"" + login + "\"");
         }
     }
-    throw std::out_of_range("no such player \"" + login + "\"");
+    else
+    {
+        throw std::out_of_range("no such player \"" + login + "\"");
+    }
 }
 

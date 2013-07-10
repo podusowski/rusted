@@ -3,7 +3,10 @@
 #include <map>
 #include <string>
 
+#include <soci.h>
+
 #include "Cake/Threading/Mutex.hpp"
+#include "Cake/DependencyInjection/Inject.hpp"
 
 #include "DataBase/DataBase.hpp"
 #include "IPlayerContainer.hpp"
@@ -29,7 +32,7 @@ public:
     Network::IConnection & getConnectionById(int);
 
     void visitOnlinePlayerById(int, std::function<void(Common::Game::Player &, Network::IConnection &)>);
-    
+
     std::vector<boost::shared_ptr<Common::Game::Player> > getAll(Common::Game::PlayerState state);
     std::vector<Network::IConnection *> getAllConnections(Common::Game::PlayerState state);
 
@@ -42,6 +45,8 @@ private:
     Server::DataBase::DataBase & m_db;
 
     Cake::Threading::Mutex m_mutex;
+
+    Cake::DependencyInjection::Inject<soci::session> m_sociSession;
 };
 
 }
