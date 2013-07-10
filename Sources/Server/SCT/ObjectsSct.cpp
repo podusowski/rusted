@@ -40,7 +40,7 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
     auto shipInfo = connection1->receive<Common::Messages::ShipInfo>();
     EXPECT_EQ(200, shipInfo->integrity);
     EXPECT_EQ(20, shipInfo->speed);
-    EXPECT_EQ("Ship2.mesh", shipInfo->model);
+    EXPECT_EQ("Ship2.model", shipInfo->model);
 
     auto shipCourseInfo = connection1->receive<Common::Messages::ShipCourseInfo>();
 
