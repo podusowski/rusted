@@ -2,6 +2,7 @@
 
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Cake/Threading/ScopedLock.hpp"
+#include "Cake/Utils/BuildString.hpp"
 
 #include "Common/Game/Utilities/PasswordHash.hpp"
 #include "Server/Game/PlayerContainer.hpp"
@@ -136,7 +137,19 @@ std::vector<Server::Network::IConnection *> PlayerContainer::getAllConnections(C
 
 PlayerSummary PlayerContainer::getPlayerSummary(int id)
 {
-    throw std::runtime_error("todo");
+    PlayerSummary ret;
+    soci::indicator ind;
+
+    m_sociSession->once << "SELECT id, login FROM users WHERE id=:id", soci::use(id), soci::into(ret.id, ind), soci::into(ret.name);
+
+    if (ind == soci::i_ok)
+    {
+        return ret;
+    }
+    else
+    {
+        throw std::runtime_error(BUILD_STRING << "no such player, id:" << id);
+    }
 }
 
 int PlayerContainer::checkCredentials(const std::string & login, const std::string & password)
