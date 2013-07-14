@@ -9,7 +9,7 @@ using namespace Client::Views;
 Camera::Camera(Graphics::IGraphics & graphics, Input::IInput & input, Common::Game::Player & player) :
     m_graphics(graphics),
     m_player(player),
-    m_distance(1000),
+    m_distance(5000),
     m_userOrientationChanging(false),
     m_userXAngle(0),
     m_userYAngle(0)
@@ -53,7 +53,7 @@ void Camera::update()
     // apply user orientation
     cameraOrientation = cameraOrientation * m_userOrientation;
 
-    int angle = 20;
+    int angle = 0;
     Ogre::Quaternion cameraOrientationAngle(Ogre::Degree(-angle), Ogre::Vector3(1, 0, 0));
     auto cameraPositionDelta = cameraOrientationAngle * Ogre::Vector3(0, 0, *m_distance);
 

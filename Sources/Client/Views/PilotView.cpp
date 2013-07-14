@@ -110,8 +110,8 @@ void PilotView::mouseReleased(const OIS::MouseButtonID & button, unsigned x, uns
         int top = y - (m_graphics.getHeight() / 2);
         int left = x - (m_graphics.getWidth() / 2);
 
-        top *= 100;
-        left *= 10;
+        top *= 1000;
+        left *= 20;
 
         Ogre::Vector3 delta(left, 0, top); 
         delta = ogreOrientation * delta;
@@ -234,7 +234,7 @@ void PilotView::updateOrientationPlane()
     auto offset = orientation * Ogre::Vector3(0, -500, -1000);
     m_orientationPlaneSceneNode->setPosition(m_camera.getPosition() + offset);
     m_orientationPlaneSceneNode->setOrientation(orientation);
-    m_orientationPlaneSceneNode->pitch(Ogre::Degree(20));
+    //m_orientationPlaneSceneNode->pitch(Ogre::Degree(20));
 }
 
 void PilotView::createCourseMarker()

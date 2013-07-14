@@ -14,8 +14,8 @@ PlayerContainer::PlayerContainer()
 {
 }
 
-int PlayerContainer::authorize(const std::string & login, 
-                               const std::string & password, 
+int PlayerContainer::authorize(const std::string & login,
+                               const std::string & password,
                                Network::IConnection & connection)
 {
     LOG_DEBUG << "Connection: " << &connection << " wants to authorize as player: " << login;
