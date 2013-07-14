@@ -1,4 +1,3 @@
-TARGET:=ServerSCT
 TYPE:=application
 
 SOURCES:=mainSCT.cpp
@@ -18,13 +17,14 @@ CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../../
 CFLAGS+=-I$(TARGET_BASE)/../../Common
 CFLAGS+=-I$(TARGET_BASE)/../../External 
+CFLAGS+=-I$(TARGET_BASE)/../../External/GoogleTest
 CFLAGS+=-I/usr/include/libxml2
 
 LDFLAGS=-L. -L$(BUILD) 
 LDFLAGS+=-lCommon -lCake -lpthread -lxml2
-LDFLAGS+=-lgtest
+LDFLAGS+=-lgtest-static
 
-RESOURCES+=SampleDataBase.xml SctDataBase.sqlite3
+RESOURCES+=SctDataBase.sqlite3
 
 DEPENDENCIES+=Server
 DEPENDENCIES+=libCommon.a

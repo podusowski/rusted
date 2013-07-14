@@ -1,8 +1,8 @@
 TARGET:=CakeUT
 TYPE:=application
 
-CFLAGS+=-I. -I.. -I$(TARGET_BASE) -I$(TARGET_BASE)/..
-LDFLAGS+=-L. -L$(BUILD) -lCake -lpthread -lgtest -lgmock
+CFLAGS+=-I. -I.. -I$(TARGET_BASE) -I$(TARGET_BASE)/.. -I$(TARGET_BASE)/../GoogleTest/
+LDFLAGS+=-L. -L$(BUILD) -lCake -lpthread -lgtest-static
 
 SOURCES+=Serialization/UnitTests/TmsTest.cpp
 SOURCES+=Networking/UnitTests/ServerSocketPoolTest.cpp
