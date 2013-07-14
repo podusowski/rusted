@@ -29,10 +29,16 @@ while getopts 't:p:b:f' opt; do
     esac
 done
 
-if [ "$tool" != "" -a "$tool" != "helgrind" -a "$tool" != "memcheck" ]; then
-    echo unknown tool: $tool
-    exit 1
-fi
+function is_tool_supported()
+{
+    local tool=$1
+
+    if [ "$tool" = "helgrind" -o "$tool" = "memcheck" ]; then
+        return 0
+    else
+        return 1
+    fi
+}
 
 function run_test_binary()
 {
@@ -74,7 +80,7 @@ function run_single_test()
     local wrapper=""
     local tool_log=""
     local tool_output=""
-    if [ "$tool" = "helgrind" -o "$tool" = "memcheck" ]; then
+    if is_tool_supported "$tool"; then
         tool_log=$log_dir/$name.$tool
         wrapper="valgrind --tool=$tool --log-file=$tool_log --trace-children=yes --child-silent-after-fork=yes"
         export SERVER_SCT_WAIT_FOR_APP_TIME=10
@@ -88,7 +94,7 @@ function run_single_test()
         result="  ${green}pass$reset "
     fi
 
-    if [ "$tool" = "helgrind" -o "$tool" = "memcheck" ]; then
+    if is_tool_supported "$tool"; then
         tool_output=`grep 'ERROR SUMMARY' $tool_log | grep -v 'ERROR SUMMARY: 0'`
     fi
 
@@ -138,6 +144,13 @@ function cleanup()
 
     wait
 }
+
+if [ "$tool" != "" ]; then
+    if ! is_tool_supported $tool; then
+        echo unknown tool: $tool
+        exit 1
+    fi
+fi
 
 trap "cleanup" EXIT TERM
 
