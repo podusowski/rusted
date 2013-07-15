@@ -19,11 +19,13 @@ SOURCES+=Math/UnitTests/KinematicParticleTest.cpp
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common
-CFLAGS+=-I$(TARGET_BASE)/../External 
+CFLAGS+=-I$(TARGET_BASE)/../External
+CFLAGS+=-I$(TARGET_BASE)/../External/GoogleTest
 CFLAGS+=-I/usr/include/libxml2
 
-LDFLAGS=-L. -L$(BUILD) -lCommon -lCake -lpthread -lboost_system -lxml2 -lgtest -lgmock
+LDFLAGS=-L. -L$(BUILD) -lCommon -lCake -lpthread -lboost_system -lxml2 -lgtest-static
 
 DEPENDENCIES+=libCommon.a
 DEPENDENCIES+=libCake.a
+DEPENDENCIES+=libgtest-static.a
 
