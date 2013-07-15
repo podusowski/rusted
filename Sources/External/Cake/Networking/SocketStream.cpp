@@ -31,15 +31,15 @@ void SocketStream::receive(void * buf, size_t size)
 
     if (ret == 0)
     {
-        std::runtime_error("connection closed by the peer during recv");
+        throw std::runtime_error("connection closed by the peer during recv");
     }
     else if (ret == -1)
     {
-        std::runtime_error("error during recv");
+        throw std::runtime_error("error during recv");
     }
     else if (ret != int(size))
     {
-        std::runtime_error("received size doesn't match the expectation");
+        throw std::runtime_error("received size doesn't match the expectation");
     }
 }
 
