@@ -1,5 +1,6 @@
 #include <cmath>
 #include <stdexcept>
+#include <iostream>
 
 #include "KinematicParticle.hpp"
 
@@ -12,8 +13,21 @@ KinematicParticle::KinematicParticle(float maxSpeed, float acceleration, float t
     m_initialSpeed(initialSpeed),
 
     // precalculated stuff
-    m_Tmax(m_targetDistance / m_maxSpeed + (m_maxSpeed / m_acceleration)),
     m_t1((m_maxSpeed - m_initialSpeed) / m_acceleration),
+    m_Tmax(
+        (
+            m_targetDistance +
+            (
+                std::pow(m_maxSpeed, 2) / float(2 * m_acceleration)
+            )
+            +
+            (
+                std::pow(m_maxSpeed - m_initialSpeed, 2) / float(2 * m_acceleration)
+            )
+        )
+        /
+        m_maxSpeed
+    ),
     m_t2(m_Tmax - (m_maxSpeed / m_acceleration))
 {
 }
@@ -23,29 +37,22 @@ float KinematicParticle::calculateDistance(Common::Game::TimeValue deltaTime) co
     // see unit tests for more description on the algorithm
 
     float t = getTimeInSeconds(deltaTime);
-
     float S = 0;
 
-    if (t < m_t1)
+    S += m_initialSpeed * std::min(t, m_t1);
+    S += m_acceleration * std::pow(std::min(t, m_t1), 2) / 2.0;
+
+    if (t > m_t1)
     {
-        S = m_initialSpeed * t;
-        S += m_acceleration * std::pow(t, 2) / 2.0;
+        S += (std::min(t, m_t2) - m_t1) * m_maxSpeed;
     }
-    else if (t >= m_t1 && t < m_t2)
+
+    if (t > m_t2)
     {
-        S = m_initialSpeed * m_t1;
-        S += m_acceleration * std::pow(m_t1, 2) / 2;
-        S += (t - m_t1) * m_maxSpeed;
-    }
-    else if (t > m_t2 && t <= m_Tmax)
-    {
-        S = m_maxSpeed * m_t1;
-        S += m_maxSpeed * (m_t2 - m_t1);
-        S -= m_acceleration * std::pow(m_Tmax - t, 2) / 2.0;
-    }
-    else
-    {
-        throw std::out_of_range("deltaTime passes Tmax");
+        float realTime = std::min(t, m_Tmax);
+
+        S += (realTime - m_t2) * m_maxSpeed;
+        S -= std::pow(realTime - m_t2, 2) * m_acceleration / 2.0;
     }
 
     return S;
@@ -55,21 +62,19 @@ float KinematicParticle::calculateSpeed(Common::Game::TimeValue deltaTime) const
 {
     float t = getTimeInSeconds(deltaTime);
 
-    if (t < m_t1)
+    if (t > m_t2)
     {
-        return t * m_acceleration;
+        float realTime = std::min(m_Tmax, t);
+
+        return (m_Tmax - realTime) * m_acceleration;
     }
-    else if (t >= m_t1 && t < m_t2)
+    else if (t > m_t1)
     {
         return m_maxSpeed;
     }
-    else if (t > m_t2 && t <= m_Tmax)
-    {
-        return (m_Tmax - t) * m_acceleration;
-    }
     else
     {
-        throw std::out_of_range("deltaTime passes Tmax");
+        return t * m_acceleration;
     }
 }
 

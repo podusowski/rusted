@@ -32,8 +32,8 @@ private:
     float m_initialSpeed;
 
     // precalculated stuff
-    float m_Tmax;
     float m_t1;
+    float m_Tmax;
     float m_t2;
 };
 
