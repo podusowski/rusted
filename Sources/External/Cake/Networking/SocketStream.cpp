@@ -27,19 +27,25 @@ void SocketStream::send(const void * buf, size_t size)
 
 void SocketStream::receive(void * buf, size_t size)
 {
-    int ret = ::recv(m_socket, buf, size, 0);
+    char * charBuf = static_cast<char *>(buf);
 
-    if (ret == 0)
+    while (size)
     {
-        throw std::runtime_error("connection closed by the peer during recv");
-    }
-    else if (ret == -1)
-    {
-        throw std::runtime_error("error during recv");
-    }
-    else if (ret != int(size))
-    {
-        throw std::runtime_error("received size doesn't match the expectation");
+        int ret = ::recv(m_socket, charBuf, size, 0);
+
+        if (ret == 0)
+        {
+            throw std::runtime_error("connection closed by remote during recv");
+        }
+        else if (ret == -1)
+        {
+            std::stringstream ss;
+            ss << "recv returned error: " << strerror(errno);
+            throw std::runtime_error(ss.str());
+        }
+
+        charBuf += ret;
+        size -= ret;
     }
 }
 
