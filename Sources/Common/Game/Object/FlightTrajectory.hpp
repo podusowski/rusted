@@ -39,6 +39,8 @@ public:
     Description getDescription();
     void applyDescription(Description);
 
+    Position calculateOrientationControlPoint(const Position &) const;
+
 private:
     Position calculatePosition(float progress);
     Common::Math::Quaternion calculateOrientation(float progress);
@@ -46,6 +48,7 @@ private:
     void configureBezier();
     void revalidateProgress(float progress);
     void calculateCachedPositionAndOrientation(float progress);
+    Description compensateLag(const Description & description);
 
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
     Description m_description;

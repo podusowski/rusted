@@ -24,12 +24,8 @@ void FlightTrajectory::fly(Common::Game::Position destination)
 
     m_description.controlPoints.clear();
 
-    // TODO: is this be faster than derivative calc?
-    auto direction = m_cachedOrientation * Common::Math::Point3(0, 0, 1);
-    direction.normalize();
-
     auto p0 = position;
-    auto p1 = position + (direction * 1000);
+    auto p1 = calculateOrientationControlPoint(position);
     auto p2 = destination;
 
     m_description.controlPoints.push_back(p0);
@@ -140,7 +136,7 @@ bool FlightTrajectory::isMoving()
     auto progress = calculateProgress(m_time->getCurrentTime());
     calculateCachedPositionAndOrientation(progress);
     revalidateProgress(progress);
-    
+
     return !m_spline->empty();
 }
 
@@ -156,45 +152,15 @@ void FlightTrajectory::applyDescription(FlightTrajectory::Description descriptio
               << ", now: " << m_time->getCurrentTime()
               << ", current position: " << getPosition();
 
-    const unsigned positionMaxCompensationThreshold = 2000;
-    const unsigned positionMinCompensationThreshold = 0;
-    const TimeValue timeCompensationThreshold(1, 0);
-
-    if (description.controlPoints.size() >= 3)
-    {
-        auto newStartingPosition = *description.controlPoints.begin();
-        auto currentPosition = getPosition();
-        auto offset = newStartingPosition - currentPosition;
-
-        // if thresholds are met, add control point with current position at the beginning
-        // of the curve
-        if (offset.length() < positionMaxCompensationThreshold && offset.length() > positionMinCompensationThreshold)
-        {
-            LOG_DEBUG << "Position offset: " << offset << " (length: " << offset.length() << ") smaller than threshold, compensating";
-            //description.controlPoints.insert(description.controlPoints.begin(), currentPosition);
-
-            LOG_DEBUG << "  " << description.controlPoints[0] << " replacing with " << currentPosition << " at first control point";
-            description.controlPoints[0] = currentPosition;
-        
-            // replace second control point
-            // TODO: extract to some method to remove duplication
-            auto direction = m_cachedOrientation * Common::Math::Point3(0, 0, 1);
-            direction.normalize();
-
-            description.controlPoints[1] = currentPosition + (direction * 1000);
-        }
-
-        auto now = m_time->getCurrentTime();
-        auto timeOffset = now - description.startTime;
-        if (timeOffset < timeCompensationThreshold)
-        {
-            LOG_DEBUG << "Time offset: " << timeOffset << " smaller than threshold, compensating";
-            description.startTime = now;
-        }
-    }
-
-    m_description = description;
+    m_description = compensateLag(description);
     configureBezier();
+}
+
+Position FlightTrajectory::calculateOrientationControlPoint(const Position & position) const
+{
+    auto direction = m_cachedOrientation * Common::Math::Point3(0, 0, 1);
+    direction.normalize();
+    return position + (direction * 1000);
 }
 
 Position FlightTrajectory::calculatePosition(float progress)
@@ -257,7 +223,7 @@ float FlightTrajectory::calculateProgress(TimeValue time)
 void FlightTrajectory::configureBezier()
 {
     m_spline->reset();
-    
+
     LOG_DEBUG << "Configuring bezier:";
 
     for (const auto & p : m_description.controlPoints)
@@ -280,5 +246,48 @@ void FlightTrajectory::calculateCachedPositionAndOrientation(float progress)
 {
     m_cachedPosition = calculatePosition(progress);
     m_cachedOrientation = calculateOrientation(progress);
+}
+
+FlightTrajectory::Description FlightTrajectory::compensateLag(const FlightTrajectory::Description & description)
+{
+    const unsigned positionMaxCompensationThreshold = 2000;
+    const unsigned positionMinCompensationThreshold = 0;
+    const TimeValue timeCompensationThreshold(1, 0);
+
+    FlightTrajectory::Description ret = description;
+
+    LOG_DEBUG << "Performing lag control on new flight description";
+
+    if (description.controlPoints.size() >= 3)
+    {
+        auto newStartingPosition = *description.controlPoints.begin();
+        auto currentPosition = getPosition();
+        auto offset = newStartingPosition - currentPosition;
+
+        // if thresholds are met, add control point with current position at the beginning
+        // of the curve
+        if (offset.length() < positionMaxCompensationThreshold && offset.length() > positionMinCompensationThreshold)
+        {
+            // starting point
+            LOG_DEBUG << "Position offset: " << offset << " (length: " << offset.length() << ") smaller than threshold, compensating";
+            LOG_DEBUG << "  " << description.controlPoints[0] << " replacing with " << currentPosition << " at first control point";
+            ret.controlPoints[0] = currentPosition;
+
+            // second control point (directional control point)
+            auto orientationControlPoint = calculateOrientationControlPoint(currentPosition);
+            LOG_DEBUG << "  " << description.controlPoints[1] << " replacing with " << currentPosition << " at second (orientation) control point";
+            ret.controlPoints[1] = orientationControlPoint;
+        }
+
+        auto now = m_time->getCurrentTime();
+        auto timeOffset = now - description.startTime;
+        if (timeOffset < timeCompensationThreshold)
+        {
+            LOG_DEBUG << "Time offset: " << timeOffset << " smaller than threshold(" << timeCompensationThreshold << "), compensating";
+            ret.startTime = now;
+        }
+    }
+
+    return ret;
 }
 
