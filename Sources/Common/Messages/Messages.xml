@@ -63,7 +63,7 @@ Ship
 
 <message id="FetchPlayerShips" />
 <message id="PlayerShips">
-	<list name="ships" type="ShipId" />
+    <list name="ships" type="ShipId" />
 </message>
 
 <message id="ShipInfo">
@@ -91,10 +91,10 @@ Ship
 </message>
 
 <message id="ChangeShipCourse">
-	<param type="int32" name="shipId" description="identifier of the entity" />
-	<param type="int32" name="x" />
-	<param type="int32" name="y" />
-	<param type="int32" name="z" />
+    <param type="int32" name="shipId" description="identifier of the entity" />
+    <param type="int32" name="x" />
+    <param type="int32" name="y" />
+    <param type="int32" name="z" />
 </message>
 
 <struct id="Position">
@@ -110,6 +110,8 @@ Ship
 
     <param type="int32" name="startTimeSeconds" />
     <param type="int32" name="startTimeMiliseconds" />
+
+    <param type="int32" name="initialSpeed" />
 </message>
 
 <!--

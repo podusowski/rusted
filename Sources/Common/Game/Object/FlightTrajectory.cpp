@@ -5,7 +5,7 @@
 using namespace Common::Game::Object;
 using namespace Common::Game;
 
-FlightTrajectory::FlightTrajectory() : 
+FlightTrajectory::FlightTrajectory() :
     m_speed(1),
     m_acceleration(100),
     m_cachedOrientation(Common::Math::Quaternion(0, std::make_tuple(0, 0, 1)))
@@ -33,6 +33,7 @@ void FlightTrajectory::fly(Common::Game::Position destination)
     m_description.controlPoints.push_back(p2);
 
     m_description.startTime = time;
+    m_description.initialSpeed = getSpeed();
 
     configureBezier();
 
@@ -114,7 +115,7 @@ unsigned FlightTrajectory::getCurrentSpeed()
 
     unsigned distance = m_spline->getLength();
     TimeValue timeTakenSoFar = m_time->getCurrentTime() - m_description.startTime;
-    Common::Math::KinematicParticle kinematicParticle(m_speed, m_acceleration, distance);
+    Common::Math::KinematicParticle kinematicParticle(m_speed, m_acceleration, distance, m_description.initialSpeed);
 
     if (kinematicParticle.isInRange(timeTakenSoFar))
     {
@@ -208,7 +209,7 @@ float FlightTrajectory::calculateProgress(TimeValue time)
 
     unsigned distance = m_spline->getLength();
     TimeValue timeTakenSoFar = time - m_description.startTime;
-    Common::Math::KinematicParticle kinematicParticle(m_speed, m_acceleration, distance);
+    Common::Math::KinematicParticle kinematicParticle(m_speed, m_acceleration, distance, m_description.initialSpeed);
 
     if (kinematicParticle.isInRange(timeTakenSoFar))
     {

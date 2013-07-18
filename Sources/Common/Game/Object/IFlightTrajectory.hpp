@@ -21,6 +21,7 @@ public:
     {
         std::vector<Position> controlPoints;
         TimeValue startTime;
+        unsigned initialSpeed;
     };
 
     virtual void fly(Position destination) = 0;
