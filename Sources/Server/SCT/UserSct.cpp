@@ -9,37 +9,24 @@ TEST(UserSct, Authorize)
 {
     using namespace ::Common::Messages;
 
-    SCT::Component component("SampleDataBase.xml");
+    SCT::Component component;
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection = component.createConnection();
 
-    // authorize user
-    {
-        Common::Messages::UserAuthorizationReq msg;
-        msg.login = "user1";
-        msg.password = "password";
-        connection->send(msg);
+    Common::Messages::UserAuthorizationReq msg;
+    msg.login = "user1";
+    msg.password = "password";
+    connection->send(msg);
 
-        auto resp = connection->receive<Common::Messages::UserAuthorizationResp>();
-        EXPECT_EQ(true, resp->success);
-        EXPECT_EQ(1, resp->player_id);
-    }
-
-    // check player's resources
-    {
-        Common::Messages::GetPlayerResourcesInfo getPlayerResourcesInfo;
-        connection->send(getPlayerResourcesInfo);
-
-        auto playerResourcesInfo = connection->receive<Common::Messages::PlayerResourcesInfo>();
-        EXPECT_EQ(0xf00d, playerResourcesInfo->helium);
-        EXPECT_EQ(0xf00d, playerResourcesInfo->carbon);
-    }
+    auto resp = connection->receive<Common::Messages::UserAuthorizationResp>();
+    EXPECT_EQ(true, resp->success);
+    EXPECT_EQ(1, resp->player_id);
 }
 
 TEST(UserSct, InvalidPassword)
 {
-    SCT::Component component("SampleDataBase.xml");
+    SCT::Component component;
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection = component.createConnection();
@@ -55,7 +42,7 @@ TEST(UserSct, InvalidPassword)
 
 TEST(UserSct, TwoUsersEntitiesStatusReq)
 {
-    SCT::Component component("SampleDataBase.xml");
+    SCT::Component component;
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 

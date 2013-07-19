@@ -48,7 +48,7 @@ private:
 
 TEST(SmokeSct, Smoke)
 {
-	SCT::Component component("SampleDataBase.xml");
+    SCT::Component component;
     component.start();
 
     SmokeSctRunnable runnable1(component, "user1", "password");
@@ -66,12 +66,12 @@ TEST(SmokeSct, Smoke)
 
 TEST(SmokeSct, BigDataBase)
 {
-    SCT::Component component("", "sqlite3://BigDataBase.sqlite3");
+    SCT::Component component("sqlite3://BigDataBase.sqlite3");
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection1;
 
-    for (int i = 0; i < 10000; i++)
+    for (int i = 0; i < 60; i++)
     {
         try
         {

@@ -16,15 +16,8 @@ using namespace ::SCT;
 
 static int s_port = 2000;
 
-Component::Component()
+Component::Component(const std::string & sociDataBase)
 {
-    std::cout << "\n";
-}
-
-Component::Component(const std::string & database, const std::string & sociDataBase)
-{
-    setConfigValue("--database.provider1.type", "xml");
-    setConfigValue("--database.provider1.url", database);
     setConfigValue("--database.url", sociDataBase);
 
     std::cout << "\n";
