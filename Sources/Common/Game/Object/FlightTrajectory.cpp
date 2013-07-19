@@ -21,6 +21,7 @@ void FlightTrajectory::fly(Common::Game::Position destination)
     TimeValue time = m_time->getCurrentTime();
     float progress = calculateProgress(time);
     auto position = calculatePosition(progress);
+    auto currentSpeed = getCurrentSpeed();
 
     m_description.controlPoints.clear();
 
@@ -33,11 +34,15 @@ void FlightTrajectory::fly(Common::Game::Position destination)
     m_description.controlPoints.push_back(p2);
 
     m_description.startTime = time;
-    m_description.initialSpeed = getSpeed();
+    m_description.initialSpeed = currentSpeed;
 
     configureBezier();
 
-    LOG_DEBUG << "New trajectory: from " << position << " to " << destination << ", start time: " << time << ", speed: " << m_speed;
+    LOG_DEBUG << "New trajectory: from " << position
+              << " to " << destination
+              << ", start time: " << time
+              << ", max speed: " << m_speed
+              << ", current speed: " << currentSpeed;
 }
 
 void FlightTrajectory::stop()
@@ -148,8 +153,7 @@ FlightTrajectory::Description FlightTrajectory::getDescription()
 
 void FlightTrajectory::applyDescription(FlightTrajectory::Description description)
 {
-    LOG_DEBUG << "Applying precalculated trajectory, description.startTime: "
-              << description.startTime
+    LOG_DEBUG << "Applying precalculated trajectory: " << description
               << ", now: " << m_time->getCurrentTime()
               << ", current position: " << getPosition();
 
@@ -264,6 +268,7 @@ FlightTrajectory::Description FlightTrajectory::compensateLag(const FlightTrajec
         auto newStartingPosition = *description.controlPoints.begin();
         auto currentPosition = getPosition();
         auto offset = newStartingPosition - currentPosition;
+        bool anyOfCompensationsPerformed = false;
 
         // if thresholds are met, add control point with current position at the beginning
         // of the curve
@@ -278,6 +283,8 @@ FlightTrajectory::Description FlightTrajectory::compensateLag(const FlightTrajec
             auto orientationControlPoint = calculateOrientationControlPoint(currentPosition);
             LOG_DEBUG << "  " << description.controlPoints[1] << " replacing with " << currentPosition << " at second (orientation) control point";
             ret.controlPoints[1] = orientationControlPoint;
+
+            anyOfCompensationsPerformed = true;
         }
 
         auto now = m_time->getCurrentTime();
@@ -286,6 +293,15 @@ FlightTrajectory::Description FlightTrajectory::compensateLag(const FlightTrajec
         {
             LOG_DEBUG << "Time offset: " << timeOffset << " smaller than threshold(" << timeCompensationThreshold << "), compensating";
             ret.startTime = now;
+
+            anyOfCompensationsPerformed = true;
+        }
+
+        if (anyOfCompensationsPerformed)
+        {
+            unsigned currentSpeed = getCurrentSpeed();
+            LOG_DEBUG << "Compensating current speed, network: " << ret.initialSpeed << ", new: " << currentSpeed;
+            ret.initialSpeed = currentSpeed;
         }
     }
 

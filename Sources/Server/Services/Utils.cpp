@@ -62,6 +62,7 @@ void Utils::sendShipCourseInfo(Common::Game::Object::Ship & ship, Network::IConn
 
     shipCourseInfo.startTimeSeconds = description.startTime.getSeconds();
     shipCourseInfo.startTimeMiliseconds = description.startTime.getMiliseconds();
+    shipCourseInfo.initialSpeed = description.initialSpeed;
 
     connection.send(shipCourseInfo);
 }

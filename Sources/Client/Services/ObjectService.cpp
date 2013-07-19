@@ -74,8 +74,6 @@ void ObjectService::handle(const Common::Messages::PlayerShips & playerShips)
     }
 }
 
-// FIXME: when ship is currently on some course and we update it with ShipInfo,
-//        it will stop at currect position
 void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
 {
     if (m_universe.has(shipInfo.id))
@@ -116,7 +114,7 @@ void ObjectService::handle(const Common::Messages::AsteroidInfo & message)
     try
     {
         boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
-    
+
         object->setId(message.objectId);
         object->setPosition(Common::Game::Position(message.x, message.y, message.z));
         object->setModel(message.model);
@@ -148,6 +146,8 @@ void ObjectService::handle(const Common::Messages::ShipCourseInfo & shipCourseIn
     description.startTime = Common::Game::TimeValue(
         shipCourseInfo.startTimeSeconds,
         shipCourseInfo.startTimeMiliseconds);
+
+    description.initialSpeed = shipCourseInfo.initialSpeed;
 
     ship.applyTrajectoryDescription(description);
 }
