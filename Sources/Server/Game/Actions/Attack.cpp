@@ -60,7 +60,18 @@ Common::Game::TimeValue Attack::finish()
 
 bool Attack::isAbleToStart()
 {
-    return true;
+    auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());
+
+    unsigned integrity = selectedObject.getIntegrity();
+
+    if (integrity > 0)
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
 void Attack::sendShipInfoToClients()

@@ -116,6 +116,9 @@ TEST_F(AttackTest, AttackDestroyedShip)
     EXPECT_CALL(*ship2, setIntegrity(_)).Times(0);
 
     Server::Game::Actions::Attack attack(universe, playerContainer, ACTION_PARAMETERS);
+
+    EXPECT_FALSE(attack.isAbleToStart());
+
     attack.start();
 }
 
