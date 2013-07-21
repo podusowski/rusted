@@ -18,6 +18,8 @@ public:
     /* @returns Time when another action of this type can be executed */
     virtual Common::Game::TimeValue finish() = 0;
 
+    virtual bool isAbleToStart() = 0;
+
     virtual ~IAction() {}
 };
 

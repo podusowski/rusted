@@ -46,3 +46,8 @@ Common::Game::TimeValue Transfer::finish()
     return Common::Game::TimeValue();
 }
 
+bool Transfer::isAbleToStart()
+{
+    return true;
+}
+

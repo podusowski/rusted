@@ -21,6 +21,7 @@ public:
     Transfer(Server::Network::IConnection &, IPlayerContainer &, Common::Game::IPlayer &);
     Common::Game::TimeValue start();
     Common::Game::TimeValue finish();
+    bool isAbleToStart();
 
 private:
     Server::Network::IConnection & m_connection;

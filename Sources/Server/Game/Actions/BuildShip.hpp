@@ -23,6 +23,7 @@ public:
     BuildShip(Common::Game::Universe &, Common::Game::IPlayer &, Server::Game::IPlayerContainer &, unsigned shipClass);
     Common::Game::TimeValue start();
     Common::Game::TimeValue finish();
+    bool isAbleToStart();
 
 private:
     void updateCargoHold();

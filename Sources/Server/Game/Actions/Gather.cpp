@@ -42,6 +42,11 @@ Common::Game::TimeValue Gather::finish()
     return Common::Game::TimeValue(1, 0);
 }
 
+bool Gather::isAbleToStart()
+{
+    return true;
+}
+
 void Gather::sendCargoInfoToClients()
 {
     // send cargoinfo of player's ship

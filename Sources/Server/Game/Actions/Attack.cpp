@@ -58,6 +58,11 @@ Common::Game::TimeValue Attack::finish()
     return Common::Game::TimeValue(1, 0);
 }
 
+bool Attack::isAbleToStart()
+{
+    return true;
+}
+
 void Attack::sendShipInfoToClients()
 {
     auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());

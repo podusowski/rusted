@@ -19,6 +19,7 @@ public:
     Attack(Common::Game::Universe & universe, IPlayerContainer &, const ActionParameters & actionParameters);
     Common::Game::TimeValue start();
     Common::Game::TimeValue finish();
+    bool isAbleToStart();
 
 private:
     void sendShipInfoToClients();

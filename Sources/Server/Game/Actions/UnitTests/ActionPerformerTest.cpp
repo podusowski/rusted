@@ -34,6 +34,11 @@ public:
         ON_CALL(*ship1, getId()).WillByDefault(Return(FOCUSED_OBJECT_ID.get()));
         ON_CALL(*ship2, getId()).WillByDefault(Return(SELECTED_OBJECT_ID.get()));
 
+        auto & action1Mock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
+        auto & action2Mock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action2);
+        ON_CALL(action1Mock, isAbleToStart()).WillByDefault(Return(true));
+        ON_CALL(action2Mock, isAbleToStart()).WillByDefault(Return(true));
+
         universe.add(ship1);
         universe.add(ship2);
     }

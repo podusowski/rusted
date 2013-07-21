@@ -14,6 +14,7 @@ class ActionMock : public IAction
 public:
     MOCK_METHOD0(start, Common::Game::TimeValue());
     MOCK_METHOD0(finish, Common::Game::TimeValue());
+    MOCK_METHOD0(isAbleToStart, bool());
 };
 
 }

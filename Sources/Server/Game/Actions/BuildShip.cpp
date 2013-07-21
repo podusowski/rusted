@@ -51,6 +51,11 @@ Common::Game::TimeValue BuildShip::finish()
     return Common::Game::TimeValue(1, 0);
 }
 
+bool BuildShip::isAbleToStart()
+{
+    return true;
+}
+
 void BuildShip::updateCargoHold()
 {
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());

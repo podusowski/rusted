@@ -35,12 +35,18 @@ void ActionPerformer::perform(
         throw std::runtime_error("action cooldown active or action ongoing");
     }
 
+    // TODO: move stack-up
     ActionParameters actionParameters = { id, parameter, focusedObjectId, selectedObjectId };
+
+    auto action = m_actionFactory.create(connection, player, actionParameters);
+
+    if (!action->isAbleToStart())
+    {
+        throw std::runtime_error("action can't be started at the moment");
+    }
 
     aquireGlobalCooldown(focusedObjectId.get(), connection);
     aquireOngoingOrCooling(actionParameters, loop);
-
-    auto action = m_actionFactory.create(connection, player, actionParameters);
 
     Common::Messages::ActionStarted actionStarted;
     actionStarted.actionId = id;
