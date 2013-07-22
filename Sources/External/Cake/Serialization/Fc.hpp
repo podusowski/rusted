@@ -147,7 +147,7 @@ public:
         return m_name;
     }
 
-    std::vector<std::string> getParameters() const
+    const std::vector<std::string> getParameters() const
     {
         return m_parameters;
     }
