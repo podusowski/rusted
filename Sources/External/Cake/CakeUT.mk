@@ -5,6 +5,7 @@ CFLAGS+=-I. -I.. -I$(TARGET_BASE) -I$(TARGET_BASE)/.. -I$(TARGET_BASE)/../Google
 LDFLAGS+=-L. -L$(BUILD) -lCake -lpthread -lgtest-static
 
 SOURCES+=Serialization/UnitTests/TmsTest.cpp
+SOURCES+=Serialization/UnitTests/FcTest.cpp
 SOURCES+=Networking/UnitTests/ServerSocketPoolTest.cpp
 SOURCES+=Networking/Protocol/UnitTests/ProtocolTest.cpp
 SOURCES+=Utils/UnitTests/StringListTest.cpp
