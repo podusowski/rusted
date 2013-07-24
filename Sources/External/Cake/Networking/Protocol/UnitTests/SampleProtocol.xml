@@ -4,6 +4,10 @@
     <param type="int32" name="integer" />
 </struct>
 
+<message id="SimpleMessage">
+    <param type="int32" name="integer" />
+</message>
+
 <struct id="ComplexStruct">
     <list type="SimpleStruct" name="list" />
     <param type="string" name="string" />

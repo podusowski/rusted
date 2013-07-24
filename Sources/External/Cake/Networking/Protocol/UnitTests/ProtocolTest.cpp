@@ -45,11 +45,11 @@ TEST(ProtocolTest, SimpleParameters)
     EXPECT_EQ(m1.string, m2.string);
     EXPECT_FLOAT_EQ(m1.real, m2.real);
 
-    ASSERT_EQ(1, m2.list.size());
+    ASSERT_EQ(1u, m2.list.size());
     EXPECT_EQ(s1.integer, m2.list[0].integer);
 
-    ASSERT_EQ(1, m2.complexList.size());
-    ASSERT_EQ(1, m2.complexList[0].list.size());
+    ASSERT_EQ(1u, m2.complexList.size());
+    ASSERT_EQ(1u, m2.complexList[0].list.size());
     EXPECT_EQ(s2.integer, m2.complexList[0].list[0].integer);
     EXPECT_EQ("string", m2.complexList[0].string);
 }
@@ -78,5 +78,14 @@ TEST(ProtocolTest, HandlerCaller)
 
     HandlerCaller0<SampleServiceMock> caller(serviceMock);
     caller.call(*abstract);
+}
+
+TEST(ProtocolTest, FcDecoder)
+{
+    auto msg = MessageFactory::create("SimpleMessage(1)");
+    auto simple = boost::dynamic_pointer_cast<SimpleMessage>(msg);
+
+    EXPECT_EQ(Id::SimpleMessage, msg->getId());
+    EXPECT_EQ(1, simple->integer);
 }
 

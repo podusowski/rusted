@@ -98,7 +98,8 @@ class CppOutput:
             "#include <Cake/Networking/Protocol/IWriteBuffer.hpp>\n"
             "#include <Cake/Networking/Protocol/IReadBuffer.hpp>\n"
             "#include \"Cake/Networking/Protocol/BinaryCoder.hpp\"\n"
-            "#include \"Cake/Networking/Protocol/BinaryDecoder.hpp\"\n")
+            "#include \"Cake/Networking/Protocol/BinaryDecoder.hpp\"\n"
+            "#include \"Cake/Networking/Protocol/FcDecoder.hpp\"\n")
 
         for namespace in self.namespace:
             self.f.write("namespace " + namespace + "{\n")
@@ -144,6 +145,7 @@ class CppOutput:
         s = s + "{\n"
         s = s + "\tvirtual void serialize(Cake::Networking::Protocol::IWriteBuffer &) const = 0;\n"
         s = s + "\tvirtual void unserialize(Cake::Networking::Protocol::IReadBuffer &) = 0;\n"
+        s = s + "\tvirtual void unserialize(const Cake::Serialization::Fc &) = 0;\n"
         s = s + "\tvirtual std::string toString() const = 0;\n"
         s = s + "};\n"
         s = s + "\n"
@@ -215,6 +217,7 @@ class CppStruct:
 
         s = s + self.__generate_serialize_method()
         s = s + self.__generate_unserialize_method()
+        s = s + self.__generate_unserialize_from_string_method()
         s = s + self.__generate_to_string_method()
 
         s = s + (
@@ -265,6 +268,30 @@ class CppStruct:
             "\tvoid unserialize(Cake::Networking::Protocol::IReadBuffer & buffer)\n"
             "\t{\n"
             "\t\tCake::Networking::Protocol::BinaryDecoder decoder(buffer);\n"
+            )
+
+        if len(self.message.params) > 0 or len(self.message.lists) > 0:
+            s = s + "\t\tdecoder"
+
+            for param in self.message.params:
+                s = s + " >> " + param.name
+
+            for param in self.message.lists:
+                s = s + " >> " + param.name
+
+            s = s + ";\n"
+
+        s = s + (
+            "\t}\n"
+            "\n"
+            )
+        return s
+
+    def __generate_unserialize_from_string_method(self):
+        s = (
+            "\tvoid unserialize(const Cake::Serialization::Fc & fc)\n"
+            "\t{\n"
+            "\t\tCake::Networking::Protocol::FcDecoder decoder(fc);\n"
             )
 
         if len(self.message.params) > 0 or len(self.message.lists) > 0:
@@ -339,10 +366,8 @@ class CppMessageFactory:
     def generate(self):
         s = ""
         s = s + self.__generate_header()
-
-        for message in self.messages:
-            s = s + self.__generate_message_case(message)
-
+        s = s + self.__generate_create_from_buffer_method()
+        s = s + self.__generate_create_from_string_method()
         s = s + self.__generate_footer()
         return s
 
@@ -351,6 +376,10 @@ class CppMessageFactory:
         s = s + "class MessageFactory\n"
         s = s + "{\n"
         s = s + "public:\n"
+        return s
+
+    def __generate_create_from_buffer_method(self):
+        s = ""
         s = s + "\tstatic boost::shared_ptr<AbstractMessage> create("
         s = s + "Cake::Networking::Protocol::IReadBuffer & buffer)\n"
         s = s + "\t{\n"
@@ -361,6 +390,19 @@ class CppMessageFactory:
         s = s + "\n"
         s = s + "\t\tswitch(id)\n"
         s = s + "\t\t{\n"
+
+        for message in self.messages:
+            s = s + self.__generate_message_case(message)
+
+        s = s + "\t\tdefault:\n"
+        s = s + "\t\t\tthrow std::runtime_error(\"unknown message id\");\n"
+        s = s + "\t\t} // switch\n"
+        s = s + "\n"
+        s = s + "\t\tret->unserialize(buffer);\n"
+        s = s + "\n"
+        s = s + "\t\treturn ret;\n"
+        s = s + "\t} // create\n"
+        s = s + "\n"
         return s
 
     def __generate_message_case(self, message):
@@ -371,16 +413,26 @@ class CppMessageFactory:
         s = s + "\n"
         return s
 
+    def __generate_create_from_string_method(self):
+        s = ""
+        s = s + "\tstatic boost::shared_ptr<AbstractMessage> create(const std::string & s)\n"
+        s = s + "\t{\n"
+        s = s + "\t\tboost::shared_ptr<AbstractMessage> ret;\n"
+        s = s + "\t\tCake::Serialization::Fc fc(s);\n"
+
+        for message in self.messages:
+            s = s + "\t\tif (fc.getName() == \"" + message.id + "\")\n"
+            s = s + "\t\t{\n"
+            s = s + "\t\t\tret.reset(new " + message.id + "());\n"
+            s = s + "\t\t}\n"
+
+        s = s + "\t\tret->unserialize(fc);\n"
+        s = s + "\t\treturn ret;\n"
+        s = s + "\t}\n"
+        return s
+
     def __generate_footer(self):
         s = ""
-        s = s + "\t\tdefault:\n"
-        s = s + "\t\t\tthrow std::runtime_error(\"unknown message id\");\n"
-        s = s + "\t\t} // switch\n"
-        s = s + "\n"
-        s = s + "\t\tret->unserialize(buffer);\n"
-        s = s + "\n"
-        s = s + "\t\treturn ret;\n"
-        s = s + "\t} // create\n"
         s = s + "}; // class MessageFactory\n"
         s = s + "\n"
         return s
