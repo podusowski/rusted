@@ -48,8 +48,8 @@ private:
     void createOrientationPlane();
     void updateOrientationPlane();
 
-    void createCourseMarker();
-    void updateCourseMarker();
+    void createDestinationMarker();
+    void updateDestinationMarker();
 
     Graphics::IGraphics & m_graphics;
     Input::IInput & m_input;

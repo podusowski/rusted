@@ -27,6 +27,7 @@ public:
     void setPosition(const Position &);
     bool isMoving();
     Position getCourseMarkerPosition();
+    Position getDestination();
     virtual void setCourse(Position course);
     virtual void setSpeed(unsigned speed);
     unsigned getSpeed();

@@ -33,6 +33,11 @@ Position Ship::getCourseMarkerPosition()
     return m_trajectory->getCourseMarkerPosition();
 }
 
+Position Ship::getDestination()
+{
+    return m_trajectory->getDestination();
+}
+
 void Ship::setCourse(Position position)
 {
     if (getIntegrity() == 0)

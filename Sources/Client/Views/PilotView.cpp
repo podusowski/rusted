@@ -52,7 +52,7 @@ void PilotView::activate()
     flyToTargetButton->eventMouseButtonClick += MyGUI::newDelegate(this, &PilotView::flyToTargetButtonClicked);
 
     createOrientationPlane();
-    createCourseMarker();
+    createDestinationMarker();
 }
 
 void PilotView::deactivate()
@@ -65,7 +65,7 @@ void PilotView::frameStarted()
     updateFocusedShipWindow();
     m_camera.update();
     updateOrientationPlane();
-    updateCourseMarker();
+    updateDestinationMarker();
 }
 
 void PilotView::updateShipPosition()
@@ -237,7 +237,7 @@ void PilotView::updateOrientationPlane()
     //m_orientationPlaneSceneNode->pitch(Ogre::Degree(20));
 }
 
-void PilotView::createCourseMarker()
+void PilotView::createDestinationMarker()
 {
     Ogre::SceneManager & scene = m_graphics.getSceneManager();
     std::string mesh = "CourseMarker.mesh";
@@ -247,9 +247,9 @@ void PilotView::createCourseMarker()
     m_courseMarkerNode->attachObject(m_courseMarkerEntity);
 }
 
-void PilotView::updateCourseMarker()
+void PilotView::updateDestinationMarker()
 {
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
-    m_courseMarkerNode->setPosition(m_graphics.toOgreVector3(focusedShip.getCourseMarkerPosition()));
+    m_courseMarkerNode->setPosition(m_graphics.toOgreVector3(focusedShip.getDestination()));
 }
 
