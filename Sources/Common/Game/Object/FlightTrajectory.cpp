@@ -87,6 +87,18 @@ Common::Math::Quaternion FlightTrajectory::getCourseMarkerOrientation()
     return Common::Math::Quaternion();
 }
 
+Common::Game::Position FlightTrajectory::getDestination()
+{
+    if (m_spline->empty())
+    {
+        return getPosition();
+    }
+    else
+    {
+        return m_description.controlPoints[m_description.controlPoints.size() - 1];
+    }
+}
+
 Common::Math::Quaternion FlightTrajectory::getOrientation()
 {
     auto progress = calculateProgress(m_time->getCurrentTime());

@@ -20,6 +20,7 @@ public:
     MOCK_METHOD0(getPosition, Position());
     MOCK_METHOD0(getCourseMarkerPosition, Position());
     MOCK_METHOD0(getCourseMarkerOrientation, Common::Math::Quaternion());
+    MOCK_METHOD0(getDestination, Position());
     MOCK_METHOD0(getOrientation, Common::Math::Quaternion());
     MOCK_METHOD1(setOrientation, void(const Common::Math::Quaternion &));
     MOCK_METHOD1(setSpeed, void(unsigned));
