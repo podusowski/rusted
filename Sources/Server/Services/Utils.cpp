@@ -95,7 +95,7 @@ void Utils::sendObjectCargoInfo(Common::Game::Object::ObjectBase & object, Netwo
     Common::Messages::ObjectCargoInfo objectCargoInfo;
     objectCargoInfo.id = object.getId();
 
-    object.visitCargoHold([&objectCargoInfo](Common::Game::Object::CargoHold & cargoHold) -> void
+    object.invokeOnCargoHold([&objectCargoInfo](Common::Game::Object::CargoHold & cargoHold) -> void
     {
         objectCargoInfo.capacity = cargoHold.getCapacity();
         objectCargoInfo.carbon = cargoHold.getCarbon();

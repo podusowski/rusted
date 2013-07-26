@@ -29,7 +29,7 @@ TEST_F(UniverseTest, GetByType)
     universe.add(staticObject);
 
     Common::Game::Universe::Objects objects = universe.get<Common::Game::Object::Ship>();
-    ASSERT_EQ(1, objects.size());
+    ASSERT_EQ(1u, objects.size());
 }
 
 TEST_F(UniverseTest, GetAll)
@@ -44,7 +44,7 @@ TEST_F(UniverseTest, GetAll)
     universe.add(staticObject);
 
     Common::Game::Universe::Objects objects = universe.getAll();
-    ASSERT_EQ(2, objects.size());
+    ASSERT_EQ(2u, objects.size());
 }
 
 TEST_F(UniverseTest, AddOneShipAndGetIt)
@@ -96,7 +96,7 @@ TEST_F(UniverseTest, AddSomeShipsAndGetByOwner)
     std::vector<boost::shared_ptr<Common::Game::Object::ObjectBase> > playerObjects 
         = universe.getByOwnerId<Common::Game::Object::Ship>(OWNER_ID);
 
-    ASSERT_EQ(1, playerObjects.size());
+    ASSERT_EQ(1u, playerObjects.size());
     ASSERT_EQ(ship1.get(), playerObjects[0].get());
 }
 
@@ -151,7 +151,7 @@ TEST_F(UniverseTest, GetByOwnerId)
     universe.add(staticObject);
 
     auto objects = universe.getByOwnerId<Common::Game::Object::Ship>(2);
-    ASSERT_EQ(1, objects.size());
+    ASSERT_EQ(1u, objects.size());
 }
 
 TEST_F(UniverseTest, Has)

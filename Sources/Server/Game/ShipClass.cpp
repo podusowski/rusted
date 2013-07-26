@@ -50,7 +50,7 @@ void ShipClass::applyTo(Common::Game::Object::Ship & ship)
     ship.setSpeed(m_speed);
     ship.setIntegrity(m_integrity);
     ship.setModel(m_model);
-    ship.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+    ship.invokeOnCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
     {
         cargoHold.setCapacity(m_capacity);
     });

@@ -34,7 +34,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(const 
         auto & shipClass = m_shipClassContainer.getById(shipClassId);
         shipClass.applyTo(ship);
         ship.setClass(shipClassId);
-        ship.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+        ship.invokeOnCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
         {
             fillCargoHold(row, cargoHold);
         });
@@ -51,7 +51,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(const 
         object->setIntegrity(row.get<int>("integrity"));
 
         // set unlimited capacity for asteroids
-        object->visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+        object->invokeOnCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
         {
             fillCargoHold(row, cargoHold);
             cargoHold.setCapacity(99999999);

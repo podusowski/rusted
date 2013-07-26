@@ -39,7 +39,7 @@ public:
     virtual Common::Math::Quaternion getOrientation();
     virtual void setOrientation(const Common::Math::Quaternion &);
 
-    void visitCargoHold(std::function<void(CargoHold &)>);
+    void invokeOnCargoHold(std::function<void(CargoHold &)>);
 
     template <class ObjectType> bool is()
     {

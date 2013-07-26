@@ -47,8 +47,8 @@ void ObjectBase::setOrientation(const Common::Math::Quaternion &)
 {
 }
 
-void ObjectBase::visitCargoHold(std::function<void(CargoHold &)> visitor)
+void ObjectBase::invokeOnCargoHold(std::function<void(CargoHold &)> function)
 {
-    visitor(m_cargoHold);
+    function(m_cargoHold);
 }
 

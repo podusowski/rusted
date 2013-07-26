@@ -115,7 +115,7 @@ std::string VisualObject::getString(int type)
 
         if (type & StringType_CargoHold)
         {
-            ship.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+            ship.invokeOnCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
             {
                 ret.add() << "C:" << cargoHold.getCarbon() << " H:" << cargoHold.getHelium() << " (" << cargoHold.getCapacity() << ")";
             });
@@ -129,7 +129,7 @@ std::string VisualObject::getString(int type)
 
         if (type & StringType_CargoHold)
         {
-            asteroid.visitCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+            asteroid.invokeOnCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
             {
                 ret.add() << "C:" << cargoHold.getCarbon() << " H:" << cargoHold.getHelium() << " (" << cargoHold.getCapacity() << ")";
             });
