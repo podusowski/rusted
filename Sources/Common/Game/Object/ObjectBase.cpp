@@ -52,3 +52,7 @@ void ObjectBase::invokeOnCargoHold(std::function<void(CargoHold &)> function)
     function(m_cargoHold);
 }
 
+ObjectBase::~ObjectBase()
+{
+}
+

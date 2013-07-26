@@ -46,7 +46,7 @@ public:
         return dynamic_cast<ObjectType*>(this) != nullptr;
     }
 
-    virtual ~ObjectBase() {}
+    virtual ~ObjectBase();
 
 private:
     unsigned m_id;
