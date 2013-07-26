@@ -28,8 +28,8 @@ public:
     Common::Math::Quaternion getOrientation();
     void setOrientation(const Common::Math::Quaternion &);
 
-    void setSpeed(unsigned);
-    unsigned getSpeed();
+    void setMaxSpeed(unsigned);
+    unsigned getMaxSpeed();
 
     unsigned getCurrentSpeed();
 
@@ -52,7 +52,7 @@ private:
 
     Cake::DependencyInjection::Inject<IRustedTime> m_time;
     Description m_description;
-    unsigned m_speed;
+    unsigned m_maxSpeed;
     unsigned m_acceleration;
     Cake::DependencyInjection::Inject<Common::Math::ISpline3> m_spline;
 

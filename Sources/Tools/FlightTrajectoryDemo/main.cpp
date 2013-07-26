@@ -21,7 +21,7 @@ struct Object
     Object(Graphics::Graphics & graphics, unsigned speed, Common::Game::Position destination) : m_graphics(&graphics)
     {
         ship = new Common::Game::Object::Ship();
-        ship->setSpeed(speed);
+        ship->setMaxSpeed(speed);
         ship->setCourse(destination);
 
         Ogre::SceneManager & scene = graphics.getSceneManager();

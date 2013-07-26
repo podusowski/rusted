@@ -23,8 +23,8 @@ public:
     MOCK_METHOD0(getDestination, Position());
     MOCK_METHOD0(getOrientation, Common::Math::Quaternion());
     MOCK_METHOD1(setOrientation, void(const Common::Math::Quaternion &));
-    MOCK_METHOD1(setSpeed, void(unsigned));
-    MOCK_METHOD0(getSpeed, unsigned());
+    MOCK_METHOD1(setMaxSpeed, void(unsigned));
+    MOCK_METHOD0(getMaxSpeed, unsigned());
     MOCK_METHOD0(getCurrentSpeed, unsigned());
     MOCK_METHOD0(isMoving, bool());
     MOCK_METHOD0(getDescription, Description());

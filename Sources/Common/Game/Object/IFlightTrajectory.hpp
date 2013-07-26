@@ -39,8 +39,8 @@ public:
     virtual Common::Math::Quaternion getOrientation() = 0;
     virtual void setOrientation(const Common::Math::Quaternion &) = 0;
 
-    virtual void setSpeed(unsigned) = 0;
-    virtual unsigned getSpeed() = 0;
+    virtual void setMaxSpeed(unsigned) = 0;
+    virtual unsigned getMaxSpeed() = 0;
 
     virtual unsigned getCurrentSpeed() = 0;
 

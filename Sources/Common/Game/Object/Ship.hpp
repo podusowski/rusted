@@ -29,8 +29,8 @@ public:
     Position getCourseMarkerPosition();
     Position getDestination();
     virtual void setCourse(Position course);
-    virtual void setSpeed(unsigned speed);
-    unsigned getSpeed();
+    virtual void setMaxSpeed(unsigned speed);
+    unsigned getMaxSpeed();
     unsigned getCurrentSpeed();
     void setIntegrity(unsigned); //override;
     Common::Math::Quaternion getOrientation();

@@ -79,7 +79,7 @@ void Utils::sendShipInfo(Common::Game::Object::Ship & ship, Network::IConnection
     shipInfo.y = position.getY();
     shipInfo.z = position.getZ();
     shipInfo.integrity = ship.getIntegrity();
-    shipInfo.speed = ship.getSpeed();
+    shipInfo.speed = ship.getMaxSpeed();
 
     auto orientation = ship.getOrientation();
     shipInfo.orientationW = orientation.getW();

@@ -49,14 +49,14 @@ void Ship::setCourse(Position position)
     m_trajectory->fly(position);
 }
 
-void Ship::setSpeed(unsigned speed)
+void Ship::setMaxSpeed(unsigned speed)
 {
-    m_trajectory->setSpeed(speed);
+    m_trajectory->setMaxSpeed(speed);
 }
 
-unsigned Ship::getSpeed()
+unsigned Ship::getMaxSpeed()
 {
-    return m_trajectory->getSpeed();
+    return m_trajectory->getMaxSpeed();
 }
 
 unsigned Ship::getCurrentSpeed()

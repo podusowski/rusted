@@ -47,7 +47,7 @@ void ShipClass::applyTo(Common::Game::Object::Ship & ship)
 {
     LOG_DEBUG << "Applying class:" << m_id << " to ship:" << ship.getId();
 
-    ship.setSpeed(m_speed);
+    ship.setMaxSpeed(m_speed);
     ship.setIntegrity(m_integrity);
     ship.setModel(m_model);
     ship.invokeOnCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void

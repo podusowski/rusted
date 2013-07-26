@@ -6,7 +6,7 @@ using namespace Common::Game::Object;
 using namespace Common::Game;
 
 FlightTrajectory::FlightTrajectory() :
-    m_speed(1),
+    m_maxSpeed(1),
     m_acceleration(100),
     m_cachedOrientation(Common::Math::Quaternion(0, std::make_tuple(0, 0, 1)))
 {
@@ -41,7 +41,7 @@ void FlightTrajectory::fly(Common::Game::Position destination)
     LOG_DEBUG << "New trajectory: from " << position
               << " to " << destination
               << ", start time: " << time
-              << ", max speed: " << m_speed
+              << ", max speed: " << m_maxSpeed
               << ", current speed: " << currentSpeed;
 }
 
@@ -113,14 +113,14 @@ void FlightTrajectory::setOrientation(const Common::Math::Quaternion & orientati
     m_cachedOrientation = orientation;
 }
 
-void FlightTrajectory::setSpeed(unsigned speed)
+void FlightTrajectory::setMaxSpeed(unsigned speed)
 {
-    m_speed = speed;
+    m_maxSpeed = speed;
 }
 
-unsigned FlightTrajectory::getSpeed()
+unsigned FlightTrajectory::getMaxSpeed()
 {
-    return m_speed;
+    return m_maxSpeed;
 }
 
 unsigned FlightTrajectory::getCurrentSpeed()
@@ -132,7 +132,7 @@ unsigned FlightTrajectory::getCurrentSpeed()
 
     unsigned distance = m_spline->getLength();
     TimeValue timeTakenSoFar = m_time->getCurrentTime() - m_description.startTime;
-    Common::Math::KinematicParticle kinematicParticle(m_speed, m_acceleration, distance, m_description.initialSpeed);
+    Common::Math::KinematicParticle kinematicParticle(m_maxSpeed, m_acceleration, distance, m_description.initialSpeed);
 
     if (kinematicParticle.isInRange(timeTakenSoFar))
     {
@@ -225,7 +225,7 @@ float FlightTrajectory::calculateProgress(TimeValue time)
 
     unsigned distance = m_spline->getLength();
     TimeValue timeTakenSoFar = time - m_description.startTime;
-    Common::Math::KinematicParticle kinematicParticle(m_speed, m_acceleration, distance, m_description.initialSpeed);
+    Common::Math::KinematicParticle kinematicParticle(m_maxSpeed, m_acceleration, distance, m_description.initialSpeed);
 
     if (kinematicParticle.isInRange(timeTakenSoFar))
     {
