@@ -7,11 +7,19 @@ namespace Client
 namespace Graphics
 {
 
+class RaycastResult
+{
+public:
+    bool valid;
+    Ogre::Entity * entity;
+    Ogre::Vector3 position;
+};
+
 class Raycast
 {
 public:
     Raycast(Ogre::SceneManager &);
-    Ogre::Entity * cast(const Ogre::Ray & ray);
+    RaycastResult cast(const Ogre::Ray & ray);
 
 private:
     void getMeshInformation(

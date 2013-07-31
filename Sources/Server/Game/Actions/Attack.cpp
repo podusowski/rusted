@@ -112,13 +112,17 @@ void Attack::sendMovingMeshEffect()
 void Attack::sendExplosionEffect()
 {
     auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());
-    auto selectedShipPosition = selectedObject.getPosition();
+    auto & focusedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.focusedObjectId.get());
+    auto focusedObjectPosition = focusedObject.getPosition();
+    auto selectedObjectPosition = selectedObject.getPosition();
+
+    auto direction = selectedObjectPosition - focusedObjectPosition;
 
     Common::Messages::EmitExplosionEffect emitExplosion;
     emitExplosion.objectId = m_actionParameters.selectedObjectId.get();
-    emitExplosion.directionX = selectedShipPosition.getX();
-    emitExplosion.directionY = selectedShipPosition.getY();
-    emitExplosion.directionZ = selectedShipPosition.getZ();
+    emitExplosion.directionX = direction.getX();
+    emitExplosion.directionY = direction.getY();
+    emitExplosion.directionZ = direction.getZ();
 
     auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)

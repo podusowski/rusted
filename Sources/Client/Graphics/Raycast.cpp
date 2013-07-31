@@ -3,6 +3,8 @@
 #include <OgreSubMesh.h>
 #include <OgreEntity.h>
 
+#include "Cake/Diagnostics/Logger.hpp"
+
 #include "Raycast.hpp"
 
 using namespace Client::Graphics;
@@ -13,8 +15,10 @@ Raycast::Raycast(Ogre::SceneManager & sceneManager)
     m_raySceneQuery->setSortByDistance(true);
 }
 
-Ogre::Entity * Raycast::cast(const Ogre::Ray & ray)
+RaycastResult Raycast::cast(const Ogre::Ray & ray)
 {
+    auto ret = RaycastResult();
+
     m_raySceneQuery->setRay(ray);
 
     // reference of the result is persistent in Ogre::RaySceneQuery until
@@ -23,11 +27,10 @@ Ogre::Entity * Raycast::cast(const Ogre::Ray & ray)
 
     if (result.empty())
     {
-        return nullptr;
+        return ret;
     }
 
     boost::optional<Ogre::Real> minDistance;
-    Ogre::Entity * ret = nullptr;
 
     for (auto it: result)
     {
@@ -41,41 +44,51 @@ Ogre::Entity * Raycast::cast(const Ogre::Ray & ray)
         {
             Ogre::Entity & entity = dynamic_cast<Ogre::Entity&>(*it.movable);
 
-            // mesh data to retrieve         
+            // mesh data to retrieve
             size_t vertex_count;
             size_t index_count;
             Ogre::Vector3 *vertices;
             unsigned long *indices;
- 
+
             // get the mesh information
             getMeshInformation(
-                entity.getMesh(), vertex_count, vertices, index_count, indices,             
+                entity.getMesh(), vertex_count, vertices, index_count, indices,
                 entity.getParentNode()->_getDerivedPosition(),
                 entity.getParentNode()->_getDerivedOrientation(),
                 entity.getParentNode()->_getDerivedScale());
- 
+
             // test for hitting individual triangles on the mesh
             for (int i = 0; i < static_cast<int>(index_count); i += 3)
             {
                 // check for a hit against this triangle
-                std::pair<bool, Ogre::Real> hit = Ogre::Math::intersects(ray, vertices[indices[i]],
-                    vertices[indices[i+1]], vertices[indices[i+2]], true, false);
- 
+                std::pair<bool, Ogre::Real> hit = Ogre::Math::intersects(ray,
+                    vertices[indices[i]],
+                    vertices[indices[i+1]],
+                    vertices[indices[i+2]],
+                    true, false);
+
                 // if it was a hit check if its the closest
                 if (hit.first)
                 {
                     if (!minDistance || hit.second < *minDistance)
                     {
                         minDistance = hit.second;
-                        ret = &entity;
+                        ret.entity = &entity;
+                        ret.valid = true;
+                        ret.position = ray.getOrigin() + (ray.getDirection().normalisedCopy() * hit.second);
+
+                        LOG_DEBUG << "Raycast match on distance from origin: " << hit.second << ", origin: "
+                                  << ray.getOrigin()
+                                  << ", direction: " << ray.getDirection()
+                                  << ", exact position: " << ret.position;
                     }
                 }
             }
- 
+
             // free the verticies and indicies memory
             delete[] vertices;
             delete[] indices;
-        }       
+        }
     }
     return ret;
 }

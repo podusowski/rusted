@@ -198,6 +198,7 @@ Ogre::Entity * Input::raycastFromMouseCursor()
                             mousePos.left / float(m_ogreRenderWindow.getWidth()), 
                             mousePos.top / float(m_ogreRenderWindow.getHeight()));
 
-    return m_raycast.cast(mouseRay);
+    auto result = m_raycast.cast(mouseRay);
+    return result.entity;
 }
 

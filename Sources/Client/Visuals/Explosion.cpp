@@ -5,6 +5,7 @@
 #include <OgreParticleSystem.h>
 #include <OgreParticleEmitter.h>
 
+#include "Graphics/Raycast.hpp"
 #include "Explosion.hpp"
 
 using namespace Client::Visuals;
@@ -18,12 +19,31 @@ Explosion::Explosion(Graphics::IGraphics & graphics, VisualObject & object, Comm
 {
     auto & scene = graphics.getSceneManager();
 
+    auto objectPosition = object.getOgreSceneNode().getPosition();
+    auto origin = objectPosition - (graphics.toOgreVector3(m_direction) * 50);
+    auto ogreDirection = graphics.toOgreVector3(m_direction).normalisedCopy();
+
+    LOG_DEBUG << "Origin for raycast: " << origin << " (object pos: " << objectPosition << ", direction: " << m_direction << ")";
+
+    Ogre::Ray ray(origin, ogreDirection);
+
+    Graphics::Raycast raycast(graphics.getSceneManager());
+    auto result = raycast.cast(ray);
+
+    if (!result.valid)
+    {
+        throw std::runtime_error("cant raycast to determinate explosion position");
+    }
+
     std::stringstream ss;
     ss << "explosion-particle-" << m_id++;
     m_ps = scene.createParticleSystem(ss.str(), "Explosion");
 
+    LOG_DEBUG << "Creating explosion, object pos: " << object.getOgreSceneNode().getPosition() << ", explosion pos: " << result.position;
+
     auto * psNode = object.getOgreSceneNode().createChildSceneNode();
-    //psNode->setPosition(Ogre::Vector3(position.getX(), position.getY(), position.getZ()));
+    //psNode->setPosition(Ogre::Vector3(50, 0, 0));
+    psNode->setPosition(result.position);
     psNode->attachObject(m_ps);
 }
 
