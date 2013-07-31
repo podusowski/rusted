@@ -1,0 +1,20 @@
+#!/bin/bash
+
+EXEC_DIRECTORY=`dirname $0`
+pushd $EXEC_DIRECTORY
+
+OGRE_RENDERER=`find /usr/lib -name RenderSystem_GL.so | head -n1`
+OGRE_RENDERER_DIR=`dirname $OGRE_RENDERER`
+echo "Ogre renderer: $OGRE_RENDERER"
+
+_LD_LIBRARY_PATH=$LD_LIBRARY_PATH
+
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.:$OGRE_RENDERER_DIR
+echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
+
+./ParticleView $@
+
+xset r on
+
+popd
+
