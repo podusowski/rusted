@@ -8,10 +8,10 @@
 
 namespace Client
 {
-namespace Effects 
+namespace Visuals
 {
 
-class Effects 
+class Effects
 {
 public:
     Effects(Graphics::IGraphics &);

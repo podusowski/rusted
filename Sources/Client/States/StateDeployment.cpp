@@ -5,7 +5,7 @@
 using namespace Client::States;
 
 StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
-                                 Effects::Effects & effects,
+                                 Visuals::Effects & effects,
                                  Input::Input & input,
                                  Gui::Gui & gui, 
                                  Network::Connection & connection, 

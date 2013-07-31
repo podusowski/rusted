@@ -32,7 +32,7 @@ class StateDeployment : public IStateDeployment
 {
 public:
     StateDeployment(Graphics::IGraphics &,
-                    Effects::Effects &,
+                    Visuals::Effects &,
                     Input::Input &,
                     Gui::Gui & gui, 
                     Network::Connection &, 

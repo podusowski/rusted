@@ -5,7 +5,7 @@
 
 #include "MovingMeshEffect.hpp"
 
-using namespace Client::Effects;
+using namespace Client::Visuals;
 
 MovingMeshEffect::MovingMeshEffect(
     Graphics::IGraphics & graphics,

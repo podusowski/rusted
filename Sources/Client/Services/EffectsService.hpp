@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Services/AbstractService.hpp"
-#include "Effects/Effects.hpp"
+#include "Visuals/Effects.hpp"
 
 namespace Client
 {
@@ -11,7 +11,7 @@ namespace Services
 class EffectsService : public AbstractService<EffectsService>
 {
 public:
-    EffectsService(Effects::Effects &);
+    EffectsService(Visuals::Effects &);
 
     void handle(const Common::Messages::EmitMovingMeshEffect &);
     void handle(const Common::Messages::EmitExplosionEffect &);
@@ -19,7 +19,7 @@ public:
     void handle(const Common::Messages::AbstractMessage &) {}
 
 private:
-    Effects::Effects & m_effects;
+    Visuals::Effects & m_effects;
 };
 
 }

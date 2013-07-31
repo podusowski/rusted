@@ -5,7 +5,7 @@
 
 namespace Client
 {
-namespace Effects
+namespace Visuals
 {
 
 class Explosion : public IEffect

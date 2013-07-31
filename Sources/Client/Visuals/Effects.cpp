@@ -4,7 +4,7 @@
 #include "Explosion.hpp"
 #include "Effects.hpp"
 
-using namespace Client::Effects;
+using namespace Client::Visuals;
 
 Effects::Effects(Client::Graphics::IGraphics & graphics) : m_graphics(graphics)
 {

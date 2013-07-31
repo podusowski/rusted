@@ -2,7 +2,7 @@
 
 using namespace Client::Services;
 
-EffectsService::EffectsService(Effects::Effects & effects) : m_effects(effects)
+EffectsService::EffectsService(Visuals::Effects & effects) : m_effects(effects)
 {
 }
 

@@ -17,7 +17,7 @@ public:
     ObjectsView(Services::ObjectService &,
                 Services::PlayerActionService &,
                 Graphics::IGraphics &,
-                Effects::Effects &,
+                Visuals::Effects &,
                 Input::IInput &,
                 Gui::Gui &,
                 Common::Game::Universe &,
@@ -36,7 +36,7 @@ private:
     Services::ObjectService & m_objectService;
     Services::PlayerActionService & m_playerActionService;
     Graphics::IGraphics & m_graphics;
-    Effects::Effects & m_effects;
+    Visuals::Effects & m_effects;
     Input::IInput & m_input;
     Gui::Gui & m_gui;
     Common::Game::Universe & m_universe;

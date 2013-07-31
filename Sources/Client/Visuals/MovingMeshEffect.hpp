@@ -9,7 +9,7 @@
 
 namespace Client
 {
-namespace Effects
+namespace Visuals
 {
 
 class MovingMeshEffect : public IEffect

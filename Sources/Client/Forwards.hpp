@@ -13,15 +13,11 @@ namespace Gui
     class Gui;
 }
 
-namespace Effects
-{
-    class Effects;
-}
-
 namespace Visuals
 {
     class VisualUniverse;
     class VisualObject;
+    class Effects;
 }
 
 namespace Services

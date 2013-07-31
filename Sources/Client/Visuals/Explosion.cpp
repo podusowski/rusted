@@ -7,7 +7,7 @@
 
 #include "Explosion.hpp"
 
-using namespace Client::Effects;
+using namespace Client::Visuals;
 
 int Explosion::m_id = 0;
 
