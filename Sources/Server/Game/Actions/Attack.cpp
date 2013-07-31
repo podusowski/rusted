@@ -115,9 +115,11 @@ void Attack::sendExplosionEffect()
     auto selectedShipPosition = selectedObject.getPosition();
 
     Common::Messages::EmitExplosionEffect emitExplosion;
-    emitExplosion.x = selectedShipPosition.getX();
-    emitExplosion.y = selectedShipPosition.getY();
-    emitExplosion.z = selectedShipPosition.getZ();
+    emitExplosion.objectId = m_actionParameters.selectedObjectId.get();
+    emitExplosion.directionX = selectedShipPosition.getX();
+    emitExplosion.directionY = selectedShipPosition.getY();
+    emitExplosion.directionZ = selectedShipPosition.getZ();
+
     auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {

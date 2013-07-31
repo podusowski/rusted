@@ -37,6 +37,7 @@ public:
     void setSelected(bool);
     Common::Game::Object::ObjectBase & getGameObject();
     std::string getString(int type = StringType_All);
+    Ogre::SceneNode & getOgreSceneNode();
 
     void update();
 

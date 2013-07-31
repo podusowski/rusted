@@ -1,8 +1,11 @@
+#include "Visuals/VisualUniverse.hpp"
 #include "EffectsService.hpp"
 
 using namespace Client::Services;
 
-EffectsService::EffectsService(Visuals::Effects & effects) : m_effects(effects)
+EffectsService::EffectsService(Visuals::VisualUniverse & visualUniverse, Visuals::Effects & effects) :
+    m_effects(effects),
+    m_visualUniverse(visualUniverse)
 {
 }
 
@@ -21,10 +24,14 @@ void EffectsService::handle(const Common::Messages::EmitMovingMeshEffect & emitM
 
 void EffectsService::handle(const Common::Messages::EmitExplosionEffect & emitExplosion)
 {
-    Common::Game::Position position(
-        emitExplosion.x, emitExplosion.y, emitExplosion.z
+    auto object = m_visualUniverse.find(emitExplosion.objectId);
+
+    Common::Game::Position direction(
+        emitExplosion.directionX,
+        emitExplosion.directionY,
+        emitExplosion.directionZ
     );
 
-    m_effects.emitExplosion(position);
+    m_effects.emitExplosion(*object, direction);
 }
 

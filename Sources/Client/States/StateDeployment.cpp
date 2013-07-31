@@ -17,9 +17,11 @@ StateDeployment::StateDeployment(Graphics::IGraphics & graphics,
     m_rustedTimeService(connection),
     m_playerActionService(connection, m_playerInfo, m_universe),
     m_objectService(connection, m_universe),
-    m_effectsService(effects),
 
+    // TODO: this is fucked up
     m_visualUniverse(graphics, gui, input, m_objectService),
+
+    m_effectsService(m_visualUniverse, effects),
 
     m_objectsView(m_objectService, m_playerActionService, graphics, effects, input, gui, m_universe, m_visualUniverse),
     m_pilotView(graphics, input, m_playerActionService, m_objectService, gui, m_universe, m_playerInfo, m_visualUniverse),

@@ -26,9 +26,9 @@ void Effects::emitMovingMeshEffect(Common::Game::Position start, Common::Game::P
     addEffect(effect);
 }
 
-void Effects::emitExplosion(Common::Game::Position position)
+void Effects::emitExplosion(VisualObject & object, Common::Game::Position direction)
 {
-    boost::shared_ptr<IEffect> effect(new Explosion(m_graphics, position));
+    boost::shared_ptr<IEffect> effect(new Explosion(m_graphics, object, direction));
     addEffect(effect);
 }
 

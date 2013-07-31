@@ -11,8 +11,10 @@ using namespace Client::Visuals;
 
 int Explosion::m_id = 0;
 
-Explosion::Explosion(Graphics::IGraphics & graphics, Common::Game::Position position) :
-    m_graphics(graphics)
+Explosion::Explosion(Graphics::IGraphics & graphics, VisualObject & object, Common::Game::Position direction) :
+    m_graphics(graphics),
+    m_object(object),
+    m_direction(direction)
 {
     auto & scene = graphics.getSceneManager();
 
@@ -20,8 +22,8 @@ Explosion::Explosion(Graphics::IGraphics & graphics, Common::Game::Position posi
     ss << "explosion-particle-" << m_id++;
     m_ps = scene.createParticleSystem(ss.str(), "Explosion");
 
-    auto * psNode = scene.getRootSceneNode()->createChildSceneNode();
-    psNode->setPosition(Ogre::Vector3(position.getX(), position.getY(), position.getZ()));
+    auto * psNode = object.getOgreSceneNode().createChildSceneNode();
+    //psNode->setPosition(Ogre::Vector3(position.getX(), position.getY(), position.getZ()));
     psNode->attachObject(m_ps);
 }
 

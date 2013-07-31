@@ -11,7 +11,7 @@
 
 namespace Client
 {
-namespace Visuals 
+namespace Visuals
 {
 
 class VisualUniverse
@@ -20,8 +20,9 @@ public:
     VisualUniverse(Client::Graphics::IGraphics &, Client::Gui::Gui &, Client::Input::IInput &, Client::Services::ObjectService &);
     std::shared_ptr<VisualObject> add(Common::Game::Object::ObjectBase &);
     std::shared_ptr<VisualObject> find(Common::Game::Object::ObjectBase &);
+    std::shared_ptr<VisualObject> find(Common::Game::Object::ObjectBase::StrictId);
     void update();
-    
+
 private:
     Client::Graphics::IGraphics & m_graphics;
     Client::Gui::Gui & m_gui;

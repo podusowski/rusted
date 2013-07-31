@@ -35,6 +35,19 @@ std::shared_ptr<VisualObject> VisualUniverse::find(Common::Game::Object::ObjectB
     throw std::out_of_range("");
 }
 
+std::shared_ptr<VisualObject> VisualUniverse::find(Common::Game::Object::ObjectBase::StrictId id)
+{
+    for (auto it = m_objects.begin(); it != m_objects.end(); it++)
+    {
+        if (it->first->getId() == id.get())
+        {
+            return it->second;
+        }
+    }
+
+    throw std::out_of_range("no such object in VisualUniverse");
+}
+
 void VisualUniverse::update()
 {
     for (auto o: m_objects)

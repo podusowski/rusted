@@ -223,9 +223,11 @@ graphic effects
 </message>
 
 <message id="EmitExplosionEffect">
-    <param type="int32" name="x" />
-    <param type="int32" name="y" />
-    <param type="int32" name="z" />
+    <param type="int32" name="objectId" />
+
+    <param type="int32" name="directionX" />
+    <param type="int32" name="directionY" />
+    <param type="int32" name="directionZ" />
 </message>
 
 </messages>

@@ -2,6 +2,7 @@
 
 #include <boost/shared_ptr.hpp>
 
+#include "VisualObject.hpp"
 #include "Common/Game/Position.hpp"
 #include "Graphics/IGraphics.hpp"
 #include "IEffect.hpp"
@@ -17,7 +18,7 @@ public:
     Effects(Graphics::IGraphics &);
     void frameStarted();
     void emitMovingMeshEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed);
-    void emitExplosion(Common::Game::Position position);
+    void emitExplosion(VisualObject & object, Common::Game::Position direction);
 
 private:
     void addEffect(boost::shared_ptr<IEffect>);

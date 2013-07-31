@@ -143,6 +143,11 @@ std::string VisualObject::getString(int type)
     return ret.toString();
 }
 
+Ogre::SceneNode & VisualObject::getOgreSceneNode()
+{
+    return *m_mainNode;
+}
+
 void VisualObject::update()
 {
     Common::Game::Position position = m_object.getPosition();
@@ -152,8 +157,6 @@ void VisualObject::update()
     m_mainNode->setOrientation(m_graphics.toOgreQuaternion(orientation));
 
     // apply Blender coordinations patch
-    //m_node->roll(Ogre::Degree(90));
-    //m_node->pitch(Ogre::Degree(90));
     m_mainNode->yaw(Ogre::Degree(-90));
 
     setEngineThrustEnabled(m_object.isMoving());
