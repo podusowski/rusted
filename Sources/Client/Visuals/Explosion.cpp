@@ -39,11 +39,13 @@ Explosion::Explosion(Graphics::IGraphics & graphics, VisualObject & object, Comm
     ss << "explosion-particle-" << m_id++;
     m_ps = scene.createParticleSystem(ss.str(), "Explosion");
 
-    LOG_DEBUG << "Creating explosion, object pos: " << object.getOgreSceneNode().getPosition() << ", explosion pos: " << result.position;
+    // FIXME: hax caused by VisualObject which scales ogre node by 100
+    auto explosionPositionDelta = (object.getOgreSceneNode().getPosition() - result.position) / 100;
+
+    LOG_DEBUG << "Creating explosion, object pos: " << object.getOgreSceneNode().getPosition() << ", explosion pos: " << explosionPositionDelta;
 
     auto * psNode = object.getOgreSceneNode().createChildSceneNode();
-    //psNode->setPosition(Ogre::Vector3(50, 0, 0));
-    psNode->setPosition(result.position);
+    psNode->setPosition(explosionPositionDelta);
     psNode->attachObject(m_ps);
 }
 
