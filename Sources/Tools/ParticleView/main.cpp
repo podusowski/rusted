@@ -30,15 +30,22 @@ int main(int argc, const char ** argv)
     auto * ps = scene.createParticleSystem("particle", argv[1]);
     psNode->attachObject(ps);
 
+    bool started = false;
+
     while (!graphics.getRenderWindow().isClosed())
     {
-        LOG_DEBUG << ps->getEmitting();
-        #if 0
+        if (!started && ps->getNumParticles())
+        {
+            started = true;
+        }
+        else if (started && !ps->getNumParticles())
+        {
             scene.destroyAllParticleSystems();
             ps = scene.createParticleSystem("particle", argv[1]);
             psNode->attachObject(ps);
+            started = false;
+            LOG_DEBUG << "Restarting";
         }
-        #endif
 
         input.frameStarted();
         if (!graphics.frameStarted()) break;
