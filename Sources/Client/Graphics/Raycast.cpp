@@ -18,6 +18,19 @@ Raycast::Raycast(Ogre::SceneManager & sceneManager)
 RaycastResult Raycast::cast(const Ogre::Ray & ray)
 {
     auto ret = RaycastResult();
+    cast(ray, [&](Ogre::Entity * entity, Ogre::Vector3 position) -> bool
+    {
+        ret.entity = entity;
+        ret.position = position;
+        ret.valid = true;
+        return false;
+    });
+    return ret;
+}
+
+void Raycast::cast(const Ogre::Ray & ray, std::function<bool(Ogre::Entity *, Ogre::Vector3)> function)
+{
+    auto ret = RaycastResult();
 
     m_raySceneQuery->setRay(ray);
 
@@ -27,18 +40,22 @@ RaycastResult Raycast::cast(const Ogre::Ray & ray)
 
     if (result.empty())
     {
-        return ret;
+        return;
     }
 
     boost::optional<Ogre::Real> minDistance;
 
+    LOG_DEBUG << "Found " << result.size() << " candidates";
+
     for (auto it: result)
     {
         // if it's farther that previous found one, just break the algorithm
+        #if 0
         if (minDistance && *minDistance < it.distance)
         {
             break;
         }
+        #endif
 
         if (it.movable != nullptr && it.movable->getMovableType() == "Entity")
         {
@@ -70,7 +87,7 @@ RaycastResult Raycast::cast(const Ogre::Ray & ray)
                 // if it was a hit check if its the closest
                 if (hit.first)
                 {
-                    if (!minDistance || hit.second < *minDistance)
+                    //if (!minDistance || hit.second < *minDistance)
                     {
                         minDistance = hit.second;
                         ret.entity = &entity;
@@ -81,6 +98,15 @@ RaycastResult Raycast::cast(const Ogre::Ray & ray)
                                   << ray.getOrigin()
                                   << ", direction: " << ray.getDirection()
                                   << ", exact position: " << ret.position;
+
+                        bool cont = function(ret.entity, ret.position);
+                        if (!cont)
+                        {
+                            LOG_DEBUG << "  user function accepted the raycast";
+                            break;
+                        }
+
+                        LOG_DEBUG << "  user function rejected the raycast, looking deeper";
                     }
                 }
             }
@@ -90,7 +116,6 @@ RaycastResult Raycast::cast(const Ogre::Ray & ray)
             delete[] indices;
         }
     }
-    return ret;
 }
 
 // algo from http://www.ogre3d.org/tikiwiki/tiki-index.php?page=Raycasting+to+the+polygon+level&structure=Cookbook

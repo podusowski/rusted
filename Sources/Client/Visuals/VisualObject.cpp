@@ -148,6 +148,11 @@ Ogre::SceneNode & VisualObject::getOgreSceneNode()
     return *m_mainNode;
 }
 
+Ogre::Entity & VisualObject::getOgreEntity()
+{
+    return *m_entity;
+}
+
 void VisualObject::update()
 {
     Common::Game::Position position = m_object.getPosition();

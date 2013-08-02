@@ -28,7 +28,24 @@ Explosion::Explosion(Graphics::IGraphics & graphics, VisualObject & object, Comm
     Ogre::Ray ray(origin, ogreDirection);
 
     Graphics::Raycast raycast(graphics.getSceneManager());
-    auto result = raycast.cast(ray);
+
+    Graphics::RaycastResult result;
+
+    raycast.cast(ray, [&](Ogre::Entity * entity, Ogre::Vector3 position) -> bool
+    {
+        if (entity == &object.getOgreEntity())
+        {
+            result.valid = true;
+            result.entity = entity;
+            result.position = position;
+
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    });
 
     if (!result.valid)
     {

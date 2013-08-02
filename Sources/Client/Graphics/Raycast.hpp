@@ -21,6 +21,12 @@ public:
     Raycast(Ogre::SceneManager &);
     RaycastResult cast(const Ogre::Ray & ray);
 
+    /* @param function This function object will be invoked for each object found across the ray.
+     *                 Function should return boolean value which determinated if iteration 
+     *                 should stop (false) or continue to the next object (true)
+     */
+    void cast(const Ogre::Ray & ray, std::function<bool(Ogre::Entity *, Ogre::Vector3)> function);
+
 private:
     void getMeshInformation(
         const Ogre::MeshPtr mesh,
