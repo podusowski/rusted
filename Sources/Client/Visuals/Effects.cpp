@@ -14,7 +14,14 @@ void Effects::frameStarted()
 {
     for (auto & effect : m_effects)
     {
-        effect->frameStarted();
+        try
+        {
+            effect->frameStarted();
+        }
+        catch (std::exception & ex)
+        {
+            LOG_WARN << "Can't finish the effect, reason: " << ex.what();
+        }
     }
 
     gc();
