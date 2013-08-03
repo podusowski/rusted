@@ -44,11 +44,19 @@ void Raycast::cast(const Ogre::Ray & ray, std::function<bool(Ogre::Entity *, Ogr
     }
 
     boost::optional<Ogre::Real> minDistance;
+    bool finished = false;
 
     LOG_DEBUG << "Found " << result.size() << " candidates";
 
     for (auto it: result)
     {
+        if (finished)
+        {
+            break;
+        }
+
+        LOG_DEBUG << "Potential match, distance: " << it.distance;
+
         // if it's farther that previous found one, just break the algorithm
         #if 0
         if (minDistance && *minDistance < it.distance)
@@ -60,6 +68,8 @@ void Raycast::cast(const Ogre::Ray & ray, std::function<bool(Ogre::Entity *, Ogr
         if (it.movable != nullptr && it.movable->getMovableType() == "Entity")
         {
             Ogre::Entity & entity = dynamic_cast<Ogre::Entity&>(*it.movable);
+
+            minDistance = boost::none;
 
             // mesh data to retrieve
             size_t vertex_count;
@@ -87,27 +97,30 @@ void Raycast::cast(const Ogre::Ray & ray, std::function<bool(Ogre::Entity *, Ogr
                 // if it was a hit check if its the closest
                 if (hit.first)
                 {
-                    //if (!minDistance || hit.second < *minDistance)
+                    if (!minDistance || hit.second < *minDistance)
                     {
                         minDistance = hit.second;
                         ret.entity = &entity;
                         ret.valid = true;
                         ret.position = ray.getOrigin() + (ray.getDirection().normalisedCopy() * hit.second);
-
-                        LOG_DEBUG << "Raycast match on distance from origin: " << hit.second << ", origin: "
-                                  << ray.getOrigin()
-                                  << ", direction: " << ray.getDirection()
-                                  << ", exact position: " << ret.position;
-
-                        bool cont = function(ret.entity, ret.position);
-                        if (!cont)
-                        {
-                            LOG_DEBUG << "  user function accepted the raycast";
-                            break;
-                        }
-
-                        LOG_DEBUG << "  user function rejected the raycast, looking deeper";
                     }
+                }
+            }
+
+            if (ret.valid)
+            {
+                LOG_DEBUG << "Raycast matched entity, exact position: " << ret.position;
+
+                finished = ! function(ret.entity, ret.position);
+
+                if (finished)
+                {
+                    LOG_DEBUG << "  user function accepted the raycast";
+                    break;
+                }
+                else
+                {
+                    LOG_DEBUG << "  user function rejected the raycast, looking deeper";
                 }
             }
 
