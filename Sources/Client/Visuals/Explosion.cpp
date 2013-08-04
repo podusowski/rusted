@@ -26,9 +26,7 @@ Explosion::Explosion(Graphics::IGraphics & graphics, VisualObject & object, Comm
     LOG_DEBUG << "Origin for raycast: " << origin << " (object pos: " << objectPosition << ", direction: " << m_direction << ")";
 
     Ogre::Ray ray(origin, ogreDirection);
-
     Graphics::Raycast raycast(graphics.getSceneManager());
-
     Graphics::RaycastResult result;
 
     raycast.cast(ray, [&](Ogre::Entity * entity, Ogre::Vector3 position) -> bool
@@ -57,12 +55,17 @@ Explosion::Explosion(Graphics::IGraphics & graphics, VisualObject & object, Comm
     m_ps = scene.createParticleSystem(ss.str(), "Explosion");
 
     // FIXME: hax caused by VisualObject which scales ogre node by 100
-    auto explosionPositionDelta = (object.getOgreSceneNode().getPosition() - result.position) / 100;
+    auto explosionPositionDelta = (result.position - object.getOgreSceneNode().getPosition()) / 100;
+
+    // FIXME: another hax caused by rotating mesh by 90d in VisualObject
+    Ogre::Quaternion rotation(Ogre::Degree(90), Ogre::Vector3(0, 1, 0));
+    explosionPositionDelta = rotation * explosionPositionDelta;
 
     LOG_DEBUG << "Creating explosion, object pos: " << object.getOgreSceneNode().getPosition() << ", explosion pos: " << explosionPositionDelta;
 
     auto * psNode = object.getOgreSceneNode().createChildSceneNode();
-    psNode->setPosition(-explosionPositionDelta);
+    psNode->setPosition(explosionPositionDelta);
+    psNode->yaw(Ogre::Degree(-90));
     psNode->attachObject(m_ps);
 }
 

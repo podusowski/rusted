@@ -1,6 +1,7 @@
 #pragma once
 
 #include <functional>
+#include <boost/utility.hpp>
 
 #include "Cake/Serialization/Tms.hpp"
 
@@ -15,7 +16,7 @@ namespace Client
 namespace Visuals
 {
 
-class VisualObject
+class VisualObject : boost::noncopyable
 {
 public:
     static const int StringType_All = 0xFF;
