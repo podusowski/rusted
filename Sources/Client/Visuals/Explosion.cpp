@@ -62,7 +62,7 @@ Explosion::Explosion(Graphics::IGraphics & graphics, VisualObject & object, Comm
     LOG_DEBUG << "Creating explosion, object pos: " << object.getOgreSceneNode().getPosition() << ", explosion pos: " << explosionPositionDelta;
 
     auto * psNode = object.getOgreSceneNode().createChildSceneNode();
-    psNode->setPosition(explosionPositionDelta);
+    psNode->setPosition(-explosionPositionDelta);
     psNode->attachObject(m_ps);
 }
 

@@ -109,7 +109,7 @@ void Raycast::cast(const Ogre::Ray & ray, std::function<bool(Ogre::Entity *, Ogr
 
             if (ret.valid)
             {
-                LOG_DEBUG << "Raycast matched entity, exact position: " << ret.position;
+                LOG_DEBUG << "Raycast matched entity, &" << ret.entity << ", exact position: " << ret.position;
 
                 finished = ! function(ret.entity, ret.position);
 
