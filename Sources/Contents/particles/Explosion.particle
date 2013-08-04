@@ -11,10 +11,10 @@ particle_system Explosion
     {
         angle 360
 
-        emission_rate 4000
-        time_to_live_min 2.0
-        time_to_live_max 2.5
-        duration 0.5
+        emission_rate 150
+        time_to_live_min 1.0
+        time_to_live_max 1.7
+        duration 0.4
         direction       -1 0 0
         velocity    200
         colour 1 0.5 0.5
