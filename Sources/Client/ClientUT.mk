@@ -11,7 +11,7 @@ CFLAGS+=-I$(TARGET_BASE)/../External
 CFLAGS+=-I$(TARGET_BASE)/../External/GoogleTest
 CFLAGS+=-I/usr/include/libxml2
 
-LDFLAGS+=-L. -L$(BUILD) -lpthread -lboost_system -lxml2 -lcppunit
+LDFLAGS+=-L. -L$(BUILD) -lpthread -lboost_system
 LDFLAGS+=-lClient
 LDFLAGS+=-lCommon
 LDFLAGS+=-lCake

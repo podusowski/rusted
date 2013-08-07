@@ -19,7 +19,6 @@ SOURCES+=Networking/GenericPacket.cpp
 SOURCES+=Networking/ServerSocket.cpp
 SOURCES+=Networking/ServerSocketPool.cpp
 SOURCES+=Networking/Socket.cpp
-SOURCES+=Networking/SocketStream.cpp
 
 SOURCES+=Networking/Protocol/BinaryCoder.cpp
 SOURCES+=Networking/Protocol/BinaryDecoder.cpp

@@ -9,6 +9,6 @@ CakeWriteBuffer::CakeWriteBuffer(Cake::Networking::Socket & socket) :
 
 void CakeWriteBuffer::write(const void * source, size_t size)
 {
-    m_socket.stream().send(source, size);
+    m_socket.send(source, size);
 }
 

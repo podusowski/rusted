@@ -7,9 +7,9 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/optional.hpp>
 
-#include "SocketStream.hpp"
+#include "Socket.hpp"
 
-namespace Cake 
+namespace Cake
 {
 namespace Networking
 {
@@ -30,7 +30,7 @@ public:
 
     template <typename T> T getValue(const std::string & name) const
     {
-        SocketStream::StringMap::const_iterator it = m_map.find(name);
+        Socket::StringMap::const_iterator it = m_map.find(name);
         if (it != m_map.end())
         {
             return boost::lexical_cast<T>(it->second);
@@ -41,34 +41,34 @@ public:
         }
     }
 
-    SocketStream::StringMap getAllData() const
+    Socket::StringMap getAllData() const
     {
         return m_map;
     }
 
-    void setAllData(const SocketStream::StringMap & data)
+    void setAllData(const Socket::StringMap & data)
     {
         m_map = data;
     }
 
 private:
-    SocketStream::StringMap m_map;
+    Socket::StringMap m_map;
     boost::optional<unsigned> m_id;
 };
 
 }
 }
 
-inline Cake::Networking::SocketStream & operator<<(Cake::Networking::SocketStream & stream, const Cake::Networking::GenericPacket & packet)
+inline Cake::Networking::Socket & operator<<(Cake::Networking::Socket & stream, const Cake::Networking::GenericPacket & packet)
 {
-    stream << packet.getId() << packet.getAllData(); 
+    stream << packet.getId() << packet.getAllData();
     return stream;
 }
 
-inline Cake::Networking::SocketStream & operator>>(Cake::Networking::SocketStream & stream, Cake::Networking::GenericPacket & packet)
+inline Cake::Networking::Socket & operator>>(Cake::Networking::Socket & stream, Cake::Networking::GenericPacket & packet)
 {
     unsigned id;
-    Cake::Networking::SocketStream::StringMap data;
+    Cake::Networking::Socket::StringMap data;
     stream >> id >> data;
 
     packet.setId(id);
