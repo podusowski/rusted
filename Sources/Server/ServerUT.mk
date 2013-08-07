@@ -15,7 +15,7 @@ CFLAGS+=-I$(TARGET_BASE)/../External/GoogleTest
 CFLAGS+=-I/usr/include/libxml2
 CFLAGS+=-I$(BUILD)/SOCI/core
 
-LDFLAGS=-L. -L$(BUILD) -lServer -lCommon -lCake -lpthread -lboost_system -lxml2 -lgtest-static -lsoci_core
+LDFLAGS=-L. -L$(BUILD) -lServer -lCommon -lCake -lpthread -lgtest-static -lsoci_core
 
 DEPENDENCIES+=libServer.a
 DEPENDENCIES+=libCommon.a
