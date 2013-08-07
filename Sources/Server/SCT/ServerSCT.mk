@@ -21,7 +21,7 @@ CFLAGS+=-I$(TARGET_BASE)/../../External/GoogleTest
 CFLAGS+=-I/usr/include/libxml2
 
 LDFLAGS=-L. -L$(BUILD) 
-LDFLAGS+=-lCommon -lCake -lpthread -lxml2
+LDFLAGS+=-lCommon -lCake -lpthread
 LDFLAGS+=-lgtest-static
 
 RESOURCES+=SctDataBase.sqlite3
