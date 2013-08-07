@@ -1,3 +1,5 @@
+#!/bin/bash
+
 set -u
 
 green="\033[1;32m"
