@@ -84,7 +84,8 @@ function run_single_test()
     local tool_output=""
     if is_tool_supported "$tool"; then
         tool_log=$log_dir/$name.$tool
-        wrapper="valgrind --xml=yes --tool=$tool --log-file=$tool_log --trace-children=yes --child-silent-after-fork=yes"
+        tool_xml_log=$log_dir/$name.$tool.xml
+        wrapper="valgrind --xml=yes --xml-file=$tool_xml_log --tool=$tool --log-file=$tool_log --trace-children=yes --child-silent-after-fork=yes"
         export SERVER_SCT_WAIT_FOR_APP_TIME=10
     fi
 
