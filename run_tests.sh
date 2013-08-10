@@ -90,11 +90,16 @@ function run_single_test()
     fi
 
     LD_LIBRARY_PATH=. SERVER_SCT_PORT=$port $wrapper ./`basename $binary` --gtest_filter=$name --gtest_output=xml:$log_dir/$name.result.xml &> $log_file
+    local return_code=$?
 
     if grep FAILED $log_file > /dev/null; then
         result="  ${red}fail$reset "
     else
         result="  ${green}pass$reset "
+    fi
+
+    if [ "$return_code" != "0" ]; then
+        result="  ${red}fail$reset "
     fi
 
     if is_tool_supported "$tool"; then
@@ -154,6 +159,8 @@ if [ "$tool" != "" ]; then
         exit 1
     fi
 fi
+
+ulimit -c unlimited
 
 trap "cleanup" EXIT TERM
 
