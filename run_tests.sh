@@ -89,7 +89,7 @@ function run_single_test()
         export SERVER_SCT_WAIT_FOR_APP_TIME=10
     fi
 
-    LD_LIBRARY_PATH=. SERVER_SCT_PORT=$port $wrapper ./`basename $binary` --gtest_filter=$name &> $log_file
+    LD_LIBRARY_PATH=. SERVER_SCT_PORT=$port $wrapper ./`basename $binary` --gtest_filter=$name --gtest_output=xml:$log_dir/$name.result.xml &> $log_file
 
     if grep FAILED $log_file > /dev/null; then
         result="  ${red}fail$reset "
