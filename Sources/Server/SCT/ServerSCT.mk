@@ -11,18 +11,18 @@ SOURCES+=ObjectsSct.cpp
 SOURCES+=ActionsSct.cpp
 SOURCES+=SmokeSct.cpp
 
-CFLAGS+=-Wall -pedantic -g 
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../../
 CFLAGS+=-I$(TARGET_BASE)/../../Common
-CFLAGS+=-I$(TARGET_BASE)/../../External 
+CFLAGS+=-I$(TARGET_BASE)/../../External
 CFLAGS+=-I$(TARGET_BASE)/../../External/GoogleTest
-CFLAGS+=-I/usr/include/libxml2
+CFLAGS+=-I$(BUILD)/SOCI/core
 
 LDFLAGS=-L. -L$(BUILD) 
 LDFLAGS+=-lCommon -lCake -lpthread
 LDFLAGS+=-lgtest-static
+LDFLAGS+=-lsoci_core
 
 RESOURCES+=SctDataBase.sqlite3
 

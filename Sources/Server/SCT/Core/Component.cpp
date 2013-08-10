@@ -16,7 +16,7 @@ using namespace ::SCT;
 
 static int s_port = 2000;
 
-Component::Component(const std::string & sociDataBase)
+Component::Component(const std::string & sociDataBase) : m_sociDataBase(sociDataBase)
 {
     setConfigValue("--database.url", sociDataBase);
 
@@ -43,6 +43,11 @@ boost::shared_ptr<Connection> Component::createConnection()
     LOG_INFO << "Creating new connection";
 
     return boost::shared_ptr<Connection>(new Connection("127.0.0.1", m_port));
+}
+
+boost::shared_ptr<soci::session> Component::createSociSession()
+{
+    return boost::shared_ptr<soci::session>(new soci::session(m_sociDataBase));
 }
 
 void Component::start()
@@ -100,19 +105,5 @@ void Component::start()
     {
         Cake::Threading::Thread::wait(0, 500);
     }
-
-    #if 0
-    for (int i = 0; i < 100; i++)
-    {
-        try
-        {
-            Connection testConnection("127.0.0.1", m_port);
-        }
-        catch (...)
-        {
-            Cake::Threading::Thread::wait(0, 500);
-        }
-    }
-    #endif
 }
 
