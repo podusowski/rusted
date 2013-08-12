@@ -25,6 +25,7 @@ public:
 private:
     Common::Game::Position extractPosition(const soci::row &);
     void fillCargoHold(const soci::row &, Common::Game::Object::CargoHold &);
+    unsigned preInsertObjectToDb(unsigned shipClassId, unsigned ownerId);
 
     IShipClassContainer & m_shipClassContainer;
     Cake::DependencyInjection::Inject<soci::session> m_sociSession;

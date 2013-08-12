@@ -75,24 +75,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::createShip(un
 
     // INSERT INTO objects VALUES(1,   "Ship",     1,     NULL,             1,    2000, 1,     1,    100,      0,     0);
 
-    std::string type = "Ship";
-    unsigned id = 0;
-
-    m_sociSession->begin();
-
-    m_sociSession->once <<
-        "INSERT INTO objects(type, class, owner, x, y, z) VALUES(:type, :class, :owner, 0, 0, 0)",
-        soci::use(type),
-        soci::use(shipClassId),
-        soci::use(ownerId);
-
-    m_sociSession->once <<
-        "SELECT id FROM objects ORDER BY id DESC LIMIT 1",
-        soci::into(id);
-
-    m_sociSession->commit();
-
-    LOG_DEBUG << "  id from the database: " << id;
+    unsigned id = preInsertObjectToDb(shipClassId, ownerId);
 
     auto & shipClass = m_shipClassContainer.getById(shipClassId);
 
@@ -129,5 +112,31 @@ void ObjectFactory::fillCargoHold(const soci::row & row, Common::Game::Object::C
     {
         LOG_WARN << "Error filling cargohold, reason: " << ex.what();
     }
+}
+
+unsigned ObjectFactory::preInsertObjectToDb(unsigned shipClassId, unsigned ownerId)
+{
+    // INSERT INTO objects VALUES(1,   "Ship",     1,     NULL,             1,    2000, 1,     1,    100,      0,     0);
+
+    std::string type = "Ship";
+    unsigned id = 0;
+
+    m_sociSession->begin();
+
+    m_sociSession->once <<
+        "INSERT INTO objects(type, class, owner, x, y, z) VALUES(:type, :class, :owner, 0, 0, 0)",
+        soci::use(type),
+        soci::use(shipClassId),
+        soci::use(ownerId);
+
+    m_sociSession->once <<
+        "SELECT id FROM objects ORDER BY id DESC LIMIT 1",
+        soci::into(id);
+
+    m_sociSession->commit();
+
+    LOG_DEBUG << "  id from the database: " << id;
+
+    return id;
 }
 
