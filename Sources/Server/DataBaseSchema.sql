@@ -1,13 +1,13 @@
 CREATE TABLE users(id INT PRIMARY KEY, login TEXT, password TEXT);
 
 CREATE TABLE objects(
-    id INT PRIMARY KEY,
-    type TEXT,
-    class INT,
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    type TEXT NOT NULL,
+    class INTEGER,
     model TEXT,
-    x INT,
-    y INT,
-    z INT,
+    x INT NOT NULL,
+    y INT NOT NULL,
+    z INT NOT NULL,
     owner INT,
     integrity INT,
     carbon INT,

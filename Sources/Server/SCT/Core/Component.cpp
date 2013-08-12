@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cstdlib>
 #include <signal.h>
+#include <fstream>
 #include <boost/lexical_cast.hpp>
 #include <boost/foreach.hpp>
 
@@ -16,9 +17,12 @@ using namespace ::SCT;
 
 static int s_port = 2000;
 
-Component::Component(const std::string & sociDataBase) : m_sociDataBase(sociDataBase)
+Component::Component(const std::string & sqliteUrl)
 {
-    setConfigValue("--database.url", sociDataBase);
+    m_sqliteUrl = copySqliteDb(sqliteUrl);
+
+    std::string sociUrl = "sqlite3://" + m_sqliteUrl;
+    setConfigValue("--database.url", sociUrl);
 
     std::cout << "\n";
 }
@@ -28,6 +32,8 @@ Component::~Component()
     LOG_INFO << "Killing application, pid: " << m_pid;
 
     ::kill(m_pid, 15);
+    removeDb();
+
     Cake::Threading::Thread::wait(0, 500);
 }
 
@@ -47,7 +53,7 @@ boost::shared_ptr<Connection> Component::createConnection()
 
 boost::shared_ptr<soci::session> Component::createSociSession()
 {
-    return boost::shared_ptr<soci::session>(new soci::session(m_sociDataBase));
+    return boost::shared_ptr<soci::session>(new soci::session("sqlite3://" + m_sqliteUrl));
 }
 
 void Component::start()
@@ -105,5 +111,25 @@ void Component::start()
     {
         Cake::Threading::Thread::wait(0, 500);
     }
+}
+
+std::string Component::copySqliteDb(const std::string & db)
+{
+    std::string ret = tmpnam(nullptr);
+
+    LOG_INFO << "Copying database from: " << db << " to: " << ret;
+
+    std::ifstream src(db, std::ios::binary);
+    std::ofstream dst(ret, std::ios::binary);
+
+    dst << src.rdbuf();
+
+    return ret;
+}
+
+void Component::removeDb()
+{
+    LOG_INFO << "Deleting temporary db: " << m_sqliteUrl;
+    std::remove(m_sqliteUrl.c_str());
 }
 

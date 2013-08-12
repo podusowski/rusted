@@ -14,7 +14,7 @@ namespace SCT
 class Component
 {
 public:
-    Component(const std::string & sociDataBase = "sqlite3://SctDataBase.sqlite3");
+    Component(const std::string & sqliteUrl = "SctDataBase.sqlite3");
     ~Component();
 
     void setConfigValue(const std::string & name, const std::string & value);
@@ -23,10 +23,13 @@ public:
     boost::shared_ptr<soci::session> createSociSession();
 
 private:
+    std::string copySqliteDb(const std::string & db);
+    void removeDb();
+
     pid_t m_pid;
     int m_port;
     std::map<std::string, std::string> m_cmdLineOptions;
-    std::string m_sociDataBase;
+    std::string m_sqliteUrl;
 };
 
 }

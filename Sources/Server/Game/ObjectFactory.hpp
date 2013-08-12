@@ -4,6 +4,8 @@
 
 #include <soci.h>
 
+#include "Cake/DependencyInjection/Inject.hpp"
+
 #include "Common/Game/Object/ObjectBase.hpp"
 #include "IShipClassContainer.hpp"
 #include "IObjectFactory.hpp"
@@ -25,6 +27,7 @@ private:
     void fillCargoHold(const soci::row &, Common::Game::Object::CargoHold &);
 
     IShipClassContainer & m_shipClassContainer;
+    Cake::DependencyInjection::Inject<soci::session> m_sociSession;
 };
 
 }

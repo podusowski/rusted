@@ -66,7 +66,7 @@ TEST(SmokeSct, Smoke)
 
 TEST(SmokeSct, BigDataBase)
 {
-    SCT::Component component("sqlite3://BigDataBase.sqlite3");
+    SCT::Component component("BigDataBase.sqlite3");
     component.start();
 
     boost::shared_ptr<SCT::Connection> connection1;
@@ -82,12 +82,14 @@ TEST(SmokeSct, BigDataBase)
         catch(...)
         {
         }
+
+        throw std::runtime_error("can't connect");
     }
 
     Common::Messages::GetVisibleObjects getVisibleObjects;
     connection1->send(getVisibleObjects);
 
     auto visibleObjects = connection1->receive<Common::Messages::VisibleObjects>();
-    EXPECT_EQ(10000, visibleObjects->objects.size());
+    EXPECT_EQ(10000u, visibleObjects->objects.size());
 }
 

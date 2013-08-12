@@ -33,7 +33,7 @@ TEST(ActionsSct, FetchAvailableActions)
     connection1->send(fetchAvailableActions);
 
     auto availableActions = connection1->receive<Common::Messages::AvailableActions>();
-    ASSERT_EQ(5, availableActions->actions.size());
+    ASSERT_EQ(5u, availableActions->actions.size());
 
     // attack
     EXPECT_EQ(1, availableActions->actions[0].id); // action id
@@ -159,6 +159,13 @@ TEST(ActionsSct, BuildShip)
     connection2->receive<Common::Messages::ShipInfo>();
     connection2->receive<Common::Messages::ShipCourseInfo>();
     connection2->receive<Common::Messages::ObjectCargoInfo>();
+
+    // check database
+    auto sociSession = component.createSociSession();
+    int ownerId = 0;
+    sociSession->once << "SELECT owner FROM objects WHERE id=:id", soci::use(shipInfo->id), soci::into(ownerId);
+
+    EXPECT_EQ(1, ownerId);
 }
 
 TEST(ActionsSct, Gather)

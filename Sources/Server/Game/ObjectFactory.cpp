@@ -73,12 +73,33 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::createShip(un
 {
     LOG_DEBUG << "Creating ship with shipClass:" << shipClassId << ", owner:" << ownerId;
 
+    // INSERT INTO objects VALUES(1,   "Ship",     1,     NULL,             1,    2000, 1,     1,    100,      0,     0);
+
+    std::string type = "Ship";
+    unsigned id = 0;
+
+    m_sociSession->begin();
+
+    m_sociSession->once <<
+        "INSERT INTO objects(type, class, owner, x, y, z) VALUES(:type, :class, :owner, 0, 0, 0)",
+        soci::use(type),
+        soci::use(shipClassId),
+        soci::use(ownerId);
+
+    m_sociSession->once <<
+        "SELECT id FROM objects ORDER BY id DESC LIMIT 1",
+        soci::into(id);
+
+    m_sociSession->commit();
+
+    LOG_DEBUG << "  id from the database: " << id;
+
     auto & shipClass = m_shipClassContainer.getById(shipClassId);
 
     boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
     auto & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
 
-    object->setId(0); // to be assigned by Universe
+    object->setId(id); // to be assigned by Universe
     ship.setOwnerId(ownerId);
     shipClass.applyTo(ship);
     ship.setClass(shipClassId);
@@ -99,7 +120,14 @@ void ObjectFactory::fillCargoHold(const soci::row & row, Common::Game::Object::C
 {
     LOG_DEBUG << "Filling cargoHold";
 
-    cargoHold.setCarbon(row.get<int>("carbon"));
-    cargoHold.setHelium(row.get<int>("helium"));
+    try
+    {
+        cargoHold.setCarbon(row.get<int>("carbon"));
+        cargoHold.setHelium(row.get<int>("helium"));
+    }
+    catch (std::exception & ex)
+    {
+        LOG_WARN << "Error filling cargohold, reason: " << ex.what();
+    }
 }
 

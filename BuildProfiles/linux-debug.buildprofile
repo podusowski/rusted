@@ -1,4 +1,4 @@
 PROFILE:=linux-debug
 CC:=g++
-CFLAGS:=-g -O0 -std=gnu++0x -Wall -Wextra -pedantic
+CFLAGS:=-g -O0 -std=gnu++0x -Wall -pedantic
 

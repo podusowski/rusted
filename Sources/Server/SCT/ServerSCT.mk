@@ -29,6 +29,7 @@ RESOURCES+=SctDataBase.sqlite3
 DEPENDENCIES+=Server
 DEPENDENCIES+=libCommon.a
 DEPENDENCIES+=libCake.a
+DEPENDENCIES+=libgtest-static.a
 
 $(TARGET_BASE)/SctDataBase.sqlite3: $(TARGET_BASE)/../DataBaseSchema.sql $(TARGET_BASE)/SctDataBase.sql
 	@rm -f $@
