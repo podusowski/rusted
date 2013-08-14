@@ -64,6 +64,8 @@ public:
 TEST(ProtocolTest, HandlerCaller)
 {
     SimpleParameters m1;
+    m1.integer = 0;
+    m1.real = 1.0;
 
     std::vector<char> raw;
     CharVectorWriteBuffer writeBuffer(raw);
