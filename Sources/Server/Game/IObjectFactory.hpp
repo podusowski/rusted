@@ -13,7 +13,6 @@ namespace Game
 class IObjectFactory
 {
 public:
-    virtual void loadFromDb() = 0;
     virtual boost::shared_ptr<Common::Game::Object::ObjectBase> create(const soci::row &) = 0;
     virtual boost::shared_ptr<Common::Game::Object::ObjectBase> createShip(unsigned shipClass, unsigned ownerId) = 0;
 
