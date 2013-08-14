@@ -16,6 +16,9 @@ void initDependencies(int argc, const char * argv[])
 {
     using namespace Cake::DependencyInjection;
 
+    auto universe = boost::make_shared<Common::Game::Universe>();
+    forInterface<Common::Game::Universe>().use(universe);
+
     boost::shared_ptr<Common::Game::IRustedTime> rustedTime(new Common::Game::RustedTime);
     forInterface<Common::Game::IRustedTime>()
         .use(rustedTime);
@@ -41,9 +44,6 @@ void initDependencies(int argc, const char * argv[])
 
     forInterface<Common::Math::ISpline3>()
         .useFactory<GenericFactory0<Common::Math::ISpline3, Common::Math::Bezier3>>();
-
-    auto universe = boost::make_shared<Common::Game::Universe>();
-    forInterface<Common::Game::Universe>().use(universe);
 }
 
 int main(int argc, const char * argv[])

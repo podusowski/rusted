@@ -6,6 +6,7 @@
 
 #include "Cake/DependencyInjection/Inject.hpp"
 
+#include "Common/Game/Universe.hpp"
 #include "Common/Game/Object/ObjectBase.hpp"
 #include "IShipClassContainer.hpp"
 #include "IObjectFactory.hpp"
@@ -28,6 +29,7 @@ private:
     unsigned preInsertObjectToDb(unsigned shipClassId, unsigned ownerId);
 
     IShipClassContainer & m_shipClassContainer;
+    Cake::DependencyInjection::Inject<Common::Game::Universe> m_universe;
     Cake::DependencyInjection::Inject<soci::session> m_sociSession;
 };
 
