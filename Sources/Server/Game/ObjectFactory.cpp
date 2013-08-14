@@ -14,6 +14,22 @@ ObjectFactory::ObjectFactory(IShipClassContainer & shipClassContainer) :
 {
 }
 
+void ObjectFactory::loadFromDb()
+{
+    LOG_INFO << "Loading universe state from db";
+
+    int objectCount;
+    m_sociSession->once << "SELECT COUNT(*) FROM objects", soci::into(objectCount);
+    LOG_INFO << "  " << objectCount << " objects";
+
+    soci::rowset<soci::row> objects = (m_sociSession->prepare << "SELECT * FROM objects");
+
+    for (auto it = objects.begin(); it != objects.end(); it++)
+    {
+        m_universe->add(create(*it));
+    }
+}
+
 boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(const soci::row & row)
 {
     using namespace std::placeholders;
