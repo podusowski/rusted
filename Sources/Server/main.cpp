@@ -23,7 +23,7 @@ void initDependencies(int argc, const char * argv[])
     forInterface<Common::Game::IRustedTime>()
         .use(rustedTime);
 
-    boost::shared_ptr<Cake::Configuration::Configuration> configuration(new Cake::Configuration::Configuration(argc, argv));
+    auto configuration = boost::make_shared<Cake::Configuration::Configuration>(argc, argv);
     forInterface<Cake::Configuration::Configuration>()
         .use(configuration);
 
