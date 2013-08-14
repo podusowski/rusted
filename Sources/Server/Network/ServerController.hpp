@@ -19,7 +19,7 @@ class ServerController
 public:
     ServerController();
     int start();
-	
+
 private:
     void gc();
     static void handleSignal(int signum);

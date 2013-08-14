@@ -1,7 +1,6 @@
 #include "Cake/Diagnostics/Logger.hpp"
 
 #include "Server/Services/ServiceDeployment.hpp"
-#include "Game/UniverseLoader.hpp"
 
 using namespace Server::Services;
 
@@ -11,8 +10,6 @@ ServiceDeployment::ServiceDeployment(Cake::Configuration::Configuration & cfg, S
     m_playerService(*m_universe, playerContainer),
     m_entityService(*m_universe, playerContainer)
 {
-    Server::Game::UniverseLoader loader;
-    loader.load(*m_universe);
 }
 
 void ServiceDeployment::deployNewConnection(Server::Network::IConnection & connection)

@@ -16,6 +16,10 @@ void initDependencies(int argc, const char * argv[])
 {
     using namespace Cake::DependencyInjection;
 
+    auto configuration = boost::make_shared<Cake::Configuration::Configuration>(argc, argv);
+    forInterface<Cake::Configuration::Configuration>()
+        .use(configuration);
+
     auto universe = boost::make_shared<Common::Game::Universe>();
     forInterface<Common::Game::Universe>().use(universe);
 
@@ -23,9 +27,11 @@ void initDependencies(int argc, const char * argv[])
     forInterface<Common::Game::IRustedTime>()
         .use(rustedTime);
 
-    auto configuration = boost::make_shared<Cake::Configuration::Configuration>(argc, argv);
-    forInterface<Cake::Configuration::Configuration>()
-        .use(configuration);
+    forInterface<Common::Game::Object::IFlightTrajectory>()
+        .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
+
+    forInterface<Common::Math::ISpline3>()
+        .useFactory<GenericFactory0<Common::Math::ISpline3, Common::Math::Bezier3>>();
 
     boost::shared_ptr<IFactory> sociSessionFactory(new Server::DataBase::SociSessionFactory);
     forInterface<soci::session>()
@@ -39,11 +45,6 @@ void initDependencies(int argc, const char * argv[])
     forInterface<Server::Game::IObjectFactory>()
         .use(objectFactory);
 
-    forInterface<Common::Game::Object::IFlightTrajectory>()
-        .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
-
-    forInterface<Common::Math::ISpline3>()
-        .useFactory<GenericFactory0<Common::Math::ISpline3, Common::Math::Bezier3>>();
 }
 
 int main(int argc, const char * argv[])

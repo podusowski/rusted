@@ -12,6 +12,7 @@ using namespace Server::Game;
 ObjectFactory::ObjectFactory(IShipClassContainer & shipClassContainer) : 
     m_shipClassContainer(shipClassContainer)
 {
+    loadFromDb();
 }
 
 void ObjectFactory::loadFromDb()

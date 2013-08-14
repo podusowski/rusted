@@ -13,7 +13,6 @@ SOURCES+=Services/RustedTimeService.cpp
 SOURCES+=Services/ServiceDeployment.cpp
 SOURCES+=Services/Utils.cpp
 SOURCES+=Game/ObjectFactory.cpp
-SOURCES+=Game/UniverseLoader.cpp
 SOURCES+=Game/PlayerContainer.cpp
 SOURCES+=Game/ShipClass.cpp
 SOURCES+=Game/ShipClassContainer.cpp
