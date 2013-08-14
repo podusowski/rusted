@@ -1,3 +1,4 @@
+#include <boost/make_shared.hpp>
 #include <soci.h>
 
 #include "Cake/DependencyInjection/Registry.hpp"
@@ -5,6 +6,7 @@
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Common/Game/Object/FlightTrajectory.hpp"
 #include "Common/Math/Bezier3.hpp"
+#include "Common/Game/Universe.hpp"
 
 #include "Game/ObjectFactory.hpp"
 #include "Network/ServerController.hpp"
@@ -39,6 +41,9 @@ void initDependencies(int argc, const char * argv[])
 
     forInterface<Common::Math::ISpline3>()
         .useFactory<GenericFactory0<Common::Math::ISpline3, Common::Math::Bezier3>>();
+
+    auto universe = boost::make_shared<Common::Game::Universe>();
+    forInterface<Common::Game::Universe>().use(universe);
 }
 
 int main(int argc, const char * argv[])

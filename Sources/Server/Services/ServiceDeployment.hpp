@@ -31,7 +31,7 @@ public:
 
 private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
-    Common::Game::Universe m_universe;
+    Cake::DependencyInjection::Inject<Common::Game::Universe> m_universe;
 
     Server::Services::ServerInfoService m_serverInfoService;
     Server::Services::RustedTimeService m_rustedTimeService;
