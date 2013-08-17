@@ -86,7 +86,7 @@ Server::Network::IConnection & PlayerContainer::getConnectionById(int playerId)
     throw std::out_of_range("player doesn't exist");
 }
 
-void PlayerContainer::visitOnlinePlayerById(int id, std::function<void(Common::Game::Player &, Network::IConnection &)> visitor)
+void PlayerContainer::invokeOnPlayer(int id, std::function<void(Common::Game::Player &, Network::IConnection &)> function)
 {
     //TODO: optimize
     Cake::Threading::ScopedLock lock(m_mutex);
@@ -94,7 +94,7 @@ void PlayerContainer::visitOnlinePlayerById(int id, std::function<void(Common::G
     {
         if (i.second->getId() == id)
         {
-            visitor(*i.second, *i.first);
+            function(*i.second, *i.first);
             return;
         }
     }
