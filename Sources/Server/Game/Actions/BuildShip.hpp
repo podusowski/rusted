@@ -5,7 +5,7 @@
 
 #include "Server/Game/Actions/IAction.hpp"
 #include "Server/Game/IPlayerContainer.hpp"
-#include "Server/Game/IObjectFactory.hpp"
+#include "Server/Game/IUniverseDataBaseFacade.hpp"
 #include "Server/Game/IShipClassContainer.hpp"
 #include "Server/Services/Utils.hpp"
 
@@ -33,7 +33,7 @@ private:
     Server::Game::IPlayerContainer & m_playerContainer;
     unsigned m_shipClass;
     Server::Services::Utils m_servicesUtils;
-    Cake::DependencyInjection::Inject<IObjectFactory> m_objectFactory;
+    Cake::DependencyInjection::Inject<IUniverseDataBaseFacade> m_universeDataBaseFacade;
     Cake::DependencyInjection::Inject<IShipClassContainer> m_shipClassContainer;
 };
 

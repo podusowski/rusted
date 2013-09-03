@@ -2,14 +2,14 @@
 
 #include <gmock/gmock.h>
 
-#include "Game/IObjectFactory.hpp"
+#include "Game/IUniverseDataBaseFacade.hpp"
 
 namespace Server
 {
 namespace Game
 {
 
-class ObjectFactoryMock : public IObjectFactory
+class UniverseDataBaseFacadeMock : public IUniverseDataBaseFacade
 {
 public:
     MOCK_METHOD1(create, boost::shared_ptr<Common::Game::Object::ObjectBase>(const soci::row &));

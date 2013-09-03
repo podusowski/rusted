@@ -10,13 +10,13 @@ namespace Server
 namespace Game
 {
 
-class IObjectFactory
+class IUniverseDataBaseFacade
 {
 public:
     virtual boost::shared_ptr<Common::Game::Object::ObjectBase> create(const soci::row &) = 0;
     virtual boost::shared_ptr<Common::Game::Object::ObjectBase> createShip(unsigned shipClass, unsigned ownerId) = 0;
 
-    virtual ~IObjectFactory() {}
+    virtual ~IUniverseDataBaseFacade() {}
 };
 
 }

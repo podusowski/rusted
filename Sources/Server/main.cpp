@@ -8,7 +8,7 @@
 #include "Common/Math/Bezier3.hpp"
 #include "Common/Game/Universe.hpp"
 
-#include "Game/ObjectFactory.hpp"
+#include "Game/UniverseDataBaseFacade.hpp"
 #include "Network/ServerController.hpp"
 #include "DataBase/SociSessionFactory.hpp"
 
@@ -41,9 +41,9 @@ void initDependencies(int argc, const char * argv[])
     forInterface<Server::Game::IShipClassContainer>()
         .use(shipClassContainer);
 
-    boost::shared_ptr<Server::Game::IObjectFactory> objectFactory(new Server::Game::ObjectFactory(*shipClassContainer));
-    forInterface<Server::Game::IObjectFactory>()
-        .use(objectFactory);
+    boost::shared_ptr<Server::Game::IUniverseDataBaseFacade> universeDbFacade(new Server::Game::UniverseDataBaseFacade(*shipClassContainer));
+    forInterface<Server::Game::IUniverseDataBaseFacade>()
+        .use(universeDbFacade);
 
 }
 

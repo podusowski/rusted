@@ -50,7 +50,7 @@ TEST_F(BuildShipTest, Build)
     // newly created ship is flying a bit from the creator ship
     EXPECT_CALL(createdShip, setCourse(_)).Times(1);
 
-    EXPECT_CALL(getObjectFactoryMock(), createShip(5, _)).Times(1).WillOnce(Return(createdObject));
+    EXPECT_CALL(getUniverseDataBaseFacadeMock(), createShip(5, _)).Times(1).WillOnce(Return(createdObject));
 
     // one for newly created object and other for focused object
     EXPECT_CALL(connection, send(
@@ -76,6 +76,6 @@ TEST_F(BuildShipTest, Build)
     ASSERT_FALSE(ships.empty());
 
     // hack for gmock bug: http://code.google.com/p/googlemock/issues/detail?id=79
-    testing::Mock::VerifyAndClear(&getObjectFactoryMock());
+    testing::Mock::VerifyAndClear(&getUniverseDataBaseFacadeMock());
 }
 

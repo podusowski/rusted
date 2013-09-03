@@ -2,20 +2,20 @@
 
 #include <boost/make_shared.hpp>
 
-#include "ObjectFactory.hpp"
+#include "UniverseDataBaseFacade.hpp"
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/Asteroid.hpp"
 #include "Server/Game/Actions/Attack.hpp"
 
 using namespace Server::Game;
 
-ObjectFactory::ObjectFactory(IShipClassContainer & shipClassContainer) : 
+UniverseDataBaseFacade::UniverseDataBaseFacade(IShipClassContainer & shipClassContainer) : 
     m_shipClassContainer(shipClassContainer)
 {
     loadFromDb();
 }
 
-void ObjectFactory::loadFromDb()
+void UniverseDataBaseFacade::loadFromDb()
 {
     LOG_INFO << "Loading universe state from db";
 
@@ -31,7 +31,7 @@ void ObjectFactory::loadFromDb()
     }
 }
 
-boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(const soci::row & row)
+boost::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::create(const soci::row & row)
 {
     using namespace std::placeholders;
 
@@ -86,7 +86,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::create(const 
     return boost::shared_ptr<Common::Game::Object::ObjectBase>();
 }
 
-boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::createShip(unsigned shipClassId, unsigned ownerId)
+boost::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::createShip(unsigned shipClassId, unsigned ownerId)
 {
     LOG_DEBUG << "Creating ship with shipClass:" << shipClassId << ", owner:" << ownerId;
 
@@ -107,7 +107,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> ObjectFactory::createShip(un
     return object;
 }
 
-Common::Game::Position ObjectFactory::extractPosition(const soci::row & row)
+Common::Game::Position UniverseDataBaseFacade::extractPosition(const soci::row & row)
 {
     Common::Game::Position position;
     position.setX(row.get<int>("x"));
@@ -116,7 +116,7 @@ Common::Game::Position ObjectFactory::extractPosition(const soci::row & row)
     return position;
 }
 
-void ObjectFactory::fillCargoHold(const soci::row & row, Common::Game::Object::CargoHold & cargoHold)
+void UniverseDataBaseFacade::fillCargoHold(const soci::row & row, Common::Game::Object::CargoHold & cargoHold)
 {
     LOG_DEBUG << "Filling cargoHold";
 
@@ -131,7 +131,7 @@ void ObjectFactory::fillCargoHold(const soci::row & row, Common::Game::Object::C
     }
 }
 
-unsigned ObjectFactory::preInsertObjectToDb(unsigned shipClassId, unsigned ownerId)
+unsigned UniverseDataBaseFacade::preInsertObjectToDb(unsigned shipClassId, unsigned ownerId)
 {
     // INSERT INTO objects VALUES(1,   "Ship",     1,     NULL,             1,    2000, 1,     1,    100,      0,     0);
 

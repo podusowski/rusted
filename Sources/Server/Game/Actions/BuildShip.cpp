@@ -27,7 +27,7 @@ Common::Game::TimeValue BuildShip::start()
 
 Common::Game::TimeValue BuildShip::finish()
 {
-    auto object = m_objectFactory->createShip(m_shipClass, m_player.getId());
+    auto object = m_universeDataBaseFacade->createShip(m_shipClass, m_player.getId());
 
     Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship &>(*object);
     Common::Game::Object::Ship & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());

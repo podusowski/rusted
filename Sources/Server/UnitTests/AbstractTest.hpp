@@ -4,7 +4,7 @@
 #include <gmock/gmock.h>
 #include <boost/shared_ptr.hpp>
 
-#include "Game/UnitTests/ObjectFactoryMock.hpp"
+#include "Game/UnitTests/UniverseDataBaseFacadeMock.hpp"
 #include "Game/UnitTests/ShipClassContainerMock.hpp"
 #include "Cake/DependencyInjection/Registry.hpp"
 #include "Common/Game/UnitTests/RustedTimeStub.hpp"
@@ -29,8 +29,8 @@ public:
         forInterface<Common::Game::Object::IFlightTrajectory>()
             .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
 
-        m_objectFactory = boost::shared_ptr<Server::Game::IObjectFactory>(new Server::Game::ObjectFactoryMock);
-        forInterface<Server::Game::IObjectFactory>().use(m_objectFactory);
+        m_universeDataBaseFacade = boost::shared_ptr<Server::Game::IUniverseDataBaseFacade>(new Server::Game::UniverseDataBaseFacadeMock);
+        forInterface<Server::Game::IUniverseDataBaseFacade>().use(m_universeDataBaseFacade);
 
         m_shipClassContainer = boost::shared_ptr<Game::IShipClassContainer>(new Game::ShipClassContainerMock());
         forInterface<Server::Game::IShipClassContainer>().use(m_shipClassContainer);
@@ -51,9 +51,9 @@ public:
         return dynamic_cast<RustedTimeStub&>(*m_time);
     }
 
-    Server::Game::ObjectFactoryMock & getObjectFactoryMock()
+    Server::Game::UniverseDataBaseFacadeMock & getUniverseDataBaseFacadeMock()
     {
-        return dynamic_cast<Server::Game::ObjectFactoryMock&>(*m_objectFactory);
+        return dynamic_cast<Server::Game::UniverseDataBaseFacadeMock&>(*m_universeDataBaseFacade);
     }
 
     Server::Game::ShipClassContainerMock & getShipClassContainerMock()
@@ -68,7 +68,7 @@ public:
 
 private:
     boost::shared_ptr<Common::Game::IRustedTime> m_time;
-    boost::shared_ptr<Server::Game::IObjectFactory> m_objectFactory;
+    boost::shared_ptr<Server::Game::IUniverseDataBaseFacade> m_universeDataBaseFacade;
     boost::shared_ptr<Server::Game::IShipClassContainer> m_shipClassContainer;
     boost::shared_ptr<Common::Math::ISpline3> m_spline;
     boost::shared_ptr<Cake::Configuration::Configuration> m_cfg;
