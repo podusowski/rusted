@@ -18,6 +18,7 @@ class RustedTime : public IRustedTime, public Cake::Threading::IRunnable
 {
 public:
     RustedTime();
+    ~RustedTime();
     boost::posix_time::ptime getRustedEpoch();
     unsigned getSeconds();
     void setReferenceTime(TimeValue);
@@ -56,6 +57,7 @@ private:
     Cake::Threading::Mutex m_timersMutex;
     Cake::Threading::ConditionVariable m_timersCondition;
     Common::Game::Utilities::IdGenerator m_idGenerator;
+    bool m_finishing;
 };
 
 }

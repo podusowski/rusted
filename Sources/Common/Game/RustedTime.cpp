@@ -6,12 +6,25 @@
 
 using namespace Common::Game;
 
-RustedTime::RustedTime() : 
+RustedTime::RustedTime() :
     m_epoch(now()), 
-    m_timerThread(*this), 
-    m_timersCondition(m_timersMutex)
+    m_timerThread(*this),
+    m_timersCondition(m_timersMutex),
+    m_finishing(false)
 {
     LOG_INFO << "Rusted epoch set to " << m_epoch;
+}
+
+RustedTime::~RustedTime()
+{
+    if (m_timerThread.isRunning())
+    {
+        LOG_DEBUG << "Waiting for timer thread to finish";
+
+        m_finishing = true;
+        m_timersCondition.signal();
+        while (m_finishing) ;
+    }
 }
 
 boost::posix_time::ptime RustedTime::getRustedEpoch()
@@ -92,7 +105,7 @@ boost::posix_time::ptime RustedTime::now()
 
 void RustedTime::run()
 {
-    while (true)
+    while (!m_finishing)
     {
         m_timersMutex.aquire();
         if (m_timers.empty())
@@ -101,37 +114,44 @@ void RustedTime::run()
             m_timersCondition.wait();
         }
 
-        Timer firstTimer = *m_timers.begin();
-        TimeValue t = getCurrentTime();
-
-        if (firstTimer.expiration <= t)
+        if (!m_timers.empty())
         {
-            LOG_DEBUG << "Timer id:" << firstTimer.m_id << " expired";
+            Timer firstTimer = *m_timers.begin();
+            TimeValue t = getCurrentTime();
 
-            m_timersMutex.release();
-
-            try
+            if (firstTimer.expiration <= t)
             {
-                firstTimer.callback();
+                LOG_DEBUG << "Timer id:" << firstTimer.m_id << " expired";
+
+                m_timersMutex.release();
+
+                try
+                {
+                    firstTimer.callback();
+                }
+                catch (std::exception & ex)
+                {
+                    LOG_WARN << "Exception during timer callback: " << ex.what();
+                }
+
+                m_timersMutex.aquire();
+
+                m_timers.erase(m_timers.begin());
             }
-            catch (std::exception & ex)
+            else
             {
-                LOG_WARN << "Exception during timer callback: " << ex.what();
+                TimeValue timeToWait = firstTimer.expiration - t;
+                LOG_DEBUG << "Timer thread as awake but there is no expiration yet, waiting:" << timeToWait << ", now:" << getCurrentTime();
+
+                m_timersCondition.timedWait(timeToWait.getSeconds(), timeToWait.getMiliseconds());
             }
-
-            m_timersMutex.aquire();
-
-            m_timers.erase(m_timers.begin());
-        }
-        else
-        {
-            TimeValue timeToWait = firstTimer.expiration - t;
-            LOG_DEBUG << "Timer thread as awake but there is no expiration yet, waiting:" << timeToWait << ", now:" << getCurrentTime();
-
-            m_timersCondition.timedWait(timeToWait.getSeconds(), timeToWait.getMiliseconds());
         }
 
         m_timersMutex.release();
     }
+
+    LOG_DEBUG << "Timer thread finished";
+
+    m_finishing = false;
 }
 
