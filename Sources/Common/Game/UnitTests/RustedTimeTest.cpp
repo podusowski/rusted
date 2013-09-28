@@ -37,6 +37,23 @@ struct TimerCallbackMock
     MOCK_METHOD1(expired, void(unsigned));
 };
 
+TEST(RustedTimeTest, SafeDestructor)
+{
+    bool b = false;
+    {
+        Common::Game::RustedTime time;
+
+        time.createTimer(TimeValue(0, 1), [&]() -> void
+        {
+            b = true;
+        });
+    }
+
+    Cake::Threading::Thread::wait(0, 500);
+
+    EXPECT_FALSE(b);
+}
+
 TEST(RustedTimeTest, Timers)
 {
     Common::Game::RustedTime time;
