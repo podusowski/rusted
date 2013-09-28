@@ -61,6 +61,50 @@ TEST(KinematicParticleTest, FullMovement)
 }
 
 /*
+         speed
+           ^
+  maxSpeed |
+           |
+           |  /\
+           | /. \
+           |/ .  \
+           '----------> time
+              t1 Tmax
+*/
+TEST(KinematicParticleTest, MovementWithoutMaximumSpeed)
+{
+    float maxSpeed = 2;
+    float acceleration = 1;
+    float targetDistance = 2;
+    float initialSpeed = 0;
+
+    KinematicParticle particle(maxSpeed, acceleration, targetDistance, initialSpeed);
+
+
+    // acceleration phase
+    {
+        EXPECT_FLOAT_EQ(0, particle.calculateDistance(TimeValue(0, 0)));
+
+        /* TODO: ... */
+
+        EXPECT_FLOAT_EQ(0.5, particle.calculateDistance(TimeValue(1, 0)));
+        EXPECT_FLOAT_EQ(1, particle.calculateSpeed(TimeValue(1, 0)));
+    }
+
+    // deceleration phase
+    {
+        EXPECT_FLOAT_EQ(0.875, particle.calculateDistance(TimeValue(1, 500)));
+        EXPECT_FLOAT_EQ(0.5, particle.calculateSpeed(TimeValue(1, 500)));
+    }
+
+    // out of domain
+    {
+        EXPECT_FLOAT_EQ(1, particle.calculateDistance(TimeValue(3, 0)));
+        EXPECT_FLOAT_EQ(0, particle.calculateSpeed(TimeValue(3, 0)));
+    }
+}
+
+/*
               speed
                 ^
                 |
