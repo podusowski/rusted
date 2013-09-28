@@ -24,6 +24,8 @@ TEST(KinematicParticleTest, FullMovement)
 
     KinematicParticle particle(maxSpeed, acceleration, targetDistance);
 
+    EXPECT_EQ(TimeValue(6, 0), particle.getEta(TimeValue()));
+
     // acceleration phase
     {
         EXPECT_FLOAT_EQ(0, particle.calculateDistance(TimeValue(0, 0)));
@@ -80,6 +82,7 @@ TEST(KinematicParticleTest, MovementWithoutMaximumSpeed)
 
     KinematicParticle particle(maxSpeed, acceleration, targetDistance, initialSpeed);
 
+    EXPECT_EQ(TimeValue(2, 0), particle.getEta(TimeValue(0, 0)));
 
     // acceleration phase
     {

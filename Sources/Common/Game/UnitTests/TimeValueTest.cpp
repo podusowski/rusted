@@ -34,3 +34,9 @@ TEST(TimeValueTest, LessThan)
     EXPECT_FALSE(TimeValue(2, 1) < TimeValue(1, 1));
 }
 
+TEST(TimeValueTest, FromSeconds)
+{
+    EXPECT_EQ(TimeValue(1, 0), TimeValue::fromSeconds(1.0));
+    EXPECT_EQ(TimeValue(1, 500), TimeValue::fromSeconds(1.5));
+}
+

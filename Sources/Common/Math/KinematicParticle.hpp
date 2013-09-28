@@ -22,6 +22,7 @@ public:
     float calculateDistance(Common::Game::TimeValue deltaTime) const;
     float calculateSpeed(Common::Game::TimeValue deltaTime) const;
     bool isInRange(Common::Game::TimeValue deltaTime) const;
+    Common::Game::TimeValue getEta(Common::Game::TimeValue currentTime) const;
 
 private:
     float getTimeInSeconds(Common::Game::TimeValue time) const;

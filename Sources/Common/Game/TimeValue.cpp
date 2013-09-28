@@ -1,5 +1,6 @@
 #include <stdexcept>
 #include <sstream>
+#include <cmath>
 
 #include "TimeValue.hpp"
 
@@ -21,6 +22,13 @@ TimeValue::TimeValue(unsigned seconds, unsigned miliseconds) :
         ss << "miliseconds must be in range 0-999, " << miliseconds << " given";
         throw std::runtime_error(ss.str());
     }
+}
+
+TimeValue TimeValue::fromSeconds(float seconds)
+{
+    unsigned full = std::floor(seconds);
+    unsigned fraction = (seconds - full) * 1000;
+    return TimeValue(full, fraction);
 }
 
 unsigned TimeValue::getSeconds() const

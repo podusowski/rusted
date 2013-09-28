@@ -12,6 +12,8 @@ class TimeValue
 public:
     TimeValue();
     TimeValue(unsigned seconds, unsigned miliseconds);
+    static TimeValue fromSeconds(float seconds);
+
     unsigned getSeconds() const;
     unsigned getMiliseconds() const;
     bool operator==(const TimeValue & val) const;

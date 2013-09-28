@@ -1,6 +1,5 @@
 #include <cmath>
 #include <stdexcept>
-#include <iostream>
 
 #include "KinematicParticle.hpp"
 
@@ -82,6 +81,11 @@ bool KinematicParticle::isInRange(Common::Game::TimeValue deltaTime) const
 {
     float t = getTimeInSeconds(deltaTime);
     return t <= m_Tmax;
+}
+
+Common::Game::TimeValue KinematicParticle::getEta(Common::Game::TimeValue currentTime) const
+{
+    return Common::Game::TimeValue::fromSeconds(m_Tmax) - currentTime;
 }
 
 float KinematicParticle::getTimeInSeconds(Common::Game::TimeValue time) const
