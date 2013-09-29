@@ -13,20 +13,8 @@ KinematicParticle::KinematicParticle(float maxSpeed, float acceleration, float t
 
     // precalculated stuff
     m_t1((m_maxSpeed - m_initialSpeed) / m_acceleration),
-    m_Tmax(
-        (
-            m_targetDistance +
-            (
-                std::pow(m_maxSpeed, 2) / float(2 * m_acceleration)
-            )
-            +
-            (
-                std::pow(m_maxSpeed - m_initialSpeed, 2) / float(2 * m_acceleration)
-            )
-        )
-        /
-        m_maxSpeed
-    ),
+    m_willReachMaxSpeed(calculateRoadDuringLinearAcceleration(m_acceleration, m_t1) < m_targetDistance / 2),
+    m_Tmax(calculateTmax()),
     m_t2(m_Tmax - (m_maxSpeed / m_acceleration))
 {
 }
@@ -38,20 +26,40 @@ float KinematicParticle::calculateDistance(Common::Game::TimeValue deltaTime) co
     float t = getTimeInSeconds(deltaTime);
     float S = 0;
 
-    S += m_initialSpeed * std::min(t, m_t1);
-    S += m_acceleration * std::pow(std::min(t, m_t1), 2) / 2.0;
-
-    if (t > m_t1)
+    if (m_willReachMaxSpeed)
     {
-        S += (std::min(t, m_t2) - m_t1) * m_maxSpeed;
-    }
+        S += m_initialSpeed * std::min(t, m_t1);
+        S += m_acceleration * std::pow(std::min(t, m_t1), 2) / 2.0;
 
-    if (t > m_t2)
+        if (t > m_t1)
+        {
+            S += (std::min(t, m_t2) - m_t1) * m_maxSpeed;
+        }
+
+        if (t > m_t2)
+        {
+            float realTime = std::min(t, m_Tmax);
+
+            S += (realTime - m_t2) * m_maxSpeed;
+            S -= std::pow(realTime - m_t2, 2) * m_acceleration / 2.0;
+        }
+    }
+    else
     {
         float realTime = std::min(t, m_Tmax);
+        float halfTime = m_Tmax / 2.0;
 
-        S += (realTime - m_t2) * m_maxSpeed;
-        S -= std::pow(realTime - m_t2, 2) * m_acceleration / 2.0;
+        S += calculateRoadDuringLinearAcceleration(m_acceleration, std::min(realTime, halfTime));
+
+        if (realTime > halfTime)
+        {
+            float eta = m_Tmax - realTime;
+
+            S += calculateRoadDuringLinearAcceleration(
+                m_acceleration,
+                halfTime - eta,
+                eta * m_acceleration);
+        }
     }
 
     return S;
@@ -91,5 +99,33 @@ Common::Game::TimeValue KinematicParticle::getEta(Common::Game::TimeValue curren
 float KinematicParticle::getTimeInSeconds(Common::Game::TimeValue time) const
 {
     return time.getSeconds() + (time.getMiliseconds() / 1000.0);
+}
+
+float KinematicParticle::calculateTmax() const
+{
+    if (m_willReachMaxSpeed)
+    {
+        return (
+            m_targetDistance +
+            (
+                std::pow(m_maxSpeed, 2) / float(2 * m_acceleration)
+            )
+            +
+            (
+                std::pow(m_maxSpeed - m_initialSpeed, 2) / float(2 * m_acceleration)
+            )
+        )
+        /
+        m_maxSpeed;
+    }
+    else
+    {
+        return 2 * std::sqrt(m_targetDistance / m_acceleration);
+    }
+}
+
+float KinematicParticle::calculateRoadDuringLinearAcceleration(float a, float t, float initialSpeed) const
+{
+    return (initialSpeed * t) + (a * std::pow(t, 2) / 2);
 }
 

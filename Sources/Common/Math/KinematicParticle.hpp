@@ -26,6 +26,8 @@ public:
 
 private:
     float getTimeInSeconds(Common::Game::TimeValue time) const;
+    float calculateTmax() const;
+    float calculateRoadDuringLinearAcceleration(float a, float t, float initialSpeed = 0) const;
 
     float m_maxSpeed;
     float m_acceleration;
@@ -34,6 +36,7 @@ private:
 
     // precalculated stuff
     float m_t1;
+    bool m_willReachMaxSpeed;
     float m_Tmax;
     float m_t2;
 };

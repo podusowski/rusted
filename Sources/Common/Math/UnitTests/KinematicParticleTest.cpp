@@ -77,7 +77,7 @@ TEST(KinematicParticleTest, MovementWithoutMaximumSpeed)
 {
     float maxSpeed = 2;
     float acceleration = 1;
-    float targetDistance = 2;
+    float targetDistance = 1;
     float initialSpeed = 0;
 
     KinematicParticle particle(maxSpeed, acceleration, targetDistance, initialSpeed);
