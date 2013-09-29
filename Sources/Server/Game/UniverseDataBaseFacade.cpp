@@ -27,11 +27,11 @@ void UniverseDataBaseFacade::loadFromDb()
 
     for (auto it = objects.begin(); it != objects.end(); it++)
     {
-        m_universe->add(create(*it));
+        loadObjectFromDb(*it);
     }
 }
 
-boost::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::create(const soci::row & row)
+void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
 {
     using namespace std::placeholders;
 
@@ -56,7 +56,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::crea
             fillCargoHold(row, cargoHold);
         });
 
-        return object;
+        m_universe->add(object);
     }
     else if (type == "Asteroid")
     {
@@ -74,7 +74,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::crea
             cargoHold.setCapacity(99999999);
         });
 
-        return object;
+        m_universe->add(object);
     }
     else
     {
@@ -82,8 +82,6 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::crea
         ss << "invalid object type: " << type;
         throw std::runtime_error(ss.str());
     }
-
-    return boost::shared_ptr<Common::Game::Object::ObjectBase>();
 }
 
 boost::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::createShip(unsigned shipClassId, unsigned ownerId)
