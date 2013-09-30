@@ -27,7 +27,7 @@ void Thread::start()
     m_thread = CreateThread(
         0, // Security attributes
         0, // Stack size
-        pFun,
+        Thread::s_run,
         (void *)this,
         CREATE_SUSPENDED,
         &id);
@@ -58,6 +58,7 @@ void Thread::start()
 void Thread::join()
 {
 #ifdef _WIN32
+    throw std::runtime_error("WIN32 not implemented");
 #else
     pthread_join(m_thread, 0);
 #endif
@@ -65,15 +66,23 @@ void Thread::join()
 
 void Thread::wait(int secs, int mili)
 {
+#ifdef _WIN32
+    throw std::runtime_error("WIN32 not implemented");
+#else
     timespec l_ts;
     l_ts.tv_sec = secs;
     l_ts.tv_nsec = mili * 1000 * 1000;
     nanosleep(&l_ts, 0);
+#endif
 }
 
 unsigned Thread::self()
 {
+#ifdef _WIN32
+    throw std::runtime_error("WIN32 not implemented");
+#else
     return pthread_self();
+#endif
 }
 
 void * Thread::s_run(void * threadCtx)
@@ -93,7 +102,9 @@ void * Thread::s_run(void * threadCtx)
     thread.m_isRunning = false;
     thread.m_isRunningLock.release();
 
+#ifndef _WIN32
     pthread_detach(pthread_self());
+#endif
 
     return 0;
 }

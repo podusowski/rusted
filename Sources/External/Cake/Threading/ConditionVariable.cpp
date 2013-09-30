@@ -8,7 +8,7 @@ using namespace Cake::Threading;
 ConditionVariable::ConditionVariable(Mutex & mutex) : m_mutex(mutex)
 {
 #ifdef _WIN32
-    #error not implemented
+    throw std::runtime_error("WIN32 is not supported");
 #else
     pthread_cond_init(&m_condition, 0);
 #endif
@@ -17,7 +17,7 @@ ConditionVariable::ConditionVariable(Mutex & mutex) : m_mutex(mutex)
 ConditionVariable::~ConditionVariable()
 {
 #ifdef _WIN32
-    #error not implemented
+    throw std::runtime_error("WIN32 is not supported");
 #else
     pthread_cond_destroy(&m_condition);
 #endif
@@ -26,7 +26,7 @@ ConditionVariable::~ConditionVariable()
 void ConditionVariable::wait()
 {
 #ifdef _WIN32
-    #error not implemented
+    throw std::runtime_error("WIN32 is not supported");
 #else
     int ret = pthread_cond_wait(&m_condition, m_mutex.getNativeHandle());
 
@@ -40,7 +40,7 @@ void ConditionVariable::wait()
 ETimedWaitResult ConditionVariable::timedWait(unsigned seconds, unsigned miliseconds)
 {
 #ifdef _WIN32
-    #error not implemented
+    throw std::runtime_error("WIN32 is not supported");
 #else
     timeval c;
     gettimeofday(&c, NULL);
@@ -84,7 +84,7 @@ ETimedWaitResult ConditionVariable::timedWait(unsigned seconds, unsigned milisec
 void ConditionVariable::signal()
 {
 #ifdef _WIN32
-    #error not implemented
+    throw std::runtime_error("WIN32 is not supported");
 #else
     pthread_cond_signal(&m_condition);
 #endif
@@ -93,7 +93,7 @@ void ConditionVariable::signal()
 void ConditionVariable::broadcast()
 {
 #ifdef _WIN32
-    #error not implemented
+    throw std::runtime_error("WIN32 is not supported");
 #else
     pthread_cond_broadcast(&m_condition);
 #endif
