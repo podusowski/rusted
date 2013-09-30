@@ -1,6 +1,6 @@
 #pragma once
 
-#include <std/shared_ptr.hpp>
+#include <memory>
 
 #include "Factory.hpp"
 
