@@ -1,5 +1,3 @@
-#include <openssl/md5.h>
-
 #include "Game/Utilities/PasswordHash.hpp"
 
 using namespace Common::Game::Utilities;
