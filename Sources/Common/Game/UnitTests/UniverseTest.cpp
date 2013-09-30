@@ -20,11 +20,11 @@ class UniverseTest : public Common::AbstractTest
 TEST_F(UniverseTest, GetByType)
 {
     Common::Game::Universe universe;
-    boost::shared_ptr<Common::Game::Object::ObjectBase> ship(new Common::Game::Object::Ship());
+    std::shared_ptr<Common::Game::Object::ObjectBase> ship(new Common::Game::Object::Ship());
     ship->setId(1);
     universe.add(ship);
 
-    boost::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::Asteroid());
+    std::shared_ptr<Common::Game::Object::ObjectBase> staticObject(new Common::Game::Object::Asteroid());
     staticObject->setId(2);
     universe.add(staticObject);
 
@@ -35,7 +35,7 @@ TEST_F(UniverseTest, GetByType)
 TEST_F(UniverseTest, GetAll)
 {
     Common::Game::Universe universe;
-    boost::shared_ptr<Common::Game::Object::ObjectBase> ship(new Common::Game::Object::Ship());
+    std::shared_ptr<Common::Game::Object::ObjectBase> ship(new Common::Game::Object::Ship());
     ship->setId(1);
     universe.add(ship);
 

@@ -1,4 +1,4 @@
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <soci.h>
 
 #include "Cake/DependencyInjection/Factory.hpp"
@@ -13,7 +13,7 @@ namespace DataBase
 class SociSessionFactory : public Cake::DependencyInjection::Factory<soci::session>
 {
 public:
-    boost::shared_ptr<soci::session> create();
+    std::shared_ptr<soci::session> create();
 
 private:
     Cake::DependencyInjection::Inject<Cake::Configuration::Configuration> m_cfg;

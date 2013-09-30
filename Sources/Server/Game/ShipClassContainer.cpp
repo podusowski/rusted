@@ -38,7 +38,7 @@ void ShipClassContainer::loadFromDataBase()
 
     for (auto it = classes.begin(); it != classes.end(); it++)
     {
-        boost::shared_ptr<ShipClass> shipClass(new ShipClass(*it));
+        std::shared_ptr<ShipClass> shipClass(new ShipClass(*it));
         auto ret = m_shipClassMap.insert(std::make_pair(shipClass->getId(), shipClass));
         if (!ret.second)
         {

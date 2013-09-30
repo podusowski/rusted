@@ -41,8 +41,8 @@ public:
     }
 
 private:
-    boost::shared_ptr<Common::Game::IRustedTime> m_time;
-    boost::shared_ptr<Common::Game::Object::IFlightTrajectory> m_trajectory;
+    std::shared_ptr<Common::Game::IRustedTime> m_time;
+    std::shared_ptr<Common::Game::Object::IFlightTrajectory> m_trajectory;
 };
 
 TEST_F(ShipTest, SetCourse)

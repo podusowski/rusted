@@ -2,7 +2,7 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "Cake/DependencyInjection/Registry.hpp"
 
@@ -46,9 +46,9 @@ public:
     }
 
 private:
-    boost::shared_ptr<Common::Game::IRustedTime> m_time;
-    boost::shared_ptr<Common::Math::ISpline3> m_spline;
-    boost::shared_ptr<Common::Game::Object::IFlightTrajectory> m_flightTrajectory;
+    std::shared_ptr<Common::Game::IRustedTime> m_time;
+    std::shared_ptr<Common::Math::ISpline3> m_spline;
+    std::shared_ptr<Common::Game::Object::IFlightTrajectory> m_flightTrajectory;
 };
 
 }

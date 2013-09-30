@@ -1,4 +1,4 @@
-#include <boost/make_shared.hpp>
+#include <memory>
 #include <soci.h>
 
 #include "Cake/DependencyInjection/Registry.hpp"
@@ -16,14 +16,14 @@ void initDependencies(int argc, const char * argv[])
 {
     using namespace Cake::DependencyInjection;
 
-    auto configuration = boost::make_shared<Cake::Configuration::Configuration>(argc, argv);
+    auto configuration = std::make_shared<Cake::Configuration::Configuration>(argc, argv);
     forInterface<Cake::Configuration::Configuration>()
         .use(configuration);
 
-    auto universe = boost::make_shared<Common::Game::Universe>();
+    auto universe = std::make_shared<Common::Game::Universe>();
     forInterface<Common::Game::Universe>().use(universe);
 
-    boost::shared_ptr<Common::Game::IRustedTime> rustedTime(new Common::Game::RustedTime);
+    std::shared_ptr<Common::Game::IRustedTime> rustedTime(new Common::Game::RustedTime);
     forInterface<Common::Game::IRustedTime>()
         .use(rustedTime);
 
@@ -33,15 +33,15 @@ void initDependencies(int argc, const char * argv[])
     forInterface<Common::Math::ISpline3>()
         .useFactory<GenericFactory0<Common::Math::ISpline3, Common::Math::Bezier3>>();
 
-    boost::shared_ptr<IFactory> sociSessionFactory(new Server::DataBase::SociSessionFactory);
+    std::shared_ptr<IFactory> sociSessionFactory(new Server::DataBase::SociSessionFactory);
     forInterface<soci::session>()
         .useFactory(sociSessionFactory);
 
-    boost::shared_ptr<Server::Game::IShipClassContainer> shipClassContainer(new Server::Game::ShipClassContainer());
+    std::shared_ptr<Server::Game::IShipClassContainer> shipClassContainer(new Server::Game::ShipClassContainer());
     forInterface<Server::Game::IShipClassContainer>()
         .use(shipClassContainer);
 
-    boost::shared_ptr<Server::Game::IUniverseDataBaseFacade> universeDbFacade(new Server::Game::UniverseDataBaseFacade(*shipClassContainer));
+    std::shared_ptr<Server::Game::IUniverseDataBaseFacade> universeDbFacade(new Server::Game::UniverseDataBaseFacade(*shipClassContainer));
     forInterface<Server::Game::IUniverseDataBaseFacade>()
         .use(universeDbFacade);
 
