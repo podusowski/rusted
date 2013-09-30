@@ -1,6 +1,11 @@
 #pragma once
 
-#include <pthread.h>
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <pthread.h>
+#endif
+
 #include "Mutex.hpp"
 
 namespace Cake
@@ -17,6 +22,13 @@ enum ETimedWaitResult
 class ConditionVariable
 {
 public:
+
+#ifdef _WIN32
+    typedef HANDLE ConditionVariableHandle;
+#else
+    typedef pthread_cond_t ConditionVariableHandle;
+#endif
+
     ConditionVariable(Mutex &); 
     ~ConditionVariable();
     void wait();
@@ -25,7 +37,7 @@ public:
     void broadcast();
 
 private:
-    pthread_cond_t m_condition;
+    ConditionVariableHandle m_condition;
     Mutex & m_mutex;
 };
 

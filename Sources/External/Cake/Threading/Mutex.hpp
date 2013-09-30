@@ -8,7 +8,7 @@
 
 #include "ILock.hpp"
 
-namespace Cake 
+namespace Cake
 {
 namespace Threading
 {
@@ -16,13 +16,20 @@ namespace Threading
 class Mutex : public ILock
 {
 public:
+
+#ifdef _WIN32
+    typedef CRITICAL_SECTION MutexHandle;
+#else
+    typedef pthread_mutex_t MutexHandle;
+#endif
+
     Mutex();
     void aquire();
     void release();
-    pthread_mutex_t * getNativeHandle();
+    MutexHandle * getNativeHandle();
 
 private:
-    pthread_mutex_t m_mutex;
+    MutexHandle m_mutex;
 };
 
 }

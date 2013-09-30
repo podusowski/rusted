@@ -10,10 +10,10 @@ using namespace Cake::Diagnostics;
 
 Logger::Logger() : m_appName("undef")
 {
-    m_banners.insert(std::make_pair(DEBUG,   "\033[1;37mDBG\033[0m"));
-    m_banners.insert(std::make_pair(INFO,    "\033[1;34mINF\033[0m"));
-    m_banners.insert(std::make_pair(WARNING, "\033[1;33mWRN\033[0m"));
-    m_banners.insert(std::make_pair(ERROR,   "\033[1;31mERR\033[0m"));
+    m_banners.insert(std::make_pair(LogLevel_DEBUG,   "\033[1;37mDBG\033[0m"));
+    m_banners.insert(std::make_pair(LogLevel_INFO,    "\033[1;34mINF\033[0m"));
+    m_banners.insert(std::make_pair(LogLevel_WARNING, "\033[1;33mWRN\033[0m"));
+    m_banners.insert(std::make_pair(LogLevel_ERROR,   "\033[1;31mERR\033[0m"));
 }
 
 Logger & Logger::getInstance()

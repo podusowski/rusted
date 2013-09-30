@@ -25,10 +25,10 @@ public:
 
 enum LogLevel
 {
-    DEBUG,
-    INFO,
-    WARNING,
-    ERROR
+    LogLevel_DEBUG,
+    LogLevel_INFO,
+    LogLevel_WARNING,
+    LogLevel_ERROR
 };
 
 class Logger : public ILogStream
@@ -69,12 +69,12 @@ private:
 #ifdef NDEBUG
     #define LOG_DEBUG DUMMY_LOG
 #else
-    #define LOG_DEBUG LOG(Cake::Diagnostics::DEBUG)
+    #define LOG_DEBUG LOG(Cake::Diagnostics::LogLevel_DEBUG)
 #endif
 
-#define LOG_INFO LOG(Cake::Diagnostics::INFO)
-#define LOG_WARN LOG(Cake::Diagnostics::WARNING)
-#define LOG_ERR LOG(Cake::Diagnostics::ERROR)
+#define LOG_INFO LOG(Cake::Diagnostics::LogLevel_INFO)
+#define LOG_WARN LOG(Cake::Diagnostics::LogLevel_WARNING)
+#define LOG_ERR LOG(Cake::Diagnostics::LogLevel_ERROR)
 
 #define TYPENAME(t) Cake::Diagnostics::Logger::Logger::getInstance().demangle(typeid(t).name())
 

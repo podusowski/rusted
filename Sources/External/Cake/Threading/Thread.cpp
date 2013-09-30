@@ -21,6 +21,17 @@ Thread::~Thread()
 void Thread::start()
 {
     m_isRunning = true;
+
+#ifdef _WIN32
+    DWORD id;
+    m_thread = CreateThread(
+        0, // Security attributes
+        0, // Stack size
+        pFun,
+        (void *)this,
+        CREATE_SUSPENDED,
+        &id);
+#else
     int ret = pthread_create(&m_thread, NULL, Thread::s_run, (void *)this);
 
     if (ret == EAGAIN)
@@ -41,11 +52,15 @@ void Thread::start()
         ss << "error during pthread_create: " << ret;
         throw std::runtime_error(ss.str());
     }
+#endif
 }
 
 void Thread::join()
 {
+#ifdef _WIN32
+#else
     pthread_join(m_thread, 0);
+#endif
 }
 
 void Thread::wait(int secs, int mili)

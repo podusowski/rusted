@@ -7,26 +7,41 @@ using namespace Cake::Threading;
 
 ConditionVariable::ConditionVariable(Mutex & mutex) : m_mutex(mutex)
 {
+#ifdef _WIN32
+    #error not implemented
+#else
     pthread_cond_init(&m_condition, 0);
+#endif
 }
 
 ConditionVariable::~ConditionVariable()
 {
+#ifdef _WIN32
+    #error not implemented
+#else
     pthread_cond_destroy(&m_condition);
+#endif
 }
 
 void ConditionVariable::wait()
 {
+#ifdef _WIN32
+    #error not implemented
+#else
     int ret = pthread_cond_wait(&m_condition, m_mutex.getNativeHandle());
 
     if (ret == EPERM)
     {
         throw std::runtime_error("condition variable mutex in not locked");
     }
+#endif
 }
 
 ETimedWaitResult ConditionVariable::timedWait(unsigned seconds, unsigned miliseconds)
 {
+#ifdef _WIN32
+    #error not implemented
+#else
     timeval c;
     gettimeofday(&c, NULL);
 
@@ -63,14 +78,23 @@ ETimedWaitResult ConditionVariable::timedWait(unsigned seconds, unsigned milisec
     {
         throw std::runtime_error("unknown error occured in condition variable pthread_cond_timedwait");
     }
+#endif
 }
 
 void ConditionVariable::signal()
 {
+#ifdef _WIN32
+    #error not implemented
+#else
     pthread_cond_signal(&m_condition);
+#endif
 }
 
 void ConditionVariable::broadcast()
 {
+#ifdef _WIN32
+    #error not implemented
+#else
     pthread_cond_broadcast(&m_condition);
+#endif
 }
