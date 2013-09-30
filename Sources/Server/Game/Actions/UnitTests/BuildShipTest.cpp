@@ -73,8 +73,6 @@ TEST_F(BuildShipTest, Build)
 
     auto ships = universe.get<Common::Game::Object::Ship>();
 
-    ASSERT_FALSE(ships.empty());
-
     // hack for gmock bug: http://code.google.com/p/googlemock/issues/detail?id=79
     testing::Mock::VerifyAndClear(&getUniverseDataBaseFacadeMock());
 }
