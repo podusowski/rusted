@@ -102,6 +102,8 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::crea
     shipClass.applyTo(ship);
     ship.setClass(shipClassId);
 
+    m_universe->add(object);
+
     return object;
 }
 

@@ -36,8 +36,6 @@ Common::Game::TimeValue BuildShip::finish()
     ship.setPosition(focusedObjectPosition);
     ship.setCourse(focusedObjectPosition + Common::Game::Position(10, 10, 0));
 
-    m_universe.add(object);
-
     auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
     {
