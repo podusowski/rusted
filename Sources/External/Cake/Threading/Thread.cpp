@@ -9,8 +9,8 @@
 using namespace Cake::Threading;
 
 Thread::Thread(IRunnable & p_runnable) :
-	m_isRunning(false),
-	m_runnable(p_runnable)
+    m_isRunning(false),
+    m_runnable(p_runnable)
 {
 }
 
@@ -20,8 +20,8 @@ Thread::~Thread()
 
 void Thread::start()
 {
-	m_isRunning = true;
-	int ret = pthread_create(&m_thread, NULL, Thread::m_run, (void *)this);
+    m_isRunning = true;
+    int ret = pthread_create(&m_thread, NULL, Thread::s_run, (void *)this);
 
     if (ret == EAGAIN)
     {
@@ -36,11 +36,11 @@ void Thread::start()
         throw std::runtime_error("no permission to create a thread");
     }
     else if (ret != 0)
-	{
-	    std::stringstream ss;
-	    ss << "error during pthread_create: " << ret;
+    {
+        std::stringstream ss;
+        ss << "error during pthread_create: " << ret;
         throw std::runtime_error(ss.str());
-	}
+    }
 }
 
 void Thread::join()
@@ -50,10 +50,10 @@ void Thread::join()
 
 void Thread::wait(int secs, int mili)
 {
-	timespec l_ts;
-	l_ts.tv_sec = secs;
-	l_ts.tv_nsec = mili * 1000 * 1000;
-	nanosleep(&l_ts, 0);
+    timespec l_ts;
+    l_ts.tv_sec = secs;
+    l_ts.tv_nsec = mili * 1000 * 1000;
+    nanosleep(&l_ts, 0);
 }
 
 unsigned Thread::self()
@@ -61,26 +61,26 @@ unsigned Thread::self()
     return pthread_self();
 }
 
-void * Thread::m_run(void * threadCtx)
+void * Thread::s_run(void * threadCtx)
 {
     Thread & thread = *static_cast<Thread *>(threadCtx);
 
-	try
-	{
-	    thread.m_runnable.run();
-	}
-	catch (...)
-	{
-	}
+    try
+    {
+        thread.m_runnable.run();
+    }
+    catch (...)
+    {
+    }
 
     // basically bool should be atomic but we'll be valgrind clean
-	thread.m_isRunningLock.aquire();
-	thread.m_isRunning = false;
-	thread.m_isRunningLock.release();
+    thread.m_isRunningLock.aquire();
+    thread.m_isRunning = false;
+    thread.m_isRunningLock.release();
 
-	pthread_detach(pthread_self());
+    pthread_detach(pthread_self());
 
-	return 0;
+    return 0;
 }
 
 bool Thread::isRunning()
