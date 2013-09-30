@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "Detail/NullType.hpp"
 #include "Detail/Exception.hpp"
@@ -25,12 +25,12 @@ template<typename Interface, typename Arg1 = Detail::NullType>
 class Factory : public IFactory 
 {
 public:
-    virtual boost::shared_ptr<Interface> create()
+    virtual std::shared_ptr<Interface> create()
     {
         CAKE_DEPENDENCY_INJECTION_EXCEPTION(what << "this fatory doesn't implement this parameters (void)");
     }
 
-    virtual boost::shared_ptr<Interface> create(Arg1 arg1)
+    virtual std::shared_ptr<Interface> create(Arg1 arg1)
     {
         CAKE_DEPENDENCY_INJECTION_EXCEPTION(what << "this fatory doesn't implement this parameters (" << CAKE_DEPENDENCY_INJECTION_TYPENAME(Arg1) << ")");
     }

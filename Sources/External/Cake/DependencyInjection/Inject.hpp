@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "Registry.hpp"
 #include "Interface.hpp"
@@ -16,13 +16,13 @@ template<typename InterfaceType, typename Arg1 = Detail::NullType> class Inject
 public:
     Inject()
     {
-        boost::shared_ptr<Detail::CycleGuard> g = create_cycle_guard();
+        std::shared_ptr<Detail::CycleGuard> g = create_cycle_guard();
         _object = find_factory<Factory<InterfaceType> >().create();
     }
 
     Inject(Arg1 arg1)
     {
-        boost::shared_ptr<Detail::CycleGuard> g = create_cycle_guard();
+        std::shared_ptr<Detail::CycleGuard> g = create_cycle_guard();
         _object = find_factory<Factory<InterfaceType, Arg1> >().create(arg1);
     }
 
@@ -42,7 +42,7 @@ private:
         return Registry::instance().find_interface<InterfaceType>();
     }
 
-    boost::shared_ptr<Detail::CycleGuard> create_cycle_guard()
+    std::shared_ptr<Detail::CycleGuard> create_cycle_guard()
     {
         return find_interface().create_cycle_guard();
     }
@@ -64,7 +64,7 @@ private:
         }
     }
 
-    boost::shared_ptr<InterfaceType> _object;
+    std::shared_ptr<InterfaceType> _object;
 };
 
 }

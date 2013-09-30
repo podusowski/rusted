@@ -1,5 +1,7 @@
 #pragma once
 
+#include <memory>
+
 #include "Detail/Log.hpp"
 #include "Factory.hpp"
 #include "GenericFactory.hpp"
@@ -58,24 +60,24 @@ public:
         m_factory.reset(new GenericFactory0<InterfaceType, Implementation>());
     }
 
-    void use(boost::shared_ptr<InterfaceType> instance)
+    void use(std::shared_ptr<InterfaceType> instance)
     {
-        m_factory = boost::shared_ptr<IFactory>(new instance_factory<InterfaceType>(instance));
+        m_factory = std::shared_ptr<IFactory>(new instance_factory<InterfaceType>(instance));
     }
 
     template<typename Factory> void useFactory()
     {
         // TODO: make it lazy, otherwise we can get troubles when factory is
         // using inject by itself
-        m_factory = boost::shared_ptr<IFactory>(new Factory()); 
+        m_factory = std::shared_ptr<IFactory>(new Factory()); 
     }
 
-    void useFactory(boost::shared_ptr<IFactory> factory)
+    void useFactory(std::shared_ptr<IFactory> factory)
     {
         m_factory = factory;
     }
 
-    boost::shared_ptr<IFactory> get_factory()
+    std::shared_ptr<IFactory> get_factory()
     {
         if (!m_factory.get())
         {
@@ -84,13 +86,13 @@ public:
         return m_factory;
     }
 
-    boost::shared_ptr<Detail::CycleGuard> create_cycle_guard()
+    std::shared_ptr<Detail::CycleGuard> create_cycle_guard()
     {
-        return boost::shared_ptr<Detail::CycleGuard>(new Detail::CycleGuard(m_cycle_counter, typeid(InterfaceType)));
+        return std::shared_ptr<Detail::CycleGuard>(new Detail::CycleGuard(m_cycle_counter, typeid(InterfaceType)));
     }
 
 private:
-    boost::shared_ptr<IFactory> m_factory;
+    std::shared_ptr<IFactory> m_factory;
     unsigned m_cycle_counter;
 };
 

@@ -3,6 +3,7 @@
 #include <map>
 #include <sstream>
 #include <stdexcept>
+#include <memory>
 
 #include "Interface.hpp"
 #include "Detail/Singleton.hpp"
@@ -22,7 +23,7 @@ public:
         interface_map::iterator it = m_interfaces.find(&typeid(InterfaceType));
         if (it == m_interfaces.end())
         {
-            boost::shared_ptr<IInterface> i(new Interface<InterfaceType>());
+            std::shared_ptr<IInterface> i(new Interface<InterfaceType>());
             m_interfaces.insert(std::make_pair(&typeid(InterfaceType), i));
             return dynamic_cast<Interface<InterfaceType>&>(*i);
         }
@@ -48,7 +49,7 @@ public:
     }
 
 private:
-    typedef std::map<const std::type_info *, boost::shared_ptr<IInterface> > interface_map;
+    typedef std::map<const std::type_info *, std::shared_ptr<IInterface> > interface_map;
 
     interface_map m_interfaces;
 };
