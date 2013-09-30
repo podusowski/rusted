@@ -2,7 +2,6 @@
 
 #ifdef _WIN32
     #include <windows.h>
-    #error sorry, WIN32 is not supported
 #else
     #include <pthread.h>
 #endif
@@ -18,6 +17,13 @@ namespace Threading
 class Thread
 {
 public:
+
+#ifdef _WIN32
+    typedef HANDLE ThreadHandle;
+#else
+    typedef pthread_t ThreadHandle;
+#endif
+
     struct Context
     {
         Thread * thread;
@@ -39,7 +45,7 @@ private:
 
     bool m_isRunning;
     IRunnable & m_runnable;
-    pthread_t m_thread;
+    ThreadHandle m_thread;
     Mutex m_isRunningLock;
 };
 
