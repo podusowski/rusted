@@ -94,7 +94,7 @@ class CppOutput:
             "#include <string>\n"
             "#include <ostream>\n"
             "#include <sstream>\n"
-            "#include <boost/shared_ptr.hpp>\n\n"
+            "#include <memory>\n\n"
             "#include <Cake/Networking/Protocol/IWriteBuffer.hpp>\n"
             "#include <Cake/Networking/Protocol/IReadBuffer.hpp>\n"
             "#include \"Cake/Networking/Protocol/BinaryCoder.hpp\"\n"
@@ -380,13 +380,13 @@ class CppMessageFactory:
 
     def __generate_create_from_buffer_method(self):
         s = ""
-        s = s + "\tstatic boost::shared_ptr<AbstractMessage> create("
+        s = s + "\tstatic std::shared_ptr<AbstractMessage> create("
         s = s + "Cake::Networking::Protocol::IReadBuffer & buffer)\n"
         s = s + "\t{\n"
         s = s + "\t\tCake::Networking::Protocol::BinaryDecoder decoder(buffer);\n"
         s = s + "\t\tint id = Id::InvalidMessage;\n"
         s = s + "\t\tdecoder >> id;\n"
-        s = s + "\t\tboost::shared_ptr<AbstractMessage> ret;\n"
+        s = s + "\t\tstd::shared_ptr<AbstractMessage> ret;\n"
         s = s + "\n"
         s = s + "\t\tswitch(id)\n"
         s = s + "\t\t{\n"
@@ -415,9 +415,9 @@ class CppMessageFactory:
 
     def __generate_create_from_string_method(self):
         s = ""
-        s = s + "\tstatic boost::shared_ptr<AbstractMessage> create(const std::string & s)\n"
+        s = s + "\tstatic std::shared_ptr<AbstractMessage> create(const std::string & s)\n"
         s = s + "\t{\n"
-        s = s + "\t\tboost::shared_ptr<AbstractMessage> ret;\n"
+        s = s + "\t\tstd::shared_ptr<AbstractMessage> ret;\n"
         s = s + "\t\tCake::Serialization::Fc fc(s);\n"
 
         for message in self.messages:
