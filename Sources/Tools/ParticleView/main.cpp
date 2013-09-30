@@ -13,7 +13,7 @@ int main(int argc, const char ** argv)
     using namespace Client;
     using namespace Cake::DependencyInjection;
 
-    boost::shared_ptr<Cake::Configuration::Configuration> configuration(new Cake::Configuration::Configuration(argc, argv));
+    std::shared_ptr<Cake::Configuration::Configuration> configuration(new Cake::Configuration::Configuration(argc, argv));
     forInterface<Cake::Configuration::Configuration>().use(configuration);
 
     Graphics::Graphics graphics;

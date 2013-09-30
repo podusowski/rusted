@@ -23,7 +23,7 @@ public:
     {
         for (int i = 0; i < 50; i++)
         {
-            boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(m_component, m_user, m_password); 
+            std::shared_ptr<SCT::Connection> connection1 = authorizeUser(m_component, m_user, m_password); 
 
             Common::Messages::FocusObject focusObject;
             focusObject.id = 1;
@@ -69,7 +69,7 @@ TEST(SmokeSct, BigDataBase)
     SCT::Component component("BigDataBase.sqlite3");
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1;
+    std::shared_ptr<SCT::Connection> connection1;
 
     for (int i = 0; i < 600; i++)
     {

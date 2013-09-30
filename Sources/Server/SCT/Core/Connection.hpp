@@ -57,7 +57,7 @@ public:
 
     void send(::Common::Messages::AbstractMessage & message);
 
-    template<class T> boost::shared_ptr<T> receive()
+    template<class T> std::shared_ptr<T> receive()
     {
         LOG_INFO << "<connection:" << this << "> Waiting for " << TYPENAME(T);
 
@@ -66,7 +66,7 @@ public:
 
         LOG_INFO << "<connection:" << this << "> Received " << *raw;
 
-        auto message = boost::dynamic_pointer_cast<T>(raw);
+        auto message = std::dynamic_pointer_cast<T>(raw);
         if (!message)
         {
             std::stringstream ss;
@@ -97,8 +97,8 @@ public:
             typedef typename Detail::GetMessageType<T1>::type Message1Type;
             typedef typename Detail::GetMessageType<T2>::type Message2Type;
 
-            auto message1 = boost::dynamic_pointer_cast<Message1Type>(raw);
-            auto message2 = boost::dynamic_pointer_cast<Message2Type>(raw);
+            auto message1 = std::dynamic_pointer_cast<Message1Type>(raw);
+            auto message2 = std::dynamic_pointer_cast<Message2Type>(raw);
 
             if (message1 && message2)
             {
@@ -126,7 +126,7 @@ public:
 
 private:
 
-    boost::shared_ptr<Cake::Networking::Socket> m_socket;
+    std::shared_ptr<Cake::Networking::Socket> m_socket;
     static int s_port;
 };
 

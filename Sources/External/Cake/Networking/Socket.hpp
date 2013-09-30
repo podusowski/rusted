@@ -19,8 +19,8 @@ public:
     Socket(int sockFd);
     ~Socket();
 
-    static boost::shared_ptr<Socket> connectToUnixSocket(const std::string & path);
-    static boost::shared_ptr<Socket> connectToTcpSocket(const std::string & address, int port);
+    static std::shared_ptr<Socket> connectToUnixSocket(const std::string & path);
+    static std::shared_ptr<Socket> connectToTcpSocket(const std::string & address, int port);
 
     void send(const void *, size_t);
     void receive(void *, size_t);

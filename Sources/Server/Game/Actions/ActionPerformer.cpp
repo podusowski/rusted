@@ -127,7 +127,7 @@ void ActionPerformer::actionTimerExpired(unsigned internalId, unsigned playerId,
     }
 
     // TODO: shrink critical section
-    boost::shared_ptr<IAction> action = it->second;
+    std::shared_ptr<IAction> action = it->second;
 
     m_ongoingActions.erase(it);
 
@@ -212,7 +212,7 @@ void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId
 }
 
 void ActionPerformer::actionFinished(
-    boost::shared_ptr<Server::Game::Actions::IAction> action,
+    std::shared_ptr<Server::Game::Actions::IAction> action,
     unsigned playerId, unsigned objectId, unsigned actionId)
 {
     Common::Game::TimeValue actionCooldown;

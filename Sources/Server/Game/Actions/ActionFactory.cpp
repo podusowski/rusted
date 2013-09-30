@@ -15,12 +15,12 @@ ActionFactory::ActionFactory(Common::Game::Universe & universe, Server::Game::IP
 {
 }
 
-boost::shared_ptr<IAction> ActionFactory::create(
+std::shared_ptr<IAction> ActionFactory::create(
     Server::Network::IConnection & connection,
     Common::Game::IPlayer & player,
     const ActionParameters & actionParameters)
 {
-    boost::shared_ptr<IAction> ret;
+    std::shared_ptr<IAction> ret;
 
     auto & focusedObject = player.getFocusedObject();
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(focusedObject);
@@ -28,19 +28,19 @@ boost::shared_ptr<IAction> ActionFactory::create(
     switch (actionParameters.actionId)
     {
         case ActionType_Attack:
-            ret = boost::shared_ptr<IAction>(new Attack(m_universe, m_playerContainer, actionParameters));
+            ret = std::shared_ptr<IAction>(new Attack(m_universe, m_playerContainer, actionParameters));
             break;
 
         case ActionType_BuildShip:
-            ret = boost::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer, actionParameters.actionParameter));
+            ret = std::shared_ptr<IAction>(new BuildShip(m_universe, player, m_playerContainer, actionParameters.actionParameter));
             break;
 
         case ActionType_Gather:
-            ret = boost::shared_ptr<IAction>(new Gather(connection, m_playerContainer, player));
+            ret = std::shared_ptr<IAction>(new Gather(connection, m_playerContainer, player));
             break;
 
         case ActionType_Transfer:
-            ret = boost::shared_ptr<IAction>(new Transfer(connection, m_playerContainer, player));
+            ret = std::shared_ptr<IAction>(new Transfer(connection, m_playerContainer, player));
             break;
 
         default:

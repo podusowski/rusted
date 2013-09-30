@@ -24,7 +24,7 @@ private:
     void gc();
     static void handleSignal(int signum);
 
-    std::vector<boost::shared_ptr<ConnectionContext> > m_connections;
+    std::vector<std::shared_ptr<ConnectionContext> > m_connections;
     int m_lastConnectionId;
 
     Cake::DependencyInjection::Inject<Cake::Configuration::Configuration> m_cfg;

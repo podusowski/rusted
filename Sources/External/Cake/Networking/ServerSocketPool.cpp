@@ -4,7 +4,7 @@
 
 using namespace Cake::Networking;
 
-void ServerSocketPool::add(boost::shared_ptr<ServerSocket> server)
+void ServerSocketPool::add(std::shared_ptr<ServerSocket> server)
 {
     m_servers.push_back(server);
 }

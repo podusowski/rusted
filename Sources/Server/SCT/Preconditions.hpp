@@ -34,8 +34,8 @@ public:
     SCT::Connection & getConnection() { return *m_connection; }
 
 private:
-    boost::shared_ptr<SCT::Component> m_component;
-    boost::shared_ptr<SCT::Connection> m_connection;
+    std::shared_ptr<SCT::Component> m_component;
+    std::shared_ptr<SCT::Connection> m_connection;
 };
 
 }

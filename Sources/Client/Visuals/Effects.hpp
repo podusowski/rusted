@@ -21,11 +21,11 @@ public:
     void emitExplosion(VisualObject & object, Common::Game::Position direction);
 
 private:
-    void addEffect(boost::shared_ptr<IEffect>);
+    void addEffect(std::shared_ptr<IEffect>);
     void gc();
 
     Graphics::IGraphics & m_graphics;
-    std::vector<boost::shared_ptr<IEffect> > m_effects;
+    std::vector<std::shared_ptr<IEffect> > m_effects;
 };
 
 }

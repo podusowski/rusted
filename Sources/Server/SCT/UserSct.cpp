@@ -12,7 +12,7 @@ TEST(UserSct, Authorize)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection = component.createConnection();
+    std::shared_ptr<SCT::Connection> connection = component.createConnection();
 
     Common::Messages::UserAuthorizationReq msg;
     msg.login = "user1";
@@ -29,7 +29,7 @@ TEST(UserSct, InvalidPassword)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection = component.createConnection();
+    std::shared_ptr<SCT::Connection> connection = component.createConnection();
 
     Common::Messages::UserAuthorizationReq userAuthorizationReq;
     userAuthorizationReq.login = "user1";
@@ -45,8 +45,8 @@ TEST(UserSct, TwoUsersEntitiesStatusReq)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
-    boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
 
     // first player
     {

@@ -93,7 +93,7 @@ void ObjectService::handle(const Common::Messages::ShipInfo & shipInfo)
     {
         LOG_DEBUG << "New ship visible (id: " << shipInfo.id << ")";
 
-        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
+        std::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
         Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
         ship.setId(shipInfo.id);
         ship.setOwnerId(shipInfo.player_id);
@@ -113,7 +113,7 @@ void ObjectService::handle(const Common::Messages::AsteroidInfo & message)
 {
     try
     {
-        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
+        std::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
 
         object->setId(message.objectId);
         object->setPosition(Common::Game::Position(message.x, message.y, message.z));

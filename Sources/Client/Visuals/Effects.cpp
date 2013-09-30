@@ -29,17 +29,17 @@ void Effects::frameStarted()
 
 void Effects::emitMovingMeshEffect(Common::Game::Position start, Common::Game::Position end, unsigned speed)
 {
-    boost::shared_ptr<IEffect> effect(new MovingMeshEffect(m_graphics, start, end, speed));
+    std::shared_ptr<IEffect> effect(new MovingMeshEffect(m_graphics, start, end, speed));
     addEffect(effect);
 }
 
 void Effects::emitExplosion(VisualObject & object, Common::Game::Position direction)
 {
-    boost::shared_ptr<IEffect> effect(new Explosion(m_graphics, object, direction));
+    std::shared_ptr<IEffect> effect(new Explosion(m_graphics, object, direction));
     addEffect(effect);
 }
 
-void Effects::addEffect(boost::shared_ptr<IEffect> effect)
+void Effects::addEffect(std::shared_ptr<IEffect> effect)
 {
     LOG_DEBUG << "Creating effect: " << TYPENAME(*effect);
 

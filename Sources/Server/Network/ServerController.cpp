@@ -50,7 +50,7 @@ int ServerController::start()
             {
                 LOG_DEBUG << "New connection established";
 
-                boost::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket.first, m_serviceDeployment));
+                std::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket.first, m_serviceDeployment));
 
                 m_connections.push_back(connectionContext);
                 m_playerContainer.add(connectionContext->getConnection());

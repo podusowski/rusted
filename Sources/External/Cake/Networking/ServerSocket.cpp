@@ -17,7 +17,7 @@ ServerSocket::ServerSocket(int sockFd) :
 }
 
 // TODO: refactor
-boost::shared_ptr<ServerSocket> ServerSocket::createTcpServer(unsigned port)
+std::shared_ptr<ServerSocket> ServerSocket::createTcpServer(unsigned port)
 {
     int sockFd = ::socket(PF_INET, SOCK_STREAM, 0);
 
@@ -42,10 +42,10 @@ boost::shared_ptr<ServerSocket> ServerSocket::createTcpServer(unsigned port)
         throw std::runtime_error("can't listen to the socket");
     }
 
-    return boost::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
+    return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
 }
 
-boost::shared_ptr<ServerSocket> ServerSocket::createUnixServer(const std::string & path)
+std::shared_ptr<ServerSocket> ServerSocket::createUnixServer(const std::string & path)
 {
     int sockFd = ::socket(PF_UNIX, SOCK_STREAM, 0);
 
@@ -68,10 +68,10 @@ boost::shared_ptr<ServerSocket> ServerSocket::createUnixServer(const std::string
         throw std::runtime_error("can't listen to the socket");
     }
 
-    return boost::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
+    return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
 }
 
-boost::shared_ptr<Socket> ServerSocket::accept()
+std::shared_ptr<Socket> ServerSocket::accept()
 {
     sockaddr remote_addr;
     socklen_t remote_addr_size = sizeof(remote_addr);
@@ -84,7 +84,7 @@ boost::shared_ptr<Socket> ServerSocket::accept()
         throw std::runtime_error(ss.str());
     }
 
-    return boost::shared_ptr<Socket>(new Socket(sockFd));
+    return std::shared_ptr<Socket>(new Socket(sockFd));
 }
 
 int ServerSocket::getNativeHandle() const

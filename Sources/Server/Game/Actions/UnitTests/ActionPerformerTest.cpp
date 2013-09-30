@@ -53,11 +53,11 @@ public:
     Server::Game::PlayerContainerMock playerContainer;
     Common::Game::PlayerMock player;
     Server::Game::Actions::ActionFactoryMock actionFactory;
-    boost::shared_ptr<Server::Game::Actions::IAction> action1;
-    boost::shared_ptr<Server::Game::Actions::IAction> action2;
+    std::shared_ptr<Server::Game::Actions::IAction> action1;
+    std::shared_ptr<Server::Game::Actions::IAction> action2;
     Common::Game::Universe universe;
-    boost::shared_ptr<Common::Game::Object::ShipMock> ship1;
-    boost::shared_ptr<Common::Game::Object::ShipMock> ship2;
+    std::shared_ptr<Common::Game::Object::ShipMock> ship1;
+    std::shared_ptr<Common::Game::Object::ShipMock> ship2;
 
     static const int ATTACK_ID = 1;
     static const int ATTACK_PARAMETER = 2;

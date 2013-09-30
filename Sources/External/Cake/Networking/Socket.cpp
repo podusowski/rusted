@@ -21,7 +21,7 @@ Socket::~Socket()
     ::close(m_sockFd);
 }
 
-boost::shared_ptr<Socket> Socket::connectToUnixSocket(const std::string & path)
+std::shared_ptr<Socket> Socket::connectToUnixSocket(const std::string & path)
 {
     Detail::SockFdGuard sockFd;
     ATOMIC_SYSCALL(::socket(AF_UNIX, SOCK_STREAM, 0), sockFd, == -1);
@@ -33,10 +33,10 @@ boost::shared_ptr<Socket> Socket::connectToUnixSocket(const std::string & path)
     int result;
     ATOMIC_SYSCALL(::connect(*sockFd, (sockaddr*)&addr, strlen(addr.sun_path) + sizeof(addr.sun_family)), result, == -1);
 
-    return boost::shared_ptr<Socket>(new Socket(sockFd.release()));
+    return std::shared_ptr<Socket>(new Socket(sockFd.release()));
 }
 
-boost::shared_ptr<Socket> Socket::connectToTcpSocket(const std::string & address, int port)
+std::shared_ptr<Socket> Socket::connectToTcpSocket(const std::string & address, int port)
 {
     Detail::SockFdGuard sockFd;
     ATOMIC_SYSCALL(::socket(PF_INET, SOCK_STREAM, 0), sockFd, == -1);
@@ -47,7 +47,7 @@ boost::shared_ptr<Socket> Socket::connectToTcpSocket(const std::string & address
     int result;
     ATOMIC_SYSCALL(::connect(*sockFd, (sockaddr*)&addr, sizeof(sockaddr_in)), result, == -1);
 
-    return boost::shared_ptr<Socket>(new Socket(sockFd.release()));
+    return std::shared_ptr<Socket>(new Socket(sockFd.release()));
 }
 
 void Socket::send(const void * buf, size_t size)

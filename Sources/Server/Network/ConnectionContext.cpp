@@ -2,7 +2,7 @@
 
 using namespace Server::Network;
 
-ConnectionContext::ConnectionContext(boost::shared_ptr<Cake::Networking::Socket> socket, 
+ConnectionContext::ConnectionContext(std::shared_ptr<Cake::Networking::Socket> socket, 
                                      Services::IServiceDeployment & serviceDeployment) :
     m_socket(socket),
     m_connection(*socket, serviceDeployment),

@@ -14,7 +14,7 @@ TEST(ObjectsSct, FetchVisibleObjects)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
 
     Common::Messages::GetVisibleObjects getVisibleObjects;
     connection1->send(getVisibleObjects);
@@ -22,7 +22,7 @@ TEST(ObjectsSct, FetchVisibleObjects)
     // VisibleObjects contains only ids of the objects that are visible by the client, to get
     // more information, GetObjectInfo should be used for each of them
 
-    boost::shared_ptr<Common::Messages::VisibleObjects> visibleObjects = connection1->receive<Common::Messages::VisibleObjects>();
+    std::shared_ptr<Common::Messages::VisibleObjects> visibleObjects = connection1->receive<Common::Messages::VisibleObjects>();
     EXPECT_EQ(5u, visibleObjects->objects.size());
 }
 
@@ -31,7 +31,7 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
 
     Common::Messages::GetObjectInfo getObjectInfo;
     getObjectInfo.id = 2;
@@ -54,7 +54,7 @@ TEST(ObjectsSct, GetObjectInfo_Asteroid)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
 
     Common::Messages::GetObjectInfo getObjectInfo;
     getObjectInfo.id = 3;

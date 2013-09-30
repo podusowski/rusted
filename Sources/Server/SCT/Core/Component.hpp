@@ -19,8 +19,8 @@ public:
 
     void setConfigValue(const std::string & name, const std::string & value);
     void start();
-    boost::shared_ptr<Connection> createConnection();
-    boost::shared_ptr<soci::session> createSociSession();
+    std::shared_ptr<Connection> createConnection();
+    std::shared_ptr<soci::session> createSociSession();
 
 private:
     std::string copySqliteDb(const std::string & db);

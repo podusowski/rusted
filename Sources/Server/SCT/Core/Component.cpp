@@ -44,16 +44,16 @@ void Component::setConfigValue(const std::string & name, const std::string & val
     m_cmdLineOptions[name] = value;
 }
 
-boost::shared_ptr<Connection> Component::createConnection()
+std::shared_ptr<Connection> Component::createConnection()
 {
     LOG_INFO << "Creating new connection";
 
-    return boost::shared_ptr<Connection>(new Connection("127.0.0.1", m_port));
+    return std::shared_ptr<Connection>(new Connection("127.0.0.1", m_port));
 }
 
-boost::shared_ptr<soci::session> Component::createSociSession()
+std::shared_ptr<soci::session> Component::createSociSession()
 {
-    return boost::shared_ptr<soci::session>(new soci::session("sqlite3://" + m_sqliteUrl));
+    return std::shared_ptr<soci::session>(new soci::session("sqlite3://" + m_sqliteUrl));
 }
 
 void Component::start()

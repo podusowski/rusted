@@ -20,7 +20,7 @@ TEST(ActionsSct, FetchAvailableActions)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
 
     // actions are attached to focused object so we have to have one
     Common::Messages::FocusObject focusObject;
@@ -61,8 +61,8 @@ TEST(ActionsSct, AttackObject)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
-    boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
 
     // client has to focus its own object 
     Common::Messages::FocusObject focusObject;
@@ -120,8 +120,8 @@ TEST(ActionsSct, BuildShip)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
-    boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
 
     // client has to focus its own object 
     Common::Messages::FocusObject focusObject;
@@ -173,7 +173,7 @@ TEST(ActionsSct, Gather)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
 
     // client has to focus its own gather capable object 
     Common::Messages::FocusObject focusObject;
@@ -218,8 +218,8 @@ TEST(ActionsSct, Transfer)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
-    boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
 
     // focus some ship
     Common::Messages::FocusObject focusObject;
@@ -257,7 +257,7 @@ TEST(ActionsSct, ExecuteActionInLoop)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
 
     // client has to focus its own gather capable object 
     Common::Messages::FocusObject focusObject;

@@ -23,7 +23,7 @@ public:
 private:
     void loadFromDataBase();
 
-    std::map<unsigned, boost::shared_ptr<ShipClass> > m_shipClassMap;
+    std::map<unsigned, std::shared_ptr<ShipClass> > m_shipClassMap;
 
     Cake::DependencyInjection::Inject<soci::session> m_sociSession;
 };

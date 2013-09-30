@@ -12,10 +12,10 @@ namespace Networking
 class ServerSocket
 {
 public:
-    static boost::shared_ptr<ServerSocket> createTcpServer(unsigned port);
-    static boost::shared_ptr<ServerSocket> createUnixServer(const std::string & path);
+    static std::shared_ptr<ServerSocket> createTcpServer(unsigned port);
+    static std::shared_ptr<ServerSocket> createUnixServer(const std::string & path);
 
-    boost::shared_ptr<Socket> accept();
+    std::shared_ptr<Socket> accept();
     int getNativeHandle() const;
 
 private:

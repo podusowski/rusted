@@ -35,7 +35,7 @@ TEST(ProtocolTest, SimpleParameters)
     m1.serialize(writeBuffer);
 
     CharVectorReadBuffer readBuffer(raw);
-    boost::shared_ptr<AbstractMessage> abstract = MessageFactory::create(readBuffer);
+    std::shared_ptr<AbstractMessage> abstract = MessageFactory::create(readBuffer);
 
     auto & m2 = dynamic_cast<SimpleParameters&>(*abstract);
 
@@ -72,7 +72,7 @@ TEST(ProtocolTest, HandlerCaller)
     m1.serialize(writeBuffer);
 
     CharVectorReadBuffer readBuffer(raw);
-    boost::shared_ptr<AbstractMessage> abstract = MessageFactory::create(readBuffer);
+    std::shared_ptr<AbstractMessage> abstract = MessageFactory::create(readBuffer);
 
     SampleServiceMock serviceMock;
 
@@ -85,7 +85,7 @@ TEST(ProtocolTest, HandlerCaller)
 TEST(ProtocolTest, FcDecoder)
 {
     auto msg = MessageFactory::create("SimpleMessage(1)");
-    auto simple = boost::dynamic_pointer_cast<SimpleMessage>(msg);
+    auto simple = std::dynamic_pointer_cast<SimpleMessage>(msg);
 
     EXPECT_EQ(Id::SimpleMessage, msg->getId());
     EXPECT_EQ(1, simple->integer);

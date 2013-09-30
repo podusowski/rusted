@@ -64,8 +64,8 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
-    boost::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
 
     // we will need this later
     Common::Messages::RustedTimeEpochReq rustedTimeEpochReq;

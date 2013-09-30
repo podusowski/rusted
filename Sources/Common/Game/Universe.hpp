@@ -18,16 +18,16 @@ namespace Game
 class Universe
 {
 public:
-    typedef std::vector<boost::shared_ptr<Object::ObjectBase> > Objects;
+    typedef std::vector<std::shared_ptr<Object::ObjectBase> > Objects;
     typedef boost::function<void(Common::Game::Object::ObjectBase &)> ObjectAddedCallback;
 
-    void add(boost::shared_ptr<Object::ObjectBase> object);
+    void add(std::shared_ptr<Object::ObjectBase> object);
     bool has(unsigned id);
     bool isOwnedBy(unsigned objectId, unsigned ownerId);
 
     template<class ObjectType> ObjectType & getById(unsigned id)
     {
-        std::map<unsigned, boost::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.find(id);
+        std::map<unsigned, std::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.find(id);
 
         if (it != m_objects.end())
         {
@@ -50,11 +50,11 @@ public:
         }
     }
 
-    template<class ObjectType> std::vector<boost::shared_ptr<Object::ObjectBase> > getByOwnerId(unsigned id)
+    template<class ObjectType> std::vector<std::shared_ptr<Object::ObjectBase> > getByOwnerId(unsigned id)
     {
-        std::vector<boost::shared_ptr<Object::ObjectBase> > ret;
+        std::vector<std::shared_ptr<Object::ObjectBase> > ret;
 
-        for (std::map<unsigned, boost::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.begin();
+        for (std::map<unsigned, std::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.begin();
              it != m_objects.end(); it++)
         {
             if (typeid(*it->second) == typeid(ObjectType) 
@@ -67,11 +67,11 @@ public:
         return ret;
     }
 
-    template<class ObjectType> std::vector<boost::shared_ptr<Object::ObjectBase> > get()
+    template<class ObjectType> std::vector<std::shared_ptr<Object::ObjectBase> > get()
     {
-        std::vector<boost::shared_ptr<Object::ObjectBase> > ret;
+        std::vector<std::shared_ptr<Object::ObjectBase> > ret;
 
-        for (std::map<unsigned, boost::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.begin();
+        for (std::map<unsigned, std::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.begin();
              it != m_objects.end(); it++)
         {
             if (it->second->is<ObjectType>())
@@ -87,7 +87,7 @@ public:
     {
         Objects ret;
 
-        for (std::map<unsigned, boost::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.begin();
+        for (std::map<unsigned, std::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.begin();
              it != m_objects.end(); it++)
         {
             ret.push_back(it->second);
@@ -100,7 +100,7 @@ public:
     void addObjectAddedCallback(ObjectAddedCallback);
 
 private:
-    std::map<unsigned, boost::shared_ptr<Object::ObjectBase> > m_objects;
+    std::map<unsigned, std::shared_ptr<Object::ObjectBase> > m_objects;
     std::vector<ObjectAddedCallback> m_objectAddedCallbacks;
     Common::Game::Utilities::IdGenerator m_idGenerator;
 };

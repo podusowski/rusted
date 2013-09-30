@@ -14,13 +14,13 @@ namespace Networking
 class ServerSocketPool
 {
 public:
-    typedef std::pair<boost::shared_ptr<Socket>, boost::shared_ptr<ServerSocket>> AcceptReturnType;
+    typedef std::pair<std::shared_ptr<Socket>, std::shared_ptr<ServerSocket>> AcceptReturnType;
 
-    void add(boost::shared_ptr<ServerSocket> server);
+    void add(std::shared_ptr<ServerSocket> server);
     AcceptReturnType accept();
 
 private:
-    std::vector<boost::shared_ptr<ServerSocket>> m_servers;
+    std::vector<std::shared_ptr<ServerSocket>> m_servers;
 };
 
 }

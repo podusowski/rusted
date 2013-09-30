@@ -39,7 +39,7 @@ void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
 
     if (type == "Ship")
     {
-        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
+        std::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
 
         Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
 
@@ -60,7 +60,7 @@ void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
     }
     else if (type == "Asteroid")
     {
-        boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
+        std::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
 
         object->setId(row.get<int>("id"));
         object->setModel(row.get<std::string>("model"));
@@ -84,7 +84,7 @@ void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
     }
 }
 
-boost::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::createShip(unsigned shipClassId, unsigned ownerId)
+std::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::createShip(unsigned shipClassId, unsigned ownerId)
 {
     LOG_DEBUG << "Creating ship with shipClass:" << shipClassId << ", owner:" << ownerId;
 
@@ -94,7 +94,7 @@ boost::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::crea
 
     auto & shipClass = m_shipClassContainer.getById(shipClassId);
 
-    boost::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
+    std::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
     auto & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
 
     object->setId(id);

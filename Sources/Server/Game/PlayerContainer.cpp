@@ -41,7 +41,7 @@ void PlayerContainer::add(Network::IConnection & connection)
 {
     LOG_DEBUG << "Adding new connection: " << &connection << " and assiociating it with new player";
 
-    boost::shared_ptr<Common::Game::Player> player(new Common::Game::Player());
+    std::shared_ptr<Common::Game::Player> player(new Common::Game::Player());
 
     Cake::Threading::ScopedLock lock(m_mutex);
     m_connectionMap.insert(std::make_pair(&connection, player));
@@ -101,11 +101,11 @@ void PlayerContainer::invokeOnPlayer(int id, std::function<void(Common::Game::Pl
     throw std::out_of_range("player doesn't exist");
 }
 
-std::vector<boost::shared_ptr<Common::Game::Player> > PlayerContainer::getAll(Common::Game::PlayerState state)
+std::vector<std::shared_ptr<Common::Game::Player> > PlayerContainer::getAll(Common::Game::PlayerState state)
 {
     Cake::Threading::ScopedLock lock(m_mutex);
 
-    std::vector<boost::shared_ptr<Common::Game::Player> > ret;
+    std::vector<std::shared_ptr<Common::Game::Player> > ret;
 
     for (auto it = m_connectionMap.begin(); it != m_connectionMap.end(); it++)
     {

@@ -31,9 +31,9 @@ public:
 
 private:
     Cake::Configuration::Configuration & m_cfg;
-    boost::shared_ptr<Cake::Networking::Socket> m_socket;
+    std::shared_ptr<Cake::Networking::Socket> m_socket;
     std::vector<IConnectionListener *> m_listeners;
-    std::queue<boost::shared_ptr<Common::Messages::AbstractMessage>> m_messages;
+    std::queue<std::shared_ptr<Common::Messages::AbstractMessage>> m_messages;
 };
 
 }

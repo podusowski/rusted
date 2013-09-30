@@ -12,7 +12,7 @@ namespace Game
 class UniverseDataBaseFacadeMock : public IUniverseDataBaseFacade
 {
 public:
-    MOCK_METHOD2(createShip, boost::shared_ptr<Common::Game::Object::ObjectBase>(unsigned, unsigned));
+    MOCK_METHOD2(createShip, std::shared_ptr<Common::Game::Object::ObjectBase>(unsigned, unsigned));
 };
 
 }

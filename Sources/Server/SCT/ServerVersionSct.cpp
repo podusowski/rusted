@@ -12,7 +12,7 @@ TEST(ServerVersionSct, testServerVersion)
     SCT::Component component;
     component.start();
 
-    boost::shared_ptr<SCT::Connection> connection = component.createConnection();
+    std::shared_ptr<SCT::Connection> connection = component.createConnection();
 
     Common::Messages::ServerVersionReq msg;
     connection->send(msg);
@@ -29,7 +29,7 @@ TEST(ServerVersionSct, FewConnections)
 
     for (int i = 0; i < 5; i++)
     {
-        boost::shared_ptr<SCT::Connection> connection = component.createConnection();
+        std::shared_ptr<SCT::Connection> connection = component.createConnection();
 
         Common::Messages::ServerVersionReq msg;
         connection->send(msg);

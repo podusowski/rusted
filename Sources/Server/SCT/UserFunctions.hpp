@@ -9,11 +9,11 @@
 namespace SCT
 {
 
-inline boost::shared_ptr<SCT::Connection> authorizeUser(SCT::Component & component, const std::string & login, const std::string & password)
+inline std::shared_ptr<SCT::Connection> authorizeUser(SCT::Component & component, const std::string & login, const std::string & password)
 {
     using namespace Common::Messages;
 
-    boost::shared_ptr<SCT::Connection> connection = component.createConnection();
+    std::shared_ptr<SCT::Connection> connection = component.createConnection();
 
     UserAuthorizationReq userAuthorizationReq;
     userAuthorizationReq.login = login;

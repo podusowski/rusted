@@ -23,7 +23,7 @@ void Connection::run()
         using namespace Common::Messages;
 
         Cake::Networking::Protocol::CakeReadBuffer buffer(*m_socket);
-        boost::shared_ptr<AbstractMessage> message = MessageFactory::create(buffer);
+        std::shared_ptr<AbstractMessage> message = MessageFactory::create(buffer);
 
         LOG_DEBUG << "Message received: " << *message << ", putting it on the queue";
         m_messages.push(message);

@@ -23,16 +23,16 @@ public:
     {
         using namespace Cake::DependencyInjection;
 
-        m_time = boost::shared_ptr<Common::Game::IRustedTime>(new RustedTimeStub);
+        m_time = std::shared_ptr<Common::Game::IRustedTime>(new RustedTimeStub);
         Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_time);
 
         forInterface<Common::Game::Object::IFlightTrajectory>()
             .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
 
-        m_universeDataBaseFacade = boost::shared_ptr<Server::Game::IUniverseDataBaseFacade>(new Server::Game::UniverseDataBaseFacadeMock);
+        m_universeDataBaseFacade = std::shared_ptr<Server::Game::IUniverseDataBaseFacade>(new Server::Game::UniverseDataBaseFacadeMock);
         forInterface<Server::Game::IUniverseDataBaseFacade>().use(m_universeDataBaseFacade);
 
-        m_shipClassContainer = boost::shared_ptr<Game::IShipClassContainer>(new Game::ShipClassContainerMock());
+        m_shipClassContainer = std::shared_ptr<Game::IShipClassContainer>(new Game::ShipClassContainerMock());
         forInterface<Server::Game::IShipClassContainer>().use(m_shipClassContainer);
 
         forInterface<Common::Math::ISpline3>().use(m_spline);
@@ -67,11 +67,11 @@ public:
     }
 
 private:
-    boost::shared_ptr<Common::Game::IRustedTime> m_time;
-    boost::shared_ptr<Server::Game::IUniverseDataBaseFacade> m_universeDataBaseFacade;
-    boost::shared_ptr<Server::Game::IShipClassContainer> m_shipClassContainer;
-    boost::shared_ptr<Common::Math::ISpline3> m_spline;
-    boost::shared_ptr<Cake::Configuration::Configuration> m_cfg;
+    std::shared_ptr<Common::Game::IRustedTime> m_time;
+    std::shared_ptr<Server::Game::IUniverseDataBaseFacade> m_universeDataBaseFacade;
+    std::shared_ptr<Server::Game::IShipClassContainer> m_shipClassContainer;
+    std::shared_ptr<Common::Math::ISpline3> m_spline;
+    std::shared_ptr<Cake::Configuration::Configuration> m_cfg;
 };
 
 }

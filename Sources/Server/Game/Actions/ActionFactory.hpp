@@ -24,7 +24,7 @@ class ActionFactory : public IActionFactory
 public:
     ActionFactory(Common::Game::Universe &, Server::Game::IPlayerContainer &);
 
-    boost::shared_ptr<Server::Game::Actions::IAction> create(
+    std::shared_ptr<Server::Game::Actions::IAction> create(
         Server::Network::IConnection & connection,
         Common::Game::IPlayer &,
         const ActionParameters &);

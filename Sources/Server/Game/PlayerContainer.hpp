@@ -32,7 +32,7 @@ public:
 
     void invokeOnPlayer(int, std::function<void(Common::Game::Player &, Network::IConnection &)>);
 
-    std::vector<boost::shared_ptr<Common::Game::Player> > getAll(Common::Game::PlayerState state);
+    std::vector<std::shared_ptr<Common::Game::Player> > getAll(Common::Game::PlayerState state);
     std::vector<Network::IConnection *> getAllConnections(Common::Game::PlayerState state);
 
     PlayerSummary getPlayerSummary(int id);
@@ -40,7 +40,7 @@ public:
 private:
     int checkCredentials(const std::string & login, const std::string & password);
 
-    std::map<Network::IConnection *, boost::shared_ptr<Common::Game::Player> > m_connectionMap;
+    std::map<Network::IConnection *, std::shared_ptr<Common::Game::Player> > m_connectionMap;
 
     Cake::Threading::Mutex m_mutex;
 

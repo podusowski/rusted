@@ -70,7 +70,7 @@ private:
     void actionCooldownExpired(unsigned playerId, unsigned objectId, unsigned actionId);
 
     void actionFinished(
-        boost::shared_ptr<Server::Game::Actions::IAction> action,
+        std::shared_ptr<Server::Game::Actions::IAction> action,
         unsigned playerId,
         unsigned objectId,
         unsigned actionId);
@@ -80,7 +80,7 @@ private:
     Common::Game::Universe & m_universe;
     Server::Game::IPlayerContainer & m_playerContainer;
     std::set<unsigned> m_playerGlobalCooldowns;
-    std::map<unsigned, boost::shared_ptr<IAction> > m_ongoingActions;
+    std::map<unsigned, std::shared_ptr<IAction> > m_ongoingActions;
     std::set<Detail::OngoingOrCoolingAction> m_ongogingOrCoolingActions;
     Cake::Threading::Mutex m_ongoingActionsMutex;
     Common::Game::Utilities::IdGenerator m_idGenerator;

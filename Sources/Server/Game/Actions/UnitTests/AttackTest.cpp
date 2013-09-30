@@ -26,8 +26,8 @@ public:
         universe.add(ship2);
     }
 
-    boost::shared_ptr<Common::Game::Object::ShipMock> ship1;
-    boost::shared_ptr<Common::Game::Object::ShipMock> ship2;
+    std::shared_ptr<Common::Game::Object::ShipMock> ship1;
+    std::shared_ptr<Common::Game::Object::ShipMock> ship2;
     Common::Game::Universe universe;
 
     static const int ATTACK_ID = 1;

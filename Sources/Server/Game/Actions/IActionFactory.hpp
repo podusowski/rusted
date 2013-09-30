@@ -19,7 +19,7 @@ class IActionFactory
 public:
     virtual ~IActionFactory() {}
 
-    virtual boost::shared_ptr<Server::Game::Actions::IAction> create(
+    virtual std::shared_ptr<Server::Game::Actions::IAction> create(
         Server::Network::IConnection &,
         Common::Game::IPlayer &,
         const ActionParameters &) = 0;

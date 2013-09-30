@@ -24,7 +24,7 @@ TEST_F(BuildShipTest, Build)
     Common::Game::Universe universe; 
     Common::Game::PlayerMock player;
     Common::Game::Object::ShipMock focusedShip;
-    boost::shared_ptr<Common::Game::Object::ObjectBase> createdObject(new Common::Game::Object::ShipMock);
+    std::shared_ptr<Common::Game::Object::ObjectBase> createdObject(new Common::Game::Object::ShipMock);
     Server::Network::ConnectionMock connection;
     Server::Game::PlayerContainerMock playerContainer;
     Server::Game::ShipClassMock shipClass;

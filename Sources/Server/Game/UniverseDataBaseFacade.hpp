@@ -20,7 +20,7 @@ class UniverseDataBaseFacade : public IUniverseDataBaseFacade
 {
 public:
     UniverseDataBaseFacade(IShipClassContainer &);
-    boost::shared_ptr<Common::Game::Object::ObjectBase> createShip(unsigned shipClass, unsigned ownerId);
+    std::shared_ptr<Common::Game::Object::ObjectBase> createShip(unsigned shipClass, unsigned ownerId);
 
 private:
     void loadFromDb();

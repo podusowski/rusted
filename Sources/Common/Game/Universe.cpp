@@ -6,7 +6,7 @@
 
 using namespace Common::Game;
 
-void Universe::add(boost::shared_ptr<Object::ObjectBase> object)
+void Universe::add(std::shared_ptr<Object::ObjectBase> object)
 {
     LOG_DEBUG << "Adding " << TYPENAME(*object) << " with id: " << object->getId();
 

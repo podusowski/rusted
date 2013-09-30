@@ -55,10 +55,10 @@ struct Object
 
 int main(int argc, const char ** argv)
 {
-    boost::shared_ptr<Common::Game::IRustedTime> time(new Common::Game::RustedTime());
+    std::shared_ptr<Common::Game::IRustedTime> time(new Common::Game::RustedTime());
     forInterface<Common::Game::IRustedTime>().use(time);
 
-    boost::shared_ptr<Cake::Configuration::Configuration> configuration(new Cake::Configuration::Configuration(argc, argv));
+    std::shared_ptr<Cake::Configuration::Configuration> configuration(new Cake::Configuration::Configuration(argc, argv));
     forInterface<Cake::Configuration::Configuration>().use(configuration);
 
     forInterface<Common::Game::Object::IFlightTrajectory>()
