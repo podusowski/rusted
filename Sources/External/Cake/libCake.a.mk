@@ -1,7 +1,11 @@
 TARGET:=libCake.a
 TYPE:=static_library
 
-CFLAGS+=-I. -I.. -I$(TARGET_BASE) -I$(TARGET_BASE)/..
+CFLAGS+=-I.
+CFLAGS+=-I..
+CFLAGS+=-I$(TARGET_BASE)
+CFLAGS+=-I$(TARGET_BASE)/..
+CFLAGS+=-I$(TARGET_BASE)/../boost_1_54_0/
 
 SOURCES+=Configuration/Configuration.cpp
 
