@@ -71,7 +71,7 @@ TEST(SmokeSct, BigDataBase)
 
     std::shared_ptr<SCT::Connection> connection1;
 
-    for (int i = 0; i < 600; i++)
+    for (int i = 0; i < 1800; i++)
     {
         try
         {
