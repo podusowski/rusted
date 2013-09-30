@@ -1,3 +1,5 @@
+#include <memory>
+
 #include "Cake/DependencyInjection/Registry.hpp"
 #include "Cake/Diagnostics/Logger.hpp"
 
@@ -10,10 +12,10 @@ void initDependencies(int argc, const char * argv[])
 {
     using namespace Cake::DependencyInjection;
 
-    boost::shared_ptr<Common::Game::IRustedTime> rustedTime(new Common::Game::RustedTime);
+    std::shared_ptr<Common::Game::IRustedTime> rustedTime(new Common::Game::RustedTime);
     forInterface<Common::Game::IRustedTime>().use(rustedTime);
 
-    boost::shared_ptr<Cake::Configuration::Configuration> configuration(new Cake::Configuration::Configuration(argc, argv));
+    std::shared_ptr<Cake::Configuration::Configuration> configuration(new Cake::Configuration::Configuration(argc, argv));
     forInterface<Cake::Configuration::Configuration>().use(configuration);
 
     forInterface<Common::Game::Object::IFlightTrajectory>()
