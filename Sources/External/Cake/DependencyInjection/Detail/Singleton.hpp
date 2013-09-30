@@ -1,8 +1,6 @@
 #pragma once
 
-#include <boost/shared_ptr.hpp>
-
-namespace Cake 
+namespace Cake
 {
 namespace DependencyInjection
 {

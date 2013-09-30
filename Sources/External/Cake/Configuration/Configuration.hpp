@@ -3,7 +3,7 @@
 #include <stdexcept>
 #include <string>
 #include <map>
-#include <boost/lexical_cast.hpp>
+#include <sstream>
 
 namespace Cake 
 {
@@ -21,7 +21,7 @@ public:
     {
         if (m_properties.find(name) == m_properties.end())
             throw std::out_of_range("no such property " + name);
-        return boost::lexical_cast<T>(m_properties[name]);
+        return convert<T>(m_properties[name]);
     }
 
     template <typename T>
@@ -29,13 +29,13 @@ public:
     {
         if (m_properties.find(name) == m_properties.end())
             return def;
-        return boost::lexical_cast<T>(m_properties[name]);
+        return convert<T>(m_properties[name]);
     }
 
     template <typename T>
     void setValue(const std::string & name, const T & value)
     {
-        m_properties[name] = boost::lexical_cast<std::string>(value);
+        m_properties[name] = convert<std::string>(value);
     }
 
     bool hasValue(const std::string & name);
@@ -45,6 +45,15 @@ public:
 private:
     void parse(const std::string & filename);
     void parse(int argc, const char * argv[]);
+
+    template<typename T, typename U> T convert(U value) const
+    {
+        T ret;
+        std::stringstream ss;
+        ss << value;
+        ss >> ret;
+        return ret;
+    }
 
     std::map<std::string, std::string> m_properties;
     std::string m_appName;
