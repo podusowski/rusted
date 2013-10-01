@@ -1,8 +1,17 @@
 TARGET:=CakeUT
 TYPE:=application
 
-CFLAGS+=-I. -I.. -I$(TARGET_BASE) -I$(TARGET_BASE)/.. -I$(TARGET_BASE)/../GoogleTest/
-LDFLAGS+=-L. -L$(BUILD) -lCake -lpthread -lgtest-static
+CFLAGS+=-I.
+CFLAGS+=-I..
+CFLAGS+=-I$(TARGET_BASE)
+CFLAGS+=-I$(TARGET_BASE)/..
+CFLAGS+=-I$(TARGET_BASE)/../GoogleTest/
+CFLAGS+=-I$(TARGET_BASE)/../boost_1_54_0/
+
+LDFLAGS+=-L.
+LDFLAGS+=-L$(BUILD)
+LDFLAGS+=-lCake
+LDFLAGS+=-lgtest-static
 
 SOURCES+=Serialization/UnitTests/TmsTest.cpp
 SOURCES+=Serialization/UnitTests/FcTest.cpp

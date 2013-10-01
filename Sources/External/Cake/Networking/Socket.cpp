@@ -1,8 +1,14 @@
 #include <stdexcept>
-#include <sys/socket.h>
-#include <sys/un.h>
-#include <netinet/in.h>
-#include <netdb.h>
+
+#ifdef _WIN32
+    #include <winsock2.h>
+    #include <windows.h>
+#else
+    #include <sys/socket.h>
+    #include <sys/un.h>
+    #include <netinet/in.h>
+    #include <netdb.h>
+#endif
 
 #include "Socket.hpp"
 #include "System/AtomicSyscall.hpp"
@@ -18,11 +24,18 @@ Socket::Socket(int sockFd) : m_sockFd(sockFd)
 
 Socket::~Socket()
 {
+#ifdef _WIN32
+    closesocket(m_sockFd);
+#else
     ::close(m_sockFd);
+#endif
 }
 
 std::shared_ptr<Socket> Socket::connectToUnixSocket(const std::string & path)
 {
+#ifdef _WIN32
+    throw std::runtime_error("WIN32 doesn't support UNIX sockets");
+#else
     Detail::SockFdGuard sockFd;
     ATOMIC_SYSCALL(::socket(AF_UNIX, SOCK_STREAM, 0), sockFd, == -1);
 
@@ -34,6 +47,7 @@ std::shared_ptr<Socket> Socket::connectToUnixSocket(const std::string & path)
     ATOMIC_SYSCALL(::connect(*sockFd, (sockaddr*)&addr, strlen(addr.sun_path) + sizeof(addr.sun_family)), result, == -1);
 
     return std::shared_ptr<Socket>(new Socket(sockFd.release()));
+#endif
 }
 
 std::shared_ptr<Socket> Socket::connectToTcpSocket(const std::string & address, int port)
@@ -52,7 +66,11 @@ std::shared_ptr<Socket> Socket::connectToTcpSocket(const std::string & address, 
 
 void Socket::send(const void * buf, size_t size)
 {
+#ifdef _WIN32
+    int ret = ::send(m_sockFd, (const char *)buf, size, 0);
+#else
     int ret = ::send(m_sockFd, buf, size, MSG_NOSIGNAL);
+#endif
 
     if (ret == -1)
     {

@@ -3,7 +3,6 @@ TYPE:=application
 
 SOURCES+=../Common/UnitTests/mainUT.cpp
 
-CFLAGS:=-Wall -pedantic -g
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 
 #include "Socket.hpp"
 #include "ServerSocket.hpp"

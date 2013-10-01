@@ -1,5 +1,3 @@
-AR:=ar rcs
-
 define static_library_TEMPLATE
 
 $(1): $$($(1)_OBJS)

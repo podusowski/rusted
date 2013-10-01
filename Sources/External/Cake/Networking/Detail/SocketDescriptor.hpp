@@ -1,5 +1,9 @@
 #pragma once
 
+#ifdef _WIN32
+    #include <windows.h>
+#endif
+
 #include <boost/optional.hpp>
 #include <string>
 
@@ -13,12 +17,19 @@ namespace Detail
 class SocketDescriptor
 {
 public:
-    SocketDescriptor(int descriptor) :
+
+#ifdef _WIN32
+    typedef HANDLE DescriptorType;
+#else
+    typedef int DescriptorType;
+#endif
+
+    SocketDescriptor(DescriptorType descriptor) :
         m_descriptor(descriptor)
     {
     }
 
-    SocketDescriptor(int descriptor, std::string filename) :
+    SocketDescriptor(DescriptorType descriptor, std::string filename) :
         m_descriptor(descriptor),
         m_filename(filename)
     {
@@ -28,7 +39,11 @@ public:
     {
         if (m_descriptor)
         {
+#ifdef _WIN32
+            CloseHandle(*m_descriptor);
+#else
             close(*m_descriptor);
+#endif
         }
 
         if (m_filename)
@@ -46,13 +61,13 @@ public:
         rhs.m_filename = boost::none;
     }
 
-    int operator*()
+    DescriptorType operator*()
     {
         return *m_descriptor;
     }
 
 private:
-    boost::optional<int> m_descriptor;
+    boost::optional<DescriptorType> m_descriptor;
     boost::optional<std::string> m_filename;
 };
 

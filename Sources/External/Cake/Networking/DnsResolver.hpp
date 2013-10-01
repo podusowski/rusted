@@ -1,8 +1,13 @@
 #pragma once
 
 #include <string>
-#include <netdb.h>
-#include <netinet/in.h>
+
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <netdb.h>
+    #include <netinet/in.h>
+#endif
 
 namespace Cake 
 {

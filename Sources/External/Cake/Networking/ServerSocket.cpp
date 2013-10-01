@@ -1,7 +1,13 @@
 #include <stdexcept>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <sys/un.h>
+
+#ifdef _WIN32
+    #include <windows.h>
+#else
+    #include <sys/socket.h>
+    #include <netinet/in.h>
+    #include <sys/un.h>
+#endif
+
 #include <errno.h>
 #include <sstream>
 #include <string.h>
@@ -42,11 +48,15 @@ std::shared_ptr<ServerSocket> ServerSocket::createTcpServer(unsigned port)
         throw std::runtime_error("can't listen to the socket");
     }
 
+    //TODO: make_shared
     return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
 }
 
 std::shared_ptr<ServerSocket> ServerSocket::createUnixServer(const std::string & path)
 {
+#ifdef _WIN32
+    throw std::runtime_error("WIN32 doesn't support UNIX sockets");
+#else
     int sockFd = ::socket(PF_UNIX, SOCK_STREAM, 0);
 
     if (sockFd == -1)
@@ -69,13 +79,12 @@ std::shared_ptr<ServerSocket> ServerSocket::createUnixServer(const std::string &
     }
 
     return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
+#endif
 }
 
 std::shared_ptr<Socket> ServerSocket::accept()
 {
-    sockaddr remote_addr;
-    socklen_t remote_addr_size = sizeof(remote_addr);
-    int sockFd = ::accept(m_sockFd, (sockaddr*)&remote_addr, &remote_addr_size);
+    int sockFd = ::accept(m_sockFd, NULL, NULL);
 
     if (sockFd == -1)
     {

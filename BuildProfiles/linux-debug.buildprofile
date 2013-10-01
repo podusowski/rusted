@@ -1,4 +1,7 @@
 PROFILE:=linux-debug
+
 CC:=g++
+AR:=ar -r -c -s
 CFLAGS:=-g -O0 -std=gnu++0x -Wall -pedantic
+LDFLAGS:=-lpthread
 

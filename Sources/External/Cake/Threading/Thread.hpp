@@ -41,7 +41,12 @@ public:
     static unsigned self();
 
 private:
+
+#ifdef _WIN32
+    static DWORD s_run(void *);
+#else
     static void * s_run(void *);
+#endif
 
     bool m_isRunning;
     IRunnable & m_runnable;

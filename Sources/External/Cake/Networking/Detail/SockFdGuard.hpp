@@ -12,34 +12,41 @@ namespace Detail
 class SockFdGuard
 {
 public:
+
+#ifdef _WIN32
+    typedef SOCKET DescriptorType;
+#else
+    typedef int DescriptorType;
+#endif
+
     SockFdGuard()
     {
     }
 
-    SockFdGuard(int sockFd) :
+    SockFdGuard(DescriptorType sockFd) :
         m_sockFd(sockFd)
     {
     }
 
-    SockFdGuard & operator=(int sockFd)
+    SockFdGuard & operator=(DescriptorType sockFd)
     {
         m_sockFd = sockFd;
         return *this;
     }
 
-    bool operator==(int sockFd)
+    bool operator==(DescriptorType sockFd)
     {
         return *m_sockFd == sockFd;
     }
 
-    int release()
+    DescriptorType release()
     {
-        int ret = *m_sockFd;
+        auto ret = *m_sockFd;
         m_sockFd = boost::none;
         return ret;
     }
 
-    int operator*()
+    DescriptorType operator*()
     {
         return *m_sockFd;
     }
@@ -48,12 +55,16 @@ public:
     {
         if (m_sockFd)
         {
+#ifdef _WIN32
+            closesocket(*m_sockFd);
+#else
             close(*m_sockFd);
+#endif
         }
     }
 
 private:
-    boost::optional<int> m_sockFd;
+    boost::optional<DescriptorType> m_sockFd;
 };
 
 }

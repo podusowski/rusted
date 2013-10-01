@@ -1,5 +1,9 @@
 #include <stdexcept>
 
+#ifdef _WIN32
+    #include <windows.h>
+#endif
+
 #include "ServerSocketPool.hpp"
 
 using namespace Cake::Networking;

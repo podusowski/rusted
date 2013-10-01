@@ -2,8 +2,7 @@
 
 #include <map>
 #include <string>
-#include <boost/scoped_ptr.hpp>
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <boost/utility.hpp>
 
 namespace Cake

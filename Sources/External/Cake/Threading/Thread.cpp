@@ -27,7 +27,7 @@ void Thread::start()
     m_thread = CreateThread(
         0, // Security attributes
         0, // Stack size
-        Thread::s_run,
+        LPTHREAD_START_ROUTINE(&Thread::s_run),
         (void *)this,
         CREATE_SUSPENDED,
         &id);
@@ -85,7 +85,11 @@ unsigned Thread::self()
 #endif
 }
 
-void * Thread::s_run(void * threadCtx)
+#ifdef _WIN32
+    DWORD Thread::s_run(void * threadCtx)
+#else
+    void * Thread::s_run(void * threadCtx)
+#endif
 {
     Thread & thread = *static_cast<Thread *>(threadCtx);
 

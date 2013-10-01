@@ -36,6 +36,7 @@ $(BUILD):
 
 # from profile
 DEFAULT_CFLAGS:=$(CFLAGS)
+DEFAULT_LDFLAGS:=$(LDFLAGS)
 
 #
 # this template is executed for each mk file found in the project
@@ -54,7 +55,7 @@ define include_target_TEMPLATE
   TYPE:=
   SOURCES:=
   CFLAGS:=$$(DEFAULT_CFLAGS)
-  LDFLAGS:=
+  LDFLAGS:=$$(DEFAULT_LDFLAGS)
   DEPENDENCIES:=
   RESOURCES:=
   TARGET:=$(shell basename $(1) | sed 's/.mk//')
