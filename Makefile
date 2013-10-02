@@ -1,5 +1,5 @@
 CPUS:=$(shell cat /proc/cpuinfo | grep processor | wc -l)
-JOBS:=$(shell echo $(CPUS)+1 | bc)
+JOBS:=$(shell echo $(CPUS) | bc)
 
 $(info $(CPUS) cpus detected, $(JOBS) processes will be used)
 
