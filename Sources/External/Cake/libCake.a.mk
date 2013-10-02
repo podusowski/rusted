@@ -5,7 +5,7 @@ CFLAGS+=-I.
 CFLAGS+=-I..
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/..
-CFLAGS+=-I$(TARGET_BASE)/../boost_1_54_0/
+CFLAGS+=-I$(TARGET_BASE)/../boost_1_52_0/
 
 SOURCES+=Configuration/Configuration.cpp
 
