@@ -8,7 +8,7 @@ CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common
 CFLAGS+=-I$(TARGET_BASE)/../External
 CFLAGS+=-I$(TARGET_BASE)/../External/GoogleTest
-CFLAGS+=-I$(TARGET_BASE)/../External/boost_1_52_0/
+CFLAGS+=-I$(TARGET_BASE)/../External/boost/
 CFLAGS+=-I/usr/include/libxml2
 
 LDFLAGS+=-L. -L$(BUILD) -lpthread

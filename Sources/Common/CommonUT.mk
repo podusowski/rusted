@@ -20,7 +20,7 @@ CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common
 CFLAGS+=-I$(TARGET_BASE)/../External
 CFLAGS+=-I$(TARGET_BASE)/../External/GoogleTest
-CFLAGS+=-I$(TARGET_BASE)/../External/boost_1_52_0/
+CFLAGS+=-I$(TARGET_BASE)/../External/boost/
 
 LDFLAGS=-L. -L$(BUILD) -lCommon -lCake -lpthread -lgtest-static
 

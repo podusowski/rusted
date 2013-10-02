@@ -82,7 +82,7 @@ TEST(SmokeSct, BigDataBase)
         catch(...) { }
     }
 
-    if (!connection)
+    if (!connection1)
     {
         throw std::runtime_error("can't connect");
     }
