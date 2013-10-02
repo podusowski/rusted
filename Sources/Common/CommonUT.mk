@@ -22,7 +22,7 @@ CFLAGS+=-I$(TARGET_BASE)/../External
 CFLAGS+=-I$(TARGET_BASE)/../External/GoogleTest
 CFLAGS+=-I$(TARGET_BASE)/../External/boost/
 
-LDFLAGS=-L. -L$(BUILD) -lCommon -lCake -lpthread -lgtest-static
+LDFLAGS=-L. -L$(BUILD) -lCommon -lCake -lgtest-static
 
 DEPENDENCIES+=libCommon.a
 DEPENDENCIES+=libCake.a
