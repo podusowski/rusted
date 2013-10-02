@@ -10068,9 +10068,10 @@ bool UntypedFunctionMockerBase::VerifyAndClearExpectationsLocked() {
   UntypedExpectations expectations_to_delete;
   untyped_expectations_.swap(expectations_to_delete);
 
-  g_gmock_mutex.Unlock();
-  expectations_to_delete.clear();
-  g_gmock_mutex.Lock();
+  {
+    internal::MutexLock lock(&g_gmock_mutex);
+    expectations_to_delete.clear();
+  }
 
   return expectations_met;
 }
