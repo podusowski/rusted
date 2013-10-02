@@ -20,6 +20,7 @@ SOURCES+=Math/KinematicParticle.cpp
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/.. 
 CFLAGS+=-I$(TARGET_BASE)/../External/
+CFLAGS+=-I$(TARGET_BASE)/../External/boost_1_54_0/
 CFLAGS+=-I/usr/include/libxml2
 
 $(TARGET): $(TARGET_BASE)/Messages/Messages.hpp
