@@ -13,6 +13,7 @@ tool=""
 pattern='.*'
 binary=""
 fast=0
+timeout=60
 
 while getopts 't:p:b:f' opt; do
     case $opt in
@@ -52,9 +53,10 @@ function run_test_binary()
         port=$((port+1))
 
         if [ $fast = "1" ]; then
-            ( run_single_test $binary $testcase $port ) &
+            ( run_single_test $binary $testcase $port 2> /dev/null ) &
         else
-            ( run_single_test $binary $testcase $port )
+            ( run_single_test $binary $testcase $port 2> /dev/null )
+            #( run_single_test $binary $testcase $port )
         fi
 
         while test `jobs | wc -l` -gt 6; do
@@ -63,6 +65,16 @@ function run_test_binary()
     done
 
     wait
+}
+
+function kill_after()
+{
+    local pid=$1
+    local time=$2
+
+    sleep $time
+
+    kill $pid > /dev/null 2> /dev/null
 }
 
 function run_single_test()
@@ -89,16 +101,23 @@ function run_single_test()
         export SERVER_SCT_WAIT_FOR_APP_TIME=10
     fi
 
-    LD_LIBRARY_PATH=. SERVER_SCT_PORT=$port $wrapper ./`basename $binary` --gtest_filter=$name --gtest_output=xml:$log_dir/$name.result.xml &> $log_file
-    local return_code=$?
+    LD_LIBRARY_PATH=. SERVER_SCT_PORT=$port $wrapper ./`basename $binary` --gtest_filter=$name --gtest_output=xml:$log_dir/$name.result.xml &> $log_file &
+    #LD_LIBRARY_PATH=. SERVER_SCT_PORT=$port $wrapper ./`basename $binary` --gtest_filter=$name --gtest_output=xml:$log_dir/$name.result.xml  &
+    local test_pid=$!
 
-    if grep FAILED $log_file > /dev/null; then
-        result="  ${red}fail$reset "
-    else
+    kill_after $test_pid $timeout &
+    local kill_after_pid=$!
+
+    wait $test_pid > /dev/null 2> /dev/null
+
+    local timeout=0
+    kill $kill_after_pid > /dev/null 2> /dev/null || timeout=1
+
+    if grep 'PASSED  ] 1' $log_file > /dev/null; then
         result="  ${green}pass$reset "
-    fi
-
-    if [ "$return_code" != "0" ]; then
+    elif [ "$timeout" = "1" ]; then
+        result="  ${red}time$reset "
+    else
         result="  ${red}fail$reset "
     fi
 
@@ -106,7 +125,7 @@ function run_single_test()
         tool_output=`grep 'ERROR SUMMARY' $tool_log | grep -v 'ERROR SUMMARY: 0'`
     fi
 
-    local failure_details=`grep Failure $log_file`
+    local failure_details=`grep Failure $log_file > /dev/null`
     local prefix=""
     if [ -n "$failure_details" ]; then
         failure_details="\n$failure_details\nsee ${red}`readlink -f $log_file`${reset}\n"
@@ -146,9 +165,9 @@ function cleanup()
     pkill -P `jobs -p` 2> /dev/null > /dev/null
 
     sleep 0.1
-    if [ -n "`jobs -p`" ]; then
+    while [ -n "`jobs -p`" ]; do
         pkill -KILL -P `jobs -p` 2> /dev/null > /dev/null
-    fi
+    done
 
     wait
 }

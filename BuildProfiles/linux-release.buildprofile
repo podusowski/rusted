@@ -3,5 +3,5 @@ PROFILE:=linux-release
 CC:=g++
 AR:=ar -r -c -s
 CFLAGS:=-O3 -std=gnu++0x -Wall -pedantic -DNDEBUG
-LDFLAGS:=-lpthread
+LDFLAGS2:=-lpthread
 
