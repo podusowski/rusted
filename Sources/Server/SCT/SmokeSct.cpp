@@ -71,7 +71,7 @@ TEST(SmokeSct, BigDataBase)
 
     std::shared_ptr<SCT::Connection> connection1;
 
-    for (int i = 0; i < 1800; i++)
+    for (int i = 0; i < 30; i++)
     {
         try
         {
@@ -79,10 +79,11 @@ TEST(SmokeSct, BigDataBase)
             connection1 = authorizeUser(component, "user1", "password");
             break;
         }
-        catch(...)
-        {
-        }
+        catch(...) { }
+    }
 
+    if (!connection)
+    {
         throw std::runtime_error("can't connect");
     }
 
