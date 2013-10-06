@@ -32,9 +32,10 @@ CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common
 CFLAGS+=-I$(TARGET_BASE)/../External
 CFLAGS+=-I$(TARGET_BASE)/../External/boost/
-CFLAGS+=-I/usr/include/OGRE
+CFLAGS+=-I$(OGRE_DIR)/OgreMain/include/
+CFLAGS+=-I$(OGRE_DIR)/_build/include/
 CFLAGS+=-I$(MYGUI_DIR)/MyGUIEngine/include/
 CFLAGS+=-I$(MYGUI_DIR)/Platforms/Ogre/OgrePlatform/include/
 
-DEPENDENCIES+=libCommon.a MyGUI
+DEPENDENCIES+=libCommon.a OGRE MyGUI
 

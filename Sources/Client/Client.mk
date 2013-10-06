@@ -5,7 +5,7 @@ SOURCES+=main.cpp
 
 LDFLAGS+=-L$(BUILD)
 LDFLAGS+=-lClient
-LDFLAGS+=-lOgreMain
+#LDFLAGS+=-lOgreMain
 LDFLAGS+=-lOIS
 LDFLAGS+=-lCommon
 LDFLAGS+=-lCake
@@ -18,8 +18,8 @@ CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common 
 CFLAGS+=-I$(TARGET_BASE)/../External
 CFLAGS+=-I$(TARGET_BASE)/../External/boost/
-CFLAGS+=-I/usr/include/libxml2
-CFLAGS+=-I/usr/include/OGRE
+CFLAGS+=-I$(OGRE_DIR)/OgreMain/include/
+CFLAGS+=-I$(OGRE_DIR)/_build/include/
 CFLAGS+=-I$(BUILD)/MyGUI/MyGUIEngine/include/
 CFLAGS+=-I$(BUILD)/MyGUI/Platforms/Ogre/OgrePlatform/include/
 
