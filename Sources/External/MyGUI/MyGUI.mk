@@ -12,6 +12,7 @@ $(BUILD)/libMyGUIEngine.so: $(BUILD)/MyGUI/lib/libMyGUIEngine.so
 
 $(MYGUI_DIR)/lib/libMyGUIEngine.so:
 	mkdir -p $(MYGUI_DIR)
+	cd $(MYGUI_DIR) && tar xf $(PACKAGE_NAME)
 	mkdir -p $(MYGUI_DIR)/_build
 	cd $(MYGUI_DIR)/_build && \
 		cmake .. -DMYGUI_RENDERSYSTEM=2 -DOGRE_SOURCE=$(OGRE_DIR) -DOGRE_BUILD=$(OGRE_DIR)/_build && \
