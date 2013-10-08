@@ -59,7 +59,7 @@ define include_target_TEMPLATE
   LDFLAGS:=$$(DEFAULT_LDFLAGS)
   DEPENDENCIES:=
   RESOURCES:=
-  TARGET:=$(shell basename $(1) | sed 's/.mk//')
+  TARGET:=$(shell basename $(1) | sed 's/.target//')
 
   include $(1)
 
@@ -133,7 +133,7 @@ endef
 #
 TARGETS:=
 TARGETS_HELP:=
-TARGET_CONFIGS := $(shell find $(SOURCE_DIR) -name *.mk)
+TARGET_CONFIGS := $(shell find $(SOURCE_DIR) -name *.target)
 
 $(foreach i, $(TARGET_CONFIGS), $(eval $(call pass_target_base_for_target, $(i))))
 $(foreach i, $(TARGET_CONFIGS), $(eval $(call include_target_TEMPLATE,$(i))))

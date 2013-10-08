@@ -2,6 +2,7 @@ TARGET:=OGRE
 TYPE:=custom
 
 OGRE_PACKAGE_NAME:=$(TARGET_BASE)/ogre_src_v1-8-1.tar.bz2
+OGRE_SRC:=$(TARGET_BASE)/ogre_src_v1-8-1
 OGREDEPS_PACKAGE_NAME:=$(TARGET_BASE)/ogredeps.tar.gz
 
 OGREDEPS_DIR:=$(BUILD)/OGREDEPS
@@ -20,9 +21,7 @@ OGREDEPS:
 
 OGRE:
 	mkdir -p $(OGRE_DIR)
-	cd $(OGRE_DIR)/.. && tar xf $(OGRE_PACKAGE_NAME)
-	mkdir -p $(OGRE_DIR)/_build
-	cd $(OGRE_DIR)/_build && \
-		cmake .. && \
-		make OgreMain RenderSystem_GL Plugin_OctreeSceneManager Plugin_ParticleFX
+	cd $(OGRE_DIR) && \
+		cmake -DOGRE_BUILD_SAMPLES=OFF $(OGRE_SRC) && \
+		make
 
