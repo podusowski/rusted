@@ -5,7 +5,7 @@ SOURCES+=main.cpp
 
 LDFLAGS+=-L$(BUILD)
 LDFLAGS+=-lClient
-#LDFLAGS+=-lOgreMain
+LDFLAGS+=-lOgreMainStatic
 LDFLAGS+=-lOIS
 LDFLAGS+=-lCommon
 LDFLAGS+=-lCake
