@@ -1,7 +1,6 @@
 TARGET:=OGRE
 TYPE:=custom
 
-OGRE_PACKAGE_NAME:=$(TARGET_BASE)/ogre_src_v1-8-1.tar.bz2
 OGRE_SRC:=$(TARGET_BASE)/ogre_src_v1-8-1
 OGREDEPS_PACKAGE_NAME:=$(TARGET_BASE)/ogredeps.tar.gz
 
