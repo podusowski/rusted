@@ -28,6 +28,6 @@ OGRE_CMAKE_OPTIONS:=-DOGRE_BUILD_COMPONENT_PAGING:BOOL="0" \
 OGRE:
 	mkdir -p $(OGRE_DIR)
 	cd $(OGRE_DIR) && \
-		cmake $(OGRE_CMAKE_OPTIONS) $(OGRE_SRC) && \
+		cmake $(OGRE_SRC) && \
 		make
 
