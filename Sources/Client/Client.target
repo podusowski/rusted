@@ -5,7 +5,9 @@ SOURCES+=main.cpp
 
 LDFLAGS+=-L$(BUILD)
 LDFLAGS+=-lClient
-LDFLAGS+=-lOgreMainStatic
+#LDFLAGS+=-lOgreMainStatic
+LDFLAGS+=$(OGRE_DIR)/lib/libOgreMain.so.1.8.1
+LDFLAGS+=-rdynamic
 LDFLAGS+=-lOIS
 LDFLAGS+=-lCommon
 LDFLAGS+=-lCake
@@ -18,10 +20,11 @@ CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common 
 CFLAGS+=-I$(TARGET_BASE)/../External
 CFLAGS+=-I$(TARGET_BASE)/../External/boost/
-CFLAGS+=-I$(OGRE_DIR)/OgreMain/include/
-CFLAGS+=-I$(OGRE_DIR)/_build/include/
-CFLAGS+=-I$(BUILD)/MyGUI/MyGUIEngine/include/
-CFLAGS+=-I$(BUILD)/MyGUI/Platforms/Ogre/OgrePlatform/include/
+CFLAGS+=-I$(OGRE_SRC)/OgreMain/include/
+CFLAGS+=-I$(OGRE_SRC)/include/
+CFLAGS+=-I$(OGRE_DIR)/include/
+CFLAGS+=-I$(MYGUI_SRC)/MyGUIEngine/include/
+CFLAGS+=-I$(MYGUI_SRC)/Platforms/Ogre/OgrePlatform/include/
 
 DEPENDENCIES+=libClient.a libCommon.a libCake.a MyGUI Contents
 
