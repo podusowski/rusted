@@ -7,9 +7,11 @@ CFLAGS+=-I$(TARGET_BASE)/../..
 CFLAGS+=-I$(TARGET_BASE)/../../Client
 CFLAGS+=-I$(TARGET_BASE)/../../Common
 CFLAGS+=-I$(TARGET_BASE)/../../External
-CFLAGS+=-I/usr/include/OGRE
-CFLAGS+=-I$(BUILD)/MyGUI/MyGUIEngine/include/
-CFLAGS+=-I$(BUILD)/MyGUI/Platforms/Ogre/OgrePlatform/include/
+CFLAGS+=-I$(OGRE_SRC)/OgreMain/include/
+CFLAGS+=-I$(OGRE_SRC)/include/
+CFLAGS+=-I$(OGRE_DIR)/include/
+CFLAGS+=-I$(MYGUI_SRC)/MyGUIEngine/include/
+CFLAGS+=-I$(MYGUI_SRC)/Platforms/Ogre/OgrePlatform/include/
 
 LDFLAGS+=-L$(BUILD)
 LDFLAGS+=-lClient

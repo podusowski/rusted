@@ -5,7 +5,6 @@ SOURCES+=main.cpp
 
 LDFLAGS+=-L$(BUILD)
 LDFLAGS+=-lClient
-#LDFLAGS+=-lOgreMainStatic
 LDFLAGS+=$(OGRE_DIR)/lib/libOgreMain.so.1.8.1
 LDFLAGS+=-rdynamic
 LDFLAGS+=-lOIS

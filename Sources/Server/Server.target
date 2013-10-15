@@ -6,14 +6,17 @@ LDFLAGS:=-L$(BUILD) -lServer -lCommon -lCake -lpthread -lsoci_core
 RESOURCES:=Server.cfg runTestServer TestDataBase.sqlite3
 DEPENDENCIES+=libServer.a libCommon.a libCake.a
 
+GEN_BIG_DATABASE_PY:=$(TARGET_BASE)/genBigDataBase.py
+DATABASE_SCHEMA:=$(TARGET_BASE)/DataBaseSchema.sql
+
 $(TARGET_BASE)/TestDataBase.sqlite3: $(TARGET_BASE)/DataBaseSchema.sql $(TARGET_BASE)/TestDataBase.sql
 	@rm -f $@
 	cat $^ | sqlite3 $@
 
 $(TARGET): $(BUILD)/BigDataBase.sqlite3
 
-$(BUILD)/BigDataBase.sqlite3: $(TARGET_BASE)/genBigDataBase.py $(TARGET_BASE)/DataBaseSchema.sql
-	$(TARGET_BASE)/genBigDataBase.py -o $@.sql
-	@rm -f $@
-	cat $(TARGET_BASE)/DataBaseSchema.sql $@.sql | sqlite3 $@
+$(BUILD)/BigDataBase.sqlite3: $(GEN_BIG_DATABASE_PY) $(DATABASE_SCHEMA)
+	$(GEN_BIG_DATABASE_PY) -o $@.sql
+	rm -f $@
+	cat $(DATABASE_SCHEMA) $@.sql | sqlite3 $@
 

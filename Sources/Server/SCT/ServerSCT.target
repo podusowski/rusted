@@ -17,7 +17,7 @@ CFLAGS+=-I$(TARGET_BASE)/../../
 CFLAGS+=-I$(TARGET_BASE)/../../Common
 CFLAGS+=-I$(TARGET_BASE)/../../External
 CFLAGS+=-I$(TARGET_BASE)/../../External/GoogleTest
-CFLAGS+=-I$(BUILD)/SOCI/core
+CFLAGS+=-I$(SOCI_SRC)/core
 
 LDFLAGS=-L. -L$(BUILD) 
 LDFLAGS+=-lCommon -lCake -lpthread
