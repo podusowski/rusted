@@ -5,7 +5,7 @@ else()
 endif ()
 
 project(OGREDEPS)
-set(CMAKE_MODULE_PATH "${OGREDEPS_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH "${OGREDEPS_SOURCE_DIR}/cmake" ${CMAKE_MODULE_PATH})
 
 if (WIN32)
   # look for DirectX which is needed by OIS
