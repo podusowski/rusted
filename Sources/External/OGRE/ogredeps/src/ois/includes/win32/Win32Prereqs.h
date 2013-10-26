@@ -44,6 +44,9 @@ restrictions:
 #	define FIELD_OFFSET offsetof
 #endif
 
+typedef IDirectInputDevice8A IDirectInputDevice8;
+typedef IDirectInput8A IDirectInput8;
+
 namespace OIS
 {
 	//Local Forward declarations
