@@ -35,6 +35,7 @@ CFLAGS+=-I$(TARGET_BASE)/../External/boost/
 CFLAGS+=-I$(OGRE_SRC)/OgreMain/include/
 CFLAGS+=-I$(OGRE_SRC)/include/
 CFLAGS+=-I$(OGRE_DIR)/include/
+CFLAGS+=-I$(OGREDEPS_DIR)/ogredeps/include/
 CFLAGS+=-I$(MYGUI_SRC)/MyGUIEngine/include/
 CFLAGS+=-I$(MYGUI_SRC)/Platforms/Ogre/OgrePlatform/include/
 

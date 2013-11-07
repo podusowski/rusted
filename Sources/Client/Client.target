@@ -4,15 +4,24 @@ TYPE:=application
 SOURCES+=main.cpp
 
 LDFLAGS+=-L$(BUILD)
+LDFLAGS+=-L$(OGREDEPS_DIR)/ogredeps/lib/Release
 LDFLAGS+=-lClient
-LDFLAGS+=$(OGRE_DIR)/lib/libOgreMain.so.1.8.1
-LDFLAGS+=-rdynamic
-LDFLAGS+=-lOIS
+
+LDFLAGS+=-lMyGUI.OgrePlatform
+LDFLAGS+=-lMyGUIEngine
+ifeq ($(PROFILE), windows-mingw-i586)
+
+  LDFLAGS+=-lOgreMain.dll
+  LDFLAGS+=-lOIS.dll
+else
+  LDFLAGS+=$(OGRE_DIR)/lib/libOgreMain.so.1.8.1
+  LDFLAGS+=-rdynamic
+  LDFLAGS+=-lpthread
+  LDFLAGS+=-lOIS
+endif
+
 LDFLAGS+=-lCommon
 LDFLAGS+=-lCake
-LDFLAGS+=-lpthread
-LDFLAGS+=-lMyGUIEngine
-LDFLAGS+=-lMyGUI.OgrePlatform
 
 CFLAGS+=-I$(TARGET_BASE) 
 CFLAGS+=-I$(TARGET_BASE)/../
@@ -22,6 +31,7 @@ CFLAGS+=-I$(TARGET_BASE)/../External/boost/
 CFLAGS+=-I$(OGRE_SRC)/OgreMain/include/
 CFLAGS+=-I$(OGRE_SRC)/include/
 CFLAGS+=-I$(OGRE_DIR)/include/
+CFLAGS+=-I$(OGREDEPS_DIR)/ogredeps/include/
 CFLAGS+=-I$(MYGUI_SRC)/MyGUIEngine/include/
 CFLAGS+=-I$(MYGUI_SRC)/Platforms/Ogre/OgrePlatform/include/
 

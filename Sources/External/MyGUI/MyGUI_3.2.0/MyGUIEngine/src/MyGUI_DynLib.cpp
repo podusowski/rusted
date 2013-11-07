@@ -24,7 +24,7 @@
 #include "MyGUI_DynLib.h"
 
 #if MYGUI_PLATFORM == MYGUI_PLATFORM_WIN32
-#	include <Windows.h>
+#	include <windows.h>
 #elif MYGUI_PLATFORM == MYGUI_PLATFORM_LINUX
 #       include <dlfcn.h>
 #endif

@@ -1,3 +1,12 @@
+#-------------------------------------------------------------------
+# This file is part of the CMake build system for OGRE
+#     (Object-oriented Graphics Rendering Engine)
+# For the latest info, see http://www.ogre3d.org/
+#
+# The contents of this file are placed in the public domain. Feel
+# free to make use of it in any way you like.
+#-------------------------------------------------------------------
+
 # - Try to find FreeType
 # Once done, this will define
 #
@@ -22,7 +31,7 @@ clear_if_changed(FREETYPE_PREFIX_PATH
   FREETYPE_INCLUDE_DIR
 )
 
-set(FREETYPE_LIBRARY_NAMES freetype2311 freetype239 freetype238 freetype235 freetype219 freetype)
+set(FREETYPE_LIBRARY_NAMES freetype2410 freetype249 freetype248 freetype246 freetype2311 freetype239 freetype238 freetype235 freetype219 freetype)
 get_debug_names(FREETYPE_LIBRARY_NAMES)
 
 use_pkgconfig(FREETYPE_PKGC freetype2)
@@ -30,13 +39,25 @@ use_pkgconfig(FREETYPE_PKGC freetype2)
 # prefer static library over framework 
 set(CMAKE_FIND_FRAMEWORK "LAST")
 
+message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
 findpkg_framework(FREETYPE)
 message(STATUS "CMAKE_PREFIX_PATH: ${CMAKE_PREFIX_PATH}")
 
-find_path(FREETYPE_INCLUDE_DIR NAMES freetype/freetype.h HINTS ${FREETYPE_INC_SEARCH_PATH} ${FREETYPE_PKGC_INCLUDE_DIRS} PATH_SUFFIXES freetype2)
-find_path(FREETYPE_FT2BUILD_INCLUDE_DIR NAMES ft2build.h HINTS ${FREETYPE_INC_SEARCH_PATH} ${FREETYPE_PKGC_INCLUDE_DIRS})
-find_library(FREETYPE_LIBRARY_REL NAMES ${FREETYPE_LIBRARY_NAMES} HINTS ${FREETYPE_LIB_SEARCH_PATH} ${FREETYPE_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" release relwithdebinfo minsizerel)
-find_library(FREETYPE_LIBRARY_DBG NAMES ${FREETYPE_LIBRARY_NAMES_DBG} HINTS ${FREETYPE_LIB_SEARCH_PATH} ${FREETYPE_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" debug)
+find_path(FREETYPE_INCLUDE_DIR NAMES freetype/freetype.h HINTS ${FREETYPE_INC_SEARCH_PATH} ${FREETYPE_PKGC_INCLUDE_DIRS} PATH_SUFFIXES freetype2 NO_CMAKE_FIND_ROOT_PATH)
+find_path(FREETYPE_FT2BUILD_INCLUDE_DIR NAMES ft2build.h HINTS ${FREETYPE_INC_SEARCH_PATH} ${FREETYPE_PKGC_INCLUDE_DIRS} NO_CMAKE_FIND_ROOT_PATH)
+
+message(STATUS "FREETYPE_INCLUDE_DIR: ${FREETYPE_INCLUDE_DIR}")
+
+find_library(FREETYPE_LIBRARY_REL
+    NAMES ${FREETYPE_LIBRARY_NAMES}
+    HINTS ${FREETYPE_LIB_SEARCH_PATH} ${FREETYPE_PKGC_LIBRARY_DIRS}
+    PATH_SUFFIXES "" Release RelWithDebInfo Minsizerel NO_CMAKE_FIND_ROOT_PATH)
+
+find_library(FREETYPE_LIBRARY_DBG NAMES ${FREETYPE_LIBRARY_NAMES_DBG} 
+    HINTS ${FREETYPE_LIB_SEARCH_PATH} ${FREETYPE_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" Debug NO_CMAKE_FIND_ROOT_PATH)
+
+message(STATUS "FREETYPE_LIBRARY_REL: ${FREETYPE_LIBRARY_REL}, FREETYPE_LIBRARY_DBG: ${FREETYPE_LIBRARY_DBG}")
+
 make_library_set(FREETYPE_LIBRARY)
 
 findpkg_finish(FREETYPE)
