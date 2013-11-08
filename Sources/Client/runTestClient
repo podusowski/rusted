@@ -3,13 +3,9 @@
 EXEC_DIRECTORY=`dirname $0`
 pushd $EXEC_DIRECTORY
 
-OGRE_RENDERER=`find /usr/lib -name RenderSystem_GL.so | head -n1`
-OGRE_RENDERER_DIR=`dirname $OGRE_RENDERER`
-echo "Ogre renderer: $OGRE_RENDERER"
-
 _LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 
-export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.:$OGRE_RENDERER_DIR
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
 echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 
 if [ -n "$DEBUG" ]; then
@@ -18,6 +14,8 @@ if [ -n "$DEBUG" ]; then
 elif [ -n "$VALGRIND" ]; then
     echo "executing with vagrind"
     valgrind --leak-check=full ./Client --network.port 1234 --network.address localhost $@
+elif [ -n "$WINE" ]; then
+    wine ./Client --network.port 1234 --network.address localhost $@
 else
     ./Client --network.port 1234 --network.address localhost $@
 fi
