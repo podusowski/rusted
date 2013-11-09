@@ -1,4 +1,4 @@
-PROFILE:=windows-mingw-i586
+PROFILE:=windows-mingw
 
 CC:=i686-w64-mingw32-g++
 AR:=i686-w64-mingw32-ar -r -c -s

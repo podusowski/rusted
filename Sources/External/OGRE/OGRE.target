@@ -8,7 +8,7 @@ OGREDEPS_ARTEFACT:=$(OGREDEPS_DIR)/src/FreeImage/libFreeImage.a
 OGRE_SRC:=$(TARGET_BASE)/ogre_src_v1-8-1
 OGRE_DIR:=$(BUILD)/OGRE/ogre_src_v1-8-1/
 
-ifeq ($(PROFILE), windows-mingw-i586)
+ifeq ($(PROFILE), windows-mingw)
   OGRE_ARTEFACT:=$(BUILD)/OgreMain.dll
 else
   OGRE_ARTEFACT:=$(BUILD)/libOgreMain.so.1.8.1

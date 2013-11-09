@@ -10,7 +10,7 @@ LDFLAGS+=-lClient
 LDFLAGS+=-lMyGUI.OgrePlatform
 LDFLAGS+=-lMyGUIEngine
 
-ifeq ($(PROFILE), windows-mingw-i586)
+ifeq ($(PROFILE), windows-mingw)
   LDFLAGS+=-lOgreMain.dll
   LDFLAGS+=-lOIS.dll
 else
