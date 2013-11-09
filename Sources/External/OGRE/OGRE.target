@@ -7,7 +7,12 @@ OGREDEPS_ARTEFACT:=$(OGREDEPS_DIR)/src/FreeImage/libFreeImage.a
 
 OGRE_SRC:=$(TARGET_BASE)/ogre_src_v1-8-1
 OGRE_DIR:=$(BUILD)/OGRE/ogre_src_v1-8-1/
-OGRE_ARTEFACT:=$(BUILD)/libOgreMain.so.1.8.1
+
+ifeq ($(PROFILE), windows-mingw-i586)
+  OGRE_ARTEFACT:=$(BUILD)/OgreMain.dll
+else
+  OGRE_ARTEFACT:=$(BUILD)/libOgreMain.so.1.8.1
+endif
 
 ifneq ($(CMAKE_TOOLCHAIN_FILE),)
   $(info using $(CMAKE_TOOLCHAIN_FILE))
@@ -40,7 +45,8 @@ OGRE_CMAKE_OPTIONS+=-DOGRE_BUILD_SAMPLES:BOOL="0"
 $(OGRE_ARTEFACT): $(OGREDEPS_ARTEFACT)
 	mkdir -p $(OGRE_DIR)
 	cd $(OGRE_DIR) && \
-		cmake -DCMAKE_BUILD_TYPE=Release $(CMAKE_TOOLCHAIN_OPTIONS) $(OGRE_CMAKE_OPTIONS) $(OGRE_SRC) && \
+		cmake -DCMAKE_BUILD_TYPE=MinSizeRel $(CMAKE_TOOLCHAIN_OPTIONS) $(OGRE_CMAKE_OPTIONS) $(OGRE_SRC) && \
 		make
 	cp -rv $(OGRE_DIR)/lib/* $(BUILD)
+	cp -rv $(OGRE_DIR)/bin/*.dll $(BUILD)
 
