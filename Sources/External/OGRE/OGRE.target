@@ -48,5 +48,5 @@ $(OGRE_ARTEFACT): $(OGREDEPS_ARTEFACT)
 		cmake -DCMAKE_BUILD_TYPE=MinSizeRel $(CMAKE_TOOLCHAIN_OPTIONS) $(OGRE_CMAKE_OPTIONS) $(OGRE_SRC) && \
 		make
 	cp -rv $(OGRE_DIR)/lib/* $(BUILD)
-	cp -rv $(OGRE_DIR)/bin/*.dll $(BUILD)
+	cp -rv $(OGRE_DIR)/bin/* $(BUILD)
 
