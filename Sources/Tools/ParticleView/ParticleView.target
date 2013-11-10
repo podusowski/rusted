@@ -7,6 +7,7 @@ CFLAGS+=-I$(TARGET_BASE)/../..
 CFLAGS+=-I$(TARGET_BASE)/../../Client
 CFLAGS+=-I$(TARGET_BASE)/../../Common
 CFLAGS+=-I$(TARGET_BASE)/../../External
+CFLAGS+=-I$(OGREDEPS_DIR)/ogredeps/include/
 CFLAGS+=-I$(OGRE_SRC)/OgreMain/include/
 CFLAGS+=-I$(OGRE_SRC)/include/
 CFLAGS+=-I$(OGRE_DIR)/include/

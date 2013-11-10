@@ -1,6 +1,6 @@
 #pragma once
 
-#include <boost/shared_ptr.hpp>
+#include <memory>
 #include <soci.h>
 
 #include "Common/Game/Object/ObjectBase.hpp"

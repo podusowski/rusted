@@ -10,7 +10,8 @@ SOURCES+=Game/Actions/UnitTests/ActionPerformerTest.cpp
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common
-CFLAGS+=-I$(TARGET_BASE)/../External 
+CFLAGS+=-I$(TARGET_BASE)/../External
+CFLAGS+=-I$(TARGET_BASE)/../External/boost
 CFLAGS+=-I$(TARGET_BASE)/../External/GoogleTest
 CFLAGS+=-I$(SOCI_SRC)/core
 

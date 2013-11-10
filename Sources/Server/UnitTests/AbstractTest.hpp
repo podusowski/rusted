@@ -2,7 +2,6 @@
 
 #include <gtest/gtest.h>
 #include <gmock/gmock.h>
-#include <boost/shared_ptr.hpp>
 
 #include "Game/UnitTests/UniverseDataBaseFacadeMock.hpp"
 #include "Game/UnitTests/ShipClassContainerMock.hpp"
