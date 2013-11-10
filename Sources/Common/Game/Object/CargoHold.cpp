@@ -24,7 +24,7 @@ unsigned CargoHold::getUsedCapacity()
     return m_carbon + m_helium;
 }
 
-unsigned CargoHold::getHelium()
+unsigned CargoHold::getHelium() const
 {
     return m_helium;
 }
@@ -44,7 +44,7 @@ void CargoHold::changeHelium(int delta)
     m_helium += delta;
 }
 
-unsigned CargoHold::getCarbon()
+unsigned CargoHold::getCarbon() const
 {
     return m_carbon;
 }

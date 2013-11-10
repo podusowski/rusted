@@ -54,6 +54,7 @@ void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
             fillCargoHold(row, cargoHold);
         });
 
+        object->addCargoHoldSlot(boost::bind(&UniverseDataBaseFacade::saveCargoHold, this, object->getId(), boost::arg<1>()));
         m_universe->add(object);
     }
     else if (type == "Asteroid")
@@ -129,6 +130,20 @@ void UniverseDataBaseFacade::fillCargoHold(const soci::row & row, Common::Game::
     {
         LOG_WARN << "Error filling cargohold, reason: " << ex.what();
     }
+}
+
+void UniverseDataBaseFacade::saveCargoHold(Common::Game::Object::ObjectBase::Id id, const Common::Game::Object::CargoHold & cargoHold)
+{
+    LOG_DEBUG << "Saving CargoHold for object: " << id;
+
+    int carbon = cargoHold.getCarbon();
+    int helium = cargoHold.getHelium();
+
+    m_sociSession->once <<
+        "UPDATE objects SET carbon=:carbon, helium=:helium WHERE id=:id",
+        soci::use(carbon),
+        soci::use(helium),
+        soci::use(id.get());
 }
 
 unsigned UniverseDataBaseFacade::preInsertObjectToDb(unsigned shipClassId, unsigned ownerId)

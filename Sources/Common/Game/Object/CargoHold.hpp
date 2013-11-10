@@ -16,11 +16,11 @@ public:
     unsigned getCapacity();
     unsigned getUsedCapacity();
 
-    unsigned getHelium();
+    unsigned getHelium() const;
     void setHelium(unsigned);
     void changeHelium(int);
 
-    unsigned getCarbon();
+    unsigned getCarbon() const;
     void setCarbon(unsigned);
     void changeCarbon(int);
 

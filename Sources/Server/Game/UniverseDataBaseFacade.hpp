@@ -27,6 +27,7 @@ private:
     void loadObjectFromDb(const soci::row &);
     Common::Game::Position extractPosition(const soci::row &);
     void fillCargoHold(const soci::row &, Common::Game::Object::CargoHold &);
+    void saveCargoHold(Common::Game::Object::ObjectBase::Id, const Common::Game::Object::CargoHold &);
     unsigned preInsertObjectToDb(unsigned shipClassId, unsigned ownerId);
 
     IShipClassContainer & m_shipClassContainer;

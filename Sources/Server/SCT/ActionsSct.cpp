@@ -203,6 +203,12 @@ TEST(ActionsSct, Gather)
     EXPECT_EQ(20, shipCargoInfo->carbon);
     EXPECT_EQ(20, shipCargoInfo->helium);
 
+    // check CargoHold in data base
+    auto sociSession = component.createSociSession();
+    int carbon;
+    sociSession->once << "SELECT carbon FROM objects WHERE id=1", soci::into(carbon);
+    EXPECT_EQ(20, carbon);
+
     // receive info about asteroid cargohold
     auto asteroidCargoInfo = connection1->receive<Common::Messages::ObjectCargoInfo>();
     EXPECT_EQ(3, asteroidCargoInfo->id);
