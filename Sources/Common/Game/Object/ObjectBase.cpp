@@ -50,6 +50,12 @@ void ObjectBase::setOrientation(const Common::Math::Quaternion &)
 void ObjectBase::invokeOnCargoHold(std::function<void(CargoHold &)> function)
 {
     function(m_cargoHold);
+    m_cargoHoldSignal(m_cargoHold);
+}
+
+boost::signals2::connection ObjectBase::addCargoHoldSlot(CargoHoldSignal::slot_type slot)
+{
+    return m_cargoHoldSignal.connect(slot);
 }
 
 ObjectBase::~ObjectBase()

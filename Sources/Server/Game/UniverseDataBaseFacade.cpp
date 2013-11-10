@@ -1,7 +1,5 @@
 #include <functional>
 
-#include <boost/make_shared.hpp>
-
 #include "UniverseDataBaseFacade.hpp"
 #include "Common/Game/Object/Ship.hpp"
 #include "Common/Game/Object/Asteroid.hpp"

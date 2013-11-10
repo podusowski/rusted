@@ -111,7 +111,7 @@ TEST_F(ShipTest, GetTrajectoryDescription)
     description.controlPoints.push_back(Common::Game::Position(1, 2, 3));
 
     EXPECT_CALL(getTrajectoryMock(), getDescription()).Times(1).WillRepeatedly(Return(description));
- 
+
     auto course = ship.getTrajectoryDescription();
 
     EXPECT_EQ(1u, course.controlPoints.size());
@@ -134,3 +134,22 @@ TEST_F(ShipTest, DefaultIntegrity)
     Common::Game::Object::Ship ship;
     EXPECT_EQ(100u, ship.getIntegrity());
 }
+
+struct CargoHoldSlotMock
+{
+    MOCK_METHOD1(cargoHoldChanged, void(const Common::Game::Object::CargoHold &));
+};
+
+TEST_F(ShipTest, CargoHoldSignal)
+{
+    Common::Game::Object::Ship ship;
+    CargoHoldSlotMock cargoHoldSlotMock;
+    EXPECT_CALL(cargoHoldSlotMock, cargoHoldChanged(_)).Times(1);
+
+    ship.addCargoHoldSlot(boost::bind(&CargoHoldSlotMock::cargoHoldChanged, &cargoHoldSlotMock, _1));
+
+    ship.invokeOnCargoHold([](Common::Game::Object::CargoHold &) -> void
+    {
+    });
+}
+

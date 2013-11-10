@@ -1,6 +1,7 @@
 #pragma once
 
 #include <typeinfo>
+#include <boost/signals2.hpp>
 
 #include "Common/Math/Quaternion.hpp"
 #include "Cake/DependencyInjection/Inject.hpp"
@@ -20,6 +21,8 @@ class ObjectBase
 public:
     typedef Common::Game::Utilities::Id<ObjectBase> Id;
     typedef Common::Game::Utilities::StrictId<ObjectBase> StrictId;
+
+    typedef boost::signals2::signal<void(const CargoHold &)> CargoHoldSignal;
 
     ObjectBase();
 
@@ -41,6 +44,8 @@ public:
 
     void invokeOnCargoHold(std::function<void(CargoHold &)>);
 
+    boost::signals2::connection addCargoHoldSlot(CargoHoldSignal::slot_type);
+
     template <class ObjectType> bool is()
     {
         return dynamic_cast<ObjectType*>(this) != nullptr;
@@ -53,6 +58,7 @@ private:
     unsigned m_integrity;
     std::string m_model;
     CargoHold m_cargoHold;
+    CargoHoldSignal m_cargoHoldSignal;
 };
 
 }
