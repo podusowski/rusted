@@ -27,8 +27,6 @@ LoginState::LoginState(IStateManagerStack & stateManagerStack,
 
 void LoginState::activate()
 {
-    m_stateDeployment.deployNewConnection();
-
     m_gui.loadLayout("LoginScreen.layout");
     m_graphics.getSceneManager().setSkyBox(true, "SkyBox1", 8000);
 
@@ -37,6 +35,7 @@ void LoginState::activate()
 
     if (m_cfg->hasValue("player.login") && m_cfg->hasValue("player.password"))
     {
+        m_stateDeployment.deployNewConnection();
         m_authorizationService.login(
             m_cfg->getValue<std::string>("player.login"), 
             m_cfg->getValue<std::string>("player.password"),
@@ -63,6 +62,7 @@ void LoginState::loginButtonClicked(MyGUI::WidgetPtr)
         auto login = boost::lexical_cast<std::string>(loginEditBox->getCaption());
         auto password = boost::lexical_cast<std::string>(passwordEditBox->getCaption());
 
+        m_stateDeployment.deployNewConnection();
         m_authorizationService.login(login, password, boost::bind(&LoginState::loggedIn, this, _1));
     }
     catch (...)
