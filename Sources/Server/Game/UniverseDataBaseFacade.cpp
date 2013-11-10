@@ -92,6 +92,8 @@ std::shared_ptr<Common::Game::Object::ObjectBase> UniverseDataBaseFacade::create
 
     unsigned id = preInsertObjectToDb(shipClassId, ownerId);
 
+    LOG_DEBUG << "  id from the database: " << id;
+
     auto & shipClass = m_shipClassContainer.getById(shipClassId);
 
     std::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
@@ -151,8 +153,6 @@ unsigned UniverseDataBaseFacade::preInsertObjectToDb(unsigned shipClassId, unsig
         soci::into(id);
 
     m_sociSession->commit();
-
-    LOG_DEBUG << "  id from the database: " << id;
 
     return id;
 }
