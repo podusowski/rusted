@@ -27,7 +27,7 @@ public:
     BinaryDecoder & operator >> (std::vector<A> & vector)
     {
         size_t size;
-        *this >> size;
+        *this >> unsigned(size);
         while (size-- > 0)
         {
             A value;

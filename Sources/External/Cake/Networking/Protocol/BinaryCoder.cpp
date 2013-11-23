@@ -24,7 +24,7 @@ BinaryCoder & BinaryCoder::operator << (const bool p_value)
 
 BinaryCoder & BinaryCoder::operator << (const std::string & p_str)
 {
-    *this << p_str.length();
+    *this << unsigned(p_str.length());
 
     m_buffer.write(p_str.c_str(), p_str.length());
     return *this;

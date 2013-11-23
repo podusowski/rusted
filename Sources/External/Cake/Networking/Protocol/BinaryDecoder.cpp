@@ -27,7 +27,7 @@ BinaryDecoder & BinaryDecoder::operator >> (unsigned & value)
 
 BinaryDecoder & BinaryDecoder::operator >> (std::string & p_str)
 {
-    size_t l_strLenght;
+    unsigned l_strLenght;
     *this >> l_strLenght;
     p_str.resize(l_strLenght);
 
