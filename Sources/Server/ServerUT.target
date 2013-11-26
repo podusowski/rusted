@@ -7,6 +7,8 @@ SOURCES+=Game/Actions/UnitTests/BuildShipTest.cpp
 SOURCES+=Game/Actions/UnitTests/ActionFactoryTest.cpp
 SOURCES+=Game/Actions/UnitTests/ActionPerformerTest.cpp
 
+SOCI_SRC:=$(TARGET_BASE)/../External/SOCI/soci-3.2.1/
+
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../
 CFLAGS+=-I$(TARGET_BASE)/../Common

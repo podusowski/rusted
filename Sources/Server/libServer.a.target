@@ -24,6 +24,8 @@ SOURCES+=Game/Actions/ActionFactory.cpp
 SOURCES+=Game/Actions/ActionPerformer.cpp
 SOURCES+=DataBase/SociSessionFactory.cpp
 
+SOCI_SRC:=$(TARGET_BASE)/../External/SOCI/soci-3.2.1/
+
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/..
 CFLAGS+=-I$(TARGET_BASE)/../Common

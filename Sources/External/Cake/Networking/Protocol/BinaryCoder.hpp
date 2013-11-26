@@ -26,7 +26,8 @@ public:
     template <class A>
     BinaryCoder & operator << (const std::vector<A> & vector)
     {
-        *this << vector.size();
+        unsigned size = vector.size();
+        *this << size;
 
         for (typename std::vector<A>::const_iterator it = vector.begin();
                 it != vector.end(); it++)

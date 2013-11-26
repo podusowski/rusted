@@ -26,8 +26,8 @@ public:
     template <class A>
     BinaryDecoder & operator >> (std::vector<A> & vector)
     {
-        size_t size;
-        *this >> unsigned(size);
+        unsigned size;
+        *this >> size;
         while (size-- > 0)
         {
             A value;
