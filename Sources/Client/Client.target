@@ -3,8 +3,14 @@ TYPE:=application
 
 SOURCES+=main.cpp
 
+OGREDEPS_DIR:=$(BUILD)/OGRE/ogredeps
+OGRE_SRC:=$(TARGET_BASE)/../External/OGRE/ogre_src_v1-8-1
+OGRE_DIR:=$(BUILD)/OGRE/ogre_src_v1-8-1/
+
+MYGUI_SRC:=$(TARGET_BASE)/../External/MyGUI/MyGUI_3.2.0
+
 LDFLAGS+=-L$(BUILD)
-LDFLAGS+=-L$(OGREDEPS_DIR)/ogredeps/lib/Release
+LDFLAGS+=-L$(OGREDEPS_DIR)/ogredeps/lib
 LDFLAGS+=-lClient
 
 LDFLAGS+=-lMyGUI.OgrePlatform
@@ -17,17 +23,11 @@ else
   LDFLAGS+=$(OGRE_DIR)/lib/libOgreMain.so.1.8.1
   LDFLAGS+=-rdynamic
   LDFLAGS+=-lpthread
-  LDFLAGS+=-lOIS
+  LDFLAGS+=libOIS.so
 endif
 
 LDFLAGS+=-lCommon
 LDFLAGS+=-lCake
-
-OGREDEPS_DIR:=$(BUILD)/OGRE/ogredeps
-OGRE_SRC:=$(TARGET_BASE)/../External/OGRE/ogre_src_v1-8-1
-OGRE_DIR:=$(BUILD)/OGRE/ogre_src_v1-8-1/
-
-MYGUI_SRC:=$(TARGET_BASE)/../External/MyGUI/MyGUI_3.2.0
 
 CFLAGS+=-I$(TARGET_BASE) 
 CFLAGS+=-I$(TARGET_BASE)/../

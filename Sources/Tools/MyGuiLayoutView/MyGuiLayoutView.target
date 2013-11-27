@@ -2,6 +2,10 @@ TYPE:=application
 
 SOURCES+=main.cpp
 
+OGREDEPS_DIR:=$(BUILD)/OGRE/ogredeps
+OGRE_SRC:=$(TARGET_BASE)/../External/OGRE/ogre_src_v1-8-1
+OGRE_DIR:=$(BUILD)/OGRE/ogre_src_v1-8-1/
+
 CFLAGS+=-I$(TARGET_BASE)
 CFLAGS+=-I$(TARGET_BASE)/../..
 CFLAGS+=-I$(TARGET_BASE)/../../Client
@@ -23,6 +27,7 @@ LDFLAGS+=-lCake
 LDFLAGS+=-lpthread
 LDFLAGS+=-lMyGUIEngine
 LDFLAGS+=-lMyGUI.OgrePlatform
+LDFLAGS+=libOIS.so
 
 DEPENDENCIES+=libClient.a MyGUI
 
