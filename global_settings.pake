@@ -1,0 +1,3 @@
+append $compiler_flags -Wall
+append $compiler_flags -pedantic
+append $compiler_flags -std=gnu++0x

@@ -10,7 +10,7 @@ BOLD = '\033[1m'
 GRAY = '\033[90m'
 RED = '\033[31m'
 BOLD_RED = '\033[1;31m'
-BUILD_DIR = "_build"
+BUILD_DIR = os.getcwd() + "/_build"
 
 """
     utilities
@@ -49,28 +49,28 @@ class CxxToolchain:
         self.compiler_flags = "-I."
         self.archiver_cmd = "ar"
 
-    def build_object(self, out_filename, in_filename):
-        prerequisites = self.__scan_includes(in_filename)
+    def build_object(self, out_filename, in_filename, include_dirs, compiler_flags):
+        prerequisites = self.__scan_includes(in_filename, include_dirs, compiler_flags)
         prerequisites.append(in_filename)
 
         if is_any_newer_than(prerequisites, out_filename):
             info(BOLD + "c++" + RESET + " " + in_filename)
             execute("mkdir -p " + os.path.dirname(out_filename))
-            execute(self.compiler_cmd + " " + self.compiler_flags + " -c -o " + out_filename + " " + in_filename)
+            execute(self.compiler_cmd + " " + self.__prepare_compiler_flags(include_dirs, compiler_flags) + " -c -o " + out_filename + " " + in_filename)
 
-    def link_application(self, out_filename, in_filenames, link_with, library_dir):
+    def link_application(self, out_filename, in_filenames, link_with, library_dirs):
         if is_any_newer_than(in_filenames, out_filename) or self.__are_libs_newer_than_target(link_with, out_filename):
             debug("linking application")
             debug("  files: " + str(in_filenames))
             debug("  with libs: " + str(link_with))
-            debug("  lib dir: " + str(library_dir))
+            debug("  lib dirs: " + str(library_dirs))
 
             parameters = ""
-            for directory in library_dir:
+            for directory in library_dirs:
                 parameters += "-L" + directory + " "
 
             info(BOLD + "linking " + RESET + out_filename)
-            execute("c++ -o " + out_filename + " " + " ".join(in_filenames) + " " + self.__libs_arguments(link_with) + " " + parameters)
+            execute(self.compiler_cmd + " -o " + out_filename + " " + " ".join(in_filenames) + " " + self.__libs_arguments(link_with) + " " + parameters)
         else:
             info(BOLD + out_filename + RESET + " is up to date")
 
@@ -90,10 +90,10 @@ class CxxToolchain:
     def application_filename(self, target_name):
         return BUILD_DIR + "/" + target_name
 
-    def __scan_includes(self, in_filename):
+    def __scan_includes(self, in_filename, include_dirs, compiler_flags):
         debug("scanning includes for " + in_filename)
         ret = []
-        out = execute(self.compiler_cmd + " " + self.compiler_flags + " -M " + in_filename).split()
+        out = execute(self.compiler_cmd + " " + self.__prepare_compiler_flags(include_dirs, compiler_flags) + " -M " + in_filename).split()
         for token in out[2:]:
             if token != "\\":
                 ret.append(token)
@@ -103,6 +103,22 @@ class CxxToolchain:
         ret = "-L " + BUILD_DIR + " "
         for lib in link_with:
             ret = ret + " -l" + lib
+        return ret
+
+    def __prepare_compiler_flags(self, include_dirs, compiler_flags):
+        ret = self.compiler_flags + " "
+        for flag in compiler_flags:
+            ret += flag + " "
+        ret += self.__prepare_include_dirs_parameters(include_dirs) + " "
+        return ret
+
+    def __prepare_include_dirs_parameters(self, include_dirs):
+        ret = ""
+        for include_dir in include_dirs:
+            ret += "-I" + include_dir + " "
+
+        debug("include parameters: " + ret)
+
         return ret
 
     def __are_libs_newer_than_target(self, link_with, target):
@@ -117,12 +133,13 @@ class CxxToolchain:
 """
 
 class CommonTargetParameters:
-    def __init__(self, variable_deposit, module_name, name):
+    def __init__(self, variable_deposit, root_path, module_name, name):
         assert isinstance(variable_deposit, VariableDeposit)
         assert isinstance(module_name, str)
         assert isinstance(name, str)
 
         self.variable_deposit = variable_deposit
+        self.root_path = root_path
         self.module_name = module_name
         self.name = name
         self.depends_on = []
@@ -132,6 +149,8 @@ class CommonTargetParameters:
 class CommonCxxParameters:
     def __init__(self):
         self.sources = []
+        self.include_dirs = []
+        self.compiler_flags = []
 
 class Target:
     def __init__(self, common_parameters):
@@ -141,10 +160,16 @@ class Target:
         return self.common_parameters.name
 
     def before(self):
+        root_dir = os.getcwd()
+        os.chdir(self.common_parameters.root_path)
         self.__try_run(self.common_parameters.run_before)
+        os.chdir(root_dir)
 
     def after(self):
+        root_dir = os.getcwd()
+        os.chdir(self.common_parameters.root_path)
         self.__try_run(self.common_parameters.run_after)
+        os.chdir(root_dir)
 
     def __try_run(self, cmd):
         if cmd != None:
@@ -159,36 +184,49 @@ class Phony(Target):
         debug("phony build")
 
 class Application(Target):
-    def __init__(self, common_parameters, common_cxx_parameters, link_with, library_dir):
+    def __init__(self, common_parameters, common_cxx_parameters, link_with, library_dirs):
         Target.__init__(self, common_parameters)
 
         self.common_parameters = common_parameters
         self.common_cxx_parameters = common_cxx_parameters
         self.link_with = link_with
-        self.library_dir = library_dir
+        self.library_dirs = library_dirs
         self.toolchain = CxxToolchain()
 
     def build(self):
+        root_dir = os.getcwd()
+        os.chdir(self.common_parameters.root_path)
+
         object_files = []
         evaluated_sources = self.common_parameters.variable_deposit.eval(
             self.common_parameters.module_name,
             self.common_cxx_parameters.sources)
+
+        evaluated_include_dirs = self.common_parameters.variable_deposit.eval(
+            self.common_parameters.module_name,
+            self.common_cxx_parameters.include_dirs)
+
+        evaluated_compiler_flags = self.common_parameters.variable_deposit.eval(
+            self.common_parameters.module_name,
+            self.common_cxx_parameters.compiler_flags)
 
         debug("building application from " + str(evaluated_sources))
 
         for source in evaluated_sources:
             object_file = self.toolchain.object_filename(self.common_parameters.name, source)
             object_files.append(object_file)
-            self.toolchain.build_object(object_file, source)
+            self.toolchain.build_object(object_file, source, evaluated_include_dirs, evaluated_compiler_flags)
 
         evaluated_link_with = self.common_parameters.variable_deposit.eval(self.common_parameters.module_name, self.link_with)
-        evaluated_library_dir = self.common_parameters.variable_deposit.eval(self.common_parameters.module_name, self.library_dir)
+        evaluated_library_dirs = self.common_parameters.variable_deposit.eval(self.common_parameters.module_name, self.library_dirs)
 
         self.toolchain.link_application(
             self.toolchain.application_filename(self.common_parameters.name),
             object_files,
             evaluated_link_with,
-            evaluated_library_dir)
+            evaluated_library_dirs)
+
+        os.chdir(root_dir)
 
 class StaticLibrary(Target):
     def __init__(self, common_parameters, common_cxx_parameters):
@@ -199,21 +237,34 @@ class StaticLibrary(Target):
         self.toolchain = CxxToolchain()
 
     def build(self):
+        root_dir = os.getcwd()
+        os.chdir(self.common_parameters.root_path)
+
         object_files = []
         evaluated_sources = self.common_parameters.variable_deposit.eval(
             self.common_parameters.module_name,
             self.common_cxx_parameters.sources)
 
+        evaluated_include_dirs = self.common_parameters.variable_deposit.eval(
+            self.common_parameters.module_name,
+            self.common_cxx_parameters.include_dirs)
+
+        evaluated_compiler_flags = self.common_parameters.variable_deposit.eval(
+            self.common_parameters.module_name,
+            self.common_cxx_parameters.compiler_flags)
+
         debug("building static_library from " + str(evaluated_sources))
 
         for source in evaluated_sources:
             object_file = self.toolchain.object_filename(self.common_parameters.name, source)
-            self.toolchain.build_object(object_file, source)
+            self.toolchain.build_object(object_file, source, evaluated_include_dirs, evaluated_compiler_flags)
             object_files.append(object_file)
 
         self.toolchain.link_static_library(
             self.toolchain.static_library_filename(self.common_parameters.name),
             object_files)
+
+        os.chdir(root_dir)
 
 """
     parser
@@ -307,6 +358,13 @@ class VariableDeposit:
 
     def append(self, module_name, name, value):
         debug("appending variable in module " + module_name + " called " + name + " with value of " + value)
+
+        if not module_name in self.modules:
+            self.modules[module_name] = {}
+
+        if not name in self.modules[module_name]:
+            self.modules[module_name][name] = []
+
         self.modules[module_name][name].append(value)
         debug("  new value: " + str(self.modules[module_name][name]))
 
@@ -321,7 +379,6 @@ class Module:
         self.filename = filename
         self.name = self.__get_module_name(filename)
         self.lines = []
-        self.variables = {}
         self.targets = []
         self.base_dir = os.path.dirname(filename)
 
@@ -330,7 +387,10 @@ class Module:
 
         self.__parse()
 
-        debug("variables: " + str(self.variables))
+        self.variable_deposit.add(
+            self.name,
+            "$__path",
+            os.getcwd() + "/" + os.path.dirname(self.filename))
 
     def __get_module_name(self, filename):
         base = os.path.basename(filename)
@@ -348,15 +408,9 @@ class Module:
         else:
             raise ParsingError(token)
 
-        if not append:
-            self.variables[variable_name] = []
-
         while True:
             token = it.next()
             if token[0] == Tokenizer.TOKEN_LITERAL:
-                self.variables[variable_name].append(token[1])
-                debug("new variable value: " + variable_name + ": " + str(self.variables[variable_name]))
-
                 if append:
                     self.variable_deposit.append(self.name, variable_name, token[1])
                 else:
@@ -423,13 +477,25 @@ class Module:
         if token[1] == "sources":
             common_cxx_parameters.sources = self.__parse_list(it)
             return True
+        elif token[1] == "include_dirs":
+            common_cxx_parameters.include_dirs = self.__parse_list(it)
+            return True
+        elif token[1] == "compiler_flags":
+            common_cxx_parameters.compiler_flags = self.__parse_list(it)
+            return True
 
         return False
 
     def __parse_application_target(self, target_name, it):
         link_with = []
-        library_dir = []
-        common_parameters = CommonTargetParameters(self.variable_deposit, self.name, target_name)
+        library_dirs = []
+
+        common_parameters = CommonTargetParameters(
+            self.variable_deposit,
+            os.path.dirname(self.filename),
+            self.name,
+            target_name)
+
         common_cxx_parameters = CommonCxxParameters()
 
         while True:
@@ -438,18 +504,23 @@ class Module:
                 if self.__try_parse_target_common_parameters(common_parameters, token, it): pass
                 elif self.__try_parse_common_cxx_parameters(common_cxx_parameters, token, it): pass
                 elif token[1] == "link_with": link_with = self.__parse_list(it)
-                elif token[1] == "library_dir": library_dir = self.__parse_list(it)
+                elif token[1] == "library_dirs": library_dirs = self.__parse_list(it)
                 else: raise ParsingError(token)
             elif token[0] == Tokenizer.TOKEN_NEWLINE:
                 break
             else:
                 raise ParsingError(token)
 
-        target = Application(common_parameters, common_cxx_parameters, link_with, library_dir)
+        target = Application(common_parameters, common_cxx_parameters, link_with, library_dirs)
         self.__add_target(target)
 
     def __parse_static_library(self, target_name, it):
-        common_parameters = CommonTargetParameters(self.variable_deposit, self.name, target_name)
+        common_parameters = CommonTargetParameters(
+            self.variable_deposit,
+            os.path.dirname(self.filename),
+            self.name,
+            target_name)
+
         common_cxx_parameters = CommonCxxParameters()
 
         while True:
@@ -468,7 +539,13 @@ class Module:
 
     def __parse_phony(self, target_name, it):
         artefact = None
-        common_parameters = CommonTargetParameters(self.variable_deposit, self.name, target_name)
+
+        common_parameters = CommonTargetParameters(
+            self.variable_deposit,
+            os.path.dirname(self.filename),
+            self.name,
+            target_name)
+
         common_cxx_parameters = CommonCxxParameters()
 
         while True:
@@ -570,7 +647,7 @@ class Tokenizer:
         debug("tokens: " + str(self.tokens))
 
     def __is_valid_identifier_char(self, char):
-        return char.isalnum() or char in './$_-'
+        return char.isalnum() or char in './$_-=+'
 
     def __try_add_variable_or_literal(self, token_type, data):
         if len(data) > 0:

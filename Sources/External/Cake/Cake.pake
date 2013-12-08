@@ -1,0 +1,38 @@
+append $sources Configuration/Configuration.cpp
+
+append $sources Diagnostics/Logger.cpp
+append $sources Diagnostics/LogMessage.cpp
+
+append $sources Threading/Mutex.cpp
+append $sources Threading/ConditionVariable.cpp
+append $sources Threading/ScopedLock.cpp
+append $sources Threading/Thread.cpp
+
+append $sources Networking/Detail/SocketDescriptor.cpp
+append $sources Networking/DnsResolver.cpp
+append $sources Networking/GenericPacket.cpp
+append $sources Networking/ServerSocket.cpp
+append $sources Networking/ServerSocketPool.cpp
+append $sources Networking/Socket.cpp
+
+append $sources Networking/Protocol/BinaryCoder.cpp
+append $sources Networking/Protocol/BinaryDecoder.cpp
+append $sources Networking/Protocol/FcDecoder.cpp
+append $sources Networking/Protocol/CharVectorReadBuffer.cpp
+append $sources Networking/Protocol/CharVectorWriteBuffer.cpp
+append $sources Networking/Protocol/CakeReadBuffer.cpp
+append $sources Networking/Protocol/CakeWriteBuffer.cpp
+
+append $sources Serialization/Tms.cpp
+
+append $sources System/AtomicSyscall.cpp
+append $sources System/ShellResult.cpp
+append $sources System/Shell.cpp
+append $sources System/Time.cpp
+
+append $sources Utils/StringList.cpp
+
+append $include_dirs ../
+
+target static_library Cake sources($sources) include_dirs($include_dirs $boost.__path) compiler_flags($global_settings.compiler_flags)
+
