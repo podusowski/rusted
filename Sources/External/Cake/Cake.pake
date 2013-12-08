@@ -33,6 +33,7 @@ append $sources System/Time.cpp
 append $sources Utils/StringList.cpp
 
 append $include_dirs ../
+append $include_dirs $boost.__path
 
-target static_library Cake sources($sources) include_dirs($include_dirs $boost.__path) compiler_flags($global_settings.compiler_flags)
+target static_library Cake sources($sources) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags)
 
