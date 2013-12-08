@@ -1,0 +1,15 @@
+append $sources Serialization/UnitTests/TmsTest.cpp
+append $sources Serialization/UnitTests/FcTest.cpp
+append $sources Networking/UnitTests/ServerSocketPoolTest.cpp
+append $sources Networking/Protocol/UnitTests/ProtocolTest.cpp
+append $sources Utils/UnitTests/StringListTest.cpp
+append $sources mainUT.cpp
+
+append $libraries Cake
+append $libraries gtest
+append $libraries pthread
+
+append $include_dirs ../
+
+target application CakeUT sources($sources) link_with($libraries) include_dirs($include_dirs $boost.__path $gtest.__path) compiler_flags($global_settings.compiler_flags) depends_on(Cake gtest)
+
