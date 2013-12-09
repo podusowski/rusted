@@ -13,5 +13,8 @@ append $include_dirs ../
 append $include_dirs $boost.__path
 append $include_dirs $gtest.__path
 
-target application CakeUT sources($sources) link_with($libraries) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on(Cake gtest)
+target application CakeUT sources($sources) link_with($libraries) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on(Cake gtest SampleProtocolHeader)
+
+set $protoc_command "Networking/Protocol/protoc.py --output Networking/Protocol/UnitTests/SampleProtocol.hpp Networking/Protocol/UnitTests/SampleProtocol.xml --namespace Cake::Networking::Protocol"
+target phony SampleProtocolHeader run_before($protoc_command)
 
