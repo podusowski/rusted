@@ -755,6 +755,28 @@ class Tokenizer:
 
         return True
 
+    def __try_tokenize_quoted_literal(self, buf):
+        pos = buf.tell()
+        data = ''
+
+        if self.__try_to_read_token(buf, '"'):
+           while True:
+                if buf.eof():
+                    raise Exception("parse error")
+
+                if self.__try_to_read_token(buf, '"'):
+                    self.__add_token(Tokenizer.TOKEN_LITERAL, data)
+                    return True
+                else:
+                    char = buf.value()
+                    data = data + char
+
+                buf.rewind()
+        else:
+            buf.seek(pos)
+
+        return False
+
     def __try_tokenize_whitespace(self, buf):
         ret = False
         while not buf.eof() and buf.value() == ' ':
@@ -768,6 +790,7 @@ class Tokenizer:
             ret = (
                 self.__try_tokenize_comment(buf) or
                 self.__try_tokenize_simple_chars(buf) or
+                self.__try_tokenize_quoted_literal(buf) or
                 self.__try_tokenize_variable_or_literal(buf) or
                 self.__try_tokenize_whitespace(buf) or
                 self.__try_tokenize_multiline_literal(buf)
@@ -820,8 +843,14 @@ def info(s):
     print(s)
 
 def main():
-    target_name = sys.argv[1]
     tree = SourceTree()
-    tree.build(target_name)
+
+    if len(sys.argv) > 1:
+        target_name = sys.argv[1]
+        tree.build(target_name)
+    else:
+        for module in tree.files:
+            for t in module.targets:
+                print(t)
 
 main()
