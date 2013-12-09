@@ -1,0 +1,25 @@
+append $sources Game/RustedTime.cpp
+append $sources Game/TimeValue.cpp
+append $sources Game/Utilities/PasswordHash.cpp
+append $sources Game/Utilities/IdGenerator.cpp
+append $sources Game/Universe.cpp
+append $sources Game/Player.cpp
+append $sources Game/Object/ObjectBase.cpp
+append $sources Game/Object/FlightTrajectory.cpp
+append $sources Game/Object/Ship.cpp
+append $sources Game/Object/Asteroid.cpp
+append $sources Game/Object/CargoHold.cpp
+append $sources Math/Quaternion.cpp
+append $sources Math/Bezier3.cpp
+append $sources Math/Matrix3.cpp
+append $sources Math/KinematicParticle.cpp
+
+append $include_dirs ..
+append $include_dirs ../External
+append $include_dirs $boost.__path
+
+target static_library Common sources($sources) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on(CommonMessagesHeader)
+
+# TODO: path
+set $protoc_command "../External/Cake/Networking/Protocol/protoc.py --output Messages/Messages.hpp Messages/Messages.xml --namespace Common::Messages"
+target phony CommonMessagesHeader run_before($protoc_command)
