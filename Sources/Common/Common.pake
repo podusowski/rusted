@@ -20,6 +20,8 @@ append $include_dirs $boost.__path
 
 target static_library Common sources($sources) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on(CommonMessagesHeader)
 
-# TODO: path
-set $protoc_command "../External/Cake/Networking/Protocol/protoc.py --output Messages/Messages.hpp Messages/Messages.xml --namespace Common::Messages"
+set $protoc "${Cake.__path}/Networking/Protocol/protoc.py"
+set $protoc_command "${protoc} --output Messages/Messages.hpp Messages/Messages.xml --namespace Common::Messages"
+
 target phony CommonMessagesHeader run_before($protoc_command)
+
