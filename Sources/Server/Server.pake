@@ -1,0 +1,25 @@
+append $sources main.cpp
+append $sources Network/Connection.cpp
+append $sources Network/ConnectionContext.cpp
+append $sources Network/ServerController.cpp
+append $sources Services/ServerInfoService.cpp
+append $sources Services/AuthorizationService.cpp
+append $sources Services/EntityService.cpp
+append $sources Services/PlayerService.cpp
+append $sources Services/RustedTimeService.cpp
+append $sources Services/ServiceDeployment.cpp
+append $sources Services/Utils.cpp
+append $sources Game/UniverseDataBaseFacade.cpp
+append $sources Game/PlayerContainer.cpp
+append $sources Game/ShipClass.cpp
+append $sources Game/ShipClassContainer.cpp
+append $sources Game/Actions/Attack.cpp
+append $sources Game/Actions/BuildShip.cpp
+append $sources Game/Actions/Gather.cpp
+append $sources Game/Actions/Transfer.cpp
+append $sources Game/Actions/ActionFactory.cpp
+append $sources Game/Actions/ActionPerformer.cpp
+append $sources DataBase/SociSessionFactory.cpp
+
+target application Server sources($sources) depends_on(Common) compiler_flags($global_settings.compiler_flags) depends_on(Common SOCI)
+
