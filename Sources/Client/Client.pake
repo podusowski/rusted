@@ -1,0 +1,27 @@
+append $sources Engine/Engine.cpp
+append $sources Graphics/Graphics.cpp
+append $sources Graphics/Raycast.cpp
+append $sources Gui/Gui.cpp
+append $sources Input/Input.cpp
+append $sources Network/Connection.cpp
+append $sources States/StateManager.cpp
+append $sources States/StateDeployment.cpp
+append $sources States/LoginState.cpp
+append $sources States/EntitySelectState.cpp
+append $sources States/PilotState.cpp
+append $sources Services/RustedTimeService.cpp
+append $sources Services/AuthorizationService.cpp
+append $sources Services/PlayerActionService.cpp
+append $sources Services/ObjectService.cpp
+append $sources Services/EffectsService.cpp
+append $sources Views/ObjectsView.cpp
+append $sources Views/Camera.cpp
+append $sources Views/PilotView.cpp
+append $sources Views/ActionsView.cpp
+append $sources Visuals/VisualObject.cpp
+append $sources Visuals/VisualUniverse.cpp
+append $sources Visuals/Effects.cpp
+append $sources Visuals/MovingMeshEffect.cpp
+append $sources Visuals/Explosion.cpp
+
+target application Client sources($sources)
