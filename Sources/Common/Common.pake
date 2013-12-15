@@ -20,8 +20,10 @@ append $include_dirs $boost.__path
 
 target static_library Common sources($sources) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on(CommonMessagesHeader)
 
+set $messages_header Messages/Messages.hpp
+set $messages_xml Messages/Messages.xml
 set $protoc "${Cake.__path}/Networking/Protocol/protoc.py"
-set $protoc_command "${protoc} --output Messages/Messages.hpp Messages/Messages.xml --namespace Common::Messages"
+set $protoc_command "${protoc} --output ${messages_header} ${messages_xml} --namespace Common::Messages"
 
-target phony CommonMessagesHeader run_before($protoc_command)
+target phony CommonMessagesHeader artefacts($messages_header) prerequisites($messages_xml) run_before($protoc_command)
 
