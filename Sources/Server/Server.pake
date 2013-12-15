@@ -42,5 +42,5 @@ set $big_database "${__build}/BigDataBase.sqlite3"
 target phony ServerBigDataBase run_before("${gen_big_database} -o ${big_database}")
 
 append $test_database_prerequisites DataBaseSchema.sql TestDataBase.sql
-append $test_database "${__build}/TestDataBase.sqlite3"
-target phony ServerTestDataBase run_before("cat ${test_database_prerequisites} | sqlite3 ${test_database}")
+set $test_database "${__build}/TestDataBase.sqlite3"
+target phony ServerTestDataBase run_before("rm -f ${test_database}; cat ${test_database_prerequisites} | sqlite3 ${test_database}")
