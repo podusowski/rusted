@@ -1,2 +1,4 @@
+set $soci_src "${__path}/soci-3.2.1/"
+
 target phony SOCI run_before("./SOCI.sh")
 

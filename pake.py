@@ -4,6 +4,7 @@ import os
 import sys
 import tempfile
 import stat
+import subprocess
 
 RESET = '\033[0m'
 BOLD = '\033[1m'
@@ -29,11 +30,14 @@ def is_any_newer_than(prerequisites, target):
             return True
     return False
 
-def execute(command):
-    f = os.popen(command)
-    out = f.read()
-    ret = f.close()
-    if ret != None:
+def execute(command, capture_output = False):
+    out = ''
+    try:
+        if capture_output:
+            out = subprocess.check_output(command, shell=True)
+        else:
+            subprocess.check_call(command, shell=True)
+    except subprocess.CalledProcessError:
         Ui.fatal("command did not finish successfully: " + command)
 
     Ui.debug("command completed: " + command)
@@ -117,7 +121,7 @@ class CxxToolchain:
     def __scan_includes(self, in_filename, include_dirs, compiler_flags):
         Ui.debug("scanning includes for " + in_filename)
         ret = []
-        out = execute(self.compiler_cmd + " " + self.__prepare_compiler_flags(include_dirs, compiler_flags) + " -M " + in_filename).split()
+        out = execute(self.compiler_cmd + " " + self.__prepare_compiler_flags(include_dirs, compiler_flags) + " -M " + in_filename, capture_output = True).split()
         for token in out[2:]:
             if token != "\\":
                 ret.append(token)
@@ -193,6 +197,8 @@ class Target:
         self.__try_run(self.common_parameters.run_after)
 
     def __try_run(self, cmds):
+        self.common_parameters.variable_deposit.polute_environment(self.common_parameters.module_name)
+
         root_dir = os.getcwd()
         os.chdir(self.common_parameters.root_path)
 
@@ -316,8 +322,21 @@ class VariableDeposit:
     def __init__(self):
         self.modules = {}
 
+    def polute_environment(self, current_module):
+        Ui.debug("poluting environment")
+        for module in self.modules:
+            for (name, variable) in self.modules[module].iteritems():
+                evaluated = self.eval(module, variable)
+                env_name = module + "_" + name[1:]
+                os.environ[env_name] = " ".join(evaluated)
+                Ui.debug("  " + env_name + ": " + str(evaluated))
+                if module == current_module:
+                    env_short_name = name[1:]
+                    os.environ[env_short_name] = " ".join(evaluated)
+                    Ui.debug("  " + env_short_name + ": " + str(evaluated))
+
     def eval(self, current_module, l):
-        Ui.debug("evaluating " + str(l))
+        Ui.debug("evaluating " + str(l) + " in context of module " + current_module)
         ret = []
         for token in l:
             if token[0] == Tokenizer.TOKEN_LITERAL:
@@ -339,14 +358,14 @@ class VariableDeposit:
                     name = "$" + parts[1]
 
                 if not name in self.modules[module]:
-                    Ui.fatal("tried to dereference non-existing variable: " + name)
+                    Ui.fatal("dereferenced " + name + " but it doesn't exists in module " + current_module)
 
                 for value in self.modules[module][name]:
                     if value[0] == Tokenizer.TOKEN_VARIABLE:
-                        re = self.eval(current_module, [value])
+                        re = self.eval(module, [value])
                         for v in re: ret.append(v)
                     else:
-                        content = self.__eval_literal(current_module, value[1])
+                        content = self.__eval_literal(module, value[1])
                         ret.append(content)
                         Ui.debug("    = " + str(content))
             else:
@@ -434,6 +453,11 @@ class Module:
             self.name,
             "$__path",
             (Tokenizer.TOKEN_LITERAL, os.getcwd() + "/" + os.path.dirname(self.filename)))
+
+        self.variable_deposit.add(
+            self.name,
+            "$__build",
+            (Tokenizer.TOKEN_LITERAL, BUILD_DIR))
 
     def __parse_error(self, token = None, msg = None):
         if token != None:

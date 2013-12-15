@@ -21,5 +21,16 @@ append $sources Game/Actions/ActionFactory.cpp
 append $sources Game/Actions/ActionPerformer.cpp
 append $sources DataBase/SociSessionFactory.cpp
 
-target application Server sources($sources) depends_on(Common) compiler_flags($global_settings.compiler_flags) depends_on(Common SOCI)
+append $libraries Common
+append $libraries Cake
+append $libraries pthread
+append $libraries soci_core
+
+append $include_dirs ..
+append $include_dirs ../External
+append $include_dirs $Common.__path
+append $include_dirs $boost.__path
+append $include_dirs "${SOCI.soci_src}/core"
+
+target application Server sources($sources) link_with($libraries) include_dirs($include_dirs) depends_on(Common) compiler_flags($global_settings.compiler_flags) depends_on(Cake Common SOCI)
 
