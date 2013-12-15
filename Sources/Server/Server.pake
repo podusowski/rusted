@@ -1,4 +1,3 @@
-append $sources main.cpp
 append $sources Network/Connection.cpp
 append $sources Network/ConnectionContext.cpp
 append $sources Network/ServerController.cpp
@@ -30,9 +29,24 @@ append $include_dirs ..
 append $include_dirs ../External
 append $include_dirs $Common.__path
 append $include_dirs $boost.__path
+append $include_dirs $gtest.__path
 append $include_dirs "${SOCI.soci_src}/core"
 
-target application Server sources($sources) link_with($libraries) include_dirs($include_dirs) depends_on(Common) compiler_flags($global_settings.compiler_flags) depends_on(Cake Common SOCI ServerResources ServerBigDataBase ServerTestDataBase)
+append $dependencies Cake Common SOCI ServerResources ServerBigDataBase ServerTestDataBase
+
+target application Server sources($sources main.cpp) link_with($libraries) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on($dependencies)
+
+# unit tests
+
+append $sources_ut ../Common/UnitTests/mainUT.cpp
+append $sources_ut Game/Actions/UnitTests/AttackTest.cpp
+append $sources_ut Game/Actions/UnitTests/BuildShipTest.cpp
+append $sources_ut Game/Actions/UnitTests/ActionFactoryTest.cpp
+append $sources_ut Game/Actions/UnitTests/ActionPerformerTest.cpp
+
+target application ServerUT sources($sources $sources_ut) link_with($libraries gtest) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on($dependencies gtest)
+
+# resources
 
 append $resources Server.cfg runTestServer
 target phony ServerResources run_before("cp -t ${__build} ${resources}")
@@ -44,3 +58,4 @@ target phony ServerBigDataBase run_before("${gen_big_database} -o ${big_database
 append $test_database_prerequisites DataBaseSchema.sql TestDataBase.sql
 set $test_database "${__build}/TestDataBase.sqlite3"
 target phony ServerTestDataBase run_before("rm -f ${test_database}; cat ${test_database_prerequisites} | sqlite3 ${test_database}")
+
