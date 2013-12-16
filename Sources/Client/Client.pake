@@ -33,7 +33,7 @@ append $include_dirs ../External
 append $include_dirs $Common.__path
 append $include_dirs $boost.__path
 append $include_dirs $gtest.__path
-append $include_dirs $OGRE.include_dir
+append $include_dirs $OGRE.include_dirs
 
 target application Client sources($sources) link_with($libraries) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags)
 

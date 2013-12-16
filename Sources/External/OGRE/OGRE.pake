@@ -3,7 +3,8 @@ set $ogredeps_dir "${__build}/OGRE/ogredeps"
 set $ogre_src "${__path}/ogre_src_v1-8-1"
 set $ogre_dir "${__build}/OGRE/ogre_src_v1-8-1"
 
-set $include_dir "${ogre_src}/OgreMain/include"
+append $include_dirs "${ogre_src}/OgreMain/include"
+append $include_dirs "${ogre_dir}/include"
 
 target phony OGRE run_before("./OGRE.sh")
 
