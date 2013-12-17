@@ -36,7 +36,7 @@ append $include_dirs $gtest.__path
 append $include_dirs $OGRE.include_dirs
 append $include_dirs $MyGUI.include_dirs
 
-append $dependencies OGRE MyGUI
+append $dependencies Cake Common OGRE MyGUI
 
 target application Client sources($sources) link_with($libraries) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on($dependencies)
 
