@@ -27,6 +27,10 @@ append $sources Visuals/Explosion.cpp
 append $libraries Common
 append $libraries Cake
 append $libraries pthread
+append $libraries OgreMainStatic
+append $libraries Plugin_OctreeSceneManagerStatic
+append $libraries Plugin_ParticleFXStatic
+append $libraries RenderSystem_GLStatic
 
 append $include_dirs ..
 append $include_dirs ../External
