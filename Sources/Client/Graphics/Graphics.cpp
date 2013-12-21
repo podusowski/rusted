@@ -105,16 +105,12 @@ void Graphics::initOgre()
 {
     m_ogreRoot = new Ogre::Root("", "");
 
-    m_ogreRoot->loadPlugin("RenderSystem_GL");
-    m_ogreRoot->loadPlugin("Plugin_ParticleFX");
+    //m_ogreRoot->loadPlugin("RenderSystem_GL");
+    //m_ogreRoot->loadPlugin("Plugin_ParticleFX");
+    m_ogreRenderSystem = new Ogre::GLRenderSystem();
+    m_ogreRoot->setRenderSystem(m_ogreRenderSystem);
 
-    if (m_ogreRoot->getAvailableRenderers().begin() == m_ogreRoot->getAvailableRenderers().end())
-    {
-        LOG_ERR << "No OGRE renderers available";
-        throw std::runtime_error("Ogre init error");
-    }
-
-    m_ogreRoot->setRenderSystem(*m_ogreRoot->getAvailableRenderers().begin());
+    //m_ogreRoot->setRenderSystem(*m_ogreRoot->getAvailableRenderers().begin());
     m_ogreRoot->initialise(false);
 
     initResources();

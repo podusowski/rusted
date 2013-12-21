@@ -27,10 +27,24 @@ append $sources Visuals/Explosion.cpp
 append $libraries Common
 append $libraries Cake
 append $libraries pthread
+append $libraries RenderSystem_GLStatic
 append $libraries OgreMainStatic
 append $libraries Plugin_OctreeSceneManagerStatic
 append $libraries Plugin_ParticleFXStatic
-append $libraries RenderSystem_GLStatic
+append $libraries MyGUIEngineStatic
+append $libraries MyGUI.OgrePlatform
+append $libraries OIS
+append $libraries zziplib
+append $libraries zlib
+append $libraries freetype
+append $libraries GL
+append $libraries GLU
+append $libraries X11
+append $libraries Xt
+append $libraries Xaw
+append $libraries Xrandr
+
+append $library_dirs $OGRE.library_dirs
 
 append $include_dirs ..
 append $include_dirs ../External
@@ -42,5 +56,5 @@ append $include_dirs $MyGUI.include_dirs
 
 append $dependencies Cake Common OGRE MyGUI
 
-target application Client sources($sources) link_with($libraries) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on($dependencies)
+target application Client sources($sources main.cpp) link_with($libraries) library_dirs($library_dirs) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on($dependencies)
 

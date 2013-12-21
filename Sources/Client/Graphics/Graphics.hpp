@@ -2,6 +2,7 @@
 
 #include <OgreRoot.h>
 #include <OgreRenderWindow.h>
+#include <OgreGLRenderSystem.h>
 
 #include "Client/Graphics//IGraphics.hpp"
 
@@ -37,6 +38,7 @@ private:
 
     Cake::DependencyInjection::Inject<Cake::Configuration::Configuration> m_cfg;
     Ogre::Root * m_ogreRoot;
+    Ogre::RenderSystem * m_ogreRenderSystem;
     Ogre::RenderWindow * m_ogreRenderWindow;
     Ogre::SceneManager * m_ogreSceneManager;
     Ogre::Camera * m_ogreCamera;
