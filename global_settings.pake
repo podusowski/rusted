@@ -1,3 +1,6 @@
 append $compiler_flags -Wall
+append $compiler_flags -g
+append $compiler_flags -O0
 append $compiler_flags -pedantic
 append $compiler_flags -std=gnu++0x
+

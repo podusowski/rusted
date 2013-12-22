@@ -105,12 +105,12 @@ void Graphics::initOgre()
 {
     m_ogreRoot = new Ogre::Root("", "");
 
-    //m_ogreRoot->loadPlugin("RenderSystem_GL");
-    //m_ogreRoot->loadPlugin("Plugin_ParticleFX");
     m_ogreRenderSystem = new Ogre::GLRenderSystem();
     m_ogreRoot->setRenderSystem(m_ogreRenderSystem);
 
-    //m_ogreRoot->setRenderSystem(*m_ogreRoot->getAvailableRenderers().begin());
+    m_particleFxPlugin = new Ogre::ParticleFXPlugin();
+    m_ogreRoot->installPlugin(m_particleFxPlugin);
+
     m_ogreRoot->initialise(false);
 
     initResources();
@@ -140,3 +140,4 @@ void Graphics::initResources()
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/materials", "FileSystem", "General");
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/objects", "FileSystem", "General");
 }
+

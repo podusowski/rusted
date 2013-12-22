@@ -5,6 +5,7 @@ set $ogre_dir "${__build}/OGRE/ogre_src_v1-8-1"
 
 append $include_dirs "${ogre_src}/OgreMain/include"
 append $include_dirs "${ogre_src}/RenderSystems/GL/include"
+append $include_dirs "${ogre_src}/PlugIns/ParticleFX/include"
 append $include_dirs "${ogre_dir}/include"
 append $include_dirs "${ogredeps_dir}/ogredeps/include"
 
