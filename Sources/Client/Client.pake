@@ -37,6 +37,7 @@ append $libraries OIS
 append $libraries zziplib
 append $libraries zlib
 append $libraries freetype
+append $libraries FreeImage
 append $libraries GL
 append $libraries GLU
 append $libraries X11

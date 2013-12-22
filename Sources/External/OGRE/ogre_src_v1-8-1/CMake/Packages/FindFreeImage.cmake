@@ -31,7 +31,7 @@ clear_if_changed(FreeImage_PREFIX_PATH
   FreeImage_INCLUDE_DIR
 )
 
-set(FreeImage_LIBRARY_NAMES freeimage freeimageLib)
+set(FreeImage_LIBRARY_NAMES freeimage freeimageLib FreeImage)
 get_debug_names(FreeImage_LIBRARY_NAMES)
 
 use_pkgconfig(FreeImage_PKGC freeimage)
@@ -40,8 +40,13 @@ findpkg_framework(FreeImage)
 
 find_path(FreeImage_INCLUDE_DIR NAMES FreeImage.h HINTS ${FreeImage_INC_SEARCH_PATH} ${FreeImage_PKGC_INCLUDE_DIRS})
 
-find_library(FreeImage_LIBRARY_REL NAMES ${FreeImage_LIBRARY_NAMES} HINTS ${FreeImage_LIB_SEARCH_PATH} ${FreeImage_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" release relwithdebinfo minsizerel)
-find_library(FreeImage_LIBRARY_DBG NAMES ${FreeImage_LIBRARY_NAMES_DBG} HINTS ${FreeImage_LIB_SEARCH_PATH} ${FreeImage_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" debug)
+message(STATUS "${FreeImage_INCLUDE_DIR}")
+
+find_library(FreeImage_LIBRARY_REL NAMES ${FreeImage_LIBRARY_NAMES} HINTS ${FreeImage_LIB_SEARCH_PATH} ${FreeImage_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" Release RelWithDebInfo MinSizeRel NO_CMAKE_FIND_ROOT_PATH)
+find_library(FreeImage_LIBRARY_DBG NAMES ${FreeImage_LIBRARY_NAMES_DBG} HINTS ${FreeImage_LIB_SEARCH_PATH} ${FreeImage_PKGC_LIBRARY_DIRS} PATH_SUFFIXES "" Debug NO_CMAKE_FIND_ROOT_PATH)
+
+message(STATUS "${FreeImage_LIBRARY_REL}")
+message(STATUS "${FreeImage_LIBRARY_DBG}")
 
 make_library_set(FreeImage_LIBRARY)
 
