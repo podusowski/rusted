@@ -7,12 +7,6 @@ import stat
 import subprocess
 import argparse
 
-RESET = '\033[0m'
-BOLD = '\033[1m'
-GRAY = '\033[90m'
-RED = '\033[31m'
-BOLD_RED = '\033[1;31m'
-BOLD_BLUE = "\033[34;1m"
 BUILD_DIR = os.getcwd() + "/_build"
 
 """
@@ -61,22 +55,22 @@ class Ui:
 
     @staticmethod
     def step(tool, parameter):
-        print(BOLD + tool + RESET + " " + parameter)
+        print(Ui.BOLD + tool + Ui.RESET + " " + parameter)
 
     @staticmethod
     def bigstep(tool, parameter):
-        print(BOLD_BLUE + tool + RESET + " " + parameter)
+        print(Ui.BOLD_BLUE + tool + Ui.RESET + " " + parameter)
 
     @staticmethod
     def fatal(message):
-        print(BOLD_RED + "fatal: " + RESET + message)
+        print(Ui.BOLD_RED + "fatal: " + Ui.RESET + message)
         sys.exit(1)
 
     @staticmethod
     def debug(s, env = None):
         if "DEBUG" in os.environ:
             if env == None or env in os.environ:
-                print(GRAY + "debug: " + s + RESET)
+                print(Ui.GRAY + "debug: " + s + Ui.RESET)
 
 """
     C++ compiler support
@@ -927,10 +921,17 @@ class SourceTree:
     def __init__(self):
         self.variable_deposit = VariableDeposit()
         self.files = []
+        self.built_targets = []
         for filename in self.__find_pake_files():
             self.files.append(Module(self.variable_deposit, filename))
 
     def build(self, target):
+        if target in self.built_targets:
+            Ui.debug(target + " already build, skipping")
+            return
+
+        self.built_targets.append(target)
+
         Ui.debug("building " + target)
         found = False
         for f in self.files:
@@ -960,15 +961,10 @@ class SourceTree:
                 if ext == ".pake":
                     yield(filename)
 
-def info(s):
-    print(s)
-
 def main():
-
     parser = argparse.ArgumentParser(description='Painless buildsystem.')
     parser.add_argument('target', metavar='target', nargs="*", help='target to be built')
     parser.add_argument('-a', '--all',  action="store_true", help='build all targets')
-    #parser.add_argument('--sum', dest='accumulate', action='store_const', const=sum, default=max, help='sum the integers (default: find the max)')
 
     tree = SourceTree()
 

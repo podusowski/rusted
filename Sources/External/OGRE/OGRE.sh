@@ -24,4 +24,5 @@ cmake -DCMAKE_BUILD_TYPE=MinSizeRel $OGRE_CMAKE_OPTIONS $ogre_src
 make
 cp -rv $ogre_dir/lib/* $__build
 cp -rv $ogre_dir/bin/* $__build
+cp -rv $ogredeps_dir/ogredeps/lib/* $__build
 
