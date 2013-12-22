@@ -4,5 +4,7 @@ set $mygui_dir "${__build}/MyGUI"
 append $include_dirs "${mygui_src}/MyGUIEngine/include"
 append $include_dirs "${mygui_src}/Platforms/Ogre/OgrePlatform/include"
 
+append $artefacts "${__build}/libMyGUIEngineStatic.a"
+
 target phony MyGUI run_before(./MyGUI.sh)
 

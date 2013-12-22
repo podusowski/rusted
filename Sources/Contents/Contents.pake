@@ -1,1 +1,1 @@
-target phony Contents run_before("cp -vrl ${__path} ${__build}/Contents")
+target phony Contents run_before("cp -rl ${__path} ${__build}/Contents")

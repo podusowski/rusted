@@ -11,5 +11,7 @@ append $include_dirs "${ogredeps_dir}/ogredeps/include"
 
 append $library_dirs "${__build}/OGRE/ogredeps/ogredeps/lib"
 
+append $artefacts "${__build}/libOgreMainStatic.a"
+
 target phony OGRE run_before("./OGRE.sh")
 
