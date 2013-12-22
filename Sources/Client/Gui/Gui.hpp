@@ -1,5 +1,8 @@
 #pragma once
 
+#include <boost/utility.hpp>
+#include <memory>
+
 #include <OgreRenderWindow.h>
 
 #include "MyGUI.h"
@@ -10,7 +13,7 @@ namespace Client
 namespace Gui
 {
 
-class Gui
+class Gui : boost::noncopyable
 {
 public:
     Gui(Ogre::RenderWindow &, Ogre::SceneManager &);
@@ -28,8 +31,8 @@ private:
     Ogre::RenderWindow & m_ogreRenderWindow;
     Ogre::SceneManager & m_ogreSceneManager;
 
-    MyGUI::Gui m_myGui;
-    MyGUI::OgrePlatform m_myGuiOgrePlatform;
+    std::shared_ptr<MyGUI::OgrePlatform> m_myGuiOgrePlatform;
+    std::shared_ptr<MyGUI::Gui> m_myGui;
     std::vector<MyGUI::VectorWidgetPtr> m_myGuiLoadedLayouts;
 };
 

@@ -9,14 +9,23 @@ Gui::Gui(Ogre::RenderWindow & ogreRenderWindow, Ogre::SceneManager & ogreSceneMa
 {
     LOG_INFO << "Initializing GUI subsystem";
 
-    initResources();
-    initRenderer();
+    try
+    {
+        initResources();
+        initRenderer();
+    }
+    catch (const std::exception & ex)
+    {
+        LOG_ERR << "Can't initialize GUI, reason: " << ex.what();
+        throw;
+    }
 }
 
 Gui::~Gui()
 {
-    m_myGui.shutdown();
-    m_myGuiOgrePlatform.shutdown();
+    LOG_INFO << "Shutting down GUI subsystem";
+    m_myGui->shutdown();
+    m_myGuiOgrePlatform->shutdown();
 }
 
 void Gui::loadLayout(const std::string & layout)
@@ -45,16 +54,17 @@ void Gui::unloadAllLayouts()
 
 MyGUI::Gui & Gui::operator*()
 {
-    return m_myGui;
+    return *m_myGui;
 }
 
 MyGUI::Gui * Gui::operator->()
 {
-    return &m_myGui;
+    return m_myGui.get();
 }
 
 void Gui::initResources()
 {
+    LOG_DEBUG << "Initializing GUI resources";
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/imagesets", "FileSystem", "General");
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/schemes", "FileSystem", "General");
     Ogre::ResourceGroupManager::getSingleton().addResourceLocation("Contents/fonts", "FileSystem", "General");
@@ -67,7 +77,11 @@ void Gui::initResources()
 
 void Gui::initRenderer()
 {
-    m_myGuiOgrePlatform.initialise(&m_ogreRenderWindow, &m_ogreSceneManager);
-    m_myGui.initialise();
+    LOG_DEBUG << "Initializing GUI renderer";
+    m_myGuiOgrePlatform = std::make_shared<MyGUI::OgrePlatform>();
+    m_myGuiOgrePlatform->initialise(&m_ogreRenderWindow, &m_ogreSceneManager);
+
+    m_myGui = std::make_shared<MyGUI::Gui>();
+    m_myGui->initialise();
 }
 
