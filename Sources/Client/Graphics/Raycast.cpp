@@ -1,3 +1,5 @@
+#include <cstdint>
+
 #include <boost/optional.hpp>
 
 #include <OgreSubMesh.h>
@@ -230,8 +232,8 @@ void Raycast::getMeshInformation(const Ogre::MeshPtr mesh,
  
         bool use32bitindexes = (ibuf->getType() == Ogre::HardwareIndexBuffer::IT_32BIT);
  
-        unsigned long*  pLong = static_cast<unsigned long*>(ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
-        unsigned short* pShort = reinterpret_cast<unsigned short*>(pLong);
+        std::uint32_t * pLong = static_cast<std::uint32_t*>(ibuf->lock(Ogre::HardwareBuffer::HBL_READ_ONLY));
+        std::uint16_t * pShort = reinterpret_cast<std::uint16_t *>(pLong);
  
  
         size_t offset = (submesh->useSharedVertices)? shared_offset : current_offset;
