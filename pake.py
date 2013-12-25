@@ -8,33 +8,26 @@ import subprocess
 import argparse
 import marshal
 
-BUILD_DIR = os.getcwd() + "/_build"
+BUILD_DIR = os.path.normpath(os.getcwd() + "/_build")
 
 """
     utilities
 """
 
-class FsUtils:
-    @staticmethod
-    def is_newer_than(prerequisite, target):
-        if os.path.exists(target):
-            ret = FsUtils.get_mtime(prerequisite) > FsUtils.get_mtime(target)
-            Ui.debug("is " + prerequisite + " newer than " + target + " = " + str(ret))
-            return ret
-        else:
-            Ui.debug(target + " doesn't exist, treating like older")
+def is_newer_than(prerequisite, target):
+    if os.path.exists(target):
+        ret = os.path.getmtime(prerequisite) > os.path.getmtime(target)
+        Ui.debug("is " + prerequisite + " newer than " + target + " = " + str(ret))
+        return ret
+    else:
+        Ui.debug(target + " doesn't exist, treating like older")
+        return True
+
+def is_any_newer_than(prerequisites, target):
+    for prerequisite in prerequisites:
+        if is_newer_than(prerequisite, target):
             return True
-
-    @staticmethod
-    def is_any_newer_than(prerequisites, target):
-        for prerequisite in prerequisites:
-            if FsUtils.is_newer_than(prerequisite, target):
-                return True
-        return False
-
-    @staticmethod
-    def get_mtime(filename):
-        return os.path.getmtime(filename)
+    return False
 
 def execute(command, capture_output = False):
     out = ''
@@ -94,13 +87,13 @@ class CxxToolchain:
         prerequisites = self.__fetch_includes(target_name, in_filename, include_dirs, compiler_flags)
         prerequisites.append(in_filename)
 
-        if FsUtils.is_any_newer_than(prerequisites, out_filename):
+        if is_any_newer_than(prerequisites, out_filename):
             Ui.step("c++", in_filename)
             execute("mkdir -p " + os.path.dirname(out_filename))
             execute(self.compiler_cmd + " " + self.__prepare_compiler_flags(include_dirs, compiler_flags) + " -c -o " + out_filename + " " + in_filename)
 
     def link_application(self, out_filename, in_filenames, link_with, library_dirs):
-        if FsUtils.is_any_newer_than(in_filenames, out_filename) or self.__are_libs_newer_than_target(link_with, out_filename):
+        if is_any_newer_than(in_filenames, out_filename) or self.__are_libs_newer_than_target(link_with, out_filename):
             Ui.debug("linking application")
             Ui.debug("  files: " + str(in_filenames))
             Ui.debug("  with libs: " + str(link_with))
@@ -133,7 +126,7 @@ class CxxToolchain:
     def __fetch_includes(self, target_name, in_filename, include_dirs, compiler_flags):
         cache_file = self.cache_directory(target_name) + in_filename + ".includes"
         includes = None
-        if os.path.exists(cache_file) and FsUtils.is_newer_than(cache_file, in_filename):
+        if os.path.exists(cache_file) and is_newer_than(cache_file, in_filename):
             includes = marshal.load(open(cache_file))
         else:
             execute("mkdir -p " + os.path.dirname(cache_file))
@@ -181,7 +174,7 @@ class CxxToolchain:
             filename = self.static_library_filename(lib)
             if os.path.exists(filename):
                 # TODO: proper appname
-                if FsUtils.is_newer_than(filename, target):
+                if is_newer_than(filename, target):
                     return True
         return False
 
@@ -243,7 +236,7 @@ class Target:
             Ui.debug("checking prerequisites (" + str(evaluated_prerequisites) + ") for making " + str(evaluated_artefacts))
             for artefact in evaluated_artefacts:
                 Ui.debug("  " + artefact)
-                if FsUtils.is_any_newer_than(evaluated_prerequisites, artefact):
+                if is_any_newer_than(evaluated_prerequisites, artefact):
                     Ui.debug("going on because " + str(artefact) + " need to be rebuilt")
                     should_run = True
                     break
@@ -348,7 +341,7 @@ class StaticLibrary(Target):
 
         artefact = self.toolchain.static_library_filename(self.common_parameters.name)
 
-        if FsUtils.is_any_newer_than(object_files, artefact):
+        if is_any_newer_than(object_files, artefact):
             Ui.bigstep("archiving", artefact)
             self.toolchain.link_static_library(artefact, object_files)
         else:
@@ -429,7 +422,7 @@ class VariableDeposit:
         return ret
 
     def __eval_literal(self, current_module, s):
-        Ui.debug("evaluating literal: " + s)
+        Ui.debug("    evaluating literal: " + s)
         ret = ""
 
         STATE_READING = 1
@@ -452,7 +445,7 @@ class VariableDeposit:
                     raise ParsingError("expecting { after $")
             elif state == STATE_READING_NAME:
                 if c == "}":
-                    Ui.debug("variable: " + variable_name)
+                    Ui.debug("    variable: " + variable_name)
                     evaluated_variable = self.eval(current_module, [(Tokenizer.TOKEN_VARIABLE, variable_name)])
                     ret += " ".join(evaluated_variable)
                     variable_name = '$'
@@ -484,8 +477,18 @@ class VariableDeposit:
         self.modules[module_name][name].append(value)
         Ui.debug("  new value: " + str(self.modules[module_name][name]))
 
+class ConfigurationDeposit:
+    def __init__(self):
+        self.configurations = []
+
+class Configuration:
+    def __init__(self):
+        self.name = None
+        self.compiler = None
+        self.compiler_flags = None
+
 class Module:
-    def __init__(self, variable_deposit, filename):
+    def __init__(self, variable_deposit, configuration_deposit, filename):
         assert isinstance(variable_deposit, VariableDeposit)
         assert isinstance(filename, str)
 
@@ -506,7 +509,7 @@ class Module:
         self.variable_deposit.add(
             self.name,
             "$__path",
-            (Tokenizer.TOKEN_LITERAL, os.getcwd() + "/" + os.path.dirname(self.filename)))
+            (Tokenizer.TOKEN_LITERAL, os.path.dirname(self.filename)))
 
         self.variable_deposit.add(
             self.name,
@@ -719,6 +722,30 @@ class Module:
         elif target_type == "phony":           self.__parse_phony(target_name, it)
         else: self.__parse_error(msg="unknown target type: " + target_type)
 
+    def __parse_configuration(self, it):
+        configuration = Configuration()
+
+        # name
+        token = it.next()
+        if token[0] == Tokenizer.TOKEN_LITERAL:
+            target_type = token[1]
+        else:
+            self.__parse_error(token)
+
+        while True:
+            token = it.next()
+            if token[0] == Tokenizer.TOKEN_LITERAL:
+                if token[1] == "compiler": configuration.compiler = self.__parse_list(it)
+                elif token[1] == "compiler_flags": configuration.compiler_flags = self.__parse_list(it)
+                else: raise ParsingError(token)
+
+            elif token[0] == Tokenizer.TOKEN_NEWLINE:
+                break
+            else:
+                raise ParsingError(token)
+
+        Ui.debug("configuration parsed:" + str(configuration))
+
     def __parse_directive(self, it):
         while True:
             token = it.next()
@@ -726,6 +753,7 @@ class Module:
             if token[0] == Tokenizer.TOKEN_LITERAL:
                 if token[1] == "set" or token[1] == "append": self.__parse_set_or_append(it, token[1] == "append")
                 elif token[1] == "target":                    self.__parse_target(it)
+                elif token[1] == "configuration":             self.__parse_configuration(it)
                 else: self.__parse_error(msg="expected directive")
 
             elif token[0] == Tokenizer.TOKEN_NEWLINE:
@@ -942,10 +970,12 @@ class Tokenizer:
 class SourceTree:
     def __init__(self):
         self.variable_deposit = VariableDeposit()
+        self.configuration_deposit = ConfigurationDeposit()
         self.files = []
         self.built_targets = []
+
         for filename in self.__find_pake_files():
-            self.files.append(Module(self.variable_deposit, filename))
+            self.files.append(Module(self.variable_deposit, self.configuration_deposit, filename))
 
     def build(self, target):
         if target in self.built_targets:
@@ -975,13 +1005,14 @@ class SourceTree:
             for t in t.targets:
                 self.build(t.common_parameters.name)
 
-    def __find_pake_files(self, path = "."):
+    def __find_pake_files(self, path = os.getcwd()):
         for (dirpath, dirnames, filenames) in os.walk(path):
             for f in filenames:
-                filename = dirpath + "/" + f
-                (base, ext) = os.path.splitext(filename)
-                if ext == ".pake":
-                    yield(filename)
+                if not dirpath.startswith(BUILD_DIR):
+                    filename = dirpath + "/" + f
+                    (base, ext) = os.path.splitext(filename)
+                    if ext == ".pake":
+                        yield(filename)
 
 def main():
     parser = argparse.ArgumentParser(description='Painless buildsystem.')
