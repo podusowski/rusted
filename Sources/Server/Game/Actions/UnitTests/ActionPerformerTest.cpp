@@ -23,7 +23,7 @@ public:
         ship2(new Common::Game::Object::ShipMock()),
         FOCUSED_OBJECT_ID(3),
         SELECTED_OBJECT_ID(4),
-        ACTION_PARAMETERS(ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID)
+        ACTION_PARAMETERS(1, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID)
     {
         ON_CALL(player, getFocusedObject()).WillByDefault(ReturnRef(*ship1));
         ON_CALL(player, getSelectedObject()).WillByDefault(ReturnRef(*ship2));

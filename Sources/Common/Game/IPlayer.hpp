@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Common/Game/Object/ObjectBase.hpp"
+#include "Common/Game/Utilities/Id.hpp"
 
 namespace Common
 {
@@ -16,6 +17,8 @@ enum PlayerState
 class IPlayer
 {
 public:
+    typedef Common::Game::Utilities::Id<IPlayer> Id;
+
     virtual ~IPlayer() {}
 
     virtual void setId(int) = 0;

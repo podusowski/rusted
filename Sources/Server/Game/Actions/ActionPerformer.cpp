@@ -36,7 +36,8 @@ void ActionPerformer::perform(
     }
 
     // TODO: move stack-up
-    ActionParameters actionParameters = { id, parameter, focusedObjectId, selectedObjectId };
+    Common::Game::IPlayer::Id playerId(player.getId());
+    ActionParameters actionParameters(playerId, id, parameter, focusedObjectId, selectedObjectId);
 
     auto action = m_actionFactory.create(connection, player, actionParameters);
 

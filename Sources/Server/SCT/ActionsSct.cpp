@@ -61,8 +61,8 @@ TEST(ActionsSct, AttackObject)
     SCT::Component component;
     component.start();
 
-    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
-    std::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password");
+    std::shared_ptr<SCT::Connection> connection2 = authorizeUser(component, "user2", "password");
 
     // client has to focus its own object 
     Common::Messages::FocusObject focusObject;

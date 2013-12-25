@@ -12,11 +12,13 @@ namespace Actions
 struct ActionParameters
 {
     ActionParameters(
+        Common::Game::IPlayer::Id _playerId,
         unsigned _actionId,
         unsigned _actionParameter,
         Common::Game::Object::ObjectBase::StrictId _focusedObjectId,
         Common::Game::Object::ObjectBase::Id _selectedObjectId
     ) :
+        playerId(_playerId),
         actionId(_actionId),
         actionParameter(_actionParameter),
         focusedObjectId(_focusedObjectId),
@@ -33,6 +35,7 @@ struct ActionParameters
             selectedObjectId == other.selectedObjectId;
     }
 
+    Common::Game::IPlayer::Id playerId;
     unsigned actionId;
     unsigned actionParameter;
     Common::Game::Object::ObjectBase::StrictId focusedObjectId;
