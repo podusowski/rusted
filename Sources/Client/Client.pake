@@ -44,6 +44,7 @@ append $libraries X11
 append $libraries Xt
 append $libraries Xaw
 append $libraries Xrandr
+append $libraries dl
 
 append $library_dirs $OGRE.library_dirs
 
