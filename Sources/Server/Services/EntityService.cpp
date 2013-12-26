@@ -2,6 +2,7 @@
 
 #include "Game/Actions/ActionType.hpp"
 #include "Server/Services/EntityService.hpp"
+#include "Server/Game/Actions/ActionParameters.hpp"
 
 using namespace Server::Services;
 
@@ -118,7 +119,10 @@ void EntityService::handle(const Common::Messages::ExecuteAction & executeAction
 
     try
     {
-        m_actionPerformer.perform(connection, player, executeAction.id, executeAction.parameter, focusedObjectId, selectedObjectId, executeAction.loop);
+        Common::Game::IPlayer::Id playerId(player.getId());
+        Game::Actions::ActionParameters actionParameters(playerId, executeAction.id, executeAction.parameter, focusedObjectId, selectedObjectId);
+
+        m_actionPerformer.perform(connection, player, actionParameters, executeAction.loop);
     }
     catch (const std::exception & ex)
     {

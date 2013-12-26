@@ -19,25 +19,18 @@ ActionPerformer::ActionPerformer(
 void ActionPerformer::perform(
     Server::Network::IConnection & connection,
     Common::Game::IPlayer & player,
-    unsigned id,
-    unsigned parameter,
-    Common::Game::Object::ObjectBase::StrictId focusedObjectId,
-    Common::Game::Object::ObjectBase::Id selectedObjectId,
+    const ActionParameters & actionParameters,
     bool loop)
 {
-    if (isGlobalCooldownActive(focusedObjectId.get()))
+    if (isGlobalCooldownActive(actionParameters.focusedObjectId.get()))
     {
         throw std::runtime_error("global cooldown is active for ship");
     }
 
-    if (isActionOngoingOrCooling(focusedObjectId.get(), id))
+    if (isActionOngoingOrCooling(actionParameters.focusedObjectId.get(), actionParameters.actionId))
     {
         throw std::runtime_error("action cooldown active or action ongoing");
     }
-
-    // TODO: move stack-up
-    Common::Game::IPlayer::Id playerId(player.getId());
-    ActionParameters actionParameters(playerId, id, parameter, focusedObjectId, selectedObjectId);
 
     auto action = m_actionFactory.create(connection, player, actionParameters);
 
@@ -46,12 +39,12 @@ void ActionPerformer::perform(
         throw std::runtime_error("action can't be started at the moment");
     }
 
-    aquireGlobalCooldown(focusedObjectId.get(), connection);
+    aquireGlobalCooldown(actionParameters.focusedObjectId.get(), connection);
     aquireOngoingOrCooling(actionParameters, loop);
 
     Common::Messages::ActionStarted actionStarted;
-    actionStarted.actionId = id;
-    actionStarted.objectId = focusedObjectId.get();
+    actionStarted.actionId = actionParameters.actionId;
+    actionStarted.objectId = actionParameters.focusedObjectId.get();
     connection.send(actionStarted);
 
     auto timeToFinish = action->start();
@@ -60,7 +53,7 @@ void ActionPerformer::perform(
     {
         LOG_DEBUG << "Action doesn't have execution time and will be finished immidiately";
 
-        actionFinished(action, player.getId(), focusedObjectId.get(), id);
+        actionFinished(action, player.getId(), actionParameters.focusedObjectId.get(), actionParameters.actionId);
     }
     else
     {
@@ -72,9 +65,11 @@ void ActionPerformer::perform(
             internalId = m_idGenerator.generate();
             m_ongoingActions.insert(std::make_pair(internalId, action));
         }
-        m_time->createTimer(timeToFinish, boost::bind(
-            &ActionPerformer::actionTimerExpired, this,
-            internalId, player.getId(), focusedObjectId.get(), id));
+        m_time->createTimer(
+            timeToFinish,
+            boost::bind(
+                &ActionPerformer::actionTimerExpired, this,
+                internalId, player.getId(), actionParameters.focusedObjectId.get(), actionParameters.actionId));
     }
 }
 
@@ -196,19 +191,27 @@ void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId
         if (itToDelete->loop)
         {
             LOG_DEBUG << "Loop is active, restarting action";
-            perform(
-                connection,
-                m_playerContainer.getBy(connection),
+
+            auto & player = m_playerContainer.getBy(connection);
+            Common::Game::IPlayer::Id playerId(player.getId());
+
+            ActionParameters actionParameters(
+                playerId,
                 ongoingOrCoolingAction.actionParameters.actionId,
                 ongoingOrCoolingAction.actionParameters.actionParameter,
                 ongoingOrCoolingAction.actionParameters.focusedObjectId,
-                ongoingOrCoolingAction.actionParameters.selectedObjectId,
+                ongoingOrCoolingAction.actionParameters.selectedObjectId);
+
+            perform(
+                connection,
+                m_playerContainer.getBy(connection),
+                actionParameters,
                 true);
         }
     }
     else
     {
-        throw std::runtime_error("action cooldown expired but no such cooldon registered");
+        throw std::runtime_error("action cooldown expired but no such cooldown registered");
     }
 }
 

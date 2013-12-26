@@ -81,7 +81,7 @@ TEST_F(ActionPerformerTest, Perform_DontFinish)
     EXPECT_CALL(actionMock, finish()).Times(0);
 
     Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
-    performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID, false);
+    performer.perform(connection, player, ACTION_PARAMETERS, false);
 }
 
 TEST_F(ActionPerformerTest, VariousActionCooldowns)
@@ -104,25 +104,25 @@ TEST_F(ActionPerformerTest, VariousActionCooldowns)
     ON_CALL(actionMock, finish()).WillByDefault(Return(Common::Game::TimeValue(3, 0)));
 
     Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
-    performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID, false);
+    performer.perform(connection, player, ACTION_PARAMETERS, false);
 
     // global cooldown timer is not expired yet
-    EXPECT_ANY_THROW(performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID, false));
+    EXPECT_ANY_THROW(performer.perform(connection, player, ACTION_PARAMETERS, false));
 
     globalCooldownTimerCallback();
 
     // action is not finished yet, so we can't execute another
-    EXPECT_ANY_THROW(performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID, false));
+    EXPECT_ANY_THROW(performer.perform(connection, player, ACTION_PARAMETERS, false));
 
     actionExecuteTimerCallback();
 
     // after action cooldown isn't expired yet so we can't execute the same action
-    EXPECT_ANY_THROW(performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID, false));
+    EXPECT_ANY_THROW(performer.perform(connection, player, ACTION_PARAMETERS, false));
 
     actionCooldownTimerCallback();
 
     // action is finished and its cooldown expired so we can perform it again
-    performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID, false);
+    performer.perform(connection, player, ACTION_PARAMETERS, false);
 }
 
 TEST_F(ActionPerformerTest, ActionExecutionFinishAfterTimerExpired)
@@ -146,7 +146,7 @@ TEST_F(ActionPerformerTest, ActionExecutionFinishAfterTimerExpired)
     EXPECT_CALL(actionMock, finish()).Times(1).WillOnce(Return(Common::Game::TimeValue()));
 
     Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
-    performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID, false);
+    performer.perform(connection, player, ACTION_PARAMETERS, false);
 
     actionExecuteTimerCallback();
 }
@@ -170,7 +170,7 @@ TEST_F(ActionPerformerTest, ActionExecutionFinishAfterTimerExpired_ActionTimeIsZ
     EXPECT_CALL(actionMock, finish()).Times(1).WillOnce(Return(Common::Game::TimeValue()));
 
     Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
-    performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID, false);
+    performer.perform(connection, player, ACTION_PARAMETERS, false);
 }
 
 TEST_F(ActionPerformerTest, ActionExecutionNotFinishedUntilTimerExpires)
@@ -188,7 +188,7 @@ TEST_F(ActionPerformerTest, ActionExecutionNotFinishedUntilTimerExpires)
     EXPECT_CALL(actionMock, finish()).Times(0);
 
     Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
-    performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID, false);
+    performer.perform(connection, player, ACTION_PARAMETERS, false);
 }
 
 TEST_F(ActionPerformerTest, ActionExecuteWithLoop)
@@ -210,7 +210,7 @@ TEST_F(ActionPerformerTest, ActionExecuteWithLoop)
     EXPECT_CALL(actionMock, finish()).Times(1).WillOnce(Return(Common::Game::TimeValue(3, 0)));
 
     Server::Game::Actions::ActionPerformer performer(actionFactory, universe, playerContainer);
-    performer.perform(connection, player, ATTACK_ID, ATTACK_PARAMETER, FOCUSED_OBJECT_ID, SELECTED_OBJECT_ID, true);
+    performer.perform(connection, player, ACTION_PARAMETERS, true);
 
     actionExecuteTimerCallback();
     globalCooldownTimerCallback();
