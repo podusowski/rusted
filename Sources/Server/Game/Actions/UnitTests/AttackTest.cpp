@@ -122,3 +122,25 @@ TEST_F(AttackTest, AttackDestroyedShip)
     attack.start();
 }
 
+TEST_F(AttackTest, AttackOwnShip)
+{
+    Server::Network::ConnectionMock connection;
+    Server::Game::PlayerContainerMock playerContainer;
+
+    std::vector<Server::Network::IConnection *> allConnections{&connection};
+    ON_CALL(playerContainer, getAllConnections(_)).WillByDefault(Return(allConnections));
+
+    EXPECT_CALL(connection, send(_)).Times(0);
+
+    ON_CALL(*ship2, getIntegrity()).WillByDefault(Return(100));
+    ON_CALL(*ship2, getOwnerId()).WillByDefault(Return(PLAYER_ID));
+
+    EXPECT_CALL(*ship2, setIntegrity(_)).Times(0);
+
+    Server::Game::Actions::Attack attack(universe, playerContainer, ACTION_PARAMETERS);
+
+    EXPECT_FALSE(attack.isAbleToStart());
+
+    attack.start();
+}
+

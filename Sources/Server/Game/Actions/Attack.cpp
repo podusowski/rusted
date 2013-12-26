@@ -24,6 +24,12 @@ Common::Game::TimeValue Attack::start()
         return Common::Game::TimeValue(0, 0);
     }
 
+    if (selectedObject.getOwnerId() == m_actionParameters.playerId.get())
+    {
+        LOG_DEBUG << "Tried to attack own ship";
+        return Common::Game::TimeValue(0, 0);
+    }
+
     sendMovingMeshEffect();
 
     auto focusedShipPosition = focusedObject.getPosition();
@@ -40,6 +46,12 @@ Common::Game::TimeValue Attack::start()
 Common::Game::TimeValue Attack::finish()
 {
     auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());
+
+    if (selectedObject.getOwnerId() == m_actionParameters.playerId.get())
+    {
+        LOG_DEBUG << "Tried to attack own ship";
+        return Common::Game::TimeValue(0, 0);
+    }
 
     unsigned integrity = selectedObject.getIntegrity();
 
@@ -61,6 +73,12 @@ Common::Game::TimeValue Attack::finish()
 bool Attack::isAbleToStart()
 {
     auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());
+
+    if (selectedObject.getOwnerId() == m_actionParameters.playerId.get())
+    {
+        LOG_DEBUG << "Tried to attack own ship";
+        return false;
+    }
 
     unsigned integrity = selectedObject.getIntegrity();
 
