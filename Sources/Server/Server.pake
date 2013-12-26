@@ -53,7 +53,9 @@ target phony ServerResources run_before("cp -t ${__build} ${resources}")
 
 set $gen_big_database ./genBigDataBase.py
 set $big_database "${__build}/BigDataBase.sqlite3"
-target phony ServerBigDataBase run_before("${gen_big_database} -o ${big_database}")
+set $big_database_sql "${__build}/BigDataBase.sql"
+set $big_database_prerequisites DataBaseSchema.sql $big_database_sql
+target phony ServerBigDataBase run_before("rm -f ${big_database} ; ${gen_big_database} -o ${big_database_sql}; cat ${big_database_prerequisites} | sqlite3 ${big_database}")
 
 append $test_database_prerequisites DataBaseSchema.sql TestDataBase.sql
 set $test_database "${__build}/TestDataBase.sqlite3"

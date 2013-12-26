@@ -13,15 +13,16 @@ append $sources ObjectsSct.cpp
 append $sources ActionsSct.cpp
 append $sources SmokeSct.cpp
 
-append $include_dirs $gtest.__path
+append $include_dirs "${gtest.__path}"
 append $include_dirs "${Cake.__path}/.."
-append $include_dirs $boost.__path
+append $include_dirs "${boost.__path}"
 append $include_dirs "${SOCI.soci_src}/core"
-append $include_dirs $Common.__path
+append $include_dirs "${Common.__path}"
 append $include_dirs "${Common.__path}/.."
 
 append $dependencies gtest
 append $dependencies SctDataBase
+append $dependencies Server
 
 append $libraries Cake
 append $libraries Common
