@@ -40,12 +40,7 @@ public:
 
 private:
     void recalculate();
-    Position calculatePosition(float progress);
-    Common::Math::Quaternion calculateOrientation(float progress);
-    float calculateProgress(TimeValue time);
     void configureBezier();
-    void revalidateProgress(float progress);
-    void calculateCachedPositionAndOrientation(float progress);
     Description compensateLag(const Description & description);
     Position calculateOrientationControlPoint(const Position &) const;
 

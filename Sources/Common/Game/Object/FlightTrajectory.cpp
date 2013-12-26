@@ -183,63 +183,6 @@ void FlightTrajectory::recalculate()
     }
 }
 
-Position FlightTrajectory::calculatePosition(float progress)
-{
-    if (m_spline->empty())
-    {
-        return m_cachedPosition;
-    }
-    else if (progress >= 1.0)
-    {
-        return m_spline->value(1.0);
-    }
-    else
-    {
-        return m_spline->value(progress);
-    }
-}
-
-Common::Math::Quaternion FlightTrajectory::calculateOrientation(float progress)
-{
-    Common::Math::Point3 derivative;
-
-    if (m_spline->empty())
-    {
-        return m_cachedOrientation;
-    }
-    else if (progress >= 1.0)
-    {
-        derivative = m_spline->derivative(1.0);
-    }
-    else
-    {
-        derivative = m_spline->derivative(progress);
-    }
-
-    return Common::Math::Quaternion(std::make_tuple(derivative.getX(), derivative.getY(), derivative.getZ()));
-}
-
-float FlightTrajectory::calculateProgress(TimeValue time)
-{
-    if (m_spline->empty())
-    {
-        return 0.0;
-    }
-
-    unsigned distance = m_spline->getLength();
-    TimeValue timeTakenSoFar = time - m_description.startTime;
-    Common::Math::KinematicParticle kinematicParticle(m_maxSpeed, m_acceleration, distance, m_description.initialSpeed);
-
-    if (kinematicParticle.isInRange(timeTakenSoFar))
-    {
-        return kinematicParticle.calculateDistance(timeTakenSoFar) / distance;
-    }
-    else
-    {
-        return 1.1; // invalid value
-    }
-}
-
 void FlightTrajectory::configureBezier()
 {
     m_spline->reset();
@@ -251,21 +194,6 @@ void FlightTrajectory::configureBezier()
         LOG_DEBUG << "  " << p;
         m_spline->addControlPoint(p);
     }
-}
-
-void FlightTrajectory::revalidateProgress(float progress)
-{
-    if (progress > 1.0)
-    {
-        m_description.controlPoints.clear();
-        configureBezier();
-    }
-}
-
-void FlightTrajectory::calculateCachedPositionAndOrientation(float progress)
-{
-    m_cachedPosition = calculatePosition(progress);
-    m_cachedOrientation = calculateOrientation(progress);
 }
 
 FlightTrajectory::Description FlightTrajectory::compensateLag(const FlightTrajectory::Description & description)
