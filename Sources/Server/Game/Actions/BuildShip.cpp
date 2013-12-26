@@ -57,7 +57,13 @@ std::string BuildShip::getName() const
 
 std::string BuildShip::getDescription() const
 {
-    return "build";
+    auto & shipClass = m_shipClassContainer->getById(m_shipClass);
+    std::stringstream ss;
+    ss << "build " << shipClass.getName() 
+       << " (carbon: " << shipClass.getRequiredCarbon()
+       << ", helium: " << shipClass.getRequiredHelium() << ")";
+
+    return ss.str();
 }
 
 void BuildShip::updateCargoHold()

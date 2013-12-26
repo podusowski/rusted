@@ -10,7 +10,7 @@ namespace Game
 class IShipClassContainer
 {
 public:
-    virtual IShipClass & getById(unsigned) = 0;
+    virtual IShipClass & getById(unsigned) const = 0;
 
     virtual ~IShipClassContainer() {}
 };

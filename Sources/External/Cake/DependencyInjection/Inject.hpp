@@ -31,6 +31,11 @@ public:
         return _object.get();
     }
 
+    const InterfaceType * operator->() const
+    {
+        return _object.get();
+    }
+
     InterfaceType & operator*()
     {
         return *_object;

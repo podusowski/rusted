@@ -12,7 +12,7 @@ namespace Game
 class ShipClassContainerMock : public IShipClassContainer
 {
 public:
-    MOCK_METHOD1(getById, IShipClass & (unsigned));
+    MOCK_CONST_METHOD1(getById, IShipClass & (unsigned));
 };
 
 }

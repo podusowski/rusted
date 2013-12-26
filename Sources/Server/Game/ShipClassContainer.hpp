@@ -18,7 +18,7 @@ public:
     ShipClassContainer();
     ~ShipClassContainer();
 
-    IShipClass & getById(unsigned);
+    IShipClass & getById(unsigned) const;
 
 private:
     void loadFromDataBase();
