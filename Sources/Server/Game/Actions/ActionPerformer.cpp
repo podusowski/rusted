@@ -39,8 +39,6 @@ void ActionPerformer::perform(
         throw std::runtime_error("action can't be started at the moment");
     }
 
-    auto timeToFinish = action->start();
-
     aquireGlobalCooldown(actionParameters.focusedObjectId.get(), connection);
     aquireOngoingOrCooling(actionParameters, loop);
 
@@ -48,6 +46,17 @@ void ActionPerformer::perform(
     actionStarted.actionId = actionParameters.actionId;
     actionStarted.objectId = actionParameters.focusedObjectId.get();
     connection.send(actionStarted);
+
+    Common::Game::TimeValue timeToFinish;
+    try
+    {
+        timeToFinish = action->start();
+    }
+    catch (const std::exception & ex)
+    {
+        actionCooldownExpired(player.getId(), actionParameters.focusedObjectId.get(), actionParameters.actionId);
+        LOG_ERR << "Can't start action, reason: " << ex.what();
+    }
 
     if (timeToFinish == Common::Game::TimeValue(0, 0))
     {
