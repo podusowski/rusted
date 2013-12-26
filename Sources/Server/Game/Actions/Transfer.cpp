@@ -51,3 +51,13 @@ bool Transfer::isAbleToStart()
     return true;
 }
 
+std::string Transfer::getName() const
+{
+    return "transfer";
+}
+
+std::string Transfer::getDescription() const
+{
+    return "transfer";
+}
+

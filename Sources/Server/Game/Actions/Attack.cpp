@@ -92,6 +92,16 @@ bool Attack::isAbleToStart()
     }
 }
 
+std::string Attack::getName() const
+{
+    return "attack";
+}
+
+std::string Attack::getDescription() const
+{
+    return "attack selected object";
+}
+
 void Attack::sendShipInfoToClients()
 {
     auto & selectedObject = m_universe.getById<Common::Game::Object::Ship>(m_actionParameters.selectedObjectId.get());

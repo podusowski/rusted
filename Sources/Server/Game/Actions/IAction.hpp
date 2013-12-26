@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 #include "Common/Game/TimeValue.hpp"
 
 namespace Server 
@@ -19,6 +21,9 @@ public:
     virtual Common::Game::TimeValue finish() = 0;
 
     virtual bool isAbleToStart() = 0;
+
+    virtual std::string getName() const = 0;
+    virtual std::string getDescription() const = 0;
 
     virtual ~IAction() {}
 };

@@ -47,6 +47,16 @@ bool Gather::isAbleToStart()
     return true;
 }
 
+std::string Gather::getName() const
+{
+    return "gather";
+}
+
+std::string Gather::getDescription() const
+{
+    return "gather resources";
+}
+
 void Gather::sendCargoInfoToClients()
 {
     // send cargoinfo of player's ship

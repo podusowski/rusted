@@ -20,6 +20,8 @@ public:
     Common::Game::TimeValue start();
     Common::Game::TimeValue finish();
     bool isAbleToStart();
+    std::string getName() const;
+    std::string getDescription() const;
 
 private:
     void sendShipInfoToClients();

@@ -50,6 +50,16 @@ bool BuildShip::isAbleToStart()
     return true;
 }
 
+std::string BuildShip::getName() const
+{
+    return "build";
+}
+
+std::string BuildShip::getDescription() const
+{
+    return "build";
+}
+
 void BuildShip::updateCargoHold()
 {
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());

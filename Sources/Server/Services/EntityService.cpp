@@ -88,19 +88,28 @@ void EntityService::handle(const Common::Messages::FetchAvailableActions &, Netw
     auto & shipClass = m_shipClassContainer->getById(object.getClass());
     auto actions = shipClass.getAvailableActions();
 
+    Common::Game::Object::ObjectBase::StrictId focusedObjectId = player.getFocusedObjectId().get();
+    Common::Game::Object::ObjectBase::Id selectedObjectId = player.getSelectedObjectId();
+
     Common::Messages::AvailableActions availableActions;
     LOG_DEBUG << "Filling available actions for ship:" << object.getId() << " (class:" << shipClass.getId() << ")";
-    for (auto action: actions)
+    for (auto a: actions)
     {
-        auto description = m_actionFactory.getActionDescription(action.type, action.parameter);
+        Common::Game::IPlayer::Id playerId(player.getId());
+        Game::Actions::ActionParameters actionParameters(playerId, a.type, a.parameter, focusedObjectId, selectedObjectId);
 
-        LOG_DEBUG << "  name:" << description.name << ", type:" << action.type << ", parameter:" << action.parameter;
+        const auto action = m_actionFactory.create(connection, player, actionParameters);
+
+        LOG_DEBUG << "  name:" << action->getName()
+                  << ", description: " << action->getDescription()
+                  << ", type:" << a.type
+                  << ", parameter:" << a.parameter;
 
         Common::Messages::AvailableAction availableAction;
-        availableAction.id = action.type;
-        availableAction.name = description.name;
-        availableAction.parameter = description.parameter;
-        availableAction.description = description.description;
+        availableAction.id = a.type;
+        availableAction.name = action->getName();
+        availableAction.parameter = a.parameter;
+        availableAction.description = action->getDescription();
 
         availableActions.actions.push_back(availableAction);
     }
