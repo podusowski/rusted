@@ -20,7 +20,7 @@ TEST(ActionsSct, FetchAvailableActions)
     SCT::Component component;
     component.start();
 
-    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password");
 
     // actions are attached to focused object so we have to have one
     Common::Messages::FocusObject focusObject;
@@ -43,7 +43,7 @@ TEST(ActionsSct, FetchAvailableActions)
     EXPECT_EQ(1, availableActions->actions[1].id); // action id
     EXPECT_EQ(2, availableActions->actions[1].parameter); // action parameter
 
-    // build 
+    // build
     EXPECT_EQ(2, availableActions->actions[2].id);
     EXPECT_EQ(1, availableActions->actions[2].parameter);
 
