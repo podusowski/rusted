@@ -31,9 +31,6 @@ public:
     virtual void setPosition(Position) = 0;
     virtual Position getPosition() = 0;
 
-    virtual Position getCourseMarkerPosition() = 0;
-    virtual Common::Math::Quaternion getCourseMarkerOrientation() = 0;
-
     virtual Position getDestination() = 0;
 
     virtual Common::Math::Quaternion getOrientation() = 0;

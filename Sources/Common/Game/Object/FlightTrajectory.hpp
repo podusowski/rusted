@@ -22,8 +22,6 @@ public:
 
     void setPosition(Position);
     Position getPosition();
-    Position getCourseMarkerPosition();
-    Common::Math::Quaternion getCourseMarkerOrientation();
     Position getDestination();
     Common::Math::Quaternion getOrientation();
     void setOrientation(const Common::Math::Quaternion &);

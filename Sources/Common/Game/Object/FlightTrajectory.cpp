@@ -68,18 +68,6 @@ Common::Game::Position FlightTrajectory::getPosition()
     return m_cachedPosition;
 }
 
-Common::Game::Position FlightTrajectory::getCourseMarkerPosition()
-{
-    float progress = calculateProgress(m_time->getCurrentTime()) * 20;
-    progress -= floor(progress);
-    return calculatePosition(progress);
-}
-
-Common::Math::Quaternion FlightTrajectory::getCourseMarkerOrientation()
-{
-    return Common::Math::Quaternion();
-}
-
 Common::Game::Position FlightTrajectory::getDestination()
 {
     if (m_spline->empty())
