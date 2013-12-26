@@ -169,7 +169,7 @@ void FlightTrajectory::applyDescription(FlightTrajectory::Description descriptio
               << ", now: " << m_time->getCurrentTime()
               << ", current position: " << getPosition();
 
-    m_description = compensateLag(description);
+    m_description = description;
     configureBezier();
 }
 
