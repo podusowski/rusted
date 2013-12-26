@@ -10,7 +10,6 @@
 #include "Common/Game/Universe.hpp"
 #include "Common/Game/Object/Ship.hpp"
 #include "IActionFactory.hpp"
-#include "ActionDescription.hpp"
 
 namespace Server
 {
@@ -28,8 +27,6 @@ public:
         Server::Network::IConnection & connection,
         Common::Game::IPlayer &,
         const ActionParameters &);
-
-    ActionDescription getActionDescription(unsigned id, unsigned parameter);
 
 private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
