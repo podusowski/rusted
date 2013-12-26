@@ -7,6 +7,7 @@
 #include <boost/signals2.hpp>
 
 #include "Common/Game/Universe.hpp"
+#include "Common/Game/IRustedTime.hpp"
 #include "Services/AbstractService.hpp"
 #include "Network/IConnection.hpp"
 
@@ -46,6 +47,8 @@ private:
     std::set<int> m_playerShips;
     std::map<int, std::shared_ptr<PlayerNameSignal>> m_playerNameSignals;
     PlayerShipsFetchedCallback m_playerShipsFetchedCallback;
+
+    Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
 };
 
 }

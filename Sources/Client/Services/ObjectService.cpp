@@ -149,6 +149,8 @@ void ObjectService::handle(const Common::Messages::ShipCourseInfo & shipCourseIn
 
     description.initialSpeed = shipCourseInfo.initialSpeed;
 
+    LOG_DEBUG << "  time difference: " << (m_time->getCurrentTime() - description.startTime);
+
     ship.applyTrajectoryDescription(description);
 }
 
