@@ -18,39 +18,35 @@ FlightTrajectory::~FlightTrajectory()
 
 void FlightTrajectory::fly(Common::Game::Position destination)
 {
-    TimeValue time = m_time->getCurrentTime();
-    float progress = calculateProgress(time);
-    auto position = calculatePosition(progress);
-    auto currentSpeed = getCurrentSpeed();
+    recalculate();
 
     m_description.controlPoints.clear();
 
-    auto p0 = position;
-    auto p1 = calculateOrientationControlPoint(position);
+    auto p0 = m_cachedPosition;
+    auto p1 = calculateOrientationControlPoint(m_cachedPosition);
     auto p2 = destination;
 
     m_description.controlPoints.push_back(p0);
     m_description.controlPoints.push_back(p1);
     m_description.controlPoints.push_back(p2);
 
+    auto time = m_time->getCurrentTime();
+
     m_description.startTime = time;
-    m_description.initialSpeed = currentSpeed;
+    m_description.initialSpeed = m_cachedSpeed;
 
     configureBezier();
 
-    LOG_DEBUG << "New trajectory: from " << position
+    LOG_DEBUG << "New trajectory: from " << m_cachedPosition
               << " to " << destination
               << ", start time: " << time
               << ", max speed: " << m_maxSpeed
-              << ", current speed: " << currentSpeed;
+              << ", current speed: " << m_cachedSpeed;
 }
 
 void FlightTrajectory::stop()
 {
-    auto time = m_time->getCurrentTime();
-    auto progress = calculateProgress(time);
-
-    calculateCachedPositionAndOrientation(progress);
+    recalculate();
 
     m_description.controlPoints.clear();
     configureBezier();
@@ -68,10 +64,7 @@ void FlightTrajectory::setPosition(Common::Game::Position position)
 
 Common::Game::Position FlightTrajectory::getPosition()
 {
-    auto progress = calculateProgress(m_time->getCurrentTime());
-    calculateCachedPositionAndOrientation(progress);
-    revalidateProgress(progress);
-
+    recalculate();
     return m_cachedPosition;
 }
 
@@ -101,10 +94,7 @@ Common::Game::Position FlightTrajectory::getDestination()
 
 Common::Math::Quaternion FlightTrajectory::getOrientation()
 {
-    auto progress = calculateProgress(m_time->getCurrentTime());
-    calculateCachedPositionAndOrientation(progress);
-    revalidateProgress(progress);
-
+    recalculate();
     return m_cachedOrientation;
 }
 
@@ -125,23 +115,8 @@ unsigned FlightTrajectory::getMaxSpeed()
 
 unsigned FlightTrajectory::getCurrentSpeed()
 {
-    if (m_spline->empty())
-    {
-        return 0;
-    }
-
-    unsigned distance = m_spline->getLength();
-    TimeValue timeTakenSoFar = m_time->getCurrentTime() - m_description.startTime;
-    Common::Math::KinematicParticle kinematicParticle(m_maxSpeed, m_acceleration, distance, m_description.initialSpeed);
-
-    if (kinematicParticle.isInRange(timeTakenSoFar))
-    {
-        return kinematicParticle.calculateSpeed(timeTakenSoFar);
-    }
-    else
-    {
-        return 0;
-    }
+    recalculate();
+    return m_cachedSpeed;
 }
 
 void FlightTrajectory::setAcceleration(unsigned acceleration)
@@ -151,10 +126,7 @@ void FlightTrajectory::setAcceleration(unsigned acceleration)
 
 bool FlightTrajectory::isMoving()
 {
-    auto progress = calculateProgress(m_time->getCurrentTime());
-    calculateCachedPositionAndOrientation(progress);
-    revalidateProgress(progress);
-
+    recalculate();
     return !m_spline->empty();
 }
 
@@ -178,6 +150,49 @@ Position FlightTrajectory::calculateOrientationControlPoint(const Position & pos
     auto direction = m_cachedOrientation * Common::Math::Point3(0, 0, 1);
     direction.normalize();
     return position + (direction * 1000);
+}
+
+void FlightTrajectory::recalculate()
+{
+    if (m_spline->empty())
+    {
+        m_cachedSpeed = 0;
+    }
+    else
+    {
+        unsigned distance = m_spline->getLength();
+        auto time = m_time->getCurrentTime();
+        TimeValue timeTakenSoFar = time - m_description.startTime;
+        Common::Math::KinematicParticle kinematicParticle(m_maxSpeed, m_acceleration, distance, m_description.initialSpeed);
+
+        if (kinematicParticle.isInRange(timeTakenSoFar))
+        {
+            float progress = kinematicParticle.calculateDistance(timeTakenSoFar) / distance;
+
+            TimeValue timeTakenSoFar = m_time->getCurrentTime() - m_description.startTime;
+
+            m_cachedPosition = m_spline->value(progress);
+
+            auto derivative = m_spline->derivative(progress);
+            m_cachedOrientation = Common::Math::Quaternion(std::make_tuple(derivative.getX(), derivative.getY(), derivative.getZ()));
+
+            m_cachedSpeed = kinematicParticle.calculateSpeed(timeTakenSoFar);
+        }
+        else
+        {
+            // calculate for 1.0
+
+            m_cachedPosition = m_spline->value(1.0);
+
+            auto derivative = m_spline->derivative(1.0);
+            m_cachedOrientation = Common::Math::Quaternion(std::make_tuple(derivative.getX(), derivative.getY(), derivative.getZ()));
+
+            m_cachedSpeed = 0;
+
+            m_description.controlPoints.clear();
+            configureBezier();
+        }
+    }
 }
 
 Position FlightTrajectory::calculatePosition(float progress)

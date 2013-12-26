@@ -41,6 +41,7 @@ public:
     void applyDescription(Description);
 
 private:
+    void recalculate();
     Position calculatePosition(float progress);
     Common::Math::Quaternion calculateOrientation(float progress);
     float calculateProgress(TimeValue time);
@@ -58,6 +59,7 @@ private:
 
     Position m_cachedPosition;
     Common::Math::Quaternion m_cachedOrientation;
+    unsigned m_cachedSpeed;
 };
 
 }
