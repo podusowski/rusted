@@ -83,7 +83,7 @@ function run_single_test()
     local name=$2
     local port=$3
 
-    local log_dir=$PWD/`dirname $binary`/../tests/`basename $binary`/
+    local log_dir=$PWD/`dirname $binary`/tests/`basename $binary`/
     local log_file=$log_dir/$name.log
     local binary_dir=$PWD/`dirname $binary`
 
