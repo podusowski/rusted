@@ -7,6 +7,11 @@ append $compiler_flags -std=gnu++0x
 append $windows_socket_libraries wsock32
 append $windows_cmake_flags "-DCMAKE_TOOLCHAIN_FILE=${__path}/toolchain-mingw.cmake"
 
-configuration windows-mingw compiler(i686-w64-mingw32-c++) application_suffix(.exe) export($global_settings.windows_socket_libraries:$socket_libraries $global_settings.windows_cmake_flags:$cmake_flags)
+configuration windows-mingw \
+    compiler(i686-w64-mingw32-c++) \
+    application_suffix(.exe) \
+    export($global_settings.windows_socket_libraries:$socket_libraries \
+           $global_settings.windows_cmake_flags:$cmake_flags)
+
 configuration __default export($__null:$socket_libraries $__null:$cmake_flags)
 
