@@ -4,3 +4,8 @@ append $compiler_flags -O0
 append $compiler_flags -pedantic
 append $compiler_flags -std=gnu++0x
 
+append $windows_socket_libraries wsock32
+
+configuration windows-mingw compiler(i686-w64-mingw32-c++) application_suffix(.exe) export($global_settings.windows_socket_libraries:$socket_libraries)
+configuration __default export($__null:$socket_libraries)
+
