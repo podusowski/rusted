@@ -40,7 +40,7 @@ public:
 
 private:
     void recalculate();
-    void configureBezier();
+    void configureSpline();
     Description compensateLag(const Description & description);
     Position calculateOrientationControlPoint(const Position &) const;
 

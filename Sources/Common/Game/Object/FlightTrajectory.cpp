@@ -35,7 +35,7 @@ void FlightTrajectory::fly(Common::Game::Position destination)
     m_description.startTime = time;
     m_description.initialSpeed = m_cachedSpeed;
 
-    configureBezier();
+    configureSpline();
 
     LOG_DEBUG << "New trajectory: from " << m_cachedPosition
               << " to " << destination
@@ -49,7 +49,7 @@ void FlightTrajectory::stop()
     recalculate();
 
     m_description.controlPoints.clear();
-    configureBezier();
+    configureSpline();
 
     LOG_DEBUG << "Stoped at: " << m_cachedPosition;
 }
@@ -59,7 +59,7 @@ void FlightTrajectory::setPosition(Common::Game::Position position)
     m_cachedPosition = position;
 
     m_description.controlPoints.clear();
-    configureBezier();
+    configureSpline();
 }
 
 Common::Game::Position FlightTrajectory::getPosition()
@@ -130,7 +130,7 @@ void FlightTrajectory::applyDescription(FlightTrajectory::Description descriptio
               << ", current position: " << getPosition();
 
     m_description = description;
-    configureBezier();
+    configureSpline();
 }
 
 Position FlightTrajectory::calculateOrientationControlPoint(const Position & position) const
@@ -178,16 +178,16 @@ void FlightTrajectory::recalculate()
             m_cachedSpeed = 0;
 
             m_description.controlPoints.clear();
-            configureBezier();
+            configureSpline();
         }
     }
 }
 
-void FlightTrajectory::configureBezier()
+void FlightTrajectory::configureSpline()
 {
     m_spline->reset();
 
-    LOG_DEBUG << "Configuring bezier:";
+    LOG_DEBUG << "Configuring spline:";
 
     for (const auto & p : m_description.controlPoints)
     {
