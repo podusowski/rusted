@@ -4703,6 +4703,7 @@ ACTION_TEMPLATE(ReturnNew,
 #include <utility>
 #include <vector>
 
+#undef GTEST_LANG_CXX11
 
 #if GTEST_LANG_CXX11
 #include <initializer_list>  // NOLINT -- must be after gtest.h
