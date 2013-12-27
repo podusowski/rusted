@@ -1,7 +1,8 @@
 if [ ! -f "$artefacts" ]; then
     mkdir -p $ogredeps_dir
     cd $ogredeps_dir
-    cmake -DCMAKE_BUILD_TYPE=Release $ogredeps_src
+    echo $__configuration_cmake_flags
+    cmake $__configuration_cmake_flags -DCMAKE_BUILD_TYPE=Release $ogredeps_src
     make install
 
     OGRE_CMAKE_OPTIONS="-DOGRE_DEPENDENCIES_DIR=$ogredeps_dir/ogredeps"
@@ -17,6 +18,7 @@ if [ ! -f "$artefacts" ]; then
     OGRE_CMAKE_OPTIONS="$OGRE_CMAKE_OPTIONS -DOGRE_BUILD_PLUGIN_PCZ=0"
     OGRE_CMAKE_OPTIONS="$OGRE_CMAKE_OPTIONS -DOGRE_BUILD_PLUGIN_BSP=0"
     OGRE_CMAKE_OPTIONS="$OGRE_CMAKE_OPTIONS -DOGRE_BUILD_SAMPLES=0"
+    OGRE_CMAKE_OPTIONS="$OGRE_CMAKE_OPTIONS $__configuration_cmake_flags"
 
     mkdir -p $ogre_dir
     cd $ogre_dir

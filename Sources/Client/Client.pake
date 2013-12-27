@@ -38,13 +38,8 @@ append $libraries zziplib
 append $libraries zlib
 append $libraries freetype
 append $libraries FreeImage
-append $libraries GL
-append $libraries GLU
-append $libraries X11
-append $libraries Xt
-append $libraries Xaw
-append $libraries Xrandr
 append $libraries dl
+append $libraries $__configuration.graphic_libraries
 
 append $library_dirs $OGRE.library_dirs
 
