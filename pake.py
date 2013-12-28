@@ -8,26 +8,33 @@ import subprocess
 import argparse
 import marshal
 
-BUILD_DIR = os.path.normpath(os.getcwd() + "/_build")
+BUILD_DIR = os.path.normpath(os.getcwd() + "/__build")
 
 """
     utilities
 """
 
-def is_newer_than(prerequisite, target):
-    if os.path.exists(target):
-        ret = os.path.getmtime(prerequisite) > os.path.getmtime(target)
-        Ui.debug("is " + prerequisite + " newer than " + target + " = " + str(ret))
-        return ret
-    else:
-        Ui.debug(target + " doesn't exist, treating like older")
-        return True
-
-def is_any_newer_than(prerequisites, target):
-    for prerequisite in prerequisites:
-        if is_newer_than(prerequisite, target):
+class FsUtils:
+    @staticmethod
+    def is_newer_than(prerequisite, target):
+        if os.path.exists(target):
+            ret = FsUtils.get_mtime(prerequisite) > FsUtils.get_mtime(target)
+            Ui.debug("is " + prerequisite + " newer than " + target + " = " + str(ret))
+            return ret
+        else:
+            Ui.debug(target + " doesn't exist, treating like older")
             return True
-    return False
+
+    @staticmethod
+    def is_any_newer_than(prerequisites, target):
+        for prerequisite in prerequisites:
+            if FsUtils.is_newer_than(prerequisite, target):
+                return True
+        return False
+
+    @staticmethod
+    def get_mtime(filename):
+        return os.path.getmtime(filename)
 
 def execute(command, capture_output = False):
     out = ''
@@ -42,6 +49,9 @@ def execute(command, capture_output = False):
     Ui.debug("command completed: " + command)
     return out
 
+def build_dir(configuration_name):
+    return os.path.normpath(BUILD_DIR + "/" + configuration_name)
+
 class Ui:
     RESET = '\033[0m'
     BOLD = '\033[1m'
@@ -49,6 +59,21 @@ class Ui:
     RED = '\033[31m'
     BOLD_RED = '\033[1;31m'
     BOLD_BLUE = "\033[34;1m"
+
+    log_depth = 0
+
+    @staticmethod
+    def push():
+        Ui.log_depth += 1
+
+    @staticmethod
+    def pop():
+        Ui.log_depth -= 1
+
+    @staticmethod
+    def print_depth_prefix():
+        for i in range(Ui.log_depth):
+            sys.stdout.write("  ")
 
     @staticmethod
     def info(message):
@@ -83,6 +108,7 @@ class Ui:
     def debug(s, env = None):
         if "DEBUG" in os.environ:
             if env == None or env in os.environ:
+                Ui.print_depth_prefix()
                 print(Ui.GRAY + "debug: " + s + Ui.RESET)
 
 """
@@ -91,25 +117,26 @@ class Ui:
 
 class CxxToolchain:
     def __init__(self, configuration, variable_deposit, module_name):
+        self.configuration = configuration
         self.variable_deposit = variable_deposit
         self.module_name = module_name
 
         self.compiler_cmd = self.__simple_eval(configuration.compiler)
         self.compiler_flags = "-I."
-        self.archiver_cmd = "ar"
+        self.archiver_cmd = self.__simple_eval(configuration.archiver)
         self.application_suffix = self.__simple_eval(configuration.application_suffix)
 
     def build_object(self, target_name, out_filename, in_filename, include_dirs, compiler_flags):
         prerequisites = self.__fetch_includes(target_name, in_filename, include_dirs, compiler_flags)
         prerequisites.append(in_filename)
 
-        if is_any_newer_than(prerequisites, out_filename):
+        if FsUtils.is_any_newer_than(prerequisites, out_filename):
             Ui.step(self.compiler_cmd, in_filename)
             execute("mkdir -p " + os.path.dirname(out_filename))
             execute(self.compiler_cmd + " " + self.__prepare_compiler_flags(include_dirs, compiler_flags) + " -c -o " + out_filename + " " + in_filename)
 
     def link_application(self, out_filename, in_filenames, link_with, library_dirs):
-        if is_any_newer_than(in_filenames, out_filename) or self.__are_libs_newer_than_target(link_with, out_filename):
+        if FsUtils.is_any_newer_than(in_filenames, out_filename) or self.__are_libs_newer_than_target(link_with, out_filename):
             Ui.debug("linking application")
             Ui.debug("  files: " + str(in_filenames))
             Ui.debug("  with libs: " + str(link_with))
@@ -125,19 +152,23 @@ class CxxToolchain:
             Ui.bigstep("up to date", out_filename)
 
     def link_static_library(self, out_filename, in_filenames):
+        Ui.bigstep(self.archiver_cmd, out_filename)
         execute(self.archiver_cmd + " -rcs " + out_filename + " " + " ".join(in_filenames))
 
     def object_filename(self, target_name, source_filename):
-        return BUILD_DIR + "/build." + target_name + "/" + source_filename + ".o"
+        return self.__build_dir() + "/build." + target_name + "/" + source_filename + ".o"
 
     def static_library_filename(self, target_name):
-        return BUILD_DIR + "/lib" + target_name + ".a"
+        return self.__build_dir() + "/lib" + target_name + ".a"
 
     def application_filename(self, target_name):
-        return BUILD_DIR + "/" + target_name + self.application_suffix
+        return self.__build_dir() + "/" + target_name + self.application_suffix
 
     def cache_directory(self, target_name):
-        return BUILD_DIR + "/build." + target_name + "/"
+        return self.__build_dir() + "/build." + target_name + "/"
+
+    def __build_dir(self):
+        return build_dir(self.configuration.name)
 
     def __simple_eval(self, tokens):
         return " ".join(self.variable_deposit.eval(self.module_name, tokens))
@@ -145,7 +176,7 @@ class CxxToolchain:
     def __fetch_includes(self, target_name, in_filename, include_dirs, compiler_flags):
         cache_file = self.cache_directory(target_name) + in_filename + ".includes"
         includes = None
-        if os.path.exists(cache_file) and is_newer_than(cache_file, in_filename):
+        if os.path.exists(cache_file) and FsUtils.is_newer_than(cache_file, in_filename):
             includes = marshal.load(open(cache_file))
         else:
             execute("mkdir -p " + os.path.dirname(cache_file))
@@ -166,7 +197,7 @@ class CxxToolchain:
         return ret
 
     def __libs_arguments(self, link_with):
-        ret = "-L " + BUILD_DIR + " "
+        ret = "-L " + self.__build_dir() + " "
         for lib in link_with:
             ret = ret + " -l" + lib
         return ret
@@ -193,7 +224,7 @@ class CxxToolchain:
             filename = self.static_library_filename(lib)
             if os.path.exists(filename):
                 # TODO: proper appname
-                if is_newer_than(filename, target):
+                if FsUtils.is_newer_than(filename, target):
                     return True
         return False
 
@@ -217,7 +248,7 @@ class CommonTargetParameters:
         self.run_before = []
         self.run_after = []
 
-class CommonCxxParameters:
+class CxxParameters:
     def __init__(self):
         self.sources = []
         self.include_dirs = []
@@ -240,13 +271,8 @@ class Target:
         root_dir = os.getcwd()
         os.chdir(self.common_parameters.root_path)
 
-        evaluated_artefacts = self.common_parameters.variable_deposit.eval(
-            self.common_parameters.module_name,
-            self.common_parameters.artefacts)
-
-        evaluated_prerequisites = self.common_parameters.variable_deposit.eval(
-            self.common_parameters.module_name,
-            self.common_parameters.prerequisites)
+        evaluated_artefacts = self.eval(self.common_parameters.artefacts)
+        evaluated_prerequisites = self.eval(self.common_parameters.prerequisites)
 
         should_run = True
         if len(evaluated_prerequisites) > 0 and len(evaluated_artefacts) > 0:
@@ -254,7 +280,7 @@ class Target:
             Ui.debug("checking prerequisites (" + str(evaluated_prerequisites) + ") for making " + str(evaluated_artefacts))
             for artefact in evaluated_artefacts:
                 Ui.debug("  " + artefact)
-                if is_any_newer_than(evaluated_prerequisites, artefact):
+                if FsUtils.is_any_newer_than(evaluated_prerequisites, artefact):
                     Ui.debug("going on because " + str(artefact) + " need to be rebuilt")
                     should_run = True
                     break
@@ -262,16 +288,18 @@ class Target:
         if should_run:
             self.common_parameters.variable_deposit.polute_environment(self.common_parameters.module_name)
 
-
-            evaluated_cmds = self.common_parameters.variable_deposit.eval(
-                self.common_parameters.module_name,
-                cmds)
+            evaluated_cmds = self.eval(cmds)
 
             for cmd in evaluated_cmds:
                 Ui.debug("running " + str(cmd))
                 execute(cmd)
 
         os.chdir(root_dir)
+
+    def eval(self, variable):
+        return self.common_parameters.variable_deposit.eval(
+            self.common_parameters.module_name,
+            variable)
 
 class Phony(Target):
     def __init__(self, common_parameters):
@@ -281,27 +309,19 @@ class Phony(Target):
         Ui.debug("phony build")
 
 class CompileableTarget(Target):
-    def __init__(self, common_parameters, common_cxx_parameters):
+    def __init__(self, common_parameters, cxx_parameters):
         Target.__init__(self, common_parameters)
 
         self.common_parameters = common_parameters
-        self.common_cxx_parameters = common_cxx_parameters
+        self.cxx_parameters = cxx_parameters
 
     def build_objects(self, configuration):
         toolchain = CxxToolchain(configuration, self.common_parameters.variable_deposit, self.common_parameters.name)
 
         object_files = []
-        evaluated_sources = self.common_parameters.variable_deposit.eval(
-            self.common_parameters.module_name,
-            self.common_cxx_parameters.sources)
-
-        evaluated_include_dirs = self.common_parameters.variable_deposit.eval(
-            self.common_parameters.module_name,
-            self.common_cxx_parameters.include_dirs)
-
-        evaluated_compiler_flags = self.common_parameters.variable_deposit.eval(
-            self.common_parameters.module_name,
-            self.common_cxx_parameters.compiler_flags)
+        evaluated_sources = self.eval(self.cxx_parameters.sources)
+        evaluated_include_dirs = self.eval(self.cxx_parameters.include_dirs)
+        evaluated_compiler_flags = self.eval(self.cxx_parameters.compiler_flags)
 
         Ui.debug("building objects from " + str(evaluated_sources))
 
@@ -313,8 +333,8 @@ class CompileableTarget(Target):
         return object_files
 
 class Application(CompileableTarget):
-    def __init__(self, common_parameters, common_cxx_parameters, link_with, library_dirs):
-        CompileableTarget.__init__(self, common_parameters, common_cxx_parameters)
+    def __init__(self, common_parameters, cxx_parameters, link_with, library_dirs):
+        CompileableTarget.__init__(self, common_parameters, cxx_parameters)
 
         self.link_with = link_with
         self.library_dirs = library_dirs
@@ -327,8 +347,8 @@ class Application(CompileableTarget):
 
         object_files = self.build_objects(configuration)
 
-        evaluated_link_with = self.common_parameters.variable_deposit.eval(self.common_parameters.module_name, self.link_with)
-        evaluated_library_dirs = self.common_parameters.variable_deposit.eval(self.common_parameters.module_name, self.library_dirs)
+        evaluated_link_with = self.eval(self.link_with)
+        evaluated_library_dirs = self.eval(self.library_dirs)
 
         toolchain.link_application(
             toolchain.application_filename(self.common_parameters.name),
@@ -339,8 +359,8 @@ class Application(CompileableTarget):
         os.chdir(root_dir)
 
 class StaticLibrary(CompileableTarget):
-    def __init__(self, common_parameters, common_cxx_parameters):
-        CompileableTarget.__init__(self, common_parameters, common_cxx_parameters)
+    def __init__(self, common_parameters, cxx_parameters):
+        CompileableTarget.__init__(self, common_parameters, cxx_parameters)
 
     def build(self, configuration):
         toolchain = CxxToolchain(configuration, self.common_parameters.variable_deposit, self.common_parameters.name)
@@ -351,8 +371,7 @@ class StaticLibrary(CompileableTarget):
 
         artefact = toolchain.static_library_filename(self.common_parameters.name)
 
-        if is_any_newer_than(object_files, artefact):
-            Ui.bigstep("archiving", artefact)
+        if FsUtils.is_any_newer_than(object_files, artefact):
             toolchain.link_static_library(artefact, object_files)
         else:
             Ui.bigstep("up to date", artefact)
@@ -367,14 +386,22 @@ class VariableDeposit:
     def __init__(self):
         self.modules = {}
 
-    def export_configuration(self, configuration):
-        Ui.debug("exporting configuration variables")
+    def export_special_variables(self, configuration):
+        Ui.debug("exporting special variables")
+        Ui.push()
+
         self.add_empty("__configuration", "$__null")
         for (value, name) in configuration.export:
             self.add("__configuration", name.content, value)
 
+        for module in self.modules:
+            self.add(module, "$__build", Token(Token.LITERAL, build_dir(configuration.name)))
+
+        Ui.pop()
+
     def polute_environment(self, current_module):
         Ui.debug("poluting environment")
+        Ui.push()
         for module in self.modules:
             for (name, variable) in self.modules[module].iteritems():
                 evaluated = self.eval(module, variable)
@@ -385,9 +412,12 @@ class VariableDeposit:
                     env_short_name = name[1:]
                     os.environ[env_short_name] = " ".join(evaluated)
                     Ui.debug("  " + env_short_name + ": " + str(evaluated))
+        Ui.pop()
 
     def eval(self, current_module, l):
         Ui.debug("evaluating " + str(l) + " in context of module " + current_module)
+        Ui.push()
+
         ret = []
         for token in l:
             if token.is_a(Token.LITERAL):
@@ -426,7 +456,8 @@ class VariableDeposit:
             else:
                 Ui.parse_error(token)
 
-        Ui.debug("  " + str(ret))
+        Ui.debug(" = " + str(ret))
+        Ui.pop()
         return ret
 
     def __eval_literal(self, current_module, s):
@@ -495,9 +526,13 @@ class VariableDeposit:
         Ui.debug("  new value: " + str(self.modules[module_name][name]))
 
 class ConfigurationDeposit:
-    def __init__(self):
+    def __init__(self, selected_configuration_name):
+        self.selected_configuration_name = selected_configuration_name
         self.configurations = {}
         self.__create_default_configuration()
+
+    def get_selected_configuration(self):
+        return self.get_configuration(self.selected_configuration_name)
 
     def get_configuration(self, configuration_name):
         return self.configurations[configuration_name]
@@ -516,6 +551,7 @@ class Configuration:
         self.compiler = [Token(Token.LITERAL, "c++")]
         self.compiler_flags = None
         self.application_suffix = [Token(Token.LITERAL, "")]
+        self.archiver = [Token(Token.LITERAL, "ar")]
         self.export = []
 
 class Module:
@@ -542,11 +578,6 @@ class Module:
             self.name,
             "$__path",
             Token(Token.LITERAL, os.path.dirname(self.filename)))
-
-        self.variable_deposit.add(
-            self.name,
-            "$__build",
-            Token(Token.LITERAL, BUILD_DIR))
 
         self.variable_deposit.add_empty(
             self.name,
@@ -651,15 +682,15 @@ class Module:
 
         return False
 
-    def __try_parse_common_cxx_parameters(self, common_cxx_parameters, token, it):
+    def __try_parse_cxx_parameters(self, cxx_parameters, token, it):
         if token.content == "sources":
-            common_cxx_parameters.sources = self.__parse_list(it)
+            cxx_parameters.sources = self.__parse_list(it)
             return True
         elif token.content == "include_dirs":
-            common_cxx_parameters.include_dirs = self.__parse_list(it)
+            cxx_parameters.include_dirs = self.__parse_list(it)
             return True
         elif token.content == "compiler_flags":
-            common_cxx_parameters.compiler_flags = self.__parse_list(it)
+            cxx_parameters.compiler_flags = self.__parse_list(it)
             return True
 
         return False
@@ -674,13 +705,13 @@ class Module:
             self.name,
             target_name)
 
-        common_cxx_parameters = CommonCxxParameters()
+        cxx_parameters = CxxParameters()
 
         while True:
             token = it.next()
             if token.is_a(Token.LITERAL):
                 if self.__try_parse_target_common_parameters(common_parameters, token, it): pass
-                elif self.__try_parse_common_cxx_parameters(common_cxx_parameters, token, it): pass
+                elif self.__try_parse_cxx_parameters(cxx_parameters, token, it): pass
                 elif token.content == "link_with": link_with = self.__parse_list(it)
                 elif token.content == "library_dirs": library_dirs = self.__parse_list(it)
                 else: Ui.parse_error(token)
@@ -689,7 +720,7 @@ class Module:
             else:
                 Ui.parse_error(token)
 
-        target = Application(common_parameters, common_cxx_parameters, link_with, library_dirs)
+        target = Application(common_parameters, cxx_parameters, link_with, library_dirs)
         self.__add_target(target)
 
     def __parse_static_library(self, target_name, it):
@@ -699,20 +730,20 @@ class Module:
             self.name,
             target_name)
 
-        common_cxx_parameters = CommonCxxParameters()
+        cxx_parameters = CxxParameters()
 
         while True:
             token = it.next()
             if token.is_a(Token.LITERAL):
                 if self.__try_parse_target_common_parameters(common_parameters, token, it): pass
-                elif self.__try_parse_common_cxx_parameters(common_cxx_parameters, token, it): pass
+                elif self.__try_parse_cxx_parameters(cxx_parameters, token, it): pass
                 else: Ui.parse_error(token)
             elif token.is_a(Token.NEWLINE):
                 break
             else:
                 Ui.parse_error(token)
 
-        target = StaticLibrary(common_parameters, common_cxx_parameters)
+        target = StaticLibrary(common_parameters, cxx_parameters)
         self.__add_target(target)
 
     def __parse_phony(self, target_name, it):
@@ -722,7 +753,7 @@ class Module:
             self.name,
             target_name)
 
-        common_cxx_parameters = CommonCxxParameters()
+        cxx_parameters = CxxParameters()
 
         while True:
             token = it.next()
@@ -772,6 +803,7 @@ class Module:
             token = it.next()
             if token.is_a(Token.LITERAL):
                 if token.content == "compiler": configuration.compiler = self.__parse_list(it)
+                elif token.content == "archiver": configuration.archiver = self.__parse_list(it)
                 elif token.content == "application_suffix": configuration.application_suffix = self.__parse_list(it)
                 elif token.content == "compiler_flags": configuration.compiler_flags = self.__parse_list(it)
                 elif token.content == "export": configuration.export = self.__parse_colon_list(it)
@@ -1054,7 +1086,7 @@ class Tokenizer:
                 break
 
 class SourceTree:
-    def __init__(self, configuration_deposit, configuration_name):
+    def __init__(self, configuration_deposit):
         self.variable_deposit = VariableDeposit()
         self.configuration_deposit = configuration_deposit
         self.files = []
@@ -1063,17 +1095,17 @@ class SourceTree:
         for filename in self.__find_pake_files():
             self.files.append(Module(self.variable_deposit, self.configuration_deposit, filename))
 
-        configuration = self.configuration_deposit.get_configuration(configuration_name)
-        self.variable_deposit.export_configuration(configuration)
+        configuration = self.configuration_deposit.get_selected_configuration()
+        self.variable_deposit.export_special_variables(configuration)
 
-    def build(self, target, configuration_name):
+    def build(self, target):
         if target in self.built_targets:
             Ui.debug(target + " already build, skipping")
             return
 
         self.built_targets.append(target)
 
-        configuration = self.configuration_deposit.get_configuration(configuration_name)
+        configuration = self.configuration_deposit.get_selected_configuration()
 
         Ui.debug("building " + target + " with configuration: " + str(configuration))
         found = False
@@ -1084,7 +1116,7 @@ class SourceTree:
                     evalueated_depends_on = self.variable_deposit.eval(f.name, t.common_parameters.depends_on)
                     for dependency in evalueated_depends_on:
                         Ui.debug(str(t) + " depends on " + dependency)
-                        self.build(dependency, configuration_name)
+                        self.build(dependency)
                     t.before()
                     #Ui.bigstep("building", t.common_parameters.name)
                     t.build(configuration)
@@ -1092,10 +1124,10 @@ class SourceTree:
         if not found:
             Ui.fatal("target " + Ui.BOLD + target + Ui.RESET + " not found in the source tree")
 
-    def build_all(self, configuration_name):
+    def build_all(self):
         for f in self.files:
             for t in t.targets:
-                self.build(t.common_parameters.name, configuration_name)
+                self.build(t.common_parameters.name)
 
     def __find_pake_files(self, path = os.getcwd()):
         for (dirpath, dirnames, filenames) in os.walk(path):
@@ -1114,8 +1146,8 @@ def main():
     args = parser.parse_args()
     Ui.debug(str(args))
 
-    configuration_deposit = ConfigurationDeposit()
-    tree = SourceTree(configuration_deposit, args.configuration)
+    configuration_deposit = ConfigurationDeposit(args.configuration)
+    tree = SourceTree(configuration_deposit)
 
     targets = []
     for module in tree.files:
@@ -1124,14 +1156,16 @@ def main():
 
     if len(args.target) > 0:
         for target in args.target:
-            tree.build(target, args.configuration)
+            tree.build(target)
     elif args.all:
         Ui.bigstep("building all targets", " ".join(targets))
         for target in targets:
-            tree.build(target, args.configuration)
+            tree.build(target)
     else:
         Ui.info(Ui.BOLD + "targets found in this source tree:" + Ui.RESET)
         for target in targets:
             Ui.info(target)
 
-main()
+if __name__ == '__main__':
+    main()
+

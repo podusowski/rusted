@@ -9,6 +9,9 @@ append $windows_cmake_flags "-DCMAKE_TOOLCHAIN_FILE=${__path}/toolchain-mingw.cm
 
 append $windows_graphic_libraries opengl32
 append $windows_graphic_libraries glu32
+append $windows_graphic_libraries kernel32
+append $windows_graphic_libraries user32
+append $windows_graphic_libraries gdi32
 
 append $linux_graphic_libraries GL
 append $linux_graphic_libraries GLU
@@ -18,9 +21,11 @@ append $linux_graphic_libraries Xaw
 append $linux_graphic_libraries Xrandr
 
 append $linux_misc_libraries dl
+append $linux_misc_libraries pthread
 
 configuration windows-mingw \
     compiler(i686-w64-mingw32-c++) \
+    archiver(i686-w64-mingw32-ar) \
     application_suffix(.exe) \
     export($global_settings.windows_socket_libraries:$socket_libraries \
            $global_settings.windows_cmake_flags:$cmake_flags \
