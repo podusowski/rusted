@@ -1,6 +1,6 @@
 # provide configuration options to choose which of the dependencies to build
 if(WIN32)
-  option(OGREDEPS_BUILD_CG "Build Cg dependency" TRUE)
+  option(OGREDEPS_BUILD_CG "Build Cg dependency" FALSE)
 endif()
 option(OGREDEPS_BUILD_FREEIMAGE "Build FreeImage dependency" TRUE)
 option(OGREDEPS_BUILD_FREETYPE "Build FreeType dependency" TRUE)

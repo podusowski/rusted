@@ -38,7 +38,8 @@ append $libraries zziplib
 append $libraries zlib
 append $libraries freetype
 append $libraries FreeImage
-append $libraries dl
+append $libraries $__configuration.socket_libraries
+append $libraries $__configuration.misc_libraries
 append $libraries $__configuration.graphic_libraries
 
 append $library_dirs $OGRE.library_dirs
