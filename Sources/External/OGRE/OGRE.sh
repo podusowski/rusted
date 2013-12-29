@@ -28,5 +28,12 @@ if [ ! -f "$artefacts" ]; then
     cp -rv $ogre_dir/lib/* $__build
     cp -rv $ogre_dir/bin/* $__build
     cp -rv $ogredeps_dir/ogredeps/lib/* $__build
+    cp -rv $ogredeps_dir/ogredeps/lib/Release/* $__build
+    cp -rv $ogredeps_dir/ogredeps/bin/Release/* $__build
+
+    # hax
+    if [ -f $__build/libOIS.dll.a ]; then
+        mv $__build/libOIS.dll.a $__build/libOIS.a
+    fi
 fi
 
