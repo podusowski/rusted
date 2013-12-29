@@ -542,6 +542,9 @@ if (APPLE)
  endif()
 endif()
 
+set_target_properties(FreeImage PROPERTIES CMAKE_CXX_FLAGS_DEBUG  "${CMAKE_CXX_FLAGS_DEBUG} -fpermissive")
+set_target_properties(FreeImage PROPERTIES CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -fpermissive")
+
 set(FreeImage_INCLUDE_DIR "${FreeImage_SOURCE_DIR}/Source" CACHE PATH "" FORCE)
 set(FreeImage_LIBRARY_DBG FreeImage CACHE STRING "" FORCE)
 set(FreeImage_LIBRARY_REL FreeImage CACHE STRING "" FORCE)
