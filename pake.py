@@ -73,7 +73,7 @@ class Ui:
     @staticmethod
     def print_depth_prefix():
         for i in range(Ui.log_depth):
-            sys.stdout.write("  ")
+            sys.stdout.write("    ")
 
     @staticmethod
     def info(message):
@@ -109,17 +109,18 @@ class Ui:
         if "DEBUG" in os.environ:
             if env == None or env in os.environ:
                 Ui.print_depth_prefix()
-                print(Ui.GRAY + "debug: " + s + Ui.RESET)
+                print(Ui.GRAY + s + Ui.RESET)
 
 """
     C++ compiler support
 """
 
 class CxxToolchain:
-    def __init__(self, configuration, variable_deposit, module_name):
+    def __init__(self, configuration, variable_deposit, module_name, source_tree):
         self.configuration = configuration
         self.variable_deposit = variable_deposit
         self.module_name = module_name
+        self.source_tree = source_tree
 
         self.compiler_cmd = self.__simple_eval(configuration.compiler)
         self.compiler_flags = self.__simple_eval(configuration.compiler_flags)
@@ -128,13 +129,22 @@ class CxxToolchain:
         self.application_suffix = self.__simple_eval(configuration.application_suffix)
 
     def build_object(self, target_name, out_filename, in_filename, include_dirs, compiler_flags):
+        Ui.debug("building object " + out_filename)
+        Ui.push()
         prerequisites = self.__fetch_includes(target_name, in_filename, include_dirs, compiler_flags)
         prerequisites.append(in_filename)
+
+        Ui.debug("appending prerequisites from pake modules: " + str(self.source_tree.files))
+        for module_filename in self.source_tree.files:
+            prerequisites.append(module_filename)
+
+        Ui.debug("prerequisites: " + str(prerequisites))
 
         if FsUtils.is_any_newer_than(prerequisites, out_filename):
             Ui.step(self.compiler_cmd, in_filename)
             execute("mkdir -p " + os.path.dirname(out_filename))
             execute(self.compiler_cmd + " " + self.__prepare_compiler_flags(include_dirs, compiler_flags) + " -c -o " + out_filename + " " + in_filename)
+        Ui.pop()
 
     def link_application(self, out_filename, in_filenames, link_with, library_dirs):
         if FsUtils.is_any_newer_than(in_filenames, out_filename) or self.__are_libs_newer_than_target(link_with, out_filename):
@@ -175,6 +185,8 @@ class CxxToolchain:
         return " ".join(self.variable_deposit.eval(self.module_name, tokens))
 
     def __fetch_includes(self, target_name, in_filename, include_dirs, compiler_flags):
+        Ui.debug("getting includes for " + in_filename)
+        Ui.push()
         cache_file = self.cache_directory(target_name) + in_filename + ".includes"
         includes = None
         if os.path.exists(cache_file) and FsUtils.is_newer_than(cache_file, in_filename):
@@ -183,6 +195,7 @@ class CxxToolchain:
             execute("mkdir -p " + os.path.dirname(cache_file))
             includes = self.__scan_includes(in_filename, include_dirs, compiler_flags)
             marshal.dump(includes, open(cache_file, "w"))
+        Ui.pop()
         return includes
 
     def __scan_includes(self, in_filename, include_dirs, compiler_flags):
@@ -264,7 +277,7 @@ class TargetDeposit:
         self.targets = {}
         self.built_targets = []
 
-    def __str__(self):
+    def __repr__(self):
         s = ''
         for target in self.targets:
             s += " * " + target + "\n"
@@ -279,6 +292,7 @@ class TargetDeposit:
         execute("mkdir -p " + build_dir(configuration.name))
 
         Ui.debug("building " + name + " with configuration " + str(configuration))
+        Ui.push()
 
         if name in self.built_targets:
             Ui.debug(name + " already build, skipping")
@@ -298,11 +312,17 @@ class TargetDeposit:
             Ui.debug(name + " depends on " + dependency)
             self.build(dependency)
 
-        toolchain = CxxToolchain(configuration, self.variable_deposit, target.common_parameters.name)
+        toolchain = CxxToolchain(
+            configuration,
+            self.variable_deposit,
+            target.common_parameters.name,
+            self.source_tree)
 
         target.before()
         target.build(toolchain)
         target.after()
+
+        Ui.pop()
 
     def build_all(self):
         Ui.bigstep("building all targets", " ".join(self.targets))
@@ -314,7 +334,7 @@ class Target:
     def __init__(self, common_parameters):
         self.common_parameters = common_parameters
 
-    def __str__(self):
+    def __repr__(self):
         return self.common_parameters.name
 
     def before(self):
@@ -337,12 +357,12 @@ class Target:
             for artefact in evaluated_artefacts:
                 Ui.debug("  " + artefact)
                 if FsUtils.is_any_newer_than(evaluated_prerequisites, artefact):
-                    Ui.debug("going on because " + str(artefact) + " need to be rebuilt")
+                    Ui.debug("going on because " + str(artefact) + " needs to be rebuilt")
                     should_run = True
                     break
 
         if should_run:
-            self.common_parameters.variable_deposit.polute_environment(self.common_parameters.module_name)
+            self.common_parameters.variable_deposit.pollute_environment(self.common_parameters.module_name)
 
             evaluated_cmds = self.eval(cmds)
 
@@ -378,11 +398,14 @@ class CompileableTarget(Target):
         evaluated_compiler_flags = self.eval(self.cxx_parameters.compiler_flags)
 
         Ui.debug("building objects from " + str(evaluated_sources))
+        Ui.push()
 
         for source in evaluated_sources:
             object_file = toolchain.object_filename(self.common_parameters.name, source)
             object_files.append(object_file)
             toolchain.build_object(self.common_parameters.name, object_file, source, evaluated_include_dirs, evaluated_compiler_flags)
+
+        Ui.pop()
 
         return object_files
 
@@ -450,8 +473,8 @@ class VariableDeposit:
 
         Ui.pop()
 
-    def polute_environment(self, current_module):
-        Ui.debug("poluting environment")
+    def pollute_environment(self, current_module):
+        Ui.debug("polluting environment")
         Ui.push()
         for module in self.modules:
             for (name, variable) in self.modules[module].iteritems():
@@ -478,7 +501,7 @@ class VariableDeposit:
             elif token.is_a(Token.VARIABLE):
                 parts = token.content.split(".")
 
-                Ui.debug("  dereferencing " + str(parts))
+                Ui.debug("dereferencing " + str(parts))
 
                 module = ''
                 name = ''
@@ -512,7 +535,8 @@ class VariableDeposit:
         return ret
 
     def __eval_literal(self, current_module, s):
-        Ui.debug("    evaluating literal: " + s)
+        Ui.debug("evaluating literal: " + s)
+        Ui.push()
         ret = ""
 
         STATE_READING = 1
@@ -535,7 +559,7 @@ class VariableDeposit:
                     Ui.parse_error(msg="expecting { after $")
             elif state == STATE_READING_NAME:
                 if c == "}":
-                    Ui.debug("    variable: " + variable_name)
+                    Ui.debug("variable: " + variable_name)
                     evaluated_variable = self.eval(current_module, [Token(Token.VARIABLE, variable_name)])
                     ret += " ".join(evaluated_variable)
                     variable_name = '$'
@@ -545,6 +569,7 @@ class VariableDeposit:
             elif state == STATE_READING_NAME:
                 variable_name = variable_name + c
 
+        Ui.pop()
         return ret
 
     def add_empty(self, module_name, name):
@@ -606,12 +631,16 @@ class Configuration:
         self.archiver = [Token.make_literal("ar")]
         self.export = []
 
+    def __repr__(self):
+        return self.name
+
 class Module:
     def __init__(self, variable_deposit, configuration_deposit, target_deposit,filename):
         assert isinstance(variable_deposit, VariableDeposit)
         assert isinstance(filename, str)
 
         Ui.debug("parsing " + filename)
+        Ui.push()
 
         self.variable_deposit = variable_deposit
         self.configuration_deposit = configuration_deposit
@@ -635,6 +664,8 @@ class Module:
         self.variable_deposit.add_empty(
             self.name,
             "$__null")
+
+        Ui.pop()
 
     def __get_module_name(self, filename):
         base = os.path.basename(filename)
@@ -896,8 +927,10 @@ class Module:
         except StopIteration:
             Ui.debug("eof")
 
-class Buffer:
+class FileReader:
     def __init__(self, filename):
+        self.line_number = 1
+
         f = open(filename, "r")
         self.position = 0
         self.buf = f.read()
@@ -912,7 +945,18 @@ class Buffer:
         return str(self.buf[self.position])
 
     def rewind(self, value = 1):
-        self.position = self.position + value
+        if value > 0:
+            for i in xrange(value):
+                self.position += 1
+                if not self.eof() and self.buf[self.position] == '\n':
+                    self.line_number += 1
+        elif value < 0:
+            for i in xrange(-value):
+                self.position -= 1
+                if not self.eof() and self.buf[self.position] == '\n':
+                    self.line_number -= 1
+        else:
+            raise Exception("rewind by 0")
 
     def seek(self, value):
         self.position = value
@@ -944,7 +988,7 @@ class Token:
         self.line = line
         self.col = col
 
-    def __str__(self):
+    def __repr__(self):
         if self.is_a(Token.LITERAL):
             return "literal: " + self.content
         elif self.is_a(Token.VARIABLE):
@@ -961,7 +1005,7 @@ class Token:
 class Tokenizer:
     def __init__(self, filename):
         self.filename = filename
-        buf = Buffer(filename)
+        buf = FileReader(filename)
         self.tokens = []
         self.__tokenize(buf)
         Ui.debug("tokens: " + str(self.tokens))
@@ -969,13 +1013,13 @@ class Tokenizer:
     def __is_valid_identifier_char(self, char):
         return char.isalnum() or char in './$_-=+'
 
-    def __try_add_variable_or_literal(self, token_type, data):
+    def __try_add_variable_or_literal(self, token_type, data, line):
         if len(data) > 0:
-            self.__add_token(token_type, data)
+            self.__add_token(token_type, data, line)
         return ""
 
-    def __add_token(self, token_type, content):
-        token = Token(token_type, content, self.filename)
+    def __add_token(self, token_type, content, line = None):
+        token = Token(token_type, content, self.filename, line)
         self.tokens.append(token)
 
     def __try_to_read_token(self, buf, what):
@@ -1012,7 +1056,7 @@ class Tokenizer:
                 char = buf.value()
 
                 if self.__try_to_read_token(buf, '"""'):
-                    self.__add_token(Token.MULTILINE_LITERAL, data)
+                    self.__add_token(Token.MULTILINE_LITERAL, data, buf.line_number)
                     return True
                 else:
                     data = data + char
@@ -1058,19 +1102,19 @@ class Tokenizer:
         char = buf.value()
 
         if char == '\n':
-            self.__add_token(Token.NEWLINE, "<new-line>")
+            self.__add_token(Token.NEWLINE, "<new-line>", buf.line_number)
             buf.rewind()
             return True
         elif char == '(':
-            self.__add_token(Token.OPEN_PARENTHESIS, "(")
+            self.__add_token(Token.OPEN_PARENTHESIS, "(", buf.line_number)
             buf.rewind()
             return True
         elif char == ')':
-            self.__add_token(Token.CLOSE_PARENTHESIS, ")")
+            self.__add_token(Token.CLOSE_PARENTHESIS, ")", buf.line_number)
             buf.rewind()
             return True
         elif char == ':':
-            self.__add_token(Token.COLON, ":")
+            self.__add_token(Token.COLON, ":", buf.line_number)
             buf.rewind()
             return True
 
@@ -1092,7 +1136,7 @@ class Tokenizer:
             else:
                 break
 
-        self.__try_add_variable_or_literal(token_type, data)
+        self.__try_add_variable_or_literal(token_type, data, buf.line_number)
 
         return True
 
@@ -1106,7 +1150,7 @@ class Tokenizer:
                     raise Exception("parse error")
 
                 if self.__try_to_read_token(buf, '"'):
-                    self.__add_token(Token.LITERAL, data)
+                    self.__add_token(Token.LITERAL, data, buf.line_number)
                     return True
                 else:
                     char = buf.value()
@@ -1149,13 +1193,15 @@ class SourceTree:
         self.files = self.__find_pake_files()
 
     def __find_pake_files(self, path = os.getcwd()):
+        ret = []
         for (dirpath, dirnames, filenames) in os.walk(path):
             for f in filenames:
                 if not dirpath.startswith(BUILD_DIR):
                     filename = dirpath + "/" + f
                     (base, ext) = os.path.splitext(filename)
                     if ext == ".pake":
-                        yield(filename)
+                        ret.append(filename)
+        return ret
 
 
 class SourceTreeParser:
@@ -1166,11 +1212,13 @@ class SourceTreeParser:
         self.modules = []
 
         for filename in source_tree.files:
-            self.modules.append(Module(
+            module = Module(
                 self.variable_deposit,
                 self.configuration_deposit,
                 self.target_deposit,
-                filename))
+                filename)
+
+            self.modules.append(module)
 
         configuration = self.configuration_deposit.get_selected_configuration()
         self.variable_deposit.export_special_variables(configuration)
@@ -1189,6 +1237,8 @@ def main():
     configuration_deposit = ConfigurationDeposit(args.configuration)
     target_deposit = TargetDeposit(variable_deposit, configuration_deposit, source_tree)
     parser = SourceTreeParser(source_tree, variable_deposit, configuration_deposit, target_deposit)
+
+    Ui.bigstep("configuration", str(configuration_deposit.get_selected_configuration()))
 
     if len(args.target) > 0:
         for target in args.target:
