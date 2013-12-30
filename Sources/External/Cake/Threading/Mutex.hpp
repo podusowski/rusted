@@ -6,6 +6,10 @@
     #include <pthread.h>
 #endif
 
+#ifdef _WIN32
+typedef CRITICAL_SECTION pthread_mutex_t;
+#endif
+
 #include "ILock.hpp"
 
 namespace Cake
@@ -16,12 +20,7 @@ namespace Threading
 class Mutex : public ILock
 {
 public:
-
-#ifdef _WIN32
-    typedef CRITICAL_SECTION MutexHandle;
-#else
     typedef pthread_mutex_t MutexHandle;
-#endif
 
     Mutex();
     void aquire();

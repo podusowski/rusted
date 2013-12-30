@@ -1,9 +1,22 @@
 #pragma once
 
+// windows implementation from http://www.cs.wustl.edu/~schmidt/win32-cv-1.html
+
 #ifdef _WIN32
     #include <windows.h>
 #else
     #include <pthread.h>
+#endif
+
+#ifdef _WIN32
+struct pthread_cond_t
+{
+    int waiters_count_;
+    CRITICAL_SECTION waiters_count_lock_;
+    HANDLE sema_;
+    HANDLE waiters_done_;
+    size_t was_broadcast_;
+};
 #endif
 
 #include "Mutex.hpp"
@@ -22,12 +35,7 @@ enum ETimedWaitResult
 class ConditionVariable
 {
 public:
-
-#ifdef _WIN32
-    typedef HANDLE ConditionVariableHandle;
-#else
     typedef pthread_cond_t ConditionVariableHandle;
-#endif
 
     ConditionVariable(Mutex &); 
     ~ConditionVariable();

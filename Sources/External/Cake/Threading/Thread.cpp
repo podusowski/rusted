@@ -58,7 +58,7 @@ void Thread::start()
 void Thread::join()
 {
 #ifdef _WIN32
-    throw std::runtime_error("WIN32 not implemented");
+    WaitForSingleObject(m_thread, INFINITE);
 #else
     pthread_join(m_thread, 0);
 #endif
@@ -67,7 +67,7 @@ void Thread::join()
 void Thread::wait(int secs, int mili)
 {
 #ifdef _WIN32
-    throw std::runtime_error("WIN32 not implemented");
+    Sleep(mili + (secs * 100));
 #else
     timespec l_ts;
     l_ts.tv_sec = secs;
@@ -79,7 +79,8 @@ void Thread::wait(int secs, int mili)
 unsigned Thread::self()
 {
 #ifdef _WIN32
-    throw std::runtime_error("WIN32 not implemented");
+    // TODO
+    return 0;
 #else
     return pthread_self();
 #endif

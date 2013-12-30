@@ -8,6 +8,11 @@ _LD_LIBRARY_PATH=$LD_LIBRARY_PATH
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:.
 echo "export LD_LIBRARY_PATH=$LD_LIBRARY_PATH"
 
+client=Client
+if [ -f Client.exe ]; then
+    client=Client.exe
+fi
+
 if [ -n "$DEBUG" ]; then
     echo "executing with gdb"
     gdb --args Client --network.port 1234 --network.address localhost $@
@@ -15,9 +20,9 @@ elif [ -n "$VALGRIND" ]; then
     echo "executing with vagrind"
     valgrind --leak-check=full ./Client --network.port 1234 --network.address localhost $@
 elif [ -n "$WINE" ]; then
-    wine ./Client --network.port 1234 --network.address localhost $@
+    wine ./$client --network.port 1234 --network.address localhost $@
 else
-    ./Client --network.port 1234 --network.address localhost $@
+    ./$client --network.port 1234 --network.address localhost $@
 fi
 
 xset r on
