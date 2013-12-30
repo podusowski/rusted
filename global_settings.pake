@@ -36,7 +36,6 @@ configuration win32 \
 configuration win64 \
     compiler(x86_64-w64-mingw32-c++) \
     archiver(x86_64-w64-mingw32-ar) \
-    linker_flags("-static-libstdc++ -static-libgcc") \
     application_suffix(.exe) \
     export($global_settings.win_socket_libraries:$socket_libraries \
            $global_settings.win64_cmake_flags:$cmake_flags \
