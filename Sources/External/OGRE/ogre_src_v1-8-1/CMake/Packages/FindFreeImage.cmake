@@ -38,7 +38,7 @@ use_pkgconfig(FreeImage_PKGC freeimage)
 
 findpkg_framework(FreeImage)
 
-find_path(FreeImage_INCLUDE_DIR NAMES FreeImage.h HINTS ${FreeImage_INC_SEARCH_PATH} ${FreeImage_PKGC_INCLUDE_DIRS})
+find_path(FreeImage_INCLUDE_DIR NAMES FreeImage.h HINTS ${FreeImage_INC_SEARCH_PATH} ${FreeImage_PKGC_INCLUDE_DIRS} NO_CMAKE_FIND_ROOT_PATH)
 
 message(STATUS "${FreeImage_INCLUDE_DIR}")
 
