@@ -1,3 +1,5 @@
+set -e
+
 if [ ! -f "$artefacts" ]; then
     mkdir -p $ogredeps_dir
     cd $ogredeps_dir
@@ -28,8 +30,14 @@ if [ ! -f "$artefacts" ]; then
     cp -rv $ogre_dir/lib/* $__build
     cp -rv $ogre_dir/bin/* $__build
     cp -rv $ogredeps_dir/ogredeps/lib/* $__build
-    cp -rv $ogredeps_dir/ogredeps/lib/Release/* $__build
-    cp -rv $ogredeps_dir/ogredeps/bin/Release/* $__build
+
+    if [ -e $ogredeps_dir/ogredeps/lib/Release ]; then
+        cp -rv $ogredeps_dir/ogredeps/lib/Release/* $__build
+    fi
+
+    if [ -e $ogredeps_dir/ogredeps/bin/Release ]; then
+        cp -rv $ogredeps_dir/ogredeps/bin/Release/* $__build
+    fi
 
     # hax
     if [ -f $__build/libOIS.dll.a ]; then
