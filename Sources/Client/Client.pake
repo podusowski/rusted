@@ -51,7 +51,10 @@ append $include_dirs $gtest.__path
 append $include_dirs $OGRE.include_dirs
 append $include_dirs $MyGUI.include_dirs
 
-append $dependencies Cake Common OGRE MyGUI Contents ClientResources
+append $dependencies Cake Common OGRE MyGUI Contents
+
+append $resources runTestClient
+append $resources runClient
 
 target application Client \
     sources($sources main.cpp) \
@@ -59,12 +62,6 @@ target application Client \
     library_dirs($library_dirs) \
     include_dirs($include_dirs) \
     compiler_flags($global_settings.compiler_flags) \
-    depends_on($dependencies)
-
-# resources
-
-append $resources runTestClient
-append $resources runClient
-
-target phony ClientResources run_before("cp -t ${__build} ${resources}")
+    depends_on($dependencies) \
+    resources($resources)
 
