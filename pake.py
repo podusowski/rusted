@@ -7,14 +7,20 @@ import stat
 import subprocess
 import argparse
 import marshal
+import shutil
 
-BUILD_DIR = os.path.normpath(os.getcwd() + "/__build")
 
 """
     utilities
 """
 
 class FsUtils:
+    BUILD_ROOT = os.path.normpath(os.getcwd() + "/__build")
+
+    @staticmethod
+    def build_dir(configuration_name):
+        return os.path.normpath(FsUtils.BUILD_ROOT + "/" + configuration_name)
+
     @staticmethod
     def is_newer_than(prerequisite, target):
         if os.path.exists(target):
@@ -49,8 +55,6 @@ def execute(command, capture_output = False):
     Ui.debug("command completed: " + command)
     return out
 
-def build_dir(configuration_name):
-    return os.path.normpath(BUILD_DIR + "/" + configuration_name)
 
 class Ui:
     RESET = '\033[0m'
@@ -167,19 +171,19 @@ class CxxToolchain:
         execute(self.archiver_cmd + " -rcs " + out_filename + " " + " ".join(in_filenames))
 
     def object_filename(self, target_name, source_filename):
-        return self.__build_dir() + "/build." + target_name + "/" + source_filename + ".o"
+        return self.build_dir() + "/build." + target_name + "/" + source_filename + ".o"
 
     def static_library_filename(self, target_name):
-        return self.__build_dir() + "/lib" + target_name + ".a"
+        return self.build_dir() + "/lib" + target_name + ".a"
 
     def application_filename(self, target_name):
-        return self.__build_dir() + "/" + target_name + self.application_suffix
+        return self.build_dir() + "/" + target_name + self.application_suffix
 
     def cache_directory(self, target_name):
-        return self.__build_dir() + "/build." + target_name + "/"
+        return self.build_dir() + "/build." + target_name + "/"
 
-    def __build_dir(self):
-        return build_dir(self.configuration.name)
+    def build_dir(self):
+        return FsUtils.build_dir(self.configuration.name)
 
     def __simple_eval(self, tokens):
         return " ".join(self.variable_deposit.eval(self.module_name, tokens))
@@ -211,7 +215,7 @@ class CxxToolchain:
         return ret
 
     def __libs_arguments(self, link_with):
-        ret = "-L " + self.__build_dir() + " "
+        ret = "-L " + self.build_dir() + " "
         for lib in link_with:
             ret = ret + " -l" + lib
         return ret
@@ -261,6 +265,7 @@ class CommonTargetParameters:
         self.depends_on = []
         self.run_before = []
         self.run_after = []
+        self.resources = []
 
 class CxxParameters:
     def __init__(self):
@@ -289,7 +294,7 @@ class TargetDeposit:
     def build(self, name):
         configuration = self.configuration_deposit.get_selected_configuration()
 
-        execute("mkdir -p " + build_dir(configuration.name))
+        execute("mkdir -p " + FsUtils.build_dir(configuration.name))
 
         Ui.debug("building " + name + " with configuration " + str(configuration))
         Ui.push()
@@ -321,6 +326,7 @@ class TargetDeposit:
         target.before()
         target.build(toolchain)
         target.after()
+        target.copy_resources(toolchain)
 
         Ui.pop()
 
@@ -342,6 +348,17 @@ class Target:
 
     def after(self):
         self.__try_run(self.common_parameters.run_after)
+
+    def copy_resources(self, toolchain):
+        root_dir = os.getcwd()
+        os.chdir(self.common_parameters.root_path)
+
+        resources = self.eval(self.common_parameters.resources)
+        for resource in resources:
+            Ui.step("copy", resource)
+            shutil.copyfile(resource, toolchain.build_dir() + "/" + resource)
+
+        os.chdir(root_dir)
 
     def __try_run(self, cmds):
         root_dir = os.getcwd()
@@ -469,7 +486,7 @@ class VariableDeposit:
             self.add("__configuration", name.content, value)
 
         for module in self.modules:
-            self.add(module, "$__build", Token(Token.LITERAL, build_dir(configuration.name)))
+            self.add(module, "$__build", Token(Token.LITERAL, FsUtils.build_dir(configuration.name)))
 
         Ui.pop()
 
@@ -763,6 +780,9 @@ class Module:
             return True
         elif token.content == "run_after":
             common_parameters.run_after = self.__parse_list(it)
+            return True
+        elif token.content == "resources":
+            common_parameters.resources = self.__parse_list(it)
             return True
 
         return False
@@ -1196,7 +1216,7 @@ class SourceTree:
         ret = []
         for (dirpath, dirnames, filenames) in os.walk(path):
             for f in filenames:
-                if not dirpath.startswith(BUILD_DIR):
+                if not dirpath.startswith(FsUtils.BUILD_ROOT):
                     filename = dirpath + "/" + f
                     (base, ext) = os.path.splitext(filename)
                     if ext == ".pake":
