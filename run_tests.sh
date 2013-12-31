@@ -186,7 +186,7 @@ trap "cleanup" EXIT TERM
 if [ -n "$binary" ]; then
     run_test_binary $binary
 else
-    root_dir=`dirname $0`/_build/
+    root_dir=`dirname $0`/__build/__default/
     for b in $root_dir/*UT $root_dir/*SCT; do
         if [ -f $b -a -x $b ]; then
             if [ $fast = "1" ]; then
