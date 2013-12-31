@@ -24,6 +24,10 @@ append $linux_graphic_libraries Xrandr
 append $linux_misc_libraries dl
 append $linux_misc_libraries pthread
 
+append $win32_resources /usr/lib/gcc/i686-w64-mingw32/4.6/libstdc++-6.dll
+append $win64_resources /usr/lib/gcc/x86_64-w64-mingw32/4.6/libstdc++-6.dll
+append $linux_resources $__null
+
 configuration win32 \
     compiler(i686-w64-mingw32-c++) \
     archiver(i686-w64-mingw32-ar) \
@@ -31,7 +35,8 @@ configuration win32 \
     export($global_settings.win_socket_libraries:$socket_libraries \
            $global_settings.win32_cmake_flags:$cmake_flags \
            $global_settings.win_graphic_libraries:$graphic_libraries \
-           $__null:$misc_libraries)
+           $__null:$misc_libraries \
+           $global_settings.win32_resources:$resources)
 
 configuration win64 \
     compiler(x86_64-w64-mingw32-c++) \
@@ -40,11 +45,13 @@ configuration win64 \
     export($global_settings.win_socket_libraries:$socket_libraries \
            $global_settings.win64_cmake_flags:$cmake_flags \
            $global_settings.win_graphic_libraries:$graphic_libraries \
-           $__null:$misc_libraries)
+           $__null:$misc_libraries \
+           $global_settings.win64_resources:$resources)
 
 configuration __default \
     export($__null:$socket_libraries \
            $__null:$cmake_flags \
            $global_settings.linux_graphic_libraries:$graphic_libraries \
-           $global_settings.linux_misc_libraries:$misc_libraries)
+           $global_settings.linux_misc_libraries:$misc_libraries \
+           $global_settings.linux_resources:$resources)
 

@@ -63,5 +63,5 @@ target application Client \
     include_dirs($include_dirs) \
     compiler_flags($global_settings.compiler_flags) \
     depends_on($dependencies) \
-    resources($resources)
+    resources($resources $__configuration.resources)
 
