@@ -48,6 +48,14 @@ configuration win64 \
            $__null:$misc_libraries \
            $global_settings.win64_resources:$resources)
 
+configuration linux-release \
+    export($__null:$socket_libraries \
+           $__null:$cmake_flags \
+           $global_settings.linux_graphic_libraries:$graphic_libraries \
+           $global_settings.linux_misc_libraries:$misc_libraries \
+           $global_settings.linux_resources:$resources)
+
+
 configuration __default \
     export($__null:$socket_libraries \
            $__null:$cmake_flags \

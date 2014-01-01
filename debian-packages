@@ -3,3 +3,4 @@ libxaw7-dev
 libglu1-mesa-dev
 libxrandr-dev
 libsqlite3-dev
+mingw-w64-dev
