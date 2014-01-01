@@ -65,3 +65,7 @@ target application Client \
     depends_on($dependencies) \
     resources($resources $__configuration.resources)
 
+target phony ClientZip \
+    depends_on(Client) \
+    run_before(./ClientZip.sh)
+
