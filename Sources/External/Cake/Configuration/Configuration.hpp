@@ -55,6 +55,8 @@ private:
         return ret;
     }
 
+    bool exists(const std::string file);
+
     std::map<std::string, std::string> m_properties;
     std::string m_appName;
 };

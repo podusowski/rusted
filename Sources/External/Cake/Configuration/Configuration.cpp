@@ -114,7 +114,7 @@ void Configuration::parse(int argc, const char * argv[])
         {
             LOG_DEBUG << "  option: " << argv[i] <<
                       ", value: " << argv[i+1];
-            
+
             std::string name = argv[i];
             if (name == "--cfg")
             {
@@ -136,6 +136,11 @@ void Configuration::parse(int argc, const char * argv[])
     {
         m_properties[it->first] = it->second;
     }
+
+    if (exists("config.cfg"))
+    {
+        parse("config.cfg");
+    }
 }
 
 bool Configuration::hasValue(const std::string & name)
@@ -145,6 +150,19 @@ bool Configuration::hasValue(const std::string & name)
 
 std::string Configuration::getAppName()
 {
-	return m_appName;
+    return m_appName;
+}
+
+bool Configuration::exists(std::string file)
+{
+    std::ifstream f(file);
+    if (f.good())
+    {
+        return true;
+    }
+    else
+    {
+        return false;
+    }
 }
 
