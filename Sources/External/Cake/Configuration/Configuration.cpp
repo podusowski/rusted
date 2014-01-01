@@ -104,6 +104,12 @@ void Configuration::parse(const std::string & filename)
 void Configuration::parse(int argc, const char * argv[])
 {
     LOG_DEBUG << "Parsing program's cmd line";
+
+    if (exists("config.cfg"))
+    {
+        parse("config.cfg");
+    }
+
     std::map<std::string, std::string> cmdLineOptions;
 
     m_appName = argv[0];
@@ -135,11 +141,6 @@ void Configuration::parse(int argc, const char * argv[])
             it != cmdLineOptions.end(); it++)
     {
         m_properties[it->first] = it->second;
-    }
-
-    if (exists("config.cfg"))
-    {
-        parse("config.cfg");
     }
 }
 
