@@ -55,6 +55,7 @@ append $dependencies Cake Common OGRE MyGUI Contents
 
 append $resources runTestClient
 append $resources runClient
+append $resources config.cfg
 
 target application Client \
     sources($sources main.cpp) \

@@ -36,10 +36,8 @@ void Connection::connect()
     std::string address = m_cfg.getValue<std::string>("network.address");
     unsigned port = m_cfg.getValue<unsigned>("network.port");
 
-    LOG_INFO << "Connecting to host";
+    LOG_INFO << "Connecting to " << address << ":" << port;
     m_socket = Cake::Networking::Socket::connectToTcpSocket(address, port);
-
-    LOG_INFO << "Connected to " << address << ":" << port;
 }
 
 void Connection::addListener(IConnectionListener & listener)

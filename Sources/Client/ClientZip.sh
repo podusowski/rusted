@@ -7,11 +7,19 @@ files="Contents "
 
 if [ -f Client.exe ]; then
     files+="Client.exe "
+else
+    files+="Client "
 fi
 
 if [ -f OIS.dll ]; then
     files+="*.dll "
 fi
+
+if [ -f libOIS.so ]; then
+    files+="libOIS.so "
+fi
+
+files+="config.cfg "
 
 zip -r $zip_file $files
 

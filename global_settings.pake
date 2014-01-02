@@ -25,7 +25,9 @@ append $linux_misc_libraries dl
 append $linux_misc_libraries pthread
 
 append $win32_resources /usr/lib/gcc/i686-w64-mingw32/4.6/libstdc++-6.dll
+append $win32_resources /usr/lib/gcc/i686-w64-mingw32/4.6/libgcc_s_sjlj-1.dll
 append $win64_resources /usr/lib/gcc/x86_64-w64-mingw32/4.6/libstdc++-6.dll
+append $win64_resources /usr/lib/gcc/x86_64-w64-mingw32/4.6/libgcc_s_sjlj-1.dll
 append $linux_resources $__null
 
 configuration win32 \
