@@ -5,3 +5,4 @@ libxrandr-dev
 libsqlite3-dev
 mingw-w64-dev
 zip
+g++-multilib

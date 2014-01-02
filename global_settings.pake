@@ -1,6 +1,4 @@
 append $compiler_flags -Wall
-append $compiler_flags -g
-append $compiler_flags -O0
 append $compiler_flags -pedantic
 append $compiler_flags -std=gnu++0x
 
@@ -50,15 +48,16 @@ configuration win64 \
            $__null:$misc_libraries \
            $global_settings.win64_resources:$resources)
 
-configuration linux-release \
+configuration linux32 \
+    compiler_flags(-m32) \
     export($__null:$socket_libraries \
            $__null:$cmake_flags \
            $global_settings.linux_graphic_libraries:$graphic_libraries \
            $global_settings.linux_misc_libraries:$misc_libraries \
            $global_settings.linux_resources:$resources)
 
-
 configuration __default \
+    compiler_flags(-g -O0) \
     export($__null:$socket_libraries \
            $__null:$cmake_flags \
            $global_settings.linux_graphic_libraries:$graphic_libraries \
