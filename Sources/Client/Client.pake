@@ -43,6 +43,7 @@ append $libraries $__configuration.graphic_libraries
 
 append $library_dirs $OGRE.library_dirs
 
+append $include_dirs .
 append $include_dirs ..
 append $include_dirs ../External
 append $include_dirs $Common.__path
