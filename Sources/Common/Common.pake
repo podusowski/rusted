@@ -14,11 +14,12 @@ append $sources Math/Bezier3.cpp
 append $sources Math/Matrix3.cpp
 append $sources Math/KinematicParticle.cpp
 
+append $include_dirs .
 append $include_dirs ..
 append $include_dirs ../External
 append $include_dirs $boost.__path
 
-target static_library Common sources($sources) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on(CommonMessagesHeader)
+target static_library Common sources($sources) include_dirs($include_dirs) depends_on(CommonMessagesHeader)
 
 set $messages_header Messages/Messages.hpp
 set $messages_xml Messages/Messages.xml

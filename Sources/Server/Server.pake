@@ -34,7 +34,7 @@ append $include_dirs "${SOCI.soci_src}/core"
 
 append $dependencies Cake Common SOCI ServerResources ServerBigDataBase ServerTestDataBase
 
-target application Server sources($sources main.cpp) link_with($libraries) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on($dependencies)
+target application Server sources($sources main.cpp) link_with($libraries) include_dirs($include_dirs) depends_on($dependencies)
 
 # unit tests
 
@@ -44,7 +44,7 @@ append $sources_ut Game/Actions/UnitTests/BuildShipTest.cpp
 append $sources_ut Game/Actions/UnitTests/ActionFactoryTest.cpp
 append $sources_ut Game/Actions/UnitTests/ActionPerformerTest.cpp
 
-target application ServerUT sources($sources $sources_ut) link_with($libraries gtest) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags) depends_on($dependencies gtest)
+target application ServerUT sources($sources $sources_ut) link_with($libraries gtest) include_dirs($include_dirs) depends_on($dependencies gtest)
 
 # resources
 

@@ -36,5 +36,5 @@ append $include_dirs "${__path}"
 append $include_dirs "${__path}/.."
 append $include_dirs "${boost.__path}"
 
-target static_library Cake sources($sources) include_dirs($include_dirs) compiler_flags($global_settings.compiler_flags)
+target static_library Cake sources($sources) include_dirs($include_dirs)
 

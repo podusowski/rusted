@@ -1,6 +1,6 @@
-append $compiler_flags -Wall
-append $compiler_flags -pedantic
-append $compiler_flags -std=gnu++0x
+append $generic_compiler_flags -Wall
+append $generic_compiler_flags -pedantic
+append $generic_compiler_flags -std=gnu++0x
 
 append $win_socket_libraries wsock32
 append $win32_cmake_flags "-DCMAKE_TOOLCHAIN_FILE=${__path}/toolchain-win32.cmake"
@@ -31,6 +31,7 @@ append $linux_resources $__null
 configuration win32 \
     compiler(i686-w64-mingw32-c++) \
     archiver(i686-w64-mingw32-ar) \
+    compiler_flags($global_settings.generic_compiler_flags -m32) \
     application_suffix(.exe) \
     export($global_settings.win_socket_libraries:$socket_libraries \
            $global_settings.win32_cmake_flags:$cmake_flags \
@@ -41,6 +42,7 @@ configuration win32 \
 configuration win64 \
     compiler(x86_64-w64-mingw32-c++) \
     archiver(x86_64-w64-mingw32-ar) \
+    compiler_flags($global_settings.generic_compiler_flags -m64) \
     application_suffix(.exe) \
     export($global_settings.win_socket_libraries:$socket_libraries \
            $global_settings.win64_cmake_flags:$cmake_flags \
@@ -49,7 +51,7 @@ configuration win64 \
            $global_settings.win64_resources:$resources)
 
 configuration linux32 \
-    compiler_flags(-m32) \
+    compiler_flags($global_settings.generic_compiler_flags -m32) \
     export($__null:$socket_libraries \
            $__null:$cmake_flags \
            $global_settings.linux_graphic_libraries:$graphic_libraries \
@@ -57,7 +59,7 @@ configuration linux32 \
            $global_settings.linux_resources:$resources)
 
 configuration __default \
-    compiler_flags(-g -O0) \
+    compiler_flags($global_settings.generic_compiler_flags -g -O0) \
     export($__null:$socket_libraries \
            $__null:$cmake_flags \
            $global_settings.linux_graphic_libraries:$graphic_libraries \

@@ -62,7 +62,6 @@ target application Client \
     link_with($libraries) \
     library_dirs($library_dirs) \
     include_dirs($include_dirs) \
-    compiler_flags($global_settings.compiler_flags) \
     depends_on($dependencies) \
     resources($resources $__configuration.resources)
 
