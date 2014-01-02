@@ -17,6 +17,7 @@ append $libraries Cake
 append $libraries gtest
 append $libraries pthread
 
+append $include_dirs ./
 append $include_dirs ../
 append $include_dirs ../External
 append $include_dirs $boost.__path
