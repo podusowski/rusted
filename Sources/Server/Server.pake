@@ -25,6 +25,7 @@ append $libraries Cake
 append $libraries pthread
 append $libraries soci_core
 
+append $include_dirs .
 append $include_dirs ..
 append $include_dirs ../External
 append $include_dirs $Common.__path

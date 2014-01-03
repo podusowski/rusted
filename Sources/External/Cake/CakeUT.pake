@@ -10,6 +10,7 @@ append $libraries gtest
 append $libraries pthread
 append $libraries $__configuration.socket_libraries
 
+append $include_dirs ./
 append $include_dirs ../
 append $include_dirs $boost.__path
 append $include_dirs $gtest.__path
