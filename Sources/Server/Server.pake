@@ -33,9 +33,11 @@ append $include_dirs $boost.__path
 append $include_dirs $gtest.__path
 append $include_dirs "${SOCI.soci_src}/core"
 
-append $dependencies Cake Common SOCI ServerResources ServerBigDataBase ServerTestDataBase
+append $dependencies Cake Common SOCI ServerBigDataBase ServerTestDataBase
 
-target application Server sources($sources main.cpp) link_with($libraries) include_dirs($include_dirs) depends_on($dependencies)
+append $resources Server.cfg runTestServer deployPublicServer.sh DataBaseSchema.sql
+
+target application Server sources($sources main.cpp) link_with($libraries) include_dirs($include_dirs) depends_on($dependencies) resources($resources)
 
 # unit tests
 
@@ -48,9 +50,6 @@ append $sources_ut Game/Actions/UnitTests/ActionPerformerTest.cpp
 target application ServerUT sources($sources $sources_ut) link_with($libraries gtest) include_dirs($include_dirs) depends_on($dependencies gtest)
 
 # resources
-
-append $resources Server.cfg runTestServer
-target phony ServerResources run_before("cp -t ${__build} ${resources}")
 
 set $gen_big_database ./genBigDataBase.py
 set $big_database "${__build}/BigDataBase.sqlite3"
