@@ -54,6 +54,7 @@ configuration win64 \
 
 configuration linux32 \
     compiler_flags($global_settings.generic_compiler_flags -m32) \
+    linker_flags(-m32) \
     export($__null:$socket_libraries \
            $__null:$cmake_flags \
            $global_settings.linux_graphic_libraries:$graphic_libraries \
@@ -62,6 +63,7 @@ configuration linux32 \
 
 configuration linux64 \
     compiler_flags($global_settings.generic_compiler_flags -m64) \
+    linker_flags(-m64) \
     export($__null:$socket_libraries \
            $__null:$cmake_flags \
            $global_settings.linux_graphic_libraries:$graphic_libraries \
