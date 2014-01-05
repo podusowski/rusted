@@ -8,6 +8,7 @@ append $sources Threading/ConditionVariable.cpp
 append $sources Threading/ScopedLock.cpp
 append $sources Threading/Thread.cpp
 
+append $sources Networking/SocketInitialize.cpp
 append $sources Networking/Detail/SocketDescriptor.cpp
 append $sources Networking/DnsResolver.cpp
 append $sources Networking/GenericPacket.cpp

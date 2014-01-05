@@ -65,9 +65,9 @@ void LoginState::loginButtonClicked(MyGUI::WidgetPtr)
         m_stateDeployment.deployNewConnection();
         m_authorizationService.login(login, password, boost::bind(&LoginState::loggedIn, this, _1));
     }
-    catch (...)
+    catch (const std::exception & ex)
     {
-        LOG_ERR << "Can't connect";
+        LOG_ERR << "Can't connect, reason: " << ex.what();
     }
 }
 

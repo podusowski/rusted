@@ -3,24 +3,26 @@
 #include <string.h>
 
 #include "System/AtomicSyscall.hpp"
+#include "Utils/BuildString.hpp"
+#include "SocketInitialize.hpp"
 #include "DnsResolver.hpp"
 
 using namespace Cake::Networking;
 
-// TODO: this still isn't thread safe...
 sockaddr_in DnsResolver::resolve(const std::string & address, int port)
 {
-    hostent * ent;
+    SocketInitialize::tryInitialize();
 
-    try
+    hostent * ent = gethostbyname(address.c_str());
+
+    if (ent == 0)
     {
-        ATOMIC_SYSCALL(gethostbyname(address.c_str()), ent, == 0);
-    }
-    catch (std::exception & ex)
-    {
-        std::stringstream ss;
-        ss << "couldn't resolve \"" << address << "\", reason: " << ex.what();
-        throw std::runtime_error(ss.str());
+#ifdef _WIN32
+        int error = WSAGetLastError();
+#else
+        int error = errno;
+#endif
+        throw std::runtime_error(BUILD_STRING << "can't resolve " << address << ", reason: " << error);
     }
 
     sockaddr_in addr;
@@ -30,3 +32,4 @@ sockaddr_in DnsResolver::resolve(const std::string & address, int port)
 
     return addr;
 }
+

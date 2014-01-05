@@ -15,11 +15,14 @@
 #include "DnsResolver.hpp"
 #include "Detail/SockFdGuard.hpp"
 #include "Diagnostics/Throw.hpp"
+#include "Utils/BuildString.hpp"
+#include "SocketInitialize.hpp"
 
 using namespace Cake::Networking;
 
 Socket::Socket(int sockFd) : m_sockFd(sockFd)
 {
+    SocketInitialize::tryInitialize();
 }
 
 Socket::~Socket()
@@ -58,8 +61,12 @@ std::shared_ptr<Socket> Socket::connectToTcpSocket(const std::string & address, 
     DnsResolver resolver;
     sockaddr_in addr = resolver.resolve(address, port);
 
-    int result;
-    ATOMIC_SYSCALL(::connect(*sockFd, (sockaddr*)&addr, sizeof(sockaddr_in)), result, == -1);
+    int result = ::connect(*sockFd, (sockaddr*)&addr, sizeof(sockaddr_in));
+
+    if (result == -1)
+    {
+        throw std::runtime_error(BUILD_STRING << "Can't connect, reason: " << errno);
+    }
 
     return std::shared_ptr<Socket>(new Socket(sockFd.release()));
 }
