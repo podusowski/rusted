@@ -4,6 +4,7 @@ root_directory=`dirname $0`
 rusted_directory=/var/rusted/
 pid_file=$rusted_directory/Server.pid
 database_file=$rusted_directory/database.sqlite3
+daemon_arguments="--name=rusted --env=LD_LIBRARY_PATH=$rusted_directory --output=$rusted_directory/Server.log --pidfile=$pid_file"
 
 function stop()
 {
@@ -42,12 +43,17 @@ function deploy()
 
 function start()
 {
+    if daemon $daemon_arguments --running ; then
+        echo "already running"
+        exit 1
+    fi
+
     local server_arguemnts+="--network.port 1987 "
     local server_arguemnts+="--network.administration_socket_path $rusted_directory/administrator.socket "
     local server_arguemnts+="--database.url sqlite3://$database_file "
 
     echo "starting Server with arguments: $server_arguemnts"
-    ( LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$rusted_directory nohup $rusted_directory/Server $server_arguemnts > /var/rusted/Server.log & echo "$!" > $pid_file )
+    daemon $daemon_arguments -- $rusted_directory/Server $server_arguemnts
 
     echo "log available in $rusted_directory/Server.log"
 }
