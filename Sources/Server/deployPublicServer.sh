@@ -4,7 +4,7 @@ root_directory=`dirname $0`
 rusted_directory=/var/rusted/
 pid_file=$rusted_directory/Server.pid
 database_file=$rusted_directory/database.sqlite3
-daemon_arguments="--name=rusted --env=LD_LIBRARY_PATH=$rusted_directory --output=$rusted_directory/Server.log --pidfile=$pid_file"
+daemon_arguments="-v -d --name=rusted --env=LD_LIBRARY_PATH=$rusted_directory --output=$rusted_directory/Server.log --pidfile=$pid_file"
 
 function stop()
 {
@@ -53,7 +53,7 @@ function start()
     local server_arguemnts+="--database.url sqlite3://$database_file "
 
     echo "starting Server with arguments: $server_arguemnts"
-    daemon $daemon_arguments -- $rusted_directory/Server $server_arguemnts
+    daemon $daemon_arguments -- $rusted_directory/Server $server_arguemnts || echo "error in daemon"
 
     echo "log available in $rusted_directory/Server.log"
 }
