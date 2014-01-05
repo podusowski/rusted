@@ -16,6 +16,8 @@
 #include "Detail/SockFdGuard.hpp"
 #include "Diagnostics/Throw.hpp"
 #include "Utils/BuildString.hpp"
+#include "Detail/Error.hpp"
+#include "Diagnostics/Logger.hpp"
 #include "SocketInitialize.hpp"
 
 using namespace Cake::Networking;
@@ -65,7 +67,7 @@ std::shared_ptr<Socket> Socket::connectToTcpSocket(const std::string & address, 
 
     if (result == -1)
     {
-        throw std::runtime_error(BUILD_STRING << "Can't connect, reason: " << errno);
+        throw std::runtime_error(BUILD_STRING << "can't connect, reason: " << Detail::Error::lastError());
     }
 
     return std::shared_ptr<Socket>(new Socket(sockFd.release()));
@@ -81,9 +83,7 @@ void Socket::send(const void * buf, size_t size)
 
     if (ret == -1)
     {
-        std::stringstream ss;
-        ss << "send: " << strerror(errno);
-        throw std::runtime_error(ss.str());
+        throw std::runtime_error(BUILD_STRING << "can't send data, reason: " << Detail::Error::lastError());
     }
 }
 
@@ -101,7 +101,7 @@ void Socket::receive(void * buf, size_t size)
         }
         else if (ret == -1)
         {
-            THROW(std::runtime_error) << "recv returned error: " << strerror(errno);
+            THROW(std::runtime_error) << "recv returned error: " << Detail::Error::lastError();
         }
 
         charBuf += ret;

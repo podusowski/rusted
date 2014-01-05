@@ -29,8 +29,13 @@ void Thread::start()
         0, // Stack size
         LPTHREAD_START_ROUTINE(&Thread::s_run),
         (void *)this,
-        CREATE_SUSPENDED,
+        0,
         &id);
+
+    if (m_thread == NULL)
+    {
+        throw std::runtime_error("CreateThread returned NULL");
+    }
 #else
     int ret = pthread_create(&m_thread, NULL, Thread::s_run, (void *)this);
 
