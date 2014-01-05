@@ -84,8 +84,7 @@ void Thread::wait(int secs, int mili)
 unsigned Thread::self()
 {
 #ifdef _WIN32
-    // TODO
-    return 0;
+    return GetCurrentThreadId();
 #else
     return pthread_self();
 #endif
