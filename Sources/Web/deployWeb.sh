@@ -10,7 +10,7 @@ function deploy()
         exit 1
     fi
 
-    cp -rv $root_directory/Page/ $web_directory
+    cp -rv $root_directory/Page/* $web_directory
 }
 
 deploy

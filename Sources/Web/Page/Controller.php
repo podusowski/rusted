@@ -12,24 +12,27 @@ class Controller
     public function index()
     {
         $this->render("Templates/index.php");
-/*
-<form action="register.php" method="post">
-    <label>login</label><input type="text" name="login" />
-    <label>password</label><input type="password" name="password1" />
-    <labeL>repeat password</label><input type="password" name="password2" />
-    <input type="submit" value="register" />
-</form>
-*/
     }
 
     public function register()
     {
-
+        $this->rusted->register($_POST["login"], $_POST["password1"]);
+        $this->redirect("index");
     }
 
     private function render($filename)
     {
         include($filename);
+    }
+
+    private function redirect($action)
+    {
+        header("location: ?action=$action");
+    }
+
+    private function makeUri($action)
+    {
+        return "?action=$action";
     }
 }
 
