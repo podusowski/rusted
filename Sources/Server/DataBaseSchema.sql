@@ -1,4 +1,8 @@
-CREATE TABLE users(id INT PRIMARY KEY, login TEXT, password TEXT);
+CREATE TABLE users(
+    id INT PRIMARY KEY,
+    login TEXT,
+    password TEXT
+);
 
 CREATE TABLE objects(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
