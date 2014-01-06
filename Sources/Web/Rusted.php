@@ -27,6 +27,9 @@ class Rusted
     function register($login, $password)
     {
         $insert = $this->db->prepare("INSERT INTO users (login, password) VALUES(:login, :password)");
+        $insert->bindParam(":login", $login);
+        $insert->bindParam(":password", $password);
+        $insert->execute();
     }
 }
 

@@ -9,9 +9,9 @@ echo("users registered: " . $rusted->users_registered());
 
 ?>
 
-<form>
-    <input type="text" name="login" />
-    <input type="password" name="password1" />
-    <input type="password" name="password2" />
+<form action="register.php" method="post">
+    <label>login</label><input type="text" name="login" />
+    <label>password</label><input type="password" name="password1" />
+    <labeL>repeat password</label><input type="password" name="password2" />
     <input type="submit" value="register" />
 </form>
