@@ -7,6 +7,7 @@ class Rusted
         $this->rusted_directory = "/var/rusted";
         $this->pid_file = "/var/rusted/Server.pid";
         $this->db = new PDO("sqlite:" . $this->rusted_directory . "/database.sqlite3");
+        $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_WARNING);
     }
 
     function online()
@@ -16,7 +17,7 @@ class Rusted
 
     function users_registered()
     {
-        $result = $this->db->query("SELECT count(*) from users");
+        $result = $this->db->query("SELECT count(*) FROM users");
 
         foreach ($result as $row)
         {
@@ -27,9 +28,7 @@ class Rusted
     function register($login, $password)
     {
         $insert = $this->db->prepare("INSERT INTO users (login, password) VALUES(:login, :password)");
-        $insert->bindParam(":login", $login);
-        $insert->bindParam(":password", $password);
-        $insert->execute();
+        return $insert->execute(array(':login' => $login, ':password' => $password));
     }
 }
 
