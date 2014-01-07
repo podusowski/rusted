@@ -16,7 +16,14 @@ class Controller
 
     public function register()
     {
-        $this->rusted->register($_POST["login"], $_POST["password1"]);
+        if ($_POST["password1" == $_POST["password2"])
+        {
+            $this->rusted->register($_POST["login"], $_POST["password1"]);
+        }
+        else
+        {
+            echo("passwords doesn't match");
+        }
         $this->redirect("index");
     }
 
