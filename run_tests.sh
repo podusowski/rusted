@@ -163,14 +163,14 @@ function read_testcases()
 function cleanup()
 {
     sleep 0.2
-    pkill -P `jobs -p` 2> /dev/null > /dev/null
+    pkill -P `jobs -p` 2> /dev/null > /dev/null || true
 
     sleep 0.1
     while [ -n "`jobs -p`" ]; do
-        pkill -KILL -P `jobs -p` 2> /dev/null > /dev/null
+        pkill -KILL -P `jobs -p` 2> /dev/null > /dev/null || true
     done
 
-    wait
+    wait || true
 }
 
 if [ "$tool" != "" ]; then
