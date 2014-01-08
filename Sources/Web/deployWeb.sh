@@ -1,7 +1,16 @@
 #!/bin/bash
 
+set -e
+
 root_directory=`dirname $0`
 web_directory=/var/www/rusted/
+
+function syntax_check()
+{
+    find . -name '*.php' | while read file; do
+        php --syntax-check $file
+    done
+}
 
 function deploy()
 {
@@ -13,5 +22,6 @@ function deploy()
     cp -rv $root_directory/Page/* $web_directory
 }
 
+syntax_check
 deploy
 
