@@ -6,6 +6,7 @@ class Controller
 {
     public function __construct()
     {
+        session_start();
         $this->rusted = new Rusted();
     }
 
@@ -16,13 +17,20 @@ class Controller
 
     public function register()
     {
-        if ($_POST["password1" == $_POST["password2"])
+        if ($_POST["password1"] == $_POST["password2"])
         {
-            $this->rusted->register($_POST["login"], $_POST["password1"]);
+            if ($this->rusted->register($_POST["login"], $_POST["password1"]))
+            {
+                $this->addMessage("your account has been created");
+            }
+            else
+            {
+                $this->addMessage("some shit happened");
+            }
         }
         else
         {
-            echo("passwords doesn't match");
+            $this->addMessage("passwords doesn't match");
         }
         $this->redirect("index");
     }
@@ -40,6 +48,23 @@ class Controller
     private function makeUri($action)
     {
         return "?action=$action";
+    }
+
+    private function addMessage($string)
+    {
+        $_SESSION["messages"][] = $string;
+    }
+
+    private function messages()
+    {
+        $messages = array();
+
+        if (isset($_SESSION["messages"]))
+        {
+            $messages = $_SESSION["messages"];
+            unset($_SESSION["messages"]);
+        }
+        return $messages;
     }
 }
 

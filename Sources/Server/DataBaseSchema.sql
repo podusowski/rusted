@@ -1,6 +1,6 @@
 CREATE TABLE users(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-    login TEXT,
+    login TEXT UNIQUE,
     password TEXT
 );
 

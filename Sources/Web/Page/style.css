@@ -1,0 +1,24 @@
+body
+{
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: black;
+    color: silver;
+    margin: 0;
+    padding: 0;
+}
+
+h1
+{
+    margin: 0;
+}
+
+#body
+{
+    padding: 1em;
+}
+
+#footer, #header
+{
+    background-color: #333;
+    background: linear-gradient(135deg, #081633 0%,#3f4c6b 100%);
+}
