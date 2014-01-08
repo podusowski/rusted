@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html>
     <head>
+        <title>Rusted</title>
         <link rel="stylesheet" href="style.css" type="text/css" media="screen" />
     </head>
     <body>
