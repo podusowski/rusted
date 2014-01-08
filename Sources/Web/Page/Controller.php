@@ -17,22 +17,28 @@ class Controller
 
     public function register()
     {
-        if ($_POST["password1"] == $_POST["password2"])
+        if ($_SERVER['REQUEST_METHOD'] == "POST")
         {
-            if ($this->rusted->register($_POST["login"], $_POST["password1"]))
+            if ($_POST["password1"] != $_POST["password2"])
             {
-                $this->addMessage("your account has been created");
+                $this->addMessage("passwords doesn't match");
+                $this->redirect("register");
+            }
+            else if (!$this->rusted->register($_POST["login"], $_POST["password1"]))
+            {
+                $this->addMessage("some shit happened");
+                $this->redirect("register");
             }
             else
             {
-                $this->addMessage("some shit happened");
+                $this->addMessage("your account has been created");
+                $this->redirect("index");
             }
         }
         else
         {
-            $this->addMessage("passwords doesn't match");
+            $this->render("Templates/register.php");
         }
-        $this->redirect("index");
     }
 
     private function render($filename)

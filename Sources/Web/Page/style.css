@@ -12,13 +12,25 @@ h1
     margin: 0;
 }
 
+label
+{
+    display: block;
+    border-bottom: 1px solid #333;
+}
+
+label span, label span
+{
+    display: block;
+}
+
 #body
 {
     padding: 1em;
 }
 
-#footer, #header
+#footer, #header, #menu
 {
+    padding: 1em;
     background-color: #333;
     background: linear-gradient(135deg, #081633 0%,#3f4c6b 100%);
 }
