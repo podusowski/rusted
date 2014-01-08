@@ -19,19 +19,24 @@ class Controller
     {
         if ($_SERVER['REQUEST_METHOD'] == "POST")
         {
-            if ($_POST["password1"] != $_POST["password2"])
+            if (strlen($_POST["login"]) < 3)
             {
-                $this->addMessage("passwords doesn't match");
+                $this->addErrorMessage("your login has to be at least 3 character long");
+                $this->redirect("register");
+            }
+            else if ($_POST["password1"] != $_POST["password2"])
+            {
+                $this->addErrorMessage("passwords doesn't match");
                 $this->redirect("register");
             }
             else if (!$this->rusted->register($_POST["login"], $_POST["password1"]))
             {
-                $this->addMessage("some shit happened");
+                $this->addErrorMessage("some shit happened");
                 $this->redirect("register");
             }
             else
             {
-                $this->addMessage("your account has been created");
+                $this->addInfoMessage("your account has been created");
                 $this->redirect("index");
             }
         }
@@ -39,6 +44,16 @@ class Controller
         {
             $this->render("Templates/register.php");
         }
+    }
+
+    public function download()
+    {
+        $this->render("Templates/download.php");
+    }
+
+    public function gallery()
+    {
+        $this->render("Templates/gallery.php");
     }
 
     private function render($filename)
@@ -58,7 +73,17 @@ class Controller
 
     private function addMessage($string)
     {
-        $_SESSION["messages"][] = $string;
+        $_SESSION["messages"][] = array('message' => $string);
+    }
+
+    private function addErrorMessage($string)
+    {
+        $_SESSION["messages"][] = array('type' => 'error', 'message' => $string);
+    }
+
+    private function addInfoMessage($string)
+    {
+        $_SESSION["messages"][] = array('type' => 'info', 'message' => $string);
     }
 
     private function messages()

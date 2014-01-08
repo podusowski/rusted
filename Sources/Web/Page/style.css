@@ -1,7 +1,7 @@
 body
 {
     font-family: Arial, Helvetica, sans-serif;
-    background-color: black;
+    background-color: #192237;
     color: silver;
     margin: 0;
     padding: 0;
@@ -10,6 +10,7 @@ body
 h1
 {
     margin: 0;
+    font-weight: lighter;
 }
 
 label
@@ -23,14 +24,65 @@ label span, label span
     display: block;
 }
 
+a
+{
+    text-decoration: none;
+    color: #516F99;
+}
+
+#menu a
+{
+    display: inline-block;
+    padding: 1em;
+    font-weight: lighter;
+    font-size: smaller;
+}
+
+#menu a:hover
+{
+    background-color: #182536;
+}
+
+#menu a:active
+{
+    background-color: #151F4F;
+}
+
 #body
 {
     padding: 1em;
 }
 
-#footer, #header, #menu
+#footer, #header
 {
     padding: 1em;
-    background-color: #333;
-    background: linear-gradient(135deg, #081633 0%,#3f4c6b 100%);
+}
+
+#header
+{
+    background-color: black;
+    background-image: url('background.png');
+    background-repeat: no-repeat;
+}
+
+#menu, #footer
+{
+    background: #05162E;
+}
+
+.message-error, .message-info
+{
+    padding: 1em;
+    text-size: smaller;
+    border-radius: 0.5em;
+}
+
+.message-error
+{
+    background: red;
+}
+
+.message-info
+{
+    background: blue;
 }
