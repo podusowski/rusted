@@ -11,7 +11,7 @@ function stop()
     if [ -f $pid_file ]; then
         echo "stopping server"
         kill `cat $pid_file`
-        rm $pid_file
+        rm $pid_file || true
     else
         echo "server is not running"
     fi
