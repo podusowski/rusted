@@ -1,6 +1,6 @@
 #!/bin/bash
 cd $__build
-zip_file=$__build/RustedClient-$__configuration___name.zip
+zip_file=$__build/Client-$__configuration___name.zip
 rm -f $zip_file
 
 files="Contents "
