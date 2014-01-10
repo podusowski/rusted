@@ -10,7 +10,14 @@ using namespace Cake::Networking;
 
 void ServerSocketPool::add(std::shared_ptr<ServerSocket> server)
 {
-    m_servers.push_back(server);
+    if (server)
+    {
+        m_servers.push_back(server);
+    }
+    else
+    {
+        throw std::logic_error("passed empty server pointer");
+    }
 }
 
 ServerSocketPool::AcceptReturnType ServerSocketPool::accept()

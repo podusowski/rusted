@@ -4,25 +4,51 @@
 #include "Networking/ServerSocketPool.hpp"
 #include "Threading/Thread.hpp"
 
+using namespace Cake::Networking;
+
 class Client : public Cake::Threading::IRunnable
 {
 public:
+    Client(int port) : m_port(port)
+    {
+    }
+
     void run()
     {
-        auto socket = Cake::Networking::Socket::connectToTcpSocket("localhost", 2001);
+        auto socket = Socket::connectToTcpSocket("localhost", m_port);
     }
+
+private:
+    int m_port;
 };
 
 TEST(ServerSocketPoolTest, Accept)
 {
-    auto server1 = Cake::Networking::ServerSocket::createTcpServer(2000);
-    auto server2 = Cake::Networking::ServerSocket::createTcpServer(2001);
+    std::shared_ptr<ServerSocket> server1;
+    std::shared_ptr<ServerSocket> server2;
+
+    int port = 2000;
+
+    for (; port < 2500; port += 2)
+    {
+        try
+        {
+            server1 = ServerSocket::createTcpServer(port);
+            server2 = ServerSocket::createTcpServer(port + 1);
+        }
+        catch (const std::exception &)
+        {
+            continue;
+        }
+
+        break;
+    }
 
     Cake::Networking::ServerSocketPool pool;
     pool.add(server1);
     pool.add(server2);
 
-    Client client;
+    Client client(port + 1);
     Cake::Threading::Thread thread(client);
     thread.start();
 

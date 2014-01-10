@@ -26,15 +26,22 @@ int ServerController::start()
     int tcpPort = m_cfg->getValue<int>("network.port");
     std::string administrationSocketPath = m_cfg->getValue<std::string>("network.administration_socket_path");
 
-    LOG_INFO << "Setting up player socket on TCP/" << tcpPort;
-    auto server = Cake::Networking::ServerSocket::createTcpServer(tcpPort);
-
-    LOG_INFO << "Setting up administrative socket on UNIX/" << administrationSocketPath;
-    auto administrationServer = Cake::Networking::ServerSocket::createUnixServer(administrationSocketPath);
-
     Cake::Networking::ServerSocketPool serverPool;
+
+    LOG_INFO << "Setting up player socket on TCP:" << tcpPort;
+    auto server = Cake::Networking::ServerSocket::createTcpServer(tcpPort);
     serverPool.add(server);
-    serverPool.add(administrationServer);
+
+    try
+    {
+        LOG_INFO << "Setting up administrative socket on UNIX:" << administrationSocketPath;
+        auto administrationServer = Cake::Networking::ServerSocket::createUnixServer(administrationSocketPath);
+        serverPool.add(administrationServer);
+    }
+    catch (const std::exception & e)
+    {
+        LOG_WARN << "Cannot initialize administration server, reason: " << e.what();
+    }
 
     LOG_INFO << "Accepting connections";
 
@@ -48,7 +55,7 @@ int ServerController::start()
 
             if (socket.second == server)
             {
-                LOG_DEBUG << "New connection established";
+                LOG_DEBUG << "New client connection established";
 
                 std::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket.first, m_serviceDeployment));
 
