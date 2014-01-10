@@ -1,17 +1,21 @@
-BUILDING
-Rusted is using plain make as a build system. To see list of the targets, just type "make" or "make help".
-You will find all nessesary libraries in Ubuntu repositories.
+# BUILDING
+
+Rusted is build by pake build system. To compile all just type:
+
+`./pake.py -a`
 
 
-TESTING
-There are two scripts which will execute previously built tests: run_sct.sh and run_tests.sh.
-run_tests.sh runs everything which is an automated test. run_sct.sh will run ServerSCT tests.
+# TESTING
 
+run_tests.py runs everything which is an automated test.
 
-RUNNING A GAME
-You can run test versions of server and client. There are two scripts to do that:
+# DEPENDENCIES
 
-    _build/runTestServer
-    _build/runTestClient
-
-Server/TestDataBase.xml is the world database which will be used in the test session.
+libx11-dev
+libxaw7-dev
+libglu1-mesa-dev
+libxrandr-dev
+libsqlite3-dev
+mingw-w64-dev
+zip
+g++-multilib
