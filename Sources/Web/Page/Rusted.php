@@ -27,8 +27,9 @@ class Rusted
 
     function register($login, $password)
     {
+        $passwordHash = sha1($password);
         $insert = $this->db->prepare("INSERT INTO users (login, password) VALUES(:login, :password)");
-        return $insert->execute(array(':login' => $login, ':password' => $password));
+        return $insert->execute(array(':login' => $login, ':password' => $passwordHash));
     }
 }
 
