@@ -154,21 +154,23 @@ PlayerSummary PlayerContainer::getPlayerSummary(int id)
 
 int PlayerContainer::checkCredentials(const std::string & login, const std::string & password)
 {
-    std::string realPassword;
+    std::string realPasswordHash;
     int id;
     soci::indicator ind;
-    m_sociSession->once << "SELECT id, password FROM users WHERE login=:login", soci::into(id, ind), soci::into(realPassword), soci::use(login);
+    m_sociSession->once << "SELECT id, password FROM users WHERE login=:login", soci::into(id, ind), soci::into(realPasswordHash), soci::use(login);
 
     if (ind == soci::i_ok)
     {
         Common::Game::Utilities::PasswordHash hash;
-        if (realPassword == hash.generate(password))
+
+        std::string networkPasswordHash = hash.generate(password);
+        if (realPasswordHash == networkPasswordHash)
         {
             return id;
         }
         else
         {
-            throw std::out_of_range("invalid password for player \"" + login + "\"");
+            throw std::out_of_range(BUILD_STRING << "invalid password for player \"" << login << "\"" << ", real:" << realPasswordHash << " ~ nw:" << networkPasswordHash);
         }
     }
     else

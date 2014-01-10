@@ -18,6 +18,7 @@ append $include_dirs .
 append $include_dirs ..
 append $include_dirs ../External
 append $include_dirs $boost.__path
+append $include_dirs $hashlibpp.__path
 
 target static_library Common sources($sources) include_dirs($include_dirs) depends_on(CommonMessagesHeader)
 

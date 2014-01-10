@@ -24,6 +24,7 @@ append $libraries Common
 append $libraries Cake
 append $libraries pthread
 append $libraries soci_core
+append $libraries hashlibpp
 
 append $include_dirs .
 append $include_dirs ..
@@ -33,7 +34,7 @@ append $include_dirs $boost.__path
 append $include_dirs $gtest.__path
 append $include_dirs "${SOCI.soci_src}/core"
 
-append $dependencies Cake Common SOCI ServerBigDataBase ServerTestDataBase
+append $dependencies Cake Common SOCI ServerBigDataBase ServerTestDataBase hashlibpp
 
 append $resources Server.cfg runTestServer deployPublicServer.sh DataBaseSchema.sql
 

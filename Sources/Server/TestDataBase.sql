@@ -1,5 +1,5 @@
-INSERT INTO users VALUES(1, "user1", "passwordhash");
-INSERT INTO users VALUES(2, "user2", "passwordhash");
+INSERT INTO users VALUES(1, "user1", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8"); /* password */
+INSERT INTO users VALUES(2, "user2", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8");
 
 /*                         id   type        class  model             x     y     z      owner integrity carbon helium */
 INSERT INTO objects VALUES(1,   "Ship",     1,     NULL,             1,    2000, 1,     1,    100,      0,     0);
