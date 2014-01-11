@@ -39,6 +39,16 @@ class Ui:
             result = Ui.BOLD_GREEN + "pass" + Ui.RESET
 
         print(result + " " + name)
+        sys.stdout.flush()
+
+    @staticmethod
+    def globalresult(passed, message):
+        result = Ui.BOLD_RED + message + Ui.RESET
+        if passed:
+            result = Ui.BOLD_GREEN + message + Ui.RESET
+
+        print(result)
+        sys.stdout.flush()
 
 class AsyncExecute(threading.Thread):
     def __init__(self, token, command, environment, working_directory, result_listener):
@@ -200,6 +210,13 @@ def main():
     log_writer = LogWriter()
     tree = Tree(result, log_writer)
     tree.run()
+
+    print("")
+
+    if result.errorcode == 0:
+        Ui.globalresult(True, "all tests passed")
+    else:
+        Ui.globalresult(False, "not all tests passed")
 
     sys.exit(result.errorcode)
 
