@@ -10,7 +10,7 @@ LogMessage::LogMessage(ILogStream & stream, const std::string & header) :
 {
 }
 
-LogMessage::LogMessage(const LogMessage & other) : 
+LogMessage::LogMessage(const LogMessage & other) :
     m_stream(other.m_stream),
     m_header(other.m_header)
 {
@@ -21,7 +21,7 @@ LogMessage::~LogMessage()
 {
     flush();
 }
-    
+
 void LogMessage::flush()
 {
     if (!m_ss.str().empty())

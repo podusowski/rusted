@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cxxabi.h>
 #include <iomanip>
+#include <chrono>
 
 #include "Cake/Threading/Thread.hpp"
 #include "Cake/Threading/ScopedLock.hpp"
@@ -63,9 +64,11 @@ std::string Logger::generateHeader(LogLevel level, const std::string & file, uns
     std::stringstream fileWithLine;
     fileWithLine << file2 << ":" << line;
 
+    std::time_t now = std::chrono::high_resolution_clock::to_time_t(std::chrono::high_resolution_clock::now());
+
+
     std::stringstream ss;
-    ss  
-        << std::setw(10) << std::setiosflags(std::ios::right) << m_appName << "("
+    ss  << now        << std::setw(10) << std::setiosflags(std::ios::right) << m_appName << "("
         << "thread:" << Cake::Threading::Thread::self() << ") "
         << std::setw(max_file_length + 4) << std::setiosflags(std::ios::right) << fileWithLine.str() 
         << " "
