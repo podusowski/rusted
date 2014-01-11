@@ -12,6 +12,7 @@ function stop()
         echo "stopping server"
         kill `cat $pid_file`
         rm $pid_file || true
+        sleep 1
     else
         echo "server is not running"
     fi
