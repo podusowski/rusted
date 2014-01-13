@@ -11,10 +11,6 @@ using namespace Cake::Diagnostics;
 
 Logger::Logger() : m_appName("undef")
 {
-    m_banners.insert(std::make_pair(LogLevel_DEBUG,   "\033[1;37mDBG\033[0m"));
-    m_banners.insert(std::make_pair(LogLevel_INFO,    "\033[1;34mINF\033[0m"));
-    m_banners.insert(std::make_pair(LogLevel_WARNING, "\033[1;33mWRN\033[0m"));
-    m_banners.insert(std::make_pair(LogLevel_ERROR,   "\033[1;31mERR\033[0m"));
 }
 
 Logger & Logger::getInstance()
@@ -38,7 +34,7 @@ std::string Logger::demangle(const std::string & name)
     return result;
 }
 
-LogMessage Logger::log(LogLevel level, 
+LogMessage Logger::log(LogLevel level,
                        const std::string & file, 
                        unsigned line)
 {
@@ -53,26 +49,72 @@ void Logger::flush(const std::string & s)
 
 std::string Logger::generateHeader(LogLevel level, const std::string & file, unsigned line)
 {
-    std::string file2 = file;
-    const unsigned max_file_length = 30;
-
-    if (file.length() > max_file_length)
-    {
-        file2 = ".." + file.substr(file.length() - max_file_length + 2, max_file_length - 2);
-    }
-
     std::stringstream fileWithLine;
-    fileWithLine << file2 << ":" << line;
-
-    auto now = std::chrono::high_resolution_clock::now();
-
+    fileWithLine << generateShortPath(file) << ":" << line;
 
     std::stringstream ss;
-    ss  << std::chrono::duration_cast<std::chrono::milliseconds>(now.time_since_epoch()).count() << std::setw(10) << std::setiosflags(std::ios::right) << m_appName << "("
-        << "thread:" << Cake::Threading::Thread::self() << ") "
-        << std::setw(max_file_length + 4) << std::setiosflags(std::ios::right) << fileWithLine.str() 
-        << " "
-        << m_banners[level] << " ";
+    ss << generateTime() << std::setw(10) << std::setiosflags(std::ios::right)
+       << m_appName
+       << "(" << generateThread() << ") "
+       << std::setw(34) << std::setiosflags(std::ios::right) << fileWithLine.str()
+       << " "
+       << generateLevel(level) << " ";
+
     return ss.str();
 }
 
+std::string Logger::generateShortPath(std::string path) const
+{
+    const unsigned MAX_LENGTH = 30;
+
+    if (path.length() > MAX_LENGTH)
+    {
+        return ".." + path.substr(path.length() - MAX_LENGTH + 2, MAX_LENGTH - 2);
+    }
+
+    return path;
+}
+
+std::string Logger::generateTime() const
+{
+    using namespace std::chrono;
+
+    static auto firstMessageTime = high_resolution_clock::now();
+
+    std::stringstream ss;
+    auto now = high_resolution_clock::now();
+    auto totalMs = duration_cast<milliseconds>(now - firstMessageTime).count();
+    int seconds = totalMs / 1000;
+    int ms = totalMs - (seconds * 1000);
+    ss << std::setfill('0') << std::setw(4) << seconds << "." << std::setw(3) << ms;
+
+    return ss.str();
+}
+
+std::string Logger::generateThread() const
+{
+    std::stringstream ss;
+    ss << "thread:" << Cake::Threading::Thread::self();
+    return ss.str();
+}
+
+std::string Logger::generateLevel(LogLevel level) const
+{
+    switch (level)
+    {
+        case LogLevel_DEBUG:
+            return "DBG";
+
+        case LogLevel_INFO:
+            return "INF";
+
+        case LogLevel_WARNING:
+            return "WRN";
+
+        case LogLevel_ERROR:
+            return "ERR";
+
+        default:
+            return "UNDEF";
+    }
+}

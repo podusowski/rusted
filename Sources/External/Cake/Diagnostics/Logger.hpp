@@ -54,8 +54,11 @@ private:
     Logger(const Logger &) {}
 
     std::string generateHeader(LogLevel, const std::string & file, unsigned line);
+    std::string generateShortPath(std::string path) const;
+    std::string generateTime() const;
+    std::string generateThread() const;
+    std::string generateLevel(LogLevel level) const;
 
-    std::map<LogLevel, std::string> m_banners;
     std::string m_appName;
     Cake::Threading::Mutex m_mutex;
 };
