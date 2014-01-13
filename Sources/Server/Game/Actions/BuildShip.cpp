@@ -71,7 +71,7 @@ void BuildShip::updateCargoHold()
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship&>(m_player.getFocusedObject());
     auto & shipClass = m_shipClassContainer->getById(m_shipClass);
 
-    focusedShip.invokeOnCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+    focusedShip.writeCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
     {
         unsigned requiredCarbon = shipClass.getRequiredCarbon();
         unsigned requiredHelium = shipClass.getRequiredHelium();

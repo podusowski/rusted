@@ -159,7 +159,7 @@ void ObjectService::handle(const Common::Messages::ObjectCargoInfo & objectCargo
     LOG_DEBUG << "Got ObjectCargoInfo for object:" << objectCargoInfo.id;
 
     auto & object = m_universe.getById<Common::Game::Object::ObjectBase>(objectCargoInfo.id);
-    object.invokeOnCargoHold([&objectCargoInfo](Common::Game::Object::CargoHold & cargoHold) -> void
+    object.writeCargoHold([&objectCargoInfo](Common::Game::Object::CargoHold & cargoHold) -> void
     {
         cargoHold.setCapacity(objectCargoInfo.capacity);
         cargoHold.setCarbon(objectCargoInfo.carbon);

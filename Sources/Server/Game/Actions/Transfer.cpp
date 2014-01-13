@@ -21,9 +21,9 @@ Common::Game::TimeValue Transfer::start()
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getFocusedObject());
 
     //TODO: additional parameters
-    selectedShip.invokeOnCargoHold([&](CargoHold & selectedShipCargoHold) -> void
+    selectedShip.writeCargoHold([&](CargoHold & selectedShipCargoHold) -> void
     {
-        focusedShip.invokeOnCargoHold([&](CargoHold & focusedShipCargoHold) -> void
+        focusedShip.writeCargoHold([&](CargoHold & focusedShipCargoHold) -> void
         {
             focusedShipCargoHold.changeCarbon(-10);
             focusedShipCargoHold.changeHelium(-10);

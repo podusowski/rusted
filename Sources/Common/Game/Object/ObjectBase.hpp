@@ -42,7 +42,8 @@ public:
     virtual Common::Math::Quaternion getOrientation();
     virtual void setOrientation(const Common::Math::Quaternion &);
 
-    void invokeOnCargoHold(std::function<void(CargoHold &)>);
+    void writeCargoHold(std::function<void(CargoHold &)>);
+    void readCargoHold(std::function<void(const CargoHold &)>) const;
 
     boost::signals2::connection addCargoHoldSlot(CargoHoldSignal::slot_type);
 

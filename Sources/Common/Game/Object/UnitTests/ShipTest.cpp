@@ -148,7 +148,7 @@ TEST_F(ShipTest, CargoHoldSignal)
 
     ship.addCargoHoldSlot(boost::bind(&CargoHoldSlotMock::cargoHoldChanged, &cargoHoldSlotMock, _1));
 
-    ship.invokeOnCargoHold([](Common::Game::Object::CargoHold &) -> void
+    ship.writeCargoHold([](Common::Game::Object::CargoHold &) -> void
     {
     });
 }

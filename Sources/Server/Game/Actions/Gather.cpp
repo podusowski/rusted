@@ -25,9 +25,9 @@ Common::Game::TimeValue Gather::finish()
     auto & asteroid = dynamic_cast<Common::Game::Object::Asteroid &>(m_player.getSelectedObject());
     auto & focusedShip = dynamic_cast<Common::Game::Object::Ship &>(m_player.getFocusedObject());
 
-    asteroid.invokeOnCargoHold([&](CargoHold & asteroidCargoHold) -> void
+    asteroid.writeCargoHold([&](CargoHold & asteroidCargoHold) -> void
     {
-        focusedShip.invokeOnCargoHold([&](CargoHold & shipCargoHold) -> void
+        focusedShip.writeCargoHold([&](CargoHold & shipCargoHold) -> void
         {
             asteroidCargoHold.changeCarbon(-10);
             asteroidCargoHold.changeHelium(-10);

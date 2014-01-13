@@ -47,10 +47,15 @@ void ObjectBase::setOrientation(const Common::Math::Quaternion &)
 {
 }
 
-void ObjectBase::invokeOnCargoHold(std::function<void(CargoHold &)> function)
+void ObjectBase::writeCargoHold(std::function<void(CargoHold &)> function)
 {
     function(m_cargoHold);
     m_cargoHoldSignal(m_cargoHold);
+}
+
+void ObjectBase::readCargoHold(std::function<void(const CargoHold &)> function) const
+{
+    function(m_cargoHold);
 }
 
 boost::signals2::connection ObjectBase::addCargoHoldSlot(CargoHoldSignal::slot_type slot)

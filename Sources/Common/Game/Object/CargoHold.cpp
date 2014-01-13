@@ -14,12 +14,12 @@ void CargoHold::setCapacity(unsigned capacity)
     m_capacity = capacity;
 }
 
-unsigned CargoHold::getCapacity()
+unsigned CargoHold::getCapacity() const
 {
     return m_capacity;
 }
 
-unsigned CargoHold::getUsedCapacity()
+unsigned CargoHold::getUsedCapacity() const
 {
     return m_carbon + m_helium;
 }

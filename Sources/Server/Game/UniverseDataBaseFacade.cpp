@@ -49,7 +49,7 @@ void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
         auto & shipClass = m_shipClassContainer.getById(shipClassId);
         shipClass.applyTo(ship);
         ship.setClass(shipClassId);
-        ship.invokeOnCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+        ship.writeCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
         {
             fillCargoHold(row, cargoHold);
         });
@@ -67,7 +67,7 @@ void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
         object->setIntegrity(row.get<int>("integrity"));
 
         // set unlimited capacity for asteroids
-        object->invokeOnCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+        object->writeCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
         {
             fillCargoHold(row, cargoHold);
             cargoHold.setCapacity(99999999);
@@ -144,6 +144,8 @@ void UniverseDataBaseFacade::saveCargoHold(Common::Game::Object::ObjectBase::Id 
         soci::use(carbon),
         soci::use(helium),
         soci::use(id.get());
+
+    LOG_DEBUG << "done.";
 }
 
 unsigned UniverseDataBaseFacade::preInsertObjectToDb(unsigned shipClassId, unsigned ownerId)

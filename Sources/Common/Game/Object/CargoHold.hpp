@@ -13,8 +13,8 @@ public:
     CargoHold();
 
     void setCapacity(unsigned capacity);
-    unsigned getCapacity();
-    unsigned getUsedCapacity();
+    unsigned getCapacity() const;
+    unsigned getUsedCapacity() const;
 
     unsigned getHelium() const;
     void setHelium(unsigned);
