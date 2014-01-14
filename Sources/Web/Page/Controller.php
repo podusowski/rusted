@@ -23,11 +23,13 @@ class Controller
             {
                 $this->addErrorMessage("your login has to be at least 3 character long");
                 $this->redirect("register");
+                return;
             }
             else if ($_POST["password1"] != $_POST["password2"])
             {
                 $this->addErrorMessage("passwords doesn't match");
                 $this->redirect("register");
+                return;
             }
 
             try
@@ -38,6 +40,7 @@ class Controller
             {
                 $this->addErrorMessage("some shit happened");
                 $this->redirect("register");
+                return;
             }
 
             $this->addInfoMessage("your account has been created");
