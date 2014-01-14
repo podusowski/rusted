@@ -40,6 +40,10 @@ function deploy()
         database_schema=$root_directory/DataBaseSchema.sql
         cat $database_schema | sqlite3 $database_file
     fi
+
+    echo "applying ships"
+    database_ships=$root_directory/DataBaseShips.sql
+    cat $database_ships | sqlite3 $database_file
 }
 
 function start()
