@@ -27,12 +27,12 @@ CREATE TABLE ship_classes(
     max_capacity INT,
     required_carbon INT,
     required_helium INT
-) ON CONFLICT REPLACE;
+);
 
 CREATE TABLE ship_classes_actions(
     id INT PRIMARY KEY,
     ship_class_id INT,
     action_id INT,
     action_parameter INT
-) ON CONFLICT REPLACE;
+);
 
