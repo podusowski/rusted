@@ -33,27 +33,29 @@ a
 #menu a
 {
     display: inline-block;
-    padding: 1em;
+    padding: 0.5em;
     font-weight: lighter;
     font-size: smaller;
+    border-bottom: 2px solid black;
 }
 
 #menu a:hover
 {
-    background-color: #182536;
+    border-bottom: 2px solid #182536;
 }
 
 #menu a:active
 {
-    background-color: #151F4F;
+    border-bottom: 2px solid black;
 }
 
 #body
 {
     padding: 1em;
+    background-color: #182536;
 }
 
-#footer, #header
+#menu, #footer, #header
 {
     padding: 1em;
 }
@@ -67,7 +69,6 @@ a
 
 #menu, #footer
 {
-    background: #05162E;
 }
 
 .message-error, .message-info
@@ -85,4 +86,12 @@ a
 .message-info
 {
     background: blue;
+}
+
+input
+{
+    border: 0;
+    background-color: black;
+    padding: 0.5em;
+    color: white;
 }
