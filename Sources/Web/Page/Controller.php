@@ -29,16 +29,19 @@ class Controller
                 $this->addErrorMessage("passwords doesn't match");
                 $this->redirect("register");
             }
-            else if (!$this->rusted->register($_POST["login"], $_POST["password1"]))
+
+            try
+            {
+                $this->rusted->register($_POST["login"], $_POST["password1"]);
+            }
+            catch (Exception $e)
             {
                 $this->addErrorMessage("some shit happened");
                 $this->redirect("register");
             }
-            else
-            {
-                $this->addInfoMessage("your account has been created");
-                $this->redirect("index");
-            }
+
+            $this->addInfoMessage("your account has been created");
+            $this->redirect("index");
         }
         else
         {
