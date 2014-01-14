@@ -36,7 +36,7 @@ append $include_dirs "${SOCI.soci_src}/core"
 
 append $dependencies Cake Common SOCI ServerBigDataBase ServerTestDataBase hashlibpp
 
-append $resources Server.cfg runTestServer deployPublicServer.sh DataBaseSchema.sql
+append $resources Server.cfg runTestServer deployPublicServer.sh DataBaseSchema.sql DataBaseShips.sql
 
 target application Server sources($sources main.cpp) link_with($libraries) include_dirs($include_dirs) depends_on($dependencies) resources($resources)
 
