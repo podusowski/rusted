@@ -33,12 +33,16 @@ class Ui:
         sys.stdout.flush()
 
     @staticmethod
-    def result(passed, name):
+    def result(passed, name, retries):
         result = Ui.BOLD_RED + "fail" + Ui.RESET
         if passed:
             result = Ui.BOLD_GREEN + "pass" + Ui.RESET
 
-        print(result + " " + name)
+        additional_info = ""
+        if retries > 0:
+            additional_info += " (after " + str(retries) + " retry)"
+
+        print(result + " " + name + additional_info)
         sys.stdout.flush()
 
     @staticmethod
@@ -66,15 +70,18 @@ class AsyncExecute(threading.Thread):
 
         returncode = None
         out = ""
-        try:
-            out = subprocess.check_output(self.command, shell=True, stderr=subprocess.STDOUT, env=self.environment)
-            returncode = 0
-        except subprocess.CalledProcessError as e:
-            returncode = e.returncode
-            out = e.output
+
+        for i in xrange(5):
+            try:
+                out = subprocess.check_output(self.command, shell=True, stderr=subprocess.STDOUT, env=self.environment)
+                returncode = 0
+                break
+            except subprocess.CalledProcessError as e:
+                returncode = e.returncode
+                out = e.output
 
         os.chdir(old_dir)
-        self.result_listener.async_execute_completed(self.token, returncode, out)
+        self.result_listener.async_execute_completed(self.token, returncode, out, i)
 
 class Binary:
     def __init__(self, filename, result, log_writer):
@@ -93,12 +100,12 @@ class Binary:
         for e in executors:
             e.join()
 
-    def async_execute_completed(self, test_name, returncode, output):
+    def async_execute_completed(self, test_name, returncode, output, retries):
         self.test_result_lock.acquire()
         if returncode != 0:
             self.result.fail()
 
-        Ui.result(returncode == 0, test_name)
+        Ui.result(returncode == 0, test_name, retries)
         self.test_result_lock.release()
 
         self.log_writer.write_log(test_name, returncode, output)
