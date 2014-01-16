@@ -72,3 +72,24 @@ TEST(ObjectsSct, GetObjectInfo_Asteroid)
     EXPECT_EQ(100, objectCargoInfo->carbon);
     EXPECT_EQ(100, objectCargoInfo->helium);
 }
+
+#if 0
+TEST(ObjectsSct, DataBaseUpdatedWithNewObjects)
+{
+    SCT::Component component;
+    component.start();
+
+    std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password");
+
+    auto sociSession = component.createSociSession();
+
+    sociSession->once <<
+        "INSERT INTO objects (id, type, class, x, y, z, owner, integrity, carbon, helium)"
+        "VALUES(10, \"Ship\", 1, 100, 100, 100, 1, 100, 0, 0)";
+
+    auto administrationConnection = component.createAdministrationConnection();
+
+    Common::Messages::RealoadDatabase reloadDatabase;
+    administrationConnection->send(reloadDatabase);
+}
+#endif

@@ -8,9 +8,18 @@
 using namespace SCT;
 using namespace Common::Messages;
 
-Connection::Connection(const std::string & addr, unsigned port)
+Connection::Connection(Connection::Type type, const std::string & addr, unsigned port)
 {
-    m_socket = Cake::Networking::Socket::connectToTcpSocket(addr, port);
+    if (type == Connection::Type::TCP)
+    {
+        LOG_INFO << "Connecting to TCP:" << addr;
+        m_socket = Cake::Networking::Socket::connectToTcpSocket(addr, port);
+    }
+    else
+    {
+        LOG_INFO << "Connecting to UNIX:" << addr;
+        m_socket = Cake::Networking::Socket::connectToUnixSocket(addr);
+    }
 }
 
 Connection::~Connection()

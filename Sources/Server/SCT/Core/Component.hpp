@@ -20,6 +20,7 @@ public:
     void setConfigValue(const std::string & name, const std::string & value);
     void start();
     std::shared_ptr<Connection> createConnection();
+    std::shared_ptr<Connection> createAdministrationConnection();
     std::shared_ptr<soci::session> createSociSession();
 
 private:
@@ -30,6 +31,7 @@ private:
     int m_port;
     std::map<std::string, std::string> m_cmdLineOptions;
     std::string m_sqliteUrl;
+    std::string m_administrationSocketPath;
 };
 
 }

@@ -230,4 +230,11 @@ graphic effects
     <param type="int32" name="directionZ" />
 </message>
 
+<!--
+    administration
+-->
+
+<message id="RealoadDatabase">
+</message>
+
 </messages>

@@ -5,11 +5,14 @@
 #include <cstdlib>
 #include <signal.h>
 #include <fstream>
+#include <stdexcept>
+
 #include <boost/lexical_cast.hpp>
 #include <boost/foreach.hpp>
 
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Cake/Threading/Thread.hpp"
+#include "Cake/Utils/BuildString.hpp"
 
 #include "Component.hpp"
 
@@ -20,6 +23,7 @@ static int s_port = 2000;
 Component::Component(const std::string & sqliteUrl)
 {
     m_sqliteUrl = copySqliteDb(sqliteUrl);
+    m_administrationSocketPath = BUILD_STRING << "/var/tmp/rusted_sct_" << m_port;
 
     std::string sociUrl = "sqlite3://" + m_sqliteUrl;
     setConfigValue("--database.url", sociUrl);
@@ -46,9 +50,15 @@ void Component::setConfigValue(const std::string & name, const std::string & val
 
 std::shared_ptr<Connection> Component::createConnection()
 {
-    LOG_INFO << "Creating new connection";
+    LOG_INFO << "Creating player connection";
 
-    return std::shared_ptr<Connection>(new Connection("127.0.0.1", m_port));
+    return std::make_shared<Connection>(Connection::Type::TCP, "127.0.0.1", m_port);
+}
+
+std::shared_ptr<Connection> Component::createAdministrationConnection()
+{
+    LOG_INFO << "Creating administration connection";
+    throw std::runtime_error("not implemented");
 }
 
 std::shared_ptr<soci::session> Component::createSociSession()

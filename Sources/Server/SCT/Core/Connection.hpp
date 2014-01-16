@@ -52,7 +52,13 @@ namespace Detail
 class Connection
 {
 public:
-    Connection(const std::string & addr, unsigned port);
+    enum class Type
+    {
+        TCP,
+        UNIX
+    };
+
+    Connection(Type type, const std::string & addr, unsigned port);
     ~Connection();
 
     void send(::Common::Messages::AbstractMessage & message);

@@ -56,7 +56,8 @@ enum Messages
 	GlobalCooldownActivated = 130,
 	GlobalCooldownExpired = 131,
 	EmitMovingMeshEffect = 132,
-	EmitExplosionEffect = 133
+	EmitExplosionEffect = 133,
+	RealoadDatabase = 134
 }; // enum
 } // namespace Id
 
@@ -1647,6 +1648,42 @@ struct EmitExplosionEffect : public AbstractMessage
 	}
 };
 
+struct RealoadDatabase : public AbstractMessage
+{
+	// no parameters
+
+	// no list parameters
+
+	Id::Messages getId() const
+	{
+		return Id::RealoadDatabase;
+	}
+
+	void serialize(Cake::Networking::Protocol::IWriteBuffer & buffer) const
+	{
+		Cake::Networking::Protocol::BinaryCoder coder(buffer);
+		coder << getId();
+	}
+
+	void unserialize(Cake::Networking::Protocol::IReadBuffer & buffer)
+	{
+		Cake::Networking::Protocol::BinaryDecoder decoder(buffer);
+	}
+
+	void unserialize(const Cake::Serialization::Fc & fc)
+	{
+		Cake::Networking::Protocol::FcDecoder decoder(fc);
+	}
+
+	std::string toString() const
+	{
+		std::stringstream ss;
+		ss	<< "RealoadDatabase ("
+			<< ")";
+		return ss.str();
+	}
+};
+
 class MessageFactory
 {
 public:
@@ -1793,6 +1830,10 @@ public:
 
 		case Id::EmitExplosionEffect:
 			ret.reset(new EmitExplosionEffect());
+			break;
+
+		case Id::RealoadDatabase:
+			ret.reset(new RealoadDatabase());
 			break;
 
 		default:
@@ -1944,6 +1985,10 @@ public:
 		{
 			ret.reset(new EmitExplosionEffect());
 		}
+		if (fc.getName() == "RealoadDatabase")
+		{
+			ret.reset(new RealoadDatabase());
+		}
 		ret->unserialize(fc);
 		return ret;
 	}
@@ -2062,6 +2107,9 @@ struct HandlerCaller0
 
 		case Id::EmitExplosionEffect:
 			m_handler.handle(static_cast<const EmitExplosionEffect&>(message)); break;
+
+		case Id::RealoadDatabase:
+			m_handler.handle(static_cast<const RealoadDatabase&>(message)); break;
 
 		default:
 			throw std::runtime_error("unknown message id");
@@ -2185,6 +2233,9 @@ struct HandlerCaller1
 
 		case Id::EmitExplosionEffect:
 			m_handler.handle(static_cast<const EmitExplosionEffect&>(message), p0); break;
+
+		case Id::RealoadDatabase:
+			m_handler.handle(static_cast<const RealoadDatabase&>(message), p0); break;
 
 		default:
 			throw std::runtime_error("unknown message id");
