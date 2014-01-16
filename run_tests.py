@@ -33,10 +33,12 @@ class Ui:
         sys.stdout.flush()
 
     @staticmethod
-    def result(passed, name, retries):
+    def result(timeout, passed, name, retries):
         result = Ui.BOLD_RED + "fail" + Ui.RESET
         if passed:
             result = Ui.BOLD_GREEN + "pass" + Ui.RESET
+        elif timeout:
+            result = Ui.BOLD_RED + "time" + Ui.RESET
 
         additional_info = ""
         if retries > 0:
@@ -55,7 +57,7 @@ class Ui:
         sys.stdout.flush()
 
 class AsyncExecute(threading.Thread):
-    def __init__(self, token, command, environment, working_directory, result_listener):
+    def __init__(self, token, command, environment, working_directory, result_listener, timeout=15):
         threading.Thread.__init__(self)
 
         self.token = token
@@ -63,25 +65,41 @@ class AsyncExecute(threading.Thread):
         self.environment = environment.copy()
         self.working_directory = working_directory
         self.result_listener = result_listener
+        self.process = None
+        self.timeout = timeout
+        self.timeout_troggered = False
 
     def run(self):
         old_dir = os.getcwd()
         os.chdir(self.working_directory)
 
-        returncode = None
+        returncode = 1
         out = ""
 
         for i in xrange(5):
-            try:
-                out = subprocess.check_output(self.command, shell=True, stderr=subprocess.STDOUT, env=self.environment)
-                returncode = 0
+            (returncode, out) = self.__run_once()
+            if returncode == 0:
                 break
-            except subprocess.CalledProcessError as e:
-                returncode = e.returncode
-                out = e.output
 
         os.chdir(old_dir)
-        self.result_listener.async_execute_completed(self.token, returncode, out, i)
+        self.result_listener.async_execute_completed(self.token, returncode, out, i, self.timeout_troggered)
+
+    def __run_once(self):
+        def execute():
+            self.process = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=self.environment)
+            (out, err) = self.process.communicate()
+            self.out = out
+
+        thread = threading.Thread(target=execute)
+        thread.start()
+        thread.join(self.timeout)
+
+        if thread.is_alive() and self.process != None:
+            self.timeout_troggered = True
+            self.process.terminate()
+            thread.join()
+
+        return (self.process.returncode, self.out)
 
 class Binary:
     def __init__(self, filename, result, log_writer):
@@ -100,12 +118,12 @@ class Binary:
         for e in executors:
             e.join()
 
-    def async_execute_completed(self, test_name, returncode, output, retries):
+    def async_execute_completed(self, test_name, returncode, output, retries, timeout):
         self.test_result_lock.acquire()
         if returncode != 0:
             self.result.fail()
 
-        Ui.result(returncode == 0, test_name, retries)
+        Ui.result(timeout, returncode == 0, test_name, retries)
         self.test_result_lock.release()
 
         self.log_writer.write_log(test_name, returncode, output)
