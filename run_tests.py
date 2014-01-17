@@ -6,6 +6,7 @@ import subprocess
 import threading
 import shutil
 import random
+import signal
 
 class Ui:
     RESET = '\033[0m'
@@ -56,6 +57,40 @@ class Ui:
         print(result)
         sys.stdout.flush()
 
+class PsUtils:
+    @staticmethod
+    def pids():
+        ret = []
+        procs = os.listdir("/proc/")
+        for proc_dir in procs:
+            if proc_dir.isdigit():
+                ret.append(int(proc_dir))
+        return ret
+
+    @staticmethod
+    def childs(pid):
+        ret = []
+        for p in PsUtils.pids():
+            try:
+                for line in open("/proc/" + str(p) + "/status", "r").readlines():
+                    if line.startswith("PPid:"):
+                        parent_pid = line.replace("PPid:\t", "").replace("\n", "")
+                        if int(parent_pid) == int(pid):
+                            ret.append(int(p))
+            # process was just killed
+            except:
+                pass
+        return ret
+
+    @staticmethod
+    def tree(pid):
+        ret = []
+        for child in PsUtils.childs(pid):
+            for s in PsUtils.tree(child):
+                ret.append(s)
+            ret.append(int(child))
+        return ret
+
 class AsyncExecute(threading.Thread):
     def __init__(self, token, command, environment, working_directory, result_listener, timeout=15):
         threading.Thread.__init__(self)
@@ -68,6 +103,7 @@ class AsyncExecute(threading.Thread):
         self.process = None
         self.timeout = timeout
         self.timeout_troggered = False
+        self.out = ""
 
     def run(self):
         old_dir = os.getcwd()
@@ -78,17 +114,25 @@ class AsyncExecute(threading.Thread):
 
         for i in xrange(5):
             (returncode, out) = self.__run_once()
-            if returncode == 0:
+            if returncode == 0 or self.timeout_troggered:
                 break
 
         os.chdir(old_dir)
         self.result_listener.async_execute_completed(self.token, returncode, out, i, self.timeout_troggered)
 
+    def __kill(self, sig):
+        for pid in PsUtils.tree(self.process.pid):
+            try:
+                os.kill(pid, sig)
+            except: pass
+        try:
+            os.kill(self.process.pid, sig)
+        except: pass
+
     def __run_once(self):
         def execute():
-            self.process = subprocess.Popen(self.command, shell=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=self.environment)
-            (out, err) = self.process.communicate()
-            self.out = out
+            self.process = subprocess.Popen(self.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=self.environment)
+            (self.out, err) = self.process.communicate()
 
         thread = threading.Thread(target=execute)
         thread.start()
@@ -96,7 +140,8 @@ class AsyncExecute(threading.Thread):
 
         if thread.is_alive() and self.process != None:
             self.timeout_troggered = True
-            self.process.terminate()
+            self.__kill(signal.SIGTERM)
+            self.__kill(signal.SIGKILL)
             thread.join()
 
         return (self.process.returncode, self.out)
@@ -133,7 +178,7 @@ class Binary:
 
         async_execute = AsyncExecute(
             test_name,
-            self.filename + " --gtest_filter=" + test_name,
+            [self.filename, "--gtest_filter=" + test_name],
             env,
             os.path.dirname(self.filename),
             self)
