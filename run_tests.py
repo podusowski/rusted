@@ -92,9 +92,10 @@ class PsUtils:
         return ret
 
 class AsyncExecute(threading.Thread):
-    def __init__(self, token, command, environment, working_directory, result_listener, timeout=15):
+    def __init__(self, port_assigner, token, command, environment, working_directory, result_listener, timeout=15):
         threading.Thread.__init__(self)
 
+        self.port_assigner = port_assigner
         self.token = token
         self.command = command
         self.environment = environment.copy()
@@ -131,7 +132,9 @@ class AsyncExecute(threading.Thread):
 
     def __run_once(self):
         def execute():
-            self.process = subprocess.Popen(self.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=self.environment)
+            env = self.environment
+            env["SERVER_SCT_PORT"] = str(self.port_assigner.acquire())
+            self.process = subprocess.Popen(self.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env)
             (self.out, err) = self.process.communicate()
 
         thread = threading.Thread(target=execute)
@@ -147,10 +150,11 @@ class AsyncExecute(threading.Thread):
         return (self.process.returncode, self.out)
 
 class Binary:
-    def __init__(self, filename, result, log_writer):
+    def __init__(self, filename, result, log_writer, port_assigner):
         self.filename = filename
         self.result = result
         self.log_writer = log_writer
+        self.port_assigner = port_assigner
         self.port = random.randrange(3000, 3500)
         self.tests = self.__scan_for_testnames()
         self.test_result_lock = threading.Lock()
@@ -177,6 +181,7 @@ class Binary:
         env = self.__prepare_env()
 
         async_execute = AsyncExecute(
+            self.port_assigner,
             test_name,
             [self.filename, "--gtest_filter=" + test_name],
             env,
@@ -224,12 +229,13 @@ class Binary:
         return env
 
 class Tree:
-    def __init__(self, result, log_writer):
+    def __init__(self, result, log_writer, port_assigner):
         self.result = result
         self.log_writer = log_writer
+        self.port_assigner = port_assigner
         self.binaries = []
         for f in self.__find_binary_filenames():
-            self.binaries.append(Binary(f, result, log_writer))
+            self.binaries.append(Binary(f, result, log_writer, port_assigner))
 
     def run(self):
         for binary in self.binaries:
@@ -274,11 +280,23 @@ class LogWriter:
         f.write(output)
         f.close()
 
+class TcpPortAssigner:
+    def __init__(self):
+        self.lock = threading.Lock()
+        self.port = random.randrange(3000, 3500)
+
+    def acquire(self):
+        self.lock.acquire()
+        self.port += 1
+        ret = self.port
+        self.lock.release()
+        return ret
 
 def main():
     result = GlobalResult()
     log_writer = LogWriter()
-    tree = Tree(result, log_writer)
+    port_assigner = TcpPortAssigner()
+    tree = Tree(result, log_writer, port_assigner)
     tree.run()
 
     print("")
