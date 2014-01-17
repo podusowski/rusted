@@ -20,6 +20,8 @@ public:
 
 private:
     ServerSocket(int sockFd);
+    static int createDescriptor(int family);
+    static void listen(int descriptor);
     int m_sockFd;
 };
 

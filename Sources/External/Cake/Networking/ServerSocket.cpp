@@ -13,6 +13,8 @@
 #include <string.h>
 #include <cstdio>
 
+#include "Utils/BuildString.hpp"
+#include "Detail/Error.hpp"
 #include "ServerSocket.hpp"
 
 using namespace Cake::Networking;
@@ -22,15 +24,9 @@ ServerSocket::ServerSocket(int sockFd) :
 {
 }
 
-// TODO: refactor
 std::shared_ptr<ServerSocket> ServerSocket::createTcpServer(unsigned port)
 {
-    int sockFd = ::socket(PF_INET, SOCK_STREAM, 0);
-
-    if (sockFd == -1)
-    {
-        throw std::runtime_error("can't create socket");
-    }
+    int sockFd = createDescriptor(PF_INET);
 
     sockaddr_in addr;
     memset(&addr, 0, sizeof(addr));
@@ -40,15 +36,12 @@ std::shared_ptr<ServerSocket> ServerSocket::createTcpServer(unsigned port)
 
     if (::bind(sockFd, (sockaddr*)&addr, sizeof(addr)) == -1)
     {
-        throw std::runtime_error("can't bind socket");
+        throw std::runtime_error(BUILD_STRING << "can't bind socket, reason: " << Detail::Error::lastError());
     }
 
-    if (::listen(sockFd, 5) == -1)
-    {
-        throw std::runtime_error("can't listen to the socket");
-    }
+    listen(sockFd);
 
-    //TODO: make_shared
+    // can't use make_shared due to private constructor
     return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
 }
 
@@ -57,27 +50,25 @@ std::shared_ptr<ServerSocket> ServerSocket::createUnixServer(const std::string &
 #ifdef _WIN32
     throw std::runtime_error("WIN32 doesn't support UNIX sockets");
 #else
-    int sockFd = ::socket(PF_UNIX, SOCK_STREAM, 0);
-
-    if (sockFd == -1)
-    {
-        throw std::runtime_error("can't create socket");
-    }
+    int sockFd = createDescriptor(PF_UNIX);
 
     sockaddr_un local_addr;
     local_addr.sun_family = PF_UNIX;
     ::strcpy(local_addr.sun_path, path.c_str());
     ::remove(local_addr.sun_path);
 
-    ::bind(sockFd, 
-           (sockaddr *)(&local_addr), 
-           sizeof(local_addr.sun_family) + strlen(local_addr.sun_path));
+    int ret = ::bind(sockFd,
+        (sockaddr *)(&local_addr),
+        sizeof(local_addr.sun_family) + strlen(local_addr.sun_path));
 
-    if (::listen(sockFd, 5) == -1)
+    if (ret == -1)
     {
-        throw std::runtime_error("can't listen to the socket");
+        throw std::runtime_error(BUILD_STRING << "can't bind socket, reason: " << Detail::Error::lastError());
     }
 
+    listen(sockFd);
+
+    // can't use make_shared due to private constructor
     return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
 #endif
 }
@@ -88,9 +79,7 @@ std::shared_ptr<Socket> ServerSocket::accept()
 
     if (sockFd == -1)
     {
-        std::stringstream ss;
-        ss << "can't accept new connection, reason: " << strerror(errno); 
-        throw std::runtime_error(ss.str());
+        throw std::runtime_error(BUILD_STRING << "can't accept new connection, reason: " << Detail::Error::lastError());
     }
 
     return std::shared_ptr<Socket>(new Socket(sockFd));
@@ -99,4 +88,26 @@ std::shared_ptr<Socket> ServerSocket::accept()
 int ServerSocket::getNativeHandle() const
 {
     return m_sockFd;
+}
+
+int ServerSocket::createDescriptor(int family)
+{
+    int descriptor = socket(family, SOCK_STREAM, 0);
+
+    if (descriptor == -1)
+    {
+        throw std::runtime_error("can't create socket");
+    }
+
+    return descriptor;
+}
+
+void ServerSocket::listen(int descriptor)
+{
+    int ret = ::listen(descriptor, 5);
+
+    if (ret == -1)
+    {
+        throw std::runtime_error("can't listen to the socket");
+    }
 }
