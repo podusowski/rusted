@@ -7,6 +7,7 @@ import threading
 import shutil
 import random
 import signal
+import argparse
 
 class Ui:
     RESET = '\033[0m'
@@ -92,7 +93,7 @@ class PsUtils:
         return ret
 
 class AsyncExecute(threading.Thread):
-    def __init__(self, port_assigner, token, command, environment, working_directory, result_listener, timeout=15):
+    def __init__(self, port_assigner, token, command, environment, working_directory, result_listener, retries, timeout=15):
         threading.Thread.__init__(self)
 
         self.port_assigner = port_assigner
@@ -102,23 +103,23 @@ class AsyncExecute(threading.Thread):
         self.working_directory = working_directory
         self.result_listener = result_listener
         self.process = None
+        self.retries = retries
         self.timeout = timeout
         self.timeout_troggered = False
         self.out = ""
 
     def run(self):
-        old_dir = os.getcwd()
-        os.chdir(self.working_directory)
-
         returncode = 1
         out = ""
 
-        for i in xrange(5):
+        if self.retries < 0:
+            raise Exception("wrong no of retries")
+
+        for i in xrange(int(self.retries) + 1):
             (returncode, out) = self.__run_once()
             if returncode == 0 or self.timeout_troggered:
                 break
 
-        os.chdir(old_dir)
         self.result_listener.async_execute_completed(self.token, returncode, out, i, self.timeout_troggered)
 
     def __kill(self, sig):
@@ -134,7 +135,7 @@ class AsyncExecute(threading.Thread):
         def execute():
             env = self.environment
             env["SERVER_SCT_PORT"] = str(self.port_assigner.acquire())
-            self.process = subprocess.Popen(self.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env)
+            self.process = subprocess.Popen(self.command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, env=env, cwd=self.working_directory)
             (self.out, err) = self.process.communicate()
 
         thread = threading.Thread(target=execute)
@@ -150,7 +151,7 @@ class AsyncExecute(threading.Thread):
         return (self.process.returncode, self.out)
 
 class Binary:
-    def __init__(self, filename, result, log_writer, port_assigner):
+    def __init__(self, filename, result, log_writer, port_assigner, retries):
         self.filename = filename
         self.result = result
         self.log_writer = log_writer
@@ -158,6 +159,7 @@ class Binary:
         self.port = random.randrange(3000, 3500)
         self.tests = self.__scan_for_testnames()
         self.test_result_lock = threading.Lock()
+        self.retries = retries
 
     def run(self):
         Ui.bigstep("running", self.filename)
@@ -186,7 +188,8 @@ class Binary:
             [self.filename, "--gtest_filter=" + test_name],
             env,
             os.path.dirname(self.filename),
-            self)
+            self,
+            self.retries)
 
         async_execute.start()
 
@@ -229,13 +232,14 @@ class Binary:
         return env
 
 class Tree:
-    def __init__(self, result, log_writer, port_assigner):
+    def __init__(self, result, log_writer, port_assigner, retries):
         self.result = result
         self.log_writer = log_writer
         self.port_assigner = port_assigner
+        self.retries = retries
         self.binaries = []
         for f in self.__find_binary_filenames():
-            self.binaries.append(Binary(f, result, log_writer, port_assigner))
+            self.binaries.append(Binary(f, result, log_writer, port_assigner, self.retries))
 
     def run(self):
         for binary in self.binaries:
@@ -293,10 +297,14 @@ class TcpPortAssigner:
         return ret
 
 def main():
+    parser = argparse.ArgumentParser(description='test runner')
+    parser.add_argument('-r', action='store', dest='retries', default="5", nargs="?", help='number of retries in case of failure')
+    args = parser.parse_args()
+
     result = GlobalResult()
     log_writer = LogWriter()
     port_assigner = TcpPortAssigner()
-    tree = Tree(result, log_writer, port_assigner)
+    tree = Tree(result, log_writer, port_assigner, args.retries)
     tree.run()
 
     print("")
