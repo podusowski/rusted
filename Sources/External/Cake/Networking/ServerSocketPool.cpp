@@ -4,6 +4,8 @@
     #include <windows.h>
 #endif
 
+#include "Utils/BuildString.hpp"
+#include "Detail/Error.hpp"
 #include "ServerSocketPool.hpp"
 
 using namespace Cake::Networking;
@@ -43,7 +45,7 @@ ServerSocketPool::AcceptReturnType ServerSocketPool::accept()
 
     if (num < 0)
     {
-        throw std::runtime_error("select -1");
+        throw std::runtime_error(BUILD_STRING << "can't accept new connection, reason: " << Detail::Error::lastError());
     }
     else if (num > 0)
     {
