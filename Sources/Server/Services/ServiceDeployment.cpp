@@ -28,3 +28,10 @@ void ServiceDeployment::deployAuthorizedConnection(Server::Network::IConnection 
     connection.addListener(m_playerService);
     connection.addListener(m_entityService);
 }
+
+void ServiceDeployment::deployAdministrationConnection(Server::Network::IConnection & connection)
+{
+    LOG_DEBUG << "Registering services for administration connection";
+
+    connection.addListener(m_administrationService);
+}

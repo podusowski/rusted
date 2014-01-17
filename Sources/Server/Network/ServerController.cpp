@@ -32,18 +32,11 @@ int ServerController::start()
     auto server = Cake::Networking::ServerSocket::createTcpServer(tcpPort);
     serverPool.add(server);
 
-    try
-    {
-        LOG_INFO << "Setting up administrative socket on UNIX:" << administrationSocketPath;
-        auto administrationServer = Cake::Networking::ServerSocket::createUnixServer(administrationSocketPath);
-        serverPool.add(administrationServer);
-    }
-    catch (const std::exception & e)
-    {
-        LOG_WARN << "Cannot initialize administration server, reason: " << e.what();
-    }
+    LOG_INFO << "Setting up administrative socket on UNIX:" << administrationSocketPath;
+    auto administrationServer = Cake::Networking::ServerSocket::createUnixServer(administrationSocketPath);
+    serverPool.add(administrationServer);
 
-    LOG_INFO << "Accepting connections";
+    LOG_INFO << "Server is up and running";
 
     try
     {
@@ -66,7 +59,13 @@ int ServerController::start()
             }
             else
             {
-                LOG_ERR << "Administration connection not implemented";
+                LOG_INFO << "New administration connection established";
+
+                std::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket.first, m_serviceDeployment));
+
+                m_administrationConnections.push_back(connectionContext);
+                m_serviceDeployment.deployAdministrationConnection(connectionContext->getConnection());
+                connectionContext->getThread().start();
             }
         }
     }
@@ -90,6 +89,20 @@ void ServerController::gc()
             LOG_DEBUG << "Collecting innactive connection: " << (*it);
 
             m_playerContainer.remove((*it)->getConnection());
+            it = m_connections.erase(it);
+        }
+        else
+        {
+            ++it;
+        }
+    }
+
+    it = m_administrationConnections.begin();
+    while (it != m_administrationConnections.end())
+    {
+        if (not (*it)->getThread().isRunning())
+        {
+            LOG_DEBUG << "Collecting innactive administration connection: " << (*it);
             it = m_connections.erase(it);
         }
         else

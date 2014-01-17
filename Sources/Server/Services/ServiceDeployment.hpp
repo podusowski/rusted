@@ -14,6 +14,7 @@
 #include "Server/Services/AuthorizationService.hpp"
 #include "Server/Services/PlayerService.hpp"
 #include "Server/Services/EntityService.hpp"
+#include "Server/Services/AdministrationService.hpp"
 
 #include "Common/Game/Universe.hpp"
 
@@ -28,16 +29,18 @@ public:
     ServiceDeployment(Cake::Configuration::Configuration &, Server::Game::PlayerContainer &);
     void deployNewConnection(Server::Network::IConnection &);
     void deployAuthorizedConnection(Server::Network::IConnection &);
+    void deployAdministrationConnection(Server::Network::IConnection &);
 
 private:
     Cake::DependencyInjection::Inject<Common::Game::IRustedTime> m_time;
     Cake::DependencyInjection::Inject<Common::Game::Universe> m_universe;
 
-    Server::Services::ServerInfoService m_serverInfoService;
-    Server::Services::RustedTimeService m_rustedTimeService;
-    Server::Services::AuthorizationService m_authorizationService;
+    Services::ServerInfoService m_serverInfoService;
+    Services::RustedTimeService m_rustedTimeService;
+    Services::AuthorizationService m_authorizationService;
     Services::PlayerService m_playerService;
     Services::EntityService m_entityService;
+    Services::AdministrationService m_administrationService;
 };
 
 }

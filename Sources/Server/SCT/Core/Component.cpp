@@ -22,6 +22,14 @@ static int s_port = 2000;
 
 Component::Component(const std::string & sqliteUrl)
 {
+    m_port = s_port ++;
+
+    if (getenv("SERVER_SCT_PORT"))
+    {
+        m_port = boost::lexical_cast<unsigned>(getenv("SERVER_SCT_PORT"));
+        LOG_INFO << "Port overwritten to " << m_port << " by SERVER_SCT_PORT environment variable";
+    }
+
     m_sqliteUrl = copySqliteDb(sqliteUrl);
     m_administrationSocketPath = BUILD_STRING << "/var/tmp/rusted_sct_" << m_port;
 
@@ -58,7 +66,8 @@ std::shared_ptr<Connection> Component::createConnection()
 std::shared_ptr<Connection> Component::createAdministrationConnection()
 {
     LOG_INFO << "Creating administration connection";
-    throw std::runtime_error("not implemented");
+
+    return std::make_shared<Connection>(Connection::Type::UNIX, m_administrationSocketPath, m_port);
 }
 
 std::shared_ptr<soci::session> Component::createSociSession()
@@ -68,15 +77,6 @@ std::shared_ptr<soci::session> Component::createSociSession()
 
 void Component::start()
 {
-    //m_port = rand() % 1000 + 1025;
-    m_port = s_port ++;
-
-    if (getenv("SERVER_SCT_PORT"))
-    {
-        m_port = boost::lexical_cast<unsigned>(getenv("SERVER_SCT_PORT"));
-        LOG_INFO << "Port overwritten to " << m_port << " by SERVER_SCT_PORT environment variable";
-    }
-
     const std::string filename = "./Server";
 
     // start the component
@@ -84,10 +84,7 @@ void Component::start()
     if (!m_pid)
     {
         setConfigValue("--network.port", boost::lexical_cast<std::string>(m_port));
-
-        std::stringstream administrationSocketPath;
-        administrationSocketPath << "/var/tmp/rusted_sct_" << m_port;
-        setConfigValue("--network.administration_socket_path", administrationSocketPath.str());
+        setConfigValue("--network.administration_socket_path", m_administrationSocketPath);
 
         char ** argv = new char*[m_cmdLineOptions.size() * 2 + 2];
         argv[0] = const_cast<char *>(filename.c_str());
