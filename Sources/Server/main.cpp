@@ -20,12 +20,9 @@ void initDependencies(int argc, const char * argv[])
     forInterface<Cake::Configuration::Configuration>()
         .use(configuration);
 
-    auto universe = std::make_shared<Common::Game::Universe>();
-    forInterface<Common::Game::Universe>().use(universe);
+    forInterface<Common::Game::Universe>().use(std::make_shared<Common::Game::Universe>());
 
-    std::shared_ptr<Common::Game::IRustedTime> rustedTime(new Common::Game::RustedTime);
-    forInterface<Common::Game::IRustedTime>()
-        .use(rustedTime);
+    forInterface<Common::Game::IRustedTime>().use(std::make_shared<Common::Game::RustedTime>());
 
     forInterface<Common::Game::Object::IFlightTrajectory>()
         .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
