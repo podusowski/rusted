@@ -10,10 +10,10 @@ using namespace Server::Game;
 UniverseDataBaseFacade::UniverseDataBaseFacade(IShipClassContainer & shipClassContainer) : 
     m_shipClassContainer(shipClassContainer)
 {
-    loadFromDb();
+    loadObjects();
 }
 
-void UniverseDataBaseFacade::loadFromDb()
+void UniverseDataBaseFacade::loadObjects()
 {
     LOG_INFO << "Loading universe state from db";
 
@@ -49,7 +49,7 @@ void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
         auto & shipClass = m_shipClassContainer.getById(shipClassId);
         shipClass.applyTo(ship);
         ship.setClass(shipClassId);
-        ship.writeCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+        ship.writeCargoHold([&](Common::Game::Object::CargoHold & cargoHold)
         {
             fillCargoHold(row, cargoHold);
         });
@@ -67,7 +67,7 @@ void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
         object->setIntegrity(row.get<int>("integrity"));
 
         // set unlimited capacity for asteroids
-        object->writeCargoHold([&](Common::Game::Object::CargoHold & cargoHold) -> void
+        object->writeCargoHold([&](Common::Game::Object::CargoHold & cargoHold)
         {
             fillCargoHold(row, cargoHold);
             cargoHold.setCapacity(99999999);

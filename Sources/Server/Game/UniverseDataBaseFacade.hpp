@@ -20,10 +20,10 @@ class UniverseDataBaseFacade : public IUniverseDataBaseFacade
 {
 public:
     UniverseDataBaseFacade(IShipClassContainer &);
+    void loadObjects();
     std::shared_ptr<Common::Game::Object::ObjectBase> createShip(unsigned shipClass, unsigned ownerId);
 
 private:
-    void loadFromDb();
     void loadObjectFromDb(const soci::row &);
     Common::Game::Position extractPosition(const soci::row &);
     void fillCargoHold(const soci::row &, Common::Game::Object::CargoHold &);
