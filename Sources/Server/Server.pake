@@ -6,6 +6,7 @@ append $sources Services/AuthorizationService.cpp
 append $sources Services/EntityService.cpp
 append $sources Services/PlayerService.cpp
 append $sources Services/RustedTimeService.cpp
+append $sources Services/AdministrationService.cpp
 append $sources Services/ServiceDeployment.cpp
 append $sources Services/Utils.cpp
 append $sources Game/UniverseDataBaseFacade.cpp

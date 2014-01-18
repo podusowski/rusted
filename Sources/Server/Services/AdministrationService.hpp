@@ -7,7 +7,7 @@ namespace Server
 namespace Services
 {
 
-class AdministrationService : public Server::AbstractService<EntityService>
+class AdministrationService : public Server::AbstractService<AdministrationService>
 {
 public:
     void handle(const Common::Messages::RealoadDatabase &, Network::IConnection &);
