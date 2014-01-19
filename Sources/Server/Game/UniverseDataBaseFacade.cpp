@@ -34,14 +34,22 @@ void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
     using namespace std::placeholders;
 
     std::string type = row.get<std::string>("type");
+    unsigned id = row.get<int>("id");
+
+    if (m_universe->has(id))
+    {
+        LOG_DEBUG << "Object id: " << id << " is already in the universe, doing nothing";
+        return;
+    }
+
+    LOG_DEBUG << "Loading object id: " << id;
 
     if (type == "Ship")
     {
-        std::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Ship);
-
+        std::shared_ptr<Common::Game::Object::ObjectBase> object = std::make_shared<Common::Game::Object::Ship>();
         Common::Game::Object::Ship & ship = dynamic_cast<Common::Game::Object::Ship&>(*object);
 
-        object->setId(row.get<int>("id"));
+        object->setId(id);
         ship.setOwnerId(row.get<int>("owner"));
         object->setPosition(extractPosition(row));
 
@@ -61,7 +69,7 @@ void UniverseDataBaseFacade::loadObjectFromDb(const soci::row & row)
     {
         std::shared_ptr<Common::Game::Object::ObjectBase> object(new Common::Game::Object::Asteroid);
 
-        object->setId(row.get<int>("id"));
+        object->setId(id);
         object->setModel(row.get<std::string>("model"));
         object->setPosition(extractPosition(row));
         object->setIntegrity(row.get<int>("integrity"));
