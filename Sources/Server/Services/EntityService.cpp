@@ -38,22 +38,7 @@ void EntityService::handle(const Common::Messages::ChangeShipCourse & changeCour
 
 void EntityService::handle(const Common::Messages::GetVisibleObjects &, Network::IConnection & connection)
 {
-    Common::Messages::VisibleObjects visibleObjects;
-
-    LOG_DEBUG << "Filling visible objects";
-
-    auto objects = m_universe.getAll(); 
-    for (auto object: objects)
-    {
-        LOG_DEBUG << "  id: " << object->getId() << ", type: " << TYPENAME(*object);
-
-        Common::Messages::ObjectId objectId;
-        objectId.id = object->getId();
-
-        visibleObjects.objects.push_back(objectId);
-    }
-
-    connection.send(visibleObjects);
+    m_utils.sendVisibleObjects(m_universe, connection);
 }
 
 void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo, Network::IConnection & connection)

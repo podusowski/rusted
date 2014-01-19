@@ -114,3 +114,23 @@ void Utils::sendObjectIntegrity(Common::Game::Object::ObjectBase & object, Netwo
     connection.send(objectIntegrity);
 }
 
+void Utils::sendVisibleObjects(Common::Game::Universe & universe, Network::IConnection & connection)
+{
+    Common::Messages::VisibleObjects visibleObjects;
+
+    LOG_DEBUG << "Filling visible objects";
+
+    auto objects = universe.getAll();
+    for (auto object: objects)
+    {
+        LOG_DEBUG << "  id: " << object->getId() << ", type: " << TYPENAME(*object);
+
+        Common::Messages::ObjectId objectId;
+        objectId.id = object->getId();
+
+        visibleObjects.objects.push_back(objectId);
+    }
+
+    connection.send(visibleObjects);
+}
+

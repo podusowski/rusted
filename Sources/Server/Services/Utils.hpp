@@ -18,6 +18,8 @@ public:
     void sendObjectCargoInfo(Common::Game::Object::ObjectBase &, Network::IConnection &);
     void sendObjectIntegrity(Common::Game::Object::ObjectBase &, Network::IConnection &);
 
+    void sendVisibleObjects(Common::Game::Universe &, Network::IConnection &);
+
 private:
     void sendShipInfo(Common::Game::Object::Ship &, Network::IConnection &);
 };
