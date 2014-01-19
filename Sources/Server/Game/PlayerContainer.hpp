@@ -31,6 +31,7 @@ public:
     Network::IConnection & getConnectionById(int);
 
     void invokeOnPlayer(int, std::function<void(Common::Game::Player &, Network::IConnection &)>);
+    void invokeOnAllPlayers(std::function<void(Common::Game::Player &, Network::IConnection &)>);
 
     std::vector<std::shared_ptr<Common::Game::Player> > getAll(Common::Game::PlayerState state);
     std::vector<Network::IConnection *> getAllConnections(Common::Game::PlayerState state);

@@ -88,7 +88,6 @@ Server::Network::IConnection & PlayerContainer::getConnectionById(int playerId)
 
 void PlayerContainer::invokeOnPlayer(int id, std::function<void(Common::Game::Player &, Network::IConnection &)> function)
 {
-    //TODO: optimize
     Cake::Threading::ScopedLock lock(m_mutex);
     for (auto & i: m_connectionMap)
     {
@@ -99,6 +98,15 @@ void PlayerContainer::invokeOnPlayer(int id, std::function<void(Common::Game::Pl
         }
     }
     throw std::out_of_range("player doesn't exist");
+}
+
+void PlayerContainer::invokeOnAllPlayers(std::function<void(Common::Game::Player &, Network::IConnection &)> function)
+{
+    Cake::Threading::ScopedLock lock(m_mutex);
+    for (auto & i: m_connectionMap)
+    {
+        function(*i.second, *i.first);
+    }
 }
 
 std::vector<std::shared_ptr<Common::Game::Player> > PlayerContainer::getAll(Common::Game::PlayerState state)

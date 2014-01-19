@@ -73,7 +73,6 @@ TEST(ObjectsSct, GetObjectInfo_Asteroid)
     EXPECT_EQ(100, objectCargoInfo->helium);
 }
 
-#if 0
 TEST(ObjectsSct, DataBaseUpdatedWithNewObjects)
 {
     SCT::Component component;
@@ -91,5 +90,8 @@ TEST(ObjectsSct, DataBaseUpdatedWithNewObjects)
 
     Common::Messages::RealoadDatabase reloadDatabase;
     administrationConnection->send(reloadDatabase);
+
+//    connection1->receive<Common::Messages::PlayerShips>();
+    connection1->receive<Common::Messages::VisibleObjects>();
 }
-#endif
+
