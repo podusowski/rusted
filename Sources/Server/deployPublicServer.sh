@@ -3,14 +3,20 @@
 root_directory=`dirname $0`
 rusted_directory=/var/rusted/
 pid_file=$rusted_directory/Server.pid
+log_file=$rusted_directory/Server.log
 database_file=$rusted_directory/database.sqlite3
-daemon_arguments="-v -d --name=rusted --env=LD_LIBRARY_PATH=$rusted_directory --output=$rusted_directory/Server.log --pidfile=$pid_file"
+daemon_arguments="-v -d --name=rusted --env=LD_LIBRARY_PATH=$rusted_directory --output=$log_file --pidfile=$pid_file"
 
 function __copy_files()
 {
     cp -v $root_directory/Server $rusted_directory
     cp -v $root_directory/libsoci* $rusted_directory
     cp -v $root_directory/AdministrationClient $rusted_directory
+}
+
+function __write_log_header()
+{
+    echo "*** `date` Starting rusted server" >> $log_file
 }
 
 function stop()
@@ -64,6 +70,7 @@ function start()
     local server_arguemnts+="--database.url sqlite3://$database_file "
 
     echo "starting Server with arguments: $server_arguemnts"
+    __write_log_header
     daemon $daemon_arguments -- $rusted_directory/Server $server_arguemnts || echo "error in daemon"
 
     echo "log available in $rusted_directory/Server.log"
