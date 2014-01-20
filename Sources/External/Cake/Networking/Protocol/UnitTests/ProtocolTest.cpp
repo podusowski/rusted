@@ -93,7 +93,7 @@ TEST(ProtocolTest, FcDecoder)
 
 TEST(ProtocolTest, Fc_NoParameterMessage)
 {
-    auto msg = MessageFactory::create("NoParameterMessage()");
+    auto msg = MessageFactory::create("NoParameterMessage()\n");
     auto simple = std::dynamic_pointer_cast<NoParameterMessage>(msg);
 
     EXPECT_EQ(Id::NoParameterMessage, msg->getId());
