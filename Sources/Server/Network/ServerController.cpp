@@ -81,6 +81,8 @@ int ServerController::start()
 
 void ServerController::gc()
 {
+    // TODO: make weak_ptr of a connection and put it in playerContainer
+
     auto it = m_connections.begin();
     while (it != m_connections.end())
     {
@@ -103,7 +105,7 @@ void ServerController::gc()
         if (not (*it)->getThread().isRunning())
         {
             LOG_DEBUG << "Collecting innactive administration connection: " << (*it);
-            it = m_connections.erase(it);
+            it = m_administrationConnections.erase(it);
         }
         else
         {
