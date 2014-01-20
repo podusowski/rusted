@@ -414,21 +414,25 @@ class CppMessageFactory:
         return s
 
     def __generate_create_from_string_method(self):
-        s = ""
-        s = s + "\tstatic std::shared_ptr<AbstractMessage> create(const std::string & s)\n"
-        s = s + "\t{\n"
-        s = s + "\t\tstd::shared_ptr<AbstractMessage> ret;\n"
-        s = s + "\t\tCake::Serialization::Fc fc(s);\n"
+        s = (""
+             "    static std::shared_ptr<AbstractMessage> create(const std::string & s)\n"
+             "    {\n"
+             "        std::shared_ptr<AbstractMessage> ret;\n"
+             "        Cake::Serialization::Fc fc(s);\n")
 
         for message in self.messages:
-            s = s + "\t\tif (fc.getName() == \"" + message.id + "\")\n"
-            s = s + "\t\t{\n"
-            s = s + "\t\t\tret.reset(new " + message.id + "());\n"
-            s = s + "\t\t}\n"
+            s = s + ("        if (fc.getName() == \"" + message.id + "\")\n"
+                     "        {\n"
+                     "            ret.reset(new " + message.id + "());\n"
+                     "        }\n")
 
-        s = s + "\t\tret->unserialize(fc);\n"
-        s = s + "\t\treturn ret;\n"
-        s = s + "\t}\n"
+        s = s + ("   if (!ret)\n"
+                 "   {\n"
+                 "       throw std::runtime_error(\"no such message\");\n"
+                 "   }\n"
+                 "   ret->unserialize(fc);\n"
+                 "   return ret;\n"
+                 "}\n")
         return s
 
     def __generate_footer(self):

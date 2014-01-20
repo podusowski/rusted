@@ -99,3 +99,7 @@ TEST(ProtocolTest, Fc_NoParameterMessage)
     EXPECT_EQ(Id::NoParameterMessage, msg->getId());
 }
 
+TEST(ProtocolTest, Fc_UnknownMessage)
+{
+    EXPECT_ANY_THROW(MessageFactory::create("Garbage()"));
+}
