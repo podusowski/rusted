@@ -4,6 +4,14 @@
 
 using namespace testing;
 
+void basicExpectations_noParam(const Cake::Serialization::Fc & fc)
+{
+    EXPECT_EQ("Foo", fc.getName());
+
+    auto parameters = fc.getParameters();
+    ASSERT_TRUE(parameters.empty());
+}
+
 void basicExpectations_1param(const Cake::Serialization::Fc & fc)
 {
     EXPECT_EQ("Foo", fc.getName());
@@ -25,6 +33,10 @@ void basicExpectations_2params(const Cake::Serialization::Fc & fc)
 
 TEST(FcTest, Simple)
 {
+    EXPECT_NO_THROW(basicExpectations_noParam(Cake::Serialization::Fc("Foo()")));
+    EXPECT_NO_THROW(basicExpectations_noParam(Cake::Serialization::Fc("Foo( )")));
+    EXPECT_NO_THROW(basicExpectations_noParam(Cake::Serialization::Fc("Foo ( )")));
+
     EXPECT_NO_THROW(basicExpectations_1param(Cake::Serialization::Fc("Foo(1)")));
     EXPECT_NO_THROW(basicExpectations_1param(Cake::Serialization::Fc(" Foo(1)")));
     EXPECT_NO_THROW(basicExpectations_1param(Cake::Serialization::Fc(" Foo (1)")));
@@ -33,6 +45,12 @@ TEST(FcTest, Simple)
     EXPECT_NO_THROW(basicExpectations_1param(Cake::Serialization::Fc(" Foo ( 1 )")));
     EXPECT_NO_THROW(basicExpectations_1param(Cake::Serialization::Fc(" Foo ( 1 ) ")));
 
+    EXPECT_NO_THROW(basicExpectations_2params(Cake::Serialization::Fc("Foo(1,2)")));
+    EXPECT_NO_THROW(basicExpectations_2params(Cake::Serialization::Fc("Foo(1, 2)")));
+}
+
+TEST(FcTest, ParseErrors)
+{
     EXPECT_ANY_THROW(Cake::Serialization::Fc("F"));
     EXPECT_ANY_THROW(Cake::Serialization::Fc("F "));
     EXPECT_ANY_THROW(Cake::Serialization::Fc("F("));
@@ -45,9 +63,6 @@ TEST(FcTest, Simple)
     EXPECT_ANY_THROW(Cake::Serialization::Fc("("));
     EXPECT_ANY_THROW(Cake::Serialization::Fc(")"));
     EXPECT_ANY_THROW(Cake::Serialization::Fc(","));
-
-    EXPECT_NO_THROW(basicExpectations_2params(Cake::Serialization::Fc("Foo(1,2)")));
-    EXPECT_NO_THROW(basicExpectations_2params(Cake::Serialization::Fc("Foo(1, 2)")));
 }
 
 
