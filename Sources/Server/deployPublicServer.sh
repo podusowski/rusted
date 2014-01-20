@@ -6,6 +6,13 @@ pid_file=$rusted_directory/Server.pid
 database_file=$rusted_directory/database.sqlite3
 daemon_arguments="-v -d --name=rusted --env=LD_LIBRARY_PATH=$rusted_directory --output=$rusted_directory/Server.log --pidfile=$pid_file"
 
+function __copy_files()
+{
+    cp -v $root_directory/Server $rusted_directory
+    cp -v $root_directory/libsoci* $rusted_directory
+    cp -v $root_directory/AdministrationClient $rusted_directory
+}
+
 function stop()
 {
     if [ -f $pid_file ]; then
@@ -30,8 +37,7 @@ function deploy()
         exit 1
     fi
 
-    cp -v $root_directory/Server $rusted_directory
-    cp -v $root_directory/libsoci* $rusted_directory
+    __copy_files
 
     echo "generating database"
     if [ -f $database_file ]; then
