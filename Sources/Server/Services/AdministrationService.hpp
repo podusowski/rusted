@@ -19,7 +19,7 @@ class AdministrationService : public Server::AbstractService<AdministrationServi
 public:
     AdministrationService(Game::IPlayerContainer &);
 
-    void handle(const Common::Messages::RealoadDatabase &, Network::IConnection &);
+    void handle(const Common::Messages::ReloadDatabase &, Network::IConnection &);
 
     void handle(const Common::Messages::AbstractMessage &, Network::IConnection &) {}
 

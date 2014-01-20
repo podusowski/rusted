@@ -12,7 +12,7 @@ AdministrationService::AdministrationService(Game::IPlayerContainer & playerCont
 {
 }
 
-void AdministrationService::handle(const Common::Messages::RealoadDatabase &, Network::IConnection &)
+void AdministrationService::handle(const Common::Messages::ReloadDatabase &, Network::IConnection &)
 {
     LOG_DEBUG << "Reloading database";
 

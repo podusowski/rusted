@@ -88,7 +88,7 @@ TEST(ObjectsSct, DataBaseUpdatedWithNewObjects)
 
     auto administrationConnection = component.createAdministrationConnection();
 
-    Common::Messages::RealoadDatabase reloadDatabase;
+    Common::Messages::ReloadDatabase reloadDatabase;
     administrationConnection->send(reloadDatabase);
 
 //    connection1->receive<Common::Messages::PlayerShips>();
