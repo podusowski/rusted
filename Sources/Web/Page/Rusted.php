@@ -43,7 +43,7 @@ class Rusted
 
         $insert->execute(array(
             ':type' => "Ship",
-            ':class' => 1,
+            ':class' => 2, // constructor
             ":x" => 100,
             ":y" => 100,
             ":z" => 100,
