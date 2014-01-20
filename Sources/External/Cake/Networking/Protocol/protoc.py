@@ -140,15 +140,15 @@ class CppOutput:
         self.f.write(s)
 
     def __write_serializable(self):
-        s = ""
-        s = s + "struct ISerializable\n"
-        s = s + "{\n"
-        s = s + "\tvirtual void serialize(Cake::Networking::Protocol::IWriteBuffer &) const = 0;\n"
-        s = s + "\tvirtual void unserialize(Cake::Networking::Protocol::IReadBuffer &) = 0;\n"
-        s = s + "\tvirtual void unserialize(const Cake::Serialization::Fc &) = 0;\n"
-        s = s + "\tvirtual std::string toString() const = 0;\n"
-        s = s + "};\n"
-        s = s + "\n"
+        s = (""
+             "struct ISerializable\n"
+             "{\n"
+             "\tvirtual void serialize(Cake::Networking::Protocol::IWriteBuffer &) const = 0;\n"
+             "\tvirtual void unserialize(Cake::Networking::Protocol::IReadBuffer &) = 0;\n"
+             "\tvirtual void unserialize(const Cake::Serialization::Fc &) = 0;\n"
+             "\tvirtual std::string toString() const = 0;\n"
+             "};\n"
+             "\n")
 
         self.f.write(s)
 
