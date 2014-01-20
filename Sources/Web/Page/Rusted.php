@@ -6,16 +6,17 @@ class Rusted
     {
         $this->rusted_directory = "/var/rusted";
         $this->pid_file = "/var/rusted/Server.pid";
+        $this->administration_socket = "/var/rusted/administrator.socket";
         $this->db = new PDO("sqlite:" . $this->rusted_directory . "/database.sqlite3");
         $this->db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    function online()
+    public function online()
     {
         return file_exists($this->pid_file);
     }
 
-    function users_registered()
+    public function users_registered()
     {
         $result = $this->db->query("SELECT count(*) FROM users");
 
@@ -25,7 +26,7 @@ class Rusted
         }
     }
 
-    function register($login, $password)
+    public function register($login, $password)
     {
         $passwordHash = sha1($password);
 
@@ -53,6 +54,15 @@ class Rusted
         ));
 
         $this->db->commit();
+
+        $this->executeTroughAdministration("ReloadDatabase()");
+    }
+
+    private function executeTroughAdministration($command)
+    {
+        $f = popen($this->rusted_directory . "/AdministrationClient " . $this->administration_socket, "w");
+        fwrite($f, $command);
+        pclose($f);
     }
 }
 
