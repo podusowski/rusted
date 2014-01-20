@@ -1,9 +1,0 @@
-PROFILE:=windows-mingw
-
-CC:=i686-w64-mingw32-g++
-AR:=i686-w64-mingw32-ar -r -c -s
-CFLAGS:=-O3 -std=gnu++0x -Wall -pedantic -DNDEBUG
-LDFLAGS2+=-lws2_32
-APPLICATION_SUFFIX:=.exe
-CMAKE_TOOLCHAIN_FILE:=$(shell pwd)/BuildProfiles/toolchain-mingw.cmake
-

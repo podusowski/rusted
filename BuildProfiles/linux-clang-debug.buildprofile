@@ -1,7 +1,0 @@
-PROFILE:=linux-clang-debug
-
-CC:=clang++
-AR:=ar -r -c -s
-CFLAGS:=-g -O0 -std=gnu++0x 
-LDFLAGS:=-lpthread
-
