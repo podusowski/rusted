@@ -27,5 +27,5 @@ set $messages_xml Messages/Messages.xml
 set $protoc "${Cake.__path}/Networking/Protocol/protoc.py"
 set $protoc_command "${protoc} --output ${messages_header} ${messages_xml} --namespace Common::Messages"
 
-target phony CommonMessagesHeader artefacts($messages_header) prerequisites($messages_xml) run_before($protoc_command)
+target phony CommonMessagesHeader artefacts($messages_header) prerequisites($messages_xml $protoc) run_before($protoc_command)
 
