@@ -26,7 +26,7 @@ function __set_permissions()
 {
     __wait_for_file $administration_socket
 
-    echo "setting permissions"
+    echo "setting permissions for group access"
     chmod -v g+w $administration_socket
     chmod -v g+w $database_file
 }
