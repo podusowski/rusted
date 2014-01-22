@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 root_directory=`dirname $0`
 rusted_directory=/var/rusted/
 pid_file=$rusted_directory/Server.pid
