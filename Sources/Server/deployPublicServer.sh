@@ -24,9 +24,29 @@ function __write_log_header()
 
 function __set_permissions()
 {
+    __wait_for_file $administration_socket
+
     echo "setting permissions"
     chmod -v g+w $administration_socket
     chmod -v g+w $database_file
+}
+
+function __wait_for_file()
+{
+    local filename=$1
+
+    echo -n "waiting for $filename to appear..."
+    for i in {1..10}; do
+        echo -n "${i}..."
+        sleep 0.5
+        if [ -e "$filename" ]; then
+            echo done
+            return
+        fi
+    done
+
+    echo fail
+    fail
 }
 
 function stop()
