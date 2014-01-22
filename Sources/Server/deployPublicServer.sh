@@ -74,7 +74,7 @@ function start()
     fi
 
     local server_arguemnts+="--network.port 1987 "
-    local server_arguemnts+="--network.administration_socket_path $administration_socket"
+    local server_arguemnts+="--network.administration_socket_path $administration_socket "
     local server_arguemnts+="--database.url sqlite3://$database_file "
 
     echo "starting Server with arguments: $server_arguemnts"
