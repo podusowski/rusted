@@ -62,7 +62,12 @@ class Rusted
     {
         $f = popen($this->rusted_directory . "/AdministrationClient " . $this->administration_socket, "w");
         fwrite($f, $command);
-        pclose($f);
+        $returncode = pclose($f);
+
+        if ($returncode != 0)
+        {
+            throw new Exception("can't communicate with the server");
+        }
     }
 }
 
