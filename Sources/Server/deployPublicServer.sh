@@ -6,6 +6,7 @@ pid_file=$rusted_directory/Server.pid
 log_file=$rusted_directory/Server.log
 database_file=$rusted_directory/database.sqlite3
 daemon_arguments="-v -d --name=rusted --env=LD_LIBRARY_PATH=$rusted_directory --output=$log_file --pidfile=$pid_file"
+administration_socket=$rusted_directory/administrator.socket
 
 function __copy_files()
 {
@@ -17,6 +18,13 @@ function __copy_files()
 function __write_log_header()
 {
     echo "*** `date` Starting rusted server" >> $log_file
+}
+
+function __set_permissions()
+{
+    echo "setting permissions"
+    chmod -v g+w $administration_socket
+    chmod -v g+w $database_file
 }
 
 function stop()
@@ -66,7 +74,7 @@ function start()
     fi
 
     local server_arguemnts+="--network.port 1987 "
-    local server_arguemnts+="--network.administration_socket_path $rusted_directory/administrator.socket "
+    local server_arguemnts+="--network.administration_socket_path $administration_socket"
     local server_arguemnts+="--database.url sqlite3://$database_file "
 
     echo "starting Server with arguments: $server_arguemnts"
@@ -74,6 +82,8 @@ function start()
     daemon $daemon_arguments -- $rusted_directory/Server $server_arguemnts || echo "error in daemon"
 
     echo "log available in $rusted_directory/Server.log"
+
+    __set_permissions
 }
 
 function status()
