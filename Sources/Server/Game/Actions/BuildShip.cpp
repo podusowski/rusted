@@ -6,8 +6,8 @@
 using namespace Server::Game::Actions;
 
 BuildShip::BuildShip(
-    Common::Game::Universe & universe, 
-    Common::Game::IPlayer & player, 
+    Common::Game::Universe & universe,
+    Common::Game::IPlayer & player,
     Server::Game::IPlayerContainer & playerContainer,
     unsigned shipClass
 ) : 
@@ -34,7 +34,7 @@ Common::Game::TimeValue BuildShip::finish()
 
     Common::Game::Position focusedObjectPosition = focusedShip.getPosition();
     ship.setPosition(focusedObjectPosition);
-    ship.setCourse(focusedObjectPosition + Common::Game::Position(10, 10, 0));
+    ship.setCourse(focusedObjectPosition + Common::Game::Position(5000, 0, 0));
 
     auto connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (auto connection: connections)
