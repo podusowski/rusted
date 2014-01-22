@@ -7,7 +7,7 @@ rusted_directory=/var/rusted/
 pid_file=$rusted_directory/Server.pid
 log_file=$rusted_directory/Server.log
 database_file=$rusted_directory/database.sqlite3
-daemon_arguments="-v -d --name=rusted --env=LD_LIBRARY_PATH=$rusted_directory --output=$log_file --pidfile=$pid_file"
+daemon_arguments="-d --name=rusted --env=LD_LIBRARY_PATH=$rusted_directory --output=$log_file --pidfile=$pid_file"
 administration_socket=$rusted_directory/administrator.socket
 
 function __copy_files()
