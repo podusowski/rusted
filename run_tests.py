@@ -117,7 +117,7 @@ class AsyncExecute(threading.Thread):
 
         for i in xrange(int(self.retries) + 1):
             (returncode, out) = self.__run_once()
-            if returncode == 0 or self.timeout_troggered:
+            if returncode == 0:
                 break
 
         self.result_listener.async_execute_completed(self.token, returncode, out, i, self.timeout_troggered)
