@@ -33,6 +33,7 @@ function stop()
         echo "stopping server"
         kill `cat $pid_file`
         rm $pid_file || true
+        rm $administration_socket || true
         sleep 1
     else
         echo "server is not running"
