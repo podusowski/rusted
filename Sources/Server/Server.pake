@@ -61,5 +61,13 @@ target phony ServerBigDataBase run_before("rm -f ${big_database} ; ${gen_big_dat
 
 append $test_database_prerequisites DataBaseSchema.sql TestDataBase.sql
 set $test_database "${__build}/TestDataBase.sqlite3"
-target phony ServerTestDataBase run_before("rm -f ${test_database}; cat ${test_database_prerequisites} | sqlite3 ${test_database}")
+set $gen_world_objects ./genWorldObjects.py
+set $world_objects_sql "${__build}/WorldObjects.sql"
+target phony ServerTestDataBase \
+    run_before("
+        rm -f ${test_database};
+        cat ${test_database_prerequisites} | sqlite3 ${test_database};
+        ${gen_world_objects} -o ${world_objects_sql};
+        cat ${world_objects_sql} | sqlite3 ${test_database}
+    ")
 

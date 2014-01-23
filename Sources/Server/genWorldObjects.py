@@ -2,6 +2,7 @@
 
 import sys
 import argparse
+import random
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-o", "--output", required=True)
@@ -14,12 +15,12 @@ f.write(
 )
 
 for i in xrange(10000):
-    radius = 10000
+    radius = 1000000
     x = random.randrange(-radius, radius)
     y = random.randrange(-radius, radius)
     z = random.randrange(-radius, radius)
     f.write(
-        'INSERT INTO objects(type, model, x, y, z, integrity, carbon, helium) VALUES("Asteroid", "Asteroid.model", ' + str(x) + ', ' + str(y) + ', ' + str(z) + '100, 10, 10);\n'
+        'INSERT INTO objects(type, model, x, y, z, integrity, carbon, helium) VALUES("Asteroid", "Asteroid.model", ' + str(x) + ', ' + str(y) + ', ' + str(z) + ', 100, 10, 10);\n'
     )
 
 f.write(
