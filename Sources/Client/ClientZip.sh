@@ -1,7 +1,6 @@
 #!/bin/bash
+
 cd $__build
-zip_file=$__build/Client-$__configuration___name.zip
-rm -f $zip_file
 
 files="Contents "
 
@@ -21,5 +20,13 @@ fi
 
 files+="config.cfg "
 
-zip -r $zip_file $files
+zip_file=$__build/Client-$__configuration___name.zip
+echo $zip_file
+
+if [ ! -e "$zip_file" -o `find $files -newer "$zip_file" | wc -l` -gt 0 ]; then
+    rm -f $zip_file
+    zip -r "$zip_file" $files
+else
+    echo $zip_file is up to date
+fi
 
