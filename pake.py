@@ -8,7 +8,7 @@ import subprocess
 import argparse
 import marshal
 import shutil
-
+import threading
 
 """
     utilities
@@ -66,40 +66,53 @@ class Ui:
     BOLD_BLUE = "\033[34;1m"
 
     log_depth = 0
+    lock = threading.Lock()
 
     @staticmethod
     def push():
+        Ui.lock.acquire()
         Ui.log_depth += 1
+        Ui.lock.release()
 
     @staticmethod
     def pop():
+        Ui.lock.acquire()
         Ui.log_depth -= 1
+        Ui.lock.release()
 
     @staticmethod
     def print_depth_prefix():
+        Ui.lock.acquire()
         for i in range(Ui.log_depth):
             sys.stdout.write("    ")
+        Ui.lock.release()
 
     @staticmethod
     def info(message):
+        Ui.lock.acquire()
         print(message)
         sys.stdout.flush()
+        Ui.lock.release()
 
     @staticmethod
     def step(tool, parameter):
+        Ui.lock.acquire()
         if sys.stdout.isatty():
             print(Ui.BOLD + tool + Ui.RESET + " " + parameter)
         else:
             print(tool + " " + parameter)
         sys.stdout.flush()
+        Ui.lock.release()
 
     @staticmethod
     def bigstep(tool, parameter):
+        Ui.lock.acquire()
         if sys.stdout.isatty():
             print(Ui.BOLD_BLUE + tool + Ui.RESET + " " + parameter)
         else:
             print(tool + " " + parameter)
         sys.stdout.flush()
+        Ui.lock.release()
 
     @staticmethod
     def fatal(message):
@@ -124,10 +137,12 @@ class Ui:
 
     @staticmethod
     def debug(s, env = None):
+        Ui.lock.acquire()
         if "DEBUG" in os.environ:
             if env == None or env in os.environ:
                 Ui.print_depth_prefix()
                 print(Ui.GRAY + s + Ui.RESET)
+        Ui.lock.release()
 
 """
     C++ compiler support
@@ -180,7 +195,7 @@ class CxxToolchain:
 
             Ui.bigstep("linking", out_filename)
             try:
-                execute(self.compiler_cmd + " " + self.linker_flags + " -o " + out_filename + " " + " ".join(in_filenames) + " " + self.__libs_arguments(link_with) + " " + parameters)
+                execute(self.compiler_cmd + " " + self.linker_flags + " -o " + out_filename + " " + " ".join(in_filenames) + " " + self.__prepare_linker_flags(link_with) + " " + parameters)
             except Exception as e:
                 Ui.fatal("cannot link " + out_filename + ", reason: " + str(e))
         else:
@@ -239,7 +254,7 @@ class CxxToolchain:
         ret.reverse()
         return ret
 
-    def __libs_arguments(self, link_with):
+    def __prepare_linker_flags(self, link_with):
         ret = "-L " + self.build_dir() + " "
         for lib in link_with:
             ret = ret + " -l" + lib
@@ -276,11 +291,12 @@ class CxxToolchain:
 """
 
 class CommonTargetParameters:
-    def __init__(self, variable_deposit, root_path, module_name, name):
+    def __init__(self, jobs, variable_deposit, root_path, module_name, name):
         assert isinstance(variable_deposit, VariableDeposit)
         assert isinstance(module_name, str)
         assert isinstance(name, str)
 
+        self.jobs = jobs
         self.variable_deposit = variable_deposit
         self.root_path = root_path
         self.module_name = module_name
@@ -454,6 +470,17 @@ class CompileableTarget(Target):
         self.common_parameters = common_parameters
         self.cxx_parameters = cxx_parameters
 
+    def __build_object(self, limit, toolchain, name, object_file, source, include_dirs, compiler_flags):
+        limit.acquire()
+        toolchain.build_object(
+            name,
+            object_file,
+            source,
+            include_dirs,
+            compiler_flags
+        )
+        limit.release()
+
     def build_objects(self, toolchain):
         object_files = []
         evaluated_sources = self.eval(self.cxx_parameters.sources)
@@ -463,10 +490,32 @@ class CompileableTarget(Target):
         Ui.debug("building objects from " + str(evaluated_sources))
         Ui.push()
 
+        threads = []
+        limit_semaphore = threading.Semaphore(self.common_parameters.jobs)
+
         for source in evaluated_sources:
             object_file = toolchain.object_filename(self.common_parameters.name, source)
             object_files.append(object_file)
-            toolchain.build_object(self.common_parameters.name, object_file, source, evaluated_include_dirs, evaluated_compiler_flags)
+
+            thread = threading.Thread(
+                target=self.__build_object,
+                args=(
+                    limit_semaphore,
+                    toolchain,
+                    self.common_parameters.name,
+                    object_file,
+                    source,
+                    evaluated_include_dirs,
+                    evaluated_compiler_flags
+                )
+            )
+
+            threads.append(thread)
+            thread.daemon = True
+            thread.start()
+
+        for thread in threads:
+            thread.join()
 
         Ui.pop()
 
@@ -699,13 +748,14 @@ class Configuration:
         return self.name
 
 class Module:
-    def __init__(self, variable_deposit, configuration_deposit, target_deposit, filename):
+    def __init__(self, jobs, variable_deposit, configuration_deposit, target_deposit, filename):
         assert isinstance(variable_deposit, VariableDeposit)
         assert isinstance(filename, str)
 
         Ui.debug("parsing " + filename)
         Ui.push()
 
+        self.jobs = jobs
         self.variable_deposit = variable_deposit
         self.configuration_deposit = configuration_deposit
         self.target_deposit = target_deposit
@@ -855,6 +905,7 @@ class Module:
         library_dirs = []
 
         common_parameters = CommonTargetParameters(
+            self.jobs,
             self.variable_deposit,
             os.path.dirname(self.filename),
             self.name,
@@ -880,6 +931,7 @@ class Module:
 
     def __parse_static_library(self, target_name, it):
         common_parameters = CommonTargetParameters(
+            self.jobs,
             self.variable_deposit,
             os.path.dirname(self.filename),
             self.name,
@@ -903,6 +955,7 @@ class Module:
 
     def __parse_phony(self, target_name, it):
         common_parameters = CommonTargetParameters(
+            self.jobs,
             self.variable_deposit,
             os.path.dirname(self.filename),
             self.name,
@@ -1275,7 +1328,8 @@ class SourceTree:
 
 
 class SourceTreeParser:
-    def __init__(self, source_tree, variable_deposit, configuration_deposit, target_deposit):
+    def __init__(self, jobs, source_tree, variable_deposit, configuration_deposit, target_deposit):
+        self.jobs = jobs
         self.variable_deposit = variable_deposit
         self.configuration_deposit = configuration_deposit
         self.target_deposit = target_deposit
@@ -1283,6 +1337,7 @@ class SourceTreeParser:
 
         for filename in source_tree.files:
             module = Module(
+                self.jobs,
                 self.variable_deposit,
                 self.configuration_deposit,
                 self.target_deposit,
@@ -1299,6 +1354,7 @@ def main():
     parser.add_argument('target', metavar='target', nargs="*", help='targets to be built')
     parser.add_argument('-a', '--all',  action="store_true", help='build all targets')
     parser.add_argument('-c', action='store', dest='configuration', default="__default", nargs="?", help='configuration to be used')
+    parser.add_argument('-j', action='store', dest='jobs', default="1", nargs="?", help='parallel jobs to be used')
     args = parser.parse_args()
     Ui.debug(str(args))
 
@@ -1306,7 +1362,7 @@ def main():
     variable_deposit = VariableDeposit()
     configuration_deposit = ConfigurationDeposit(args.configuration)
     target_deposit = TargetDeposit(variable_deposit, configuration_deposit, source_tree)
-    parser = SourceTreeParser(source_tree, variable_deposit, configuration_deposit, target_deposit)
+    parser = SourceTreeParser(int(args.jobs), source_tree, variable_deposit, configuration_deposit, target_deposit)
 
     Ui.bigstep("configuration", str(configuration_deposit.get_selected_configuration()))
 
