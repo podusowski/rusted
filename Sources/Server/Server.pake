@@ -19,6 +19,7 @@ append $sources Game/Actions/Gather.cpp
 append $sources Game/Actions/Transfer.cpp
 append $sources Game/Actions/ActionFactory.cpp
 append $sources Game/Actions/ActionPerformer.cpp
+append $sources Game/ObjectVisibilityUpdater.cpp
 append $sources DataBase/SociSessionFactory.cpp
 
 append $libraries Common
@@ -48,6 +49,7 @@ append $sources_ut Game/Actions/UnitTests/AttackTest.cpp
 append $sources_ut Game/Actions/UnitTests/BuildShipTest.cpp
 append $sources_ut Game/Actions/UnitTests/ActionFactoryTest.cpp
 append $sources_ut Game/Actions/UnitTests/ActionPerformerTest.cpp
+append $sources_ut Game/UnitTests/ObjectVisibilityUpdaterTest.cpp
 
 target application ServerUT sources($sources $sources_ut) link_with($libraries gtest) include_dirs($include_dirs) depends_on($dependencies gtest)
 
@@ -57,13 +59,18 @@ set $gen_big_database ./genBigDataBase.py
 set $big_database "${__build}/BigDataBase.sqlite3"
 set $big_database_sql "${__build}/BigDataBase.sql"
 set $big_database_prerequisites DataBaseSchema.sql $big_database_sql
-target phony ServerBigDataBase run_before("rm -f ${big_database} ; ${gen_big_database} -o ${big_database_sql}; cat ${big_database_prerequisites} | sqlite3 ${big_database}")
+target phony ServerBigDataBase \
+    artefacts($big_database) \
+    prerequisites($gen_big_database $big_database_prerequisites) \
+    run_before("rm -f ${big_database} ; ${gen_big_database} -o ${big_database_sql}; cat ${big_database_prerequisites} | sqlite3 ${big_database}")
 
 append $test_database_prerequisites DataBaseSchema.sql TestDataBase.sql
 set $test_database "${__build}/TestDataBase.sqlite3"
 set $gen_world_objects ./genWorldObjects.py
 set $world_objects_sql "${__build}/WorldObjects.sql"
 target phony ServerTestDataBase \
+    artefacts($test_database) \
+    prerequisites($gen_world_objects $test_database_prerequisites) \
     run_before("
         rm -f ${test_database};
         cat ${test_database_prerequisites} | sqlite3 ${test_database};
