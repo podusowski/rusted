@@ -8,7 +8,7 @@
 #include "InstanceFactory.hpp"
 #include "Detail/Exception.hpp"
 
-namespace Cake 
+namespace Cake
 {
 namespace DependencyInjection
 {
@@ -36,7 +36,7 @@ namespace Detail
     };
 }
 
-class IInterface 
+class IInterface
 {
 public:
     virtual const std::type_info & get_interface() = 0;
@@ -86,7 +86,7 @@ public:
         return m_factory;
     }
 
-    std::shared_ptr<Detail::CycleGuard> create_cycle_guard()
+    std::shared_ptr<Detail::CycleGuard> createCycleGuard()
     {
         return std::shared_ptr<Detail::CycleGuard>(new Detail::CycleGuard(m_cycle_counter, typeid(InterfaceType)));
     }

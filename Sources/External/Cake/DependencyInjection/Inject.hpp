@@ -16,60 +16,61 @@ template<typename InterfaceType, typename Arg1 = Detail::NullType> class Inject
 public:
     Inject()
     {
-        std::shared_ptr<Detail::CycleGuard> g = create_cycle_guard();
-        _object = find_factory<Factory<InterfaceType> >().create();
+        std::shared_ptr<Detail::CycleGuard> g = createCycleGuard();
+        m_object = factory<Factory<InterfaceType> >().create();
     }
 
     Inject(Arg1 arg1)
     {
-        std::shared_ptr<Detail::CycleGuard> g = create_cycle_guard();
-        _object = find_factory<Factory<InterfaceType, Arg1> >().create(arg1);
+        std::shared_ptr<Detail::CycleGuard> g = createCycleGuard();
+        m_object = factory<Factory<InterfaceType, Arg1> >().create(arg1);
     }
 
     InterfaceType * operator->()
     {
-        return _object.get();
+        return m_object.get();
     }
 
     const InterfaceType * operator->() const
     {
-        return _object.get();
+        return m_object.get();
     }
 
     InterfaceType & operator*()
     {
-        return *_object;
+        return *m_object;
     }
 
 private:
-    Interface<InterfaceType> & find_interface()
+    Interface<InterfaceType> & interface()
     {
-        return Registry::instance().find_interface<InterfaceType>();
+        return GlobalRegistry::instance().findInterface<InterfaceType>();
     }
 
-    std::shared_ptr<Detail::CycleGuard> create_cycle_guard()
+    std::shared_ptr<Detail::CycleGuard> createCycleGuard()
     {
-        return find_interface().create_cycle_guard();
+        return interface().createCycleGuard();
     }
 
-    template<typename Factory> Factory & find_factory()
+    template<typename Factory> Factory & factory()
     {
-        Interface<InterfaceType> & iface = Registry::instance().find_interface<InterfaceType>();
+        Interface<InterfaceType> & iface = GlobalRegistry::instance().findInterface<InterfaceType>();
+
         try
         {
             Factory & factory = dynamic_cast<Factory&>(*iface.get_factory());
             return factory;
         }
-        catch (std::bad_cast &)
+        catch (const std::bad_cast &)
         {
             CAKE_DEPENDENCY_INJECTION_EXCEPTION(what << "inject declaration mismatch: inject type: " 
-                                 << CAKE_DEPENDENCY_INJECTION_TYPENAME(*this) 
-                                 << ", registered factory: " 
-                                 << iface.get_factory()->describe());
+                                                     << CAKE_DEPENDENCY_INJECTION_TYPENAME(*this) 
+                                                     << ", registered factory: " 
+                                                     << iface.get_factory()->describe());
         }
     }
 
-    std::shared_ptr<InterfaceType> _object;
+    std::shared_ptr<InterfaceType> m_object;
 };
 
 }

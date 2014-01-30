@@ -10,17 +10,17 @@
 #include "Detail/Log.hpp"
 #include "Detail/Exception.hpp"
 
-namespace Cake 
+namespace Cake
 {
 namespace DependencyInjection
 {
 
-class Registry : public Detail::Singleton<Registry>
+class GlobalRegistry : public Detail::Singleton<GlobalRegistry>
 {
 public:
-    template<typename InterfaceType> Interface<InterfaceType> & create_interface()
+    template<typename InterfaceType> Interface<InterfaceType> & createInterface()
     {
-        interface_map::iterator it = m_interfaces.find(&typeid(InterfaceType));
+        const auto it = m_interfaces.find(&typeid(InterfaceType));
         if (it == m_interfaces.end())
         {
             std::shared_ptr<IInterface> i(new Interface<InterfaceType>());
@@ -33,9 +33,9 @@ public:
         }
     }
 
-    template<typename InterfaceType> Interface<InterfaceType> & find_interface()
+    template<typename InterfaceType> Interface<InterfaceType> & findInterface()
     {
-        interface_map::iterator it = m_interfaces.find(&typeid(InterfaceType)); 
+        const auto it = m_interfaces.find(&typeid(InterfaceType));
         if (it == m_interfaces.end())
         {
             CAKE_DEPENDENCY_INJECTION_EXCEPTION(what << "can't inject " << CAKE_DEPENDENCY_INJECTION_TYPENAME(InterfaceType) << " because no such object is registered");
@@ -49,14 +49,12 @@ public:
     }
 
 private:
-    typedef std::map<const std::type_info *, std::shared_ptr<IInterface> > interface_map;
-
-    interface_map m_interfaces;
+    std::map<const std::type_info *, std::shared_ptr<IInterface> > m_interfaces;
 };
 
 template<typename InterfaceType> Interface<InterfaceType> & forInterface()
 {
-    return Registry::instance().create_interface<InterfaceType>();
+    return GlobalRegistry::instance().createInterface<InterfaceType>();
 }
 
 template<typename InterfaceType, typename Implementation> void use()
@@ -66,7 +64,7 @@ template<typename InterfaceType, typename Implementation> void use()
 
 inline void clear()
 {
-    Registry::instance().clear();
+    GlobalRegistry::instance().clear();
 }
 
 }
