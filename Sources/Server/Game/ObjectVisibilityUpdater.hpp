@@ -10,6 +10,7 @@ namespace Game
 class ObjectVisibilityUpdater
 {
 public:
+    void sendVisibleObjects(const Common::Game::Position &);
 };
 
 }
