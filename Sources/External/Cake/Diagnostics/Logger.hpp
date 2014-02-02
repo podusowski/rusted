@@ -5,7 +5,6 @@
 
 #include "LogMessage.hpp"
 #include "ILogStream.hpp"
-#include "Cake/DependencyInjection/Inject.hpp"
 #include "Cake/Configuration/Configuration.hpp"
 #include "Cake/Threading/Mutex.hpp"
 
