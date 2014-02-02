@@ -72,6 +72,15 @@ configuration linux64 \
            $global_settings.linux_misc_libraries:$misc_libraries \
            $global_settings.linux_resources:$resources)
 
+configuration clang \
+    compiler(clang++) \
+    compiler_flags($global_settings.generic_compiler_flags $global_settings.debug_compiler_flags) \
+    export($__null:$socket_libraries \
+           $__null:$cmake_flags \
+           $global_settings.linux_graphic_libraries:$graphic_libraries \
+           $global_settings.linux_misc_libraries:$misc_libraries \
+           $global_settings.linux_resources:$resources)
+
 configuration __default \
     compiler_flags($global_settings.generic_compiler_flags $global_settings.debug_compiler_flags) \
     export($__null:$socket_libraries \
