@@ -25,10 +25,10 @@ void initDependencies(int argc, const char * argv[])
     forInterface<Common::Game::IRustedTime>().use(std::make_shared<Common::Game::RustedTime>());
 
     forInterface<Common::Game::Object::IFlightTrajectory>()
-        .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
+        .useFactory<GenericFactory<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
 
     forInterface<Common::Math::ISpline3>()
-        .useFactory<GenericFactory0<Common::Math::ISpline3, Common::Math::Bezier3>>();
+        .useFactory<GenericFactory<Common::Math::ISpline3, Common::Math::Bezier3>>();
 
     std::shared_ptr<IFactory> sociSessionFactory(new Server::DataBase::SociSessionFactory);
     forInterface<soci::session>()

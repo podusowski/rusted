@@ -20,7 +20,7 @@ class GlobalRegistry : public Detail::Singleton<GlobalRegistry>
 public:
     template<typename InterfaceType> Interface<InterfaceType> & createInterface()
     {
-        static_assert(std::is_polymorphic<InterfaceType>::value, "interface must be polymorphic");
+        //static_assert(std::is_polymorphic<InterfaceType>::value, "interface must be polymorphic");
 
         const auto it = m_interfaces.find(&typeid(InterfaceType));
         if (it == m_interfaces.end())
