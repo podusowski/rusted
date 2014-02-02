@@ -2,18 +2,17 @@
 
 #include <memory>
 
-#include "Factory.hpp"
+#include "AbstractFactory.hpp"
 
 namespace Cake 
 {
 namespace DependencyInjection
 {
 
-template<typename Interface>
-class instance_factory : public Factory<Interface>
+template<typename Interface> class InstanceFactory : public AbstractFactory<Interface>
 {
 public:
-    instance_factory(std::shared_ptr<Interface> instance) :
+    InstanceFactory(std::shared_ptr<Interface> instance) :
         m_instance(instance)
     {
     }

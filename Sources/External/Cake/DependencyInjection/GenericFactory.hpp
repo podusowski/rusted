@@ -2,31 +2,19 @@
 
 #include <memory>
 
-#include "Detail/NullType.hpp"
-#include "Factory.hpp"
+#include "AbstractFactory.hpp"
 
 namespace Cake
 {
 namespace DependencyInjection
 {
 
-template<typename Interface, typename Implementation>
-class GenericFactory0 : public Factory<Interface>
+template<typename Interface, typename Implementation, typename... Args> class GenericFactory : public AbstractFactory<Interface, Args...>
 {
 public:
-    virtual std::shared_ptr<Interface> create()
+    std::shared_ptr<Interface> create(Args... args)
     {
-        return std::shared_ptr<Interface>(new Implementation());
-    }
-};
-
-template<typename Interface, typename Implementation, typename Arg1>
-class GenericFactory1 : public Factory<Interface, Arg1>
-{
-public:
-    virtual std::shared_ptr<Interface> create(Arg1 arg1)
-    {
-        return std::shared_ptr<Interface>(new Implementation(arg1));
+        return std::make_shared<Implementation>(args...);
     }
 };
 

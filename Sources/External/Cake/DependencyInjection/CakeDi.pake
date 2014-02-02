@@ -1,0 +1,10 @@
+append $sources "${gtest.__path}/mainUT.cpp"
+append $sources "UnitTests/DependencyInjectionTest.cpp"
+# append $sources "UnitTests/ProfileTest.cpp"
+
+append $include_dirs "${__path}"
+append $include_dirs "${__path}/.."
+append $include_dirs "${gtest.__path}"
+
+target application CakeDiUT sources($sources) include_dirs($include_dirs) link_with(gtest pthread)
+

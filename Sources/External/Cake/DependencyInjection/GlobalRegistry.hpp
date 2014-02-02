@@ -20,12 +20,14 @@ class GlobalRegistry : public Detail::Singleton<GlobalRegistry>
 public:
     template<typename InterfaceType> Interface<InterfaceType> & createInterface()
     {
+        static_assert(std::is_polymorphic<InterfaceType>::value, "interface must be polymorphic");
+
         const auto it = m_interfaces.find(&typeid(InterfaceType));
         if (it == m_interfaces.end())
         {
-            std::shared_ptr<IInterface> i(new Interface<InterfaceType>());
-            m_interfaces.insert(std::make_pair(&typeid(InterfaceType), i));
-            return dynamic_cast<Interface<InterfaceType>&>(*i);
+            auto interface = std::make_shared<Interface<InterfaceType>>();
+            m_interfaces.insert(std::make_pair(&typeid(InterfaceType), interface));
+            return *interface;
         }
         else
         {
@@ -33,13 +35,14 @@ public:
         }
     }
 
-    template<typename InterfaceType> Interface<InterfaceType> & findInterface()
+    template<typename InterfaceType> Interface<InterfaceType> & findInterface() const
     {
         const auto it = m_interfaces.find(&typeid(InterfaceType));
         if (it == m_interfaces.end())
         {
             CAKE_DEPENDENCY_INJECTION_EXCEPTION(what << "can't inject " << CAKE_DEPENDENCY_INJECTION_TYPENAME(InterfaceType) << " because no such object is registered");
         }
+        // TODO: do we really need dynamic_cast here?
         return dynamic_cast<Interface<InterfaceType>&>(*it->second);
     }
 
@@ -59,7 +62,7 @@ template<typename InterfaceType> Interface<InterfaceType> & forInterface()
 
 template<typename InterfaceType, typename Implementation> void use()
 {
-    forInterface<InterfaceType>().use<Implementation>();
+    forInterface<InterfaceType>().template use<Implementation>();
 }
 
 inline void clear()
