@@ -25,9 +25,9 @@ public:
         const auto it = m_interfaces.find(&typeid(InterfaceType));
         if (it == m_interfaces.end())
         {
-            auto interface = std::make_shared<Interface<InterfaceType>>();
-            m_interfaces.insert(std::make_pair(&typeid(InterfaceType), interface));
-            return *interface;
+            auto i = std::make_shared<Interface<InterfaceType>>();
+            m_interfaces.insert(std::make_pair(&typeid(InterfaceType), i));
+            return *i;
         }
         else
         {

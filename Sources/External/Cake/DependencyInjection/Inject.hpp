@@ -47,18 +47,18 @@ private:
 
     template<typename FactoryType> FactoryType & findFactory() const
     {
-        auto & interface = findInterface();
+        auto & i = findInterface();
 
         try
         {
-            return dynamic_cast<FactoryType&>(*interface.getFactory());
+            return dynamic_cast<FactoryType&>(*i.getFactory());
         }
         catch (const std::bad_cast &)
         {
             CAKE_DEPENDENCY_INJECTION_EXCEPTION(what << "inject declaration mismatch: inject type: "
                                                      << CAKE_DEPENDENCY_INJECTION_TYPENAME(*this)
                                                      << ", registered factory: "
-                                                     << interface.getFactory()->describe());
+                                                     << i.getFactory()->describe());
         }
     }
 
