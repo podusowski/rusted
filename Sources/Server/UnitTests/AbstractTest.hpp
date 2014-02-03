@@ -26,7 +26,7 @@ public:
         Cake::DependencyInjection::forInterface<Common::Game::IRustedTime>().use(m_time);
 
         forInterface<Common::Game::Object::IFlightTrajectory>()
-            .useFactory<GenericFactory0<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
+            .useFactory<GenericFactory<Common::Game::Object::IFlightTrajectory, Common::Game::Object::FlightTrajectory> >();
 
         m_universeDataBaseFacade = std::shared_ptr<Server::Game::IUniverseDataBaseFacade>(new Server::Game::UniverseDataBaseFacadeMock);
         forInterface<Server::Game::IUniverseDataBaseFacade>().use(m_universeDataBaseFacade);

@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Cake/DependencyInjection/Inject.hpp"
+
 #include "Common/Game/Position.hpp"
 #include "Common/Game/IRustedTime.hpp"
 #include "Common/Game/TimeValue.hpp"
