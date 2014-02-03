@@ -4,10 +4,11 @@ Rusted is build by pake build system. To compile all just type:
 
 `./pake.py -a`
 
+to build all targets for the __default configuration which is pretty much linux debug
 
 # TESTING
 
-run_tests.py runs everything which is an automated test.
+`./run_tests.py` runs everything which is an automated test.
 
 # DEPENDENCIES
 
