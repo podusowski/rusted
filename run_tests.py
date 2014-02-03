@@ -10,13 +10,22 @@ import signal
 import argparse
 
 class Ui:
-    RESET = '\033[0m'
-    BOLD = '\033[1m'
-    GRAY = '\033[90m'
-    RED = '\033[31m'
-    BOLD_RED = '\033[1;31m'
-    BOLD_GREEN = "\033[1;32m"
-    BOLD_BLUE = "\033[34;1m"
+    if sys.stdout.isatty():
+        RESET = '\033[0m'
+        BOLD = '\033[1m'
+        GRAY = '\033[90m'
+        RED = '\033[31m'
+        BOLD_RED = '\033[1;31m'
+        BOLD_GREEN = "\033[1;32m"
+        BOLD_BLUE = "\033[34;1m"
+    else:
+        RESET = ''
+        BOLD = ''
+        GRAY = ''
+        RED = ''
+        BOLD_RED = ''
+        BOLD_GREEN = ''
+        BOLD_BLUE = ''
 
     @staticmethod
     def step(tool, parameter):
