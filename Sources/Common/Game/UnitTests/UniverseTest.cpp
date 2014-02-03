@@ -7,11 +7,14 @@
 #include "Common/UnitTests/AbstractTest.hpp"
 
 #include "Game/Object/Ship.hpp"
+#include "Game/Object/UnitTests/ShipMock.hpp"
 #include "Game/Object/Asteroid.hpp"
-#include "Game/Universe.hpp"
 #include "Game/Object/FlightTrajectory.hpp"
 
+#include "Game/Universe.hpp"
+
 using namespace testing;
+using namespace Common::Game;
 
 class UniverseTest : public Common::AbstractTest
 {
@@ -191,3 +194,40 @@ TEST_F(UniverseTest, IsOwnedBy)
     EXPECT_FALSE(universe.isOwnedBy(3, 1)); // not a ship
 }
 
+struct ObjectsInProximityCallbackMock
+{
+    MOCK_METHOD1(call, void(Object::ObjectBase &));
+
+    void operator()(Object::ObjectBase & o)
+    {
+        call(o);
+    }
+};
+
+TEST_F(UniverseTest, ObjectsInProximity)
+{
+    const Position CENTER{ 0, 0, 0 };
+
+    Universe universe;
+
+    auto ship1 = std::make_shared<Common::Game::Object::ShipMock>();
+    EXPECT_CALL(*ship1, getPosition()).WillOnce(Return(Position(0, 0, 0)));
+    EXPECT_CALL(*ship1, getId()).Times(AtLeast(1)).WillRepeatedly(Return(1));
+    universe.add(ship1);
+
+    auto ship2 = std::make_shared<Common::Game::Object::ShipMock>();
+    EXPECT_CALL(*ship2, getPosition()).WillOnce(Return(Position(0, 100, 0)));
+    EXPECT_CALL(*ship2, getId()).Times(AtLeast(1)).WillRepeatedly(Return(2));
+    universe.add(ship2);
+
+    auto ship3 = std::make_shared<Common::Game::Object::ShipMock>();
+    EXPECT_CALL(*ship3, getPosition()).WillOnce(Return(Position(0, 1000, 0)));
+    EXPECT_CALL(*ship3, getId()).Times(AtLeast(1)).WillRepeatedly(Return(3));
+    universe.add(ship3);
+
+    ObjectsInProximityCallbackMock callbackMock;
+    EXPECT_CALL(callbackMock, call(Ref(*ship1)));
+    EXPECT_CALL(callbackMock, call(Ref(*ship2)));
+
+    universe.objectsInProximity(CENTER, 500, std::ref(callbackMock));
+}

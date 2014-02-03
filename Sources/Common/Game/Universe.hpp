@@ -1,7 +1,6 @@
 #pragma once
 
 #include <vector>
-#include <boost/shared_ptr.hpp>
 #include <boost/function.hpp>
 
 #include "Cake/Diagnostics/Logger.hpp"
@@ -98,6 +97,8 @@ public:
     }
 
     void addObjectAddedCallback(ObjectAddedCallback);
+
+    void objectsInProximity(Position center, int radius, std::function<void(Object::ObjectBase &)>);
 
 private:
     std::map<unsigned, std::shared_ptr<Object::ObjectBase> > m_objects;

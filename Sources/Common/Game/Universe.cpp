@@ -66,7 +66,18 @@ bool Universe::isOwnedBy(unsigned objectId, unsigned ownerId)
 
 void Universe::addObjectAddedCallback(ObjectAddedCallback callback)
 {
-    LOG_DEBUG << "Adding ObjectAddedCallback: " << callback;
-
+    // TODO: use boost::signals2 for thread safety
     m_objectAddedCallbacks.push_back(callback);
+}
+
+void Universe::objectsInProximity(Position center, int radius, std::function<void(Object::ObjectBase &)> callback)
+{
+    for (auto pair: m_objects)
+    {
+        auto & object = pair.second;
+        if (Position::distance(center, object->getPosition()) < radius)
+        {
+            callback(*object);
+        }
+    }
 }
