@@ -86,7 +86,7 @@ Server::Network::IConnection & PlayerContainer::getConnectionById(int playerId)
     throw std::out_of_range("player doesn't exist");
 }
 
-void PlayerContainer::invokeOnPlayer(int id, std::function<void(Common::Game::Player &, Network::IConnection &)> function)
+void PlayerContainer::invokeOnPlayer(int id, std::function<void(Common::Game::IPlayer &, Network::IConnection &)> function)
 {
     Cake::Threading::ScopedLock lock(m_mutex);
     for (auto & i: m_connectionMap)
@@ -100,7 +100,7 @@ void PlayerContainer::invokeOnPlayer(int id, std::function<void(Common::Game::Pl
     throw std::out_of_range("player doesn't exist");
 }
 
-void PlayerContainer::invokeOnAllPlayers(std::function<void(Common::Game::Player &, Network::IConnection &)> function)
+void PlayerContainer::invokeOnAllPlayers(std::function<void(Common::Game::IPlayer &, Network::IConnection &)> function)
 {
     Cake::Threading::ScopedLock lock(m_mutex);
     for (auto & i: m_connectionMap)

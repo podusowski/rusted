@@ -19,13 +19,17 @@ EntityService::EntityService(
 
 void EntityService::handle(const Common::Messages::ChangeShipCourse & changeCourseReq, Network::IConnection & connection)
 {
+    // TODO: thread safety
     Common::Game::Object::Ship & ship = m_universe.getById<Common::Game::Object::Ship>(changeCourseReq.shipId);
 
-    Common::Game::Position destination(changeCourseReq.x,
-                                       changeCourseReq.y,
-                                       changeCourseReq.z);
+    const Common::Game::Position destination(
+        changeCourseReq.x,
+        changeCourseReq.y,
+        changeCourseReq.z);
+
     ship.setCourse(destination);
 
+    // TODO: thread safety
     std::vector<Network::IConnection *> connections = m_playerContainer.getAllConnections(Common::Game::PLAYER_STATE_AUTHORIZED);
     for (std::vector<Network::IConnection *>::iterator it = connections.begin(); it != connections.end(); it++)
     {
@@ -68,7 +72,9 @@ void EntityService::handle(const Common::Messages::FocusObject & focusObject, Ne
 
 void EntityService::handle(const Common::Messages::FetchAvailableActions &, Network::IConnection & connection)
 {
+    // TODO: thread safety
     auto & player = m_playerContainer.getBy(connection);
+
     auto & object = dynamic_cast<Common::Game::Object::Ship&>(player.getFocusedObject());
     auto & shipClass = m_shipClassContainer->getById(object.getClass());
     auto actions = shipClass.getAvailableActions();

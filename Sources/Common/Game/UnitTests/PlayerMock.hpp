@@ -4,9 +4,9 @@
 
 #include "Common/Game/IPlayer.hpp"
 
-namespace Common 
+namespace Common
 {
-namespace Game 
+namespace Game
 {
 
 class PlayerMock : public IPlayer

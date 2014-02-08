@@ -18,7 +18,7 @@ void AdministrationService::handle(const Common::Messages::ReloadDatabase &, Net
 
     m_universeDataBaseFacade->loadObjects();
 
-    m_playerContainer.invokeOnAllPlayers([&](Common::Game::Player &, Network::IConnection & connection)
+    m_playerContainer.invokeOnAllPlayers([&](Common::Game::IPlayer &, Network::IConnection & connection)
     {
         m_utils.sendVisibleObjects(*m_universe, connection);
     });
