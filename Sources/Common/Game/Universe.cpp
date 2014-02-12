@@ -87,7 +87,9 @@ void Universe::objectsOwnedByPlayer(int playerId, std::function<void(Object::Obj
     for (const auto pair: m_objects)
     {
         const auto & object = pair.second;
-        if (object->is<Object::OwnedObjectBase>() && dynamic_cast<Object::OwnedObjectBase&>(*object).getOwnerId() == playerId)
+
+        if (object->is<Object::OwnedObjectBase>()
+            && dynamic_cast<Object::OwnedObjectBase&>(*object).getOwnerId() == playerId)
         {
             callback(*object);
         }

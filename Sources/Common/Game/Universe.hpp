@@ -24,6 +24,7 @@ public:
     bool has(unsigned id);
     bool isOwnedBy(unsigned objectId, unsigned ownerId);
 
+    // TODO: deprecated
     template<class ObjectType> ObjectType & getById(unsigned id)
     {
         std::map<unsigned, std::shared_ptr<Object::ObjectBase> >::iterator it = m_objects.find(id);
@@ -49,6 +50,7 @@ public:
         }
     }
 
+    // TODO: deprecated
     template<class ObjectType> std::vector<std::shared_ptr<Object::ObjectBase> > getByOwnerId(unsigned id)
     {
         std::vector<std::shared_ptr<Object::ObjectBase> > ret;
@@ -66,6 +68,7 @@ public:
         return ret;
     }
 
+    // TODO: deprecated
     template<class ObjectType> std::vector<std::shared_ptr<Object::ObjectBase> > get()
     {
         std::vector<std::shared_ptr<Object::ObjectBase> > ret;
@@ -82,6 +85,7 @@ public:
         return ret;
     }
 
+    // TODO: deprecated
     Objects getAll()
     {
         Objects ret;
