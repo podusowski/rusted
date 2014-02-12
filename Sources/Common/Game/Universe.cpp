@@ -81,3 +81,16 @@ void Universe::objectsInProximity(Position center, int radius, std::function<voi
         }
     }
 }
+
+void Universe::objectsOwnedByPlayer(int playerId, std::function<void(Object::ObjectBase &)> callback)
+{
+    for (const auto pair: m_objects)
+    {
+        const auto & object = pair.second;
+        if (object->is<Object::OwnedObjectBase>() && dynamic_cast<Object::OwnedObjectBase&>(*object).getOwnerId() == playerId)
+        {
+            callback(*object);
+        }
+    }
+}
+

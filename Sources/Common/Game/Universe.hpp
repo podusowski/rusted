@@ -99,6 +99,7 @@ public:
     void addObjectAddedCallback(ObjectAddedCallback);
 
     void objectsInProximity(Position center, int radius, std::function<void(Object::ObjectBase &)>);
+    void objectsOwnedByPlayer(int playerId, std::function<void(Object::ObjectBase &)>);
 
 private:
     std::map<unsigned, std::shared_ptr<Object::ObjectBase> > m_objects;

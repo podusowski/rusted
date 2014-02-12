@@ -141,6 +141,7 @@ TEST_F(UniverseTest, DoubleInsert)
     EXPECT_ANY_THROW(universe.add(obj2));
 }
 
+// TODO: deprecated
 TEST_F(UniverseTest, GetByOwnerId)
 {
     Common::Game::Universe universe;
@@ -194,7 +195,7 @@ TEST_F(UniverseTest, IsOwnedBy)
     EXPECT_FALSE(universe.isOwnedBy(3, 1)); // not a ship
 }
 
-struct ObjectsInProximityCallbackMock
+struct ObjectsVisitorCallbackMock
 {
     MOCK_METHOD1(call, void(Object::ObjectBase &));
 
@@ -225,9 +226,31 @@ TEST_F(UniverseTest, ObjectsInProximity)
     EXPECT_CALL(*ship3, getId()).Times(AtLeast(1)).WillRepeatedly(Return(3));
     universe.add(ship3);
 
-    ObjectsInProximityCallbackMock callbackMock;
+    ObjectsVisitorCallbackMock callbackMock;
     EXPECT_CALL(callbackMock, call(Ref(*ship1)));
     EXPECT_CALL(callbackMock, call(Ref(*ship2)));
 
     universe.objectsInProximity(CENTER, 500, std::ref(callbackMock));
 }
+
+TEST_F(UniverseTest, ObjectOwnedByPlayer)
+{
+    const int PLAYER_ID = 2;
+
+    Common::Game::Universe universe;
+
+    auto ship = std::make_shared<Common::Game::Object::Ship>();
+    ship->setId(1);
+    ship->setOwnerId(PLAYER_ID);
+    universe.add(ship);
+
+    auto staticObject = std::make_shared<Common::Game::Object::Asteroid>();
+    staticObject->setId(2);
+    universe.add(staticObject);
+
+    StrictMock<ObjectsVisitorCallbackMock> callbackMock;
+    EXPECT_CALL(callbackMock, call(Ref(*ship)));
+
+    universe.objectsOwnedByPlayer(PLAYER_ID, std::ref(callbackMock));
+}
+
