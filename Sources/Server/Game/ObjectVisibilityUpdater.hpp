@@ -14,6 +14,7 @@ class ObjectVisibilityUpdater
 {
 public:
     void sendVisibleObjects(const Common::Game::Position &);
+    void sendVisibleObjectsByPlayer(unsigned playerId);
 
 private:
     Cake::DependencyInjection::Inject<Common::Game::Universe> m_universe;

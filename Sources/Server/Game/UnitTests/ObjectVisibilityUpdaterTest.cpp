@@ -58,6 +58,28 @@ TEST_F(ObjectVisibilityUpdaterTest, OneShip)
     updater.sendVisibleObjects(POSITION);
 }
 
+TEST_F(ObjectVisibilityUpdaterTest, ObjectsVisibleByPlayer)
+{
+    Common::Game::PlayerMock playerMock;
+    Server::Network::ConnectionMock connectionMock;
+
+    auto ship1Mock = std::make_shared<Common::Game::Object::ShipMock>();
+    EXPECT_CALL(*ship1Mock, getId()).Times(AtLeast(1)).WillRepeatedly(Return(1));
+    universe->add(ship1Mock);
+
+    auto ship2Mock = std::make_shared<Common::Game::Object::ShipMock>();
+    EXPECT_CALL(*ship1Mock, getId()).Times(AtLeast(1)).WillRepeatedly(Return(2));
+    universe->add(ship1Mock);
+
+    EXPECT_CALL(*playerContainerMock, invokeOnPlayer(PLAYER_ID, _)).WillOnce(InvokeArgument<1>(std::ref(playerMock), std::ref(connectionMock)));
+
+    Common::Messages::VisibleObjects expectedVisibleObjects;
+    EXPECT_CALL(connectionMock, send(_));
+
+    ObjectVisibilityUpdater updater;
+    updater.sendVisibleObjectsByPlayer(PLAYER_ID);
+}
+
 }
 }
 }
