@@ -569,13 +569,18 @@ class MessageGenerator:
     def __generate_to_string_method(self):
         s = "std::stringstream ss;\n"
 
-        s += 'ss << "' + self.message.id + ' (";\n'
+        s += 'ss << "' + self.message.id + ' ( ";\n'
 
         for param in self.message.params:
             s += 'ss << "' + param.name + ':" << ' + param.name + ' << " ";\n'
 
-        for list in self.message.lists:
-            s += 'ss << "' + list.name + ' (list)" << " ";\n'
+        for p in self.message.lists:
+            s += 'ss << "' + p.name + ':( ";\n'
+            s += 'for (const auto & e : ' + p.name + ')\n'
+            s += '{\n'
+            s += '    ss << e.toString() << " ";\n'
+            s += '}\n'
+            s += 'ss << ") ";\n'
 
         s += 'ss << ")";\n'
 
