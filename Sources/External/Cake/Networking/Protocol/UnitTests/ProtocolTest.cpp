@@ -17,6 +17,23 @@ TEST(ProtocolTest, Constructing)
     SimpleParameters params2(1, "", 1.0, {}, {});
 }
 
+TEST(ProtocolTest, Comparison)
+{
+    SimpleParameters params1(1, "", 1.0, {}, {});
+    SimpleParameters params2(2, "", 1.0, {}, {});
+    SimpleParameters params3(1, "a", 1.0, {}, {});
+    SimpleParameters params4(1, "", 2.0, {}, {});
+
+    SimpleStruct simpleStruct1(1);
+    SimpleParameters params5(1, "", 1.0, {simpleStruct1}, {});
+
+    EXPECT_EQ(params1, params1);
+    EXPECT_NE(params1, params2);
+    EXPECT_NE(params1, params3);
+    EXPECT_NE(params1, params4);
+    EXPECT_NE(params1, params5);
+}
+
 TEST(ProtocolTest, SimpleParameters)
 {
     SimpleParameters m1;

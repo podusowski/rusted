@@ -61,6 +61,16 @@ class Struct:
             lists.append(list)
         return lists
 
+class CppFunction:
+    def __init__(self, return_type, name, arguments, body):
+        s = "    " + return_type + " " + name + "(" + ", ".join(arguments) + ")\n"
+        s = s + "{\n"
+        s = s + body
+        s = s + "}\n"
+        s = s + "\n"
+
+        return s
+
 class CppOutput:
     def __init__(self, structs, messages, output_file, namespace):
         self.output_file = output_file
@@ -214,6 +224,7 @@ class CppStruct:
 
         s = s + self.__generate_default_constructor()
         s = s + self.__generate_specialized_constructor()
+        s = s + self.__generate_equals_operator()
 
         if self.is_message:
             s = s + self.__generate_getid_method()
@@ -351,7 +362,7 @@ class CppStruct:
     def __generate_specialized_constructor(self):
         s = ""
 
-        if len(self.message.params) > 0:
+        if len(self.message.params) > 0 or len(self.message.lists) > 0:
             s = s + "\texplicit " + self.message.id + "(\n"
 
             param_list = []
@@ -376,6 +387,39 @@ class CppStruct:
             s = s + "\t{\n"
             s = s + "\t}\n"
             s = s + "\n"
+
+        return s
+
+    def __generate_equals_operator(self):
+        s = (
+            "\tbool operator == (const " + self.message.id + " & other) const\n"
+            "\t{\n"
+        )
+
+        if len(self.message.params) > 0 or len(self.message.lists) > 0:
+            comparisons = []
+            for param in self.message.params:
+                comparisons.append(param.name + " == other." + param.name)
+
+            for param in self.message.lists:
+                comparisons.append(param.name + " == other." + param.name)
+
+            s = s + "\t\treturn " + " &&\n\t\t       ".join(comparisons) + ";"
+        else:
+            s = s + "\t\treturn true;"
+
+        s = s + (
+            "\n"
+            "\t}\n"
+            "\n"
+        )
+
+        s = s + (
+            "\tbool operator != (const " + self.message.id + " & other) const\n"
+            "\t{\n"
+            "\t\treturn !(*this == other);\n"
+            "\t}\n"
+        )
 
         return s
 
