@@ -15,6 +15,9 @@ TEST(ProtocolTest, Constructing)
 {
     SimpleParameters params1;
     SimpleParameters params2(1, "", 1.0, {}, {});
+
+    EXPECT_EQ(1, params2.integer);
+    EXPECT_EQ("", params2.string);
 }
 
 TEST(ProtocolTest, Comparison)
