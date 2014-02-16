@@ -11,6 +11,12 @@
 using namespace testing;
 using namespace Cake::Networking::Protocol;
 
+TEST(ProtocolTest, Constructing)
+{
+    SimpleParameters params1;
+    SimpleParameters params2(1, "", 1.0, {}, {});
+}
+
 TEST(ProtocolTest, SimpleParameters)
 {
     SimpleParameters m1;
@@ -103,3 +109,4 @@ TEST(ProtocolTest, Fc_UnknownMessage)
 {
     EXPECT_ANY_THROW(MessageFactory::create("Garbage()"));
 }
+

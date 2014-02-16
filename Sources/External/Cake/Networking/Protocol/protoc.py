@@ -212,6 +212,9 @@ class CppStruct:
         s = s + self.__generate_params()
         s = s + self.__generate_lists()
 
+        s = s + self.__generate_default_constructor()
+        s = s + self.__generate_specialized_constructor()
+
         if self.is_message:
             s = s + self.__generate_getid_method()
 
@@ -334,6 +337,46 @@ class CppStruct:
             s = s + "\tstd::vector<" + list.type + "> " + list.name + ";\n"
 
         s = s + "\n"
+        return s
+
+    def __generate_default_constructor(self):
+        s = (
+            "\t" + self.message.id + "()\n"
+            "\t{\n"
+            "\t}\n"
+            "\n"
+        )
+        return s
+
+    def __generate_specialized_constructor(self):
+        s = ""
+
+        if len(self.message.params) > 0:
+            s = s + "\texplicit " + self.message.id + "(\n"
+
+            param_list = []
+            for param in self.message.params:
+                param_list.append("\t\tconst " + param.cpp_type + " & _" + param.name)
+
+            for param in self.message.lists:
+                param_list.append("\t\tconst std::vector<" + param.type + "> & _" + param.name)
+
+            s = s + ",\n".join(param_list) + "\n"
+            s = s + "\t):\n"
+
+            initializer_list = []
+            for param in self.message.params:
+                initializer_list.append("\t\t" + param.name + "(_" + param.name + ")")
+
+            for param in self.message.lists:
+                initializer_list.append("\t\t" + param.name + "(_" + param.name + ")")
+
+            s = s + ",\n".join(initializer_list) + "\n"
+
+            s = s + "\t{\n"
+            s = s + "\t}\n"
+            s = s + "\n"
+
         return s
 
     def __generate_to_string_method(self):
