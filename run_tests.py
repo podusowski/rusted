@@ -8,6 +8,7 @@ import shutil
 import random
 import signal
 import argparse
+import re
 
 class Ui:
     if sys.stdout.isatty():
@@ -170,13 +171,18 @@ class Binary:
         self.test_result_lock = threading.Lock()
         self.retries = retries
 
-    def run(self):
-        Ui.bigstep("running", self.filename)
+    def run(self, pattern):
         executors = []
-        for test_name in self.tests:
-            executors.append(self.__run_test(test_name))
-        for e in executors:
-            e.join()
+        tests_to_run = self.__match_test_to_run(pattern)
+
+        if len(tests_to_run) > 0:
+            Ui.bigstep("running", self.filename)
+
+            for test_name in tests_to_run:
+                executors.append(self.__run_test(test_name))
+
+            for e in executors:
+                e.join()
 
     def async_execute_completed(self, test_name, returncode, output, retries, timeout):
         self.test_result_lock.acquire()
@@ -187,6 +193,13 @@ class Binary:
         self.test_result_lock.release()
 
         self.log_writer.write_log(test_name, returncode, output)
+
+    def __match_test_to_run(self, pattern):
+        ret = []
+        for test_name in self.tests:
+            if re.match(pattern, test_name):
+                ret.append(test_name)
+        return ret
 
     def __run_test(self, test_name):
         env = self.__prepare_env()
@@ -250,9 +263,9 @@ class Tree:
         for f in self.__find_binary_filenames():
             self.binaries.append(Binary(f, result, log_writer, port_assigner, self.retries))
 
-    def run(self):
+    def run(self, pattern):
         for binary in self.binaries:
-            binary.run()
+            binary.run(pattern)
 
     def __find_binary_filenames(self):
         ret = []
@@ -308,13 +321,14 @@ class TcpPortAssigner:
 def main():
     parser = argparse.ArgumentParser(description='test runner')
     parser.add_argument('-r', action='store', dest='retries', default="5", nargs="?", help='number of retries in case of failure')
+    parser.add_argument('-p', action='store', dest='pattern', default=".*", nargs="?", help='run test cases matched with pattern')
     args = parser.parse_args()
 
     result = GlobalResult()
     log_writer = LogWriter()
     port_assigner = TcpPortAssigner()
     tree = Tree(result, log_writer, port_assigner, args.retries)
-    tree.run()
+    tree.run(args.pattern)
 
     print("")
 
