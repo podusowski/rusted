@@ -25,22 +25,29 @@ void ObjectVisibilityUpdater::sendVisibleObjects(const Common::Game::Position & 
 
 void ObjectVisibilityUpdater::sendVisibleObjectsByPlayer(unsigned playerId)
 {
-    Common::Messages::VisibleObjects visibleObjects;
+    LOG_DEBUG << "Sending objects visible by player: " << playerId;
+
+    std::set<unsigned> visibleIds;
 
     m_universe->objectsOwnedByPlayer(playerId, [&](Common::Game::Object::ObjectBase & object)
     {
+        LOG_DEBUG << "  checking: " << object;
+
         const auto position = object.getPosition();
 
         m_universe->objectsInProximity(position, 1000, [&](Common::Game::Object::ObjectBase & object)
         {
-            if (object.is<Common::Game::Object::OwnedObjectBase>())
-            {
+            LOG_DEBUG << "  player: " << playerId << " sees " << object;
 
-            }
+            visibleIds.insert(object.getId());
         });
-
-        sendVisibleObjects(position);
     });
+
+    Common::Messages::VisibleObjects visibleObjects;
+    for (auto id: visibleIds)
+    {
+        visibleObjects.objects.push_back(Common::Messages::ObjectId(id));
+    }
 
     m_playerContainer->invokeOnPlayer(playerId, [&](Common::Game::IPlayer &, Network::IConnection & connection)
     {

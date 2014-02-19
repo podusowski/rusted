@@ -58,6 +58,24 @@ TEST_F(ObjectVisibilityUpdaterTest, OneShip)
     updater.sendVisibleObjects(POSITION);
 }
 
+MATCHER_P(MessageEqualsTo, expected, "")
+{
+    if (expected.getId() != arg.getId())
+    {
+        *result_listener << "expected id: " << expected.getId() << ", given id: " << arg.getId();
+        return false;
+    }
+
+    auto castedArg = dynamic_cast<const decltype(expected)&>(arg);
+    if (!(castedArg == expected))
+    {
+        *result_listener << "payloads doesn't match, expected " << expected << ", given: " << castedArg;
+        return false;
+    }
+
+    return true;
+}
+
 TEST_F(ObjectVisibilityUpdaterTest, ObjectsVisibleByPlayer)
 {
     Common::Game::PlayerMock playerMock;
@@ -65,16 +83,23 @@ TEST_F(ObjectVisibilityUpdaterTest, ObjectsVisibleByPlayer)
 
     auto ship1Mock = std::make_shared<Common::Game::Object::ShipMock>();
     EXPECT_CALL(*ship1Mock, getId()).Times(AtLeast(1)).WillRepeatedly(Return(1));
+    EXPECT_CALL(*ship1Mock, getPosition()).Times(AtLeast(1)).WillRepeatedly(Return(Common::Game::Position(0, 0, 0)));
+    EXPECT_CALL(*ship1Mock, getOwnerId()).Times(AtLeast(1)).WillRepeatedly(Return(PLAYER_ID));
     universe->add(ship1Mock);
 
     auto ship2Mock = std::make_shared<Common::Game::Object::ShipMock>();
-    EXPECT_CALL(*ship1Mock, getId()).Times(AtLeast(1)).WillRepeatedly(Return(2));
-    universe->add(ship1Mock);
+    EXPECT_CALL(*ship2Mock, getId()).Times(AtLeast(1)).WillRepeatedly(Return(2));
+    EXPECT_CALL(*ship2Mock, getPosition()).Times(AtLeast(1)).WillRepeatedly(Return(Common::Game::Position(100, 0, 0)));
+    EXPECT_CALL(*ship2Mock, getOwnerId()).Times(AtLeast(1)).WillRepeatedly(Return(PLAYER_ID));
+    universe->add(ship2Mock);
 
     EXPECT_CALL(*playerContainerMock, invokeOnPlayer(PLAYER_ID, _)).WillOnce(InvokeArgument<1>(std::ref(playerMock), std::ref(connectionMock)));
 
-    Common::Messages::VisibleObjects expectedVisibleObjects;
-    EXPECT_CALL(connectionMock, send(_));
+    EXPECT_CALL(connectionMock, send(
+        MessageEqualsTo(Common::Messages::VisibleObjects({
+            Common::Messages::ObjectId(1),
+            Common::Messages::ObjectId(2)
+    }))));
 
     ObjectVisibilityUpdater updater;
     updater.sendVisibleObjectsByPlayer(PLAYER_ID);
