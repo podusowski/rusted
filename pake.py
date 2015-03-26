@@ -1,1396 +1,455 @@
 #!/usr/bin/env python
+# encoding: utf-8
+# Thomas Nagy, 2005-2010; Arne Babenhauserheide
 
-import os
-import sys
-import tempfile
-import stat
-import subprocess
-import argparse
-import marshal
-import shutil
-import threading
+"""Waffle iron - creates waffles :)
 
-"""
-    utilities
+- http://draketo.de/proj/waffles/
+
+TODO: Differenciate sourcetree and packages: sourcetree as dir in wafdir, packages in subdir packages. 
 """
 
-class FsUtils:
-    BUILD_ROOT = os.path.normpath(os.getcwd() + "/__build")
+__license__ = """
+This license only applies to the waffle part of the code,
+which ends with
+### Waffle Finished ###
 
-    @staticmethod
-    def build_dir(configuration_name):
-        return os.path.normpath(FsUtils.BUILD_ROOT + "/" + configuration_name)
+Redistribution and use in source and binary forms, with or without
+modification, are permitted provided that the following conditions
+are met:
 
-    @staticmethod
-    def is_newer_than(prerequisite, target):
-        if os.path.exists(target):
-            ret = FsUtils.get_mtime(prerequisite) > FsUtils.get_mtime(target)
-            Ui.debug("is " + prerequisite + " newer than " + target + " = " + str(ret))
-            return ret
-        else:
-            Ui.debug(target + " doesn't exist, treating like older")
-            return True
+1. Redistributions of source code must retain the above copyright
+   notice, this list of conditions and the following disclaimer.
 
-    @staticmethod
-    def is_any_newer_than(prerequisites, target):
-        for prerequisite in prerequisites:
-            if FsUtils.is_newer_than(prerequisite, target):
-                return True
-        return False
+2. Redistributions in binary form must reproduce the above copyright
+   notice, this list of conditions and the following disclaimer in the
+   documentation and/or other materials provided with the distribution.
 
-    @staticmethod
-    def get_mtime(filename):
-        return os.path.getmtime(filename)
+3. The name of the author may not be used to endorse or promote products
+   derived from this software without specific prior written permission.
 
-def execute(command, capture_output = False):
-    out = ''
-    try:
-        if capture_output:
-            out = subprocess.check_output(command, shell=True)
-        else:
-            subprocess.check_call(command, shell=True)
-    except subprocess.CalledProcessError:
-        raise Exception("command did not finish successfully: " + command)
-        #Ui.fatal("command did not finish successfully: " + command)
-
-    Ui.debug("command completed: " + command)
-    return out
-
-
-class Ui:
-    RESET = '\033[0m'
-    BOLD = '\033[1m'
-    GRAY = '\033[90m'
-    RED = '\033[31m'
-    BOLD_RED = '\033[1;31m'
-    BOLD_BLUE = "\033[34;1m"
-
-    log_depth = 0
-    lock = threading.Lock()
-
-    @staticmethod
-    def push():
-        Ui.lock.acquire()
-        Ui.log_depth += 1
-        Ui.lock.release()
-
-    @staticmethod
-    def pop():
-        Ui.lock.acquire()
-        Ui.log_depth -= 1
-        Ui.lock.release()
-
-    @staticmethod
-    def print_depth_prefix():
-        for i in range(Ui.log_depth):
-            sys.stdout.write("    ")
-
-    @staticmethod
-    def info(message):
-        Ui.lock.acquire()
-        print(message)
-        sys.stdout.flush()
-        Ui.lock.release()
-
-    @staticmethod
-    def step(tool, parameter):
-        Ui.lock.acquire()
-        if sys.stdout.isatty():
-            print(Ui.BOLD + tool + Ui.RESET + " " + parameter)
-        else:
-            print(tool + " " + parameter)
-        sys.stdout.flush()
-        Ui.lock.release()
-
-    @staticmethod
-    def bigstep(tool, parameter):
-        Ui.lock.acquire()
-        if sys.stdout.isatty():
-            print(Ui.BOLD_BLUE + tool + Ui.RESET + " " + parameter)
-        else:
-            print(tool + " " + parameter)
-        sys.stdout.flush()
-        Ui.lock.release()
-
-    @staticmethod
-    def fatal(message):
-        if sys.stdout.isatty():
-            print(Ui.BOLD_RED + "fatal: " + Ui.RESET + message)
-        else:
-            print("fatal: " + message)
-        sys.stdout.flush()
-        sys.exit(1)
-
-    @staticmethod
-    def parse_error(token = None, msg = None):
-        if token != None:
-            s = token.location_str()
-            if msg != None:
-                s += ": " + msg
-            else:
-                s += ": unexpected " + str(token)
-            Ui.fatal(s)
-        else:
-            Ui.fatal(msg)
-
-    @staticmethod
-    def debug(s, env = None):
-        Ui.lock.acquire()
-        if "DEBUG" in os.environ:
-            if env == None or env in os.environ:
-                Ui.print_depth_prefix()
-                print(Ui.GRAY + s + Ui.RESET)
-        Ui.lock.release()
-
-"""
-    C++ compiler support
+THIS SOFTWARE IS PROVIDED BY THE AUTHOR "AS IS" AND ANY EXPRESS OR
+IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+DISCLAIMED. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+(INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,
+STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING
+IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+POSSIBILITY OF SUCH DAMAGE.
 """
 
-class CxxToolchain:
-    def __init__(self, configuration, variable_deposit, module_name, source_tree):
-        self.configuration = configuration
-        self.variable_deposit = variable_deposit
-        self.module_name = module_name
-        self.source_tree = source_tree
-
-        self.compiler_cmd = self.__simple_eval(configuration.compiler)
-        self.compiler_flags = self.__simple_eval(configuration.compiler_flags)
-        self.linker_flags = self.__simple_eval(configuration.linker_flags)
-        self.archiver_cmd = self.__simple_eval(configuration.archiver)
-        self.application_suffix = self.__simple_eval(configuration.application_suffix)
-
-    def build_object(self, target_name, out_filename, in_filename, include_dirs, compiler_flags):
-        Ui.debug("building object " + out_filename)
-        Ui.push()
-        prerequisites = self.__fetch_includes(target_name, in_filename, include_dirs, compiler_flags)
-        prerequisites.append(in_filename)
-
-        Ui.debug("appending prerequisites from pake modules: " + str(self.source_tree.files))
-        for module_filename in self.source_tree.files:
-            prerequisites.append(module_filename)
-
-        Ui.debug("prerequisites: " + str(prerequisites))
-
-        if FsUtils.is_any_newer_than(prerequisites, out_filename):
-            Ui.step(self.compiler_cmd, in_filename)
-            execute("mkdir -p " + os.path.dirname(out_filename))
-            execute(self.compiler_cmd + " " + self.__prepare_compiler_flags(include_dirs, compiler_flags) + " -c -o " + out_filename + " " + in_filename)
-        Ui.pop()
-
-    def link_application(self, out_filename, in_filenames, link_with, library_dirs):
-        if FsUtils.is_any_newer_than(in_filenames, out_filename) or self.__are_libs_newer_than_target(link_with, out_filename):
-            Ui.debug("linking application")
-            Ui.debug("  files: " + str(in_filenames))
-            Ui.debug("  with libs: " + str(link_with))
-            Ui.debug("  lib dirs: " + str(library_dirs))
-
-            parameters = ""
-            for directory in library_dirs:
-                parameters += "-L" + directory + " "
-
-            Ui.bigstep("linking", out_filename)
-            try:
-                execute(self.compiler_cmd + " " + self.linker_flags + " -o " + out_filename + " " + " ".join(in_filenames) + " " + self.__prepare_linker_flags(link_with) + " " + parameters)
-            except Exception as e:
-                Ui.fatal("cannot link " + out_filename + ", reason: " + str(e))
-        else:
-            Ui.bigstep("up to date", out_filename)
-
-    def link_static_library(self, out_filename, in_filenames):
-        Ui.bigstep(self.archiver_cmd, out_filename)
-        execute(self.archiver_cmd + " -rcs " + out_filename + " " + " ".join(in_filenames))
-
-    def object_filename(self, target_name, source_filename):
-        return self.build_dir() + "/build." + target_name + "/" + source_filename + ".o"
-
-    def static_library_filename(self, target_name):
-        return self.build_dir() + "/lib" + target_name + ".a"
-
-    def application_filename(self, target_name):
-        return self.build_dir() + "/" + target_name + self.application_suffix
-
-    def cache_directory(self, target_name):
-        return self.build_dir() + "/build." + target_name + "/"
-
-    def build_dir(self):
-        return FsUtils.build_dir(self.configuration.name)
-
-    def __simple_eval(self, tokens):
-        return " ".join(self.variable_deposit.eval(self.module_name, tokens))
-
-    def __fetch_includes(self, target_name, in_filename, include_dirs, compiler_flags):
-        Ui.debug("getting includes for " + in_filename)
-        Ui.push()
-        cache_file = self.cache_directory(target_name) + in_filename + ".includes"
-        includes = None
-        if os.path.exists(cache_file) and FsUtils.is_newer_than(cache_file, in_filename):
-            includes = marshal.load(open(cache_file))
-        else:
-            execute("mkdir -p " + os.path.dirname(cache_file))
-            includes = self.__scan_includes(in_filename, include_dirs, compiler_flags)
-            marshal.dump(includes, open(cache_file, "w"))
-        Ui.pop()
-        return includes
-
-    def __scan_includes(self, in_filename, include_dirs, compiler_flags):
-        Ui.debug("scanning includes for " + in_filename)
-        ret = []
-        out = ""
-        try:
-            out = execute(self.compiler_cmd + " " + self.__prepare_compiler_flags(include_dirs, compiler_flags) + " -M " + in_filename, capture_output = True).split()
-        except:
-            Ui.fatal("can't finish request")
-
-        for token in out[2:]:
-            if token != "\\":
-                ret.append(token)
-
-        return ret
-
-    def __prepare_linker_flags(self, link_with):
-        ret = "-L " + self.build_dir() + " "
-        for lib in link_with:
-            ret = ret + " -l" + lib
-        return ret
-
-    def __prepare_compiler_flags(self, include_dirs, compiler_flags):
-        ret = self.compiler_flags + " "
-        for flag in compiler_flags:
-            ret += flag + " "
-        ret += self.__prepare_include_dirs_parameters(include_dirs) + " "
-        return ret
-
-    def __prepare_include_dirs_parameters(self, include_dirs):
-        ret = ""
-        for include_dir in include_dirs:
-            ret += "-I" + include_dir + " "
-
-        Ui.debug("include parameters: " + ret)
-
-        return ret
-
-    def __are_libs_newer_than_target(self, link_with, target):
-        # check if the library is from our source tree
-        for lib in link_with:
-            filename = self.static_library_filename(lib)
-            if os.path.exists(filename):
-                # TODO: proper appname
-                if FsUtils.is_newer_than(filename, target):
-                    return True
-        return False
-
-"""
-    targets
-"""
-
-class CommonTargetParameters:
-    def __init__(self, jobs, variable_deposit, root_path, module_name, name):
-        assert isinstance(variable_deposit, VariableDeposit)
-        assert isinstance(module_name, str)
-        assert isinstance(name, str)
-
-        self.jobs = jobs
-        self.variable_deposit = variable_deposit
-        self.root_path = root_path
-        self.module_name = module_name
-        self.name = name
-        self.artefacts = []
-        self.prerequisites = []
-        self.depends_on = []
-        self.run_before = []
-        self.run_after = []
-        self.resources = []
-        self.visible_in = []
-
-class CxxParameters:
-    def __init__(self):
-        self.sources = []
-        self.include_dirs = []
-        self.compiler_flags = []
-        self.built_targets = []
-
-class TargetDeposit:
-    def __init__(self, variable_deposit, configuration_deposit, source_tree):
-        self.variable_deposit = variable_deposit
-        self.configuration_deposit = configuration_deposit
-        self.source_tree = source_tree
-        self.targets = {}
-        self.built_targets = []
-
-    def __repr__(self):
-        s = ''
-        for target in self.targets:
-            s += " * " + target + "\n"
-        return s
-
-    def add_target(self, target):
-        self.targets[target.common_parameters.name] = target
-
-    def build(self, name):
-        configuration = self.configuration_deposit.get_selected_configuration()
-
-        execute("mkdir -p " + FsUtils.build_dir(configuration.name))
-
-        Ui.debug("building " + name + " with configuration " + str(configuration))
-        Ui.push()
-
-        if name in self.built_targets:
-            Ui.debug(name + " already build, skipping")
-            return
-        else:
-            self.built_targets.append(name)
-
-        if not name in self.targets:
-            Ui.fatal("target " + name + " not found")
-
-        target = self.targets[name]
-
-        if not target.is_visible(configuration):
-            Ui.fatal("target " + name + " is not visible in " + str(configuration))
-
-        evalueated_depends_on = self.variable_deposit.eval(
-            target.common_parameters.module_name,
-            target.common_parameters.depends_on)
-
-        for dependency in evalueated_depends_on:
-            Ui.debug(name + " depends on " + dependency)
-            self.build(dependency)
-
-        toolchain = CxxToolchain(
-            configuration,
-            self.variable_deposit,
-            target.common_parameters.name,
-            self.source_tree)
-
-        target.before()
-        target.build(toolchain)
-        target.after()
-        target.copy_resources(toolchain)
-
-        Ui.pop()
-
-    def build_all(self):
-        Ui.bigstep("building all targets", " ".join(self.targets))
-
-        configuration = self.configuration_deposit.get_selected_configuration()
-
-        for name in self.targets:
-            target = self.targets[name]
-            if target.is_visible(configuration):
-                self.build(name)
-            else:
-                Ui.bigstep("skip", name)
-
-class Target:
-    def __init__(self, common_parameters):
-        self.common_parameters = common_parameters
-
-    def __repr__(self):
-        return self.common_parameters.name
-
-    def before(self):
-        self.__try_run(self.common_parameters.run_before)
-
-    def after(self):
-        self.__try_run(self.common_parameters.run_after)
-
-    def copy_resources(self, toolchain):
-        root_dir = os.getcwd()
-        os.chdir(self.common_parameters.root_path)
-
-        resources = self.eval(self.common_parameters.resources)
-        for resource in resources:
-            Ui.step("copy", resource)
-            execute("rsync --update -r '" + resource + "' '" + toolchain.build_dir() + "/'")
-
-        os.chdir(root_dir)
-
-    def is_visible(self, configuration):
-        evaluated_visible_in = self.eval(self.common_parameters.visible_in)
-        if len(evaluated_visible_in) > 0:
-            for visible_in in evaluated_visible_in:
-                if visible_in == configuration.name:
-                    return True
-            return False
-        else:
-            return True
-
-    def __try_run(self, cmds):
-        root_dir = os.getcwd()
-        os.chdir(self.common_parameters.root_path)
-
-        evaluated_artefacts = self.eval(self.common_parameters.artefacts)
-        evaluated_prerequisites = self.eval(self.common_parameters.prerequisites)
-
-        should_run = True
-        if len(evaluated_prerequisites) > 0 and len(evaluated_artefacts) > 0:
-            should_run = False
-            Ui.debug("checking prerequisites (" + str(evaluated_prerequisites) + ") for making " + str(evaluated_artefacts))
-            for artefact in evaluated_artefacts:
-                Ui.debug("  " + artefact)
-                if FsUtils.is_any_newer_than(evaluated_prerequisites, artefact):
-                    Ui.debug("going on because " + str(artefact) + " needs to be rebuilt")
-                    should_run = True
-                    break
-
-        if should_run:
-            self.common_parameters.variable_deposit.pollute_environment(self.common_parameters.module_name)
-
-            evaluated_cmds = self.eval(cmds)
-
-            for cmd in evaluated_cmds:
-                Ui.debug("running " + str(cmd))
-                execute(cmd)
-
-        os.chdir(root_dir)
-
-    def eval(self, variable):
-        return self.common_parameters.variable_deposit.eval(
-            self.common_parameters.module_name,
-            variable)
-
-class Phony(Target):
-    def __init__(self, common_parameters):
-        Target.__init__(self, common_parameters)
-
-    def build(self, configuration):
-        Ui.debug("phony build")
-
-class CompileableTarget(Target):
-    def __init__(self, common_parameters, cxx_parameters):
-        Target.__init__(self, common_parameters)
-
-        self.common_parameters = common_parameters
-        self.cxx_parameters = cxx_parameters
-        self.error = False
-        self.lock = threading.Lock()
-
-    def __build_object(self, limit, toolchain, name, object_file, source, include_dirs, compiler_flags):
-        limit.acquire()
-
-        if self.error:
-            limit.release()
-            return
-
-        try:
-            toolchain.build_object(
-                name,
-                object_file,
-                source,
-                include_dirs,
-                compiler_flags
-            )
-        except Exception as e:
-            self.lock.acquire()
-            Ui.debug("catched " + str(e))
-            self.error = True
-            self.lock.release()
-            limit.release()
-
-        limit.release()
-
-    def build_objects(self, toolchain):
-        object_files = []
-        evaluated_sources = self.eval(self.cxx_parameters.sources)
-        evaluated_include_dirs = self.eval(self.cxx_parameters.include_dirs)
-        evaluated_compiler_flags = self.eval(self.cxx_parameters.compiler_flags)
-
-        Ui.debug("building objects from " + str(evaluated_sources))
-        Ui.push()
-
-        threads = []
-        limit_semaphore = threading.Semaphore(self.common_parameters.jobs)
-
-        for source in evaluated_sources:
-            object_file = toolchain.object_filename(self.common_parameters.name, source)
-            object_files.append(object_file)
-
-            thread = threading.Thread(
-                target=self.__build_object,
-                args=(
-                    limit_semaphore,
-                    toolchain,
-                    self.common_parameters.name,
-                    object_file,
-                    source,
-                    evaluated_include_dirs,
-                    evaluated_compiler_flags
-                )
-            )
-
-            threads.append(thread)
-            thread.daemon = True
-            thread.start()
-
-        done = False
-        while not done:
-            done = True
-            for thread in threads:
-                if thread.isAlive():
-                    done = False
-                    thread.join(0.1)
-
-        if self.error:
-            Ui.fatal("cannot build " + self.common_parameters.name)
-
-        Ui.pop()
-
-        return object_files
-
-class Application(CompileableTarget):
-    def __init__(self, common_parameters, cxx_parameters, link_with, library_dirs):
-        CompileableTarget.__init__(self, common_parameters, cxx_parameters)
-
-        self.link_with = link_with
-        self.library_dirs = library_dirs
-
-    def build(self, toolchain):
-        root_dir = os.getcwd()
-        os.chdir(self.common_parameters.root_path)
-
-        object_files = self.build_objects(toolchain)
-
-        evaluated_link_with = self.eval(self.link_with)
-        evaluated_library_dirs = self.eval(self.library_dirs)
-
-        toolchain.link_application(
-            toolchain.application_filename(self.common_parameters.name),
-            object_files,
-            evaluated_link_with,
-            evaluated_library_dirs)
-
-        os.chdir(root_dir)
-
-class StaticLibrary(CompileableTarget):
-    def __init__(self, common_parameters, cxx_parameters):
-        CompileableTarget.__init__(self, common_parameters, cxx_parameters)
-
-    def build(self, toolchain):
-        root_dir = os.getcwd()
-        os.chdir(self.common_parameters.root_path)
-
-        object_files = self.build_objects(toolchain)
-
-        artefact = toolchain.static_library_filename(self.common_parameters.name)
-
-        if FsUtils.is_any_newer_than(object_files, artefact):
-            toolchain.link_static_library(artefact, object_files)
-        else:
-            Ui.bigstep("up to date", artefact)
-
-        os.chdir(root_dir)
-
-"""
-    parser
-"""
-
-class VariableDeposit:
-    def __init__(self):
-        self.modules = {}
-
-    def export_special_variables(self, configuration):
-        Ui.debug("exporting special variables")
-        Ui.push()
-
-        self.add_empty("__configuration", "$__null")
-        self.add("__configuration", "$__name", Token.make_literal(configuration.name))
-        for (value, name) in configuration.export:
-            self.add("__configuration", name.content, value)
-
-        for module in self.modules:
-            self.add(module, "$__build", Token(Token.LITERAL, FsUtils.build_dir(configuration.name)))
-
-        Ui.pop()
-
-    def pollute_environment(self, current_module):
-        Ui.debug("polluting environment")
-        Ui.push()
-        for module in self.modules:
-            for (name, variable) in self.modules[module].iteritems():
-                evaluated = self.eval(module, variable)
-                env_name = module + "_" + name[1:]
-                os.environ[env_name] = " ".join(evaluated)
-                Ui.debug("  " + env_name + ": " + str(evaluated))
-                if module == current_module:
-                    env_short_name = name[1:]
-                    os.environ[env_short_name] = " ".join(evaluated)
-                    Ui.debug("  " + env_short_name + ": " + str(evaluated))
-        Ui.pop()
-
-    def eval(self, current_module, l):
-        Ui.debug("evaluating " + str(l) + " in context of module " + current_module)
-        Ui.push()
-
-        ret = []
-        for token in l:
-            if token.is_a(Token.LITERAL):
-                content = self.__eval_literal(current_module, token.content)
-                Ui.debug("  " + token.content + " = " + content)
-                ret.append(content)
-            elif token.is_a(Token.VARIABLE):
-                parts = token.content.split(".")
-
-                Ui.debug("dereferencing " + str(parts))
-
-                module = ''
-                name = ''
-                if len(parts) == 1:
-                    module = current_module
-                    name = parts[0]
-                elif len(parts) == 2:
-                    module = parts[0][1:] # lose the $
-                    name = "$" + parts[1]
-
-                if not module in self.modules:
-                    Ui.parse_error(msg="no such module: " + module)
-
-                # TODO: make some comment about __configuration variables
-                if not name in self.modules[module]:
-                    Ui.fatal("dereferenced " + name + " but it doesn't exists in module " + module)
-
-                for value in self.modules[module][name]:
-                    if value.is_a(Token.VARIABLE):
-                        re = self.eval(module, [value])
-                        for v in re: ret.append(v)
-                    else:
-                        content = self.__eval_literal(module, value.content)
-                        ret.append(content)
-                        Ui.debug("    = " + str(content))
-            else:
-                Ui.parse_error(token)
-
-        Ui.debug(" = " + str(ret))
-        Ui.pop()
-        return ret
-
-    def __eval_literal(self, current_module, s):
-        Ui.debug("evaluating literal: " + s)
-        Ui.push()
-        ret = ""
-
-        STATE_READING = 1
-        STATE_WAITING_FOR_PARENTHESIS = 2
-        STATE_READING_NAME = 3
-
-        variable_name = '$'
-        state = STATE_READING
-
-        for c in s:
-            if state == STATE_READING:
-                if c == "$":
-                    state = STATE_WAITING_FOR_PARENTHESIS
-                else:
-                    ret += c
-            elif state == STATE_WAITING_FOR_PARENTHESIS:
-                if c == "{":
-                    state = STATE_READING_NAME
-                else:
-                    Ui.parse_error(msg="expecting { after $")
-            elif state == STATE_READING_NAME:
-                if c == "}":
-                    Ui.debug("variable: " + variable_name)
-                    evaluated_variable = self.eval(current_module, [Token(Token.VARIABLE, variable_name)])
-                    ret += " ".join(evaluated_variable)
-                    variable_name = '$'
-                    state = STATE_READING
-                else:
-                    variable_name += c
-            elif state == STATE_READING_NAME:
-                variable_name = variable_name + c
-
-        Ui.pop()
-        return ret
-
-    def add_empty(self, module_name, name):
-        Ui.debug("adding empty variable in module " + module_name + " called " + name)
-
-        if not module_name in self.modules:
-            self.modules[module_name] = {}
-
-        self.modules[module_name][name] = []
-
-
-    def add(self, module_name, name, value):
-        Ui.debug("adding variable in module " + module_name + " called " + name + " with value of " + str(value))
-
-        if not module_name in self.modules:
-            self.modules[module_name] = {}
-
-        self.modules[module_name][name] = [value]
-
-    def append(self, module_name, name, value):
-        Ui.debug("appending variable in module " + module_name + " called " + name + " with value of " + str(value))
-
-        if not module_name in self.modules:
-            self.modules[module_name] = {}
-
-        if not name in self.modules[module_name]:
-            self.modules[module_name][name] = []
-
-        self.modules[module_name][name].append(value)
-        Ui.debug("  new value: " + str(self.modules[module_name][name]))
-
-class ConfigurationDeposit:
-    def __init__(self, selected_configuration_name):
-        self.selected_configuration_name = selected_configuration_name
-        self.configurations = {}
-        self.__create_default_configuration()
-
-    def get_selected_configuration(self):
-        return self.get_configuration(self.selected_configuration_name)
-
-    def get_configuration(self, configuration_name):
-        return self.configurations[configuration_name]
-
-    def add_configuration(self, configuration):
-        Ui.debug("adding configuration: " + str(configuration))
-        self.configurations[configuration.name] = configuration
-
-    def __create_default_configuration(self):
-        configuration = Configuration()
-        self.add_configuration(configuration)
-
-class Configuration:
-    def __init__(self):
-        self.name = "__default"
-        self.compiler = [Token.make_literal("c++")]
-        self.compiler_flags = [Token.make_literal("-I.")]
-        self.linker_flags = [Token.make_literal("-L.")]
-        self.application_suffix = [Token.make_literal("")]
-        self.archiver = [Token.make_literal("ar")]
-        self.export = []
-
-    def __repr__(self):
-        return self.name
-
-class Module:
-    def __init__(self, jobs, variable_deposit, configuration_deposit, target_deposit, filename):
-        assert isinstance(variable_deposit, VariableDeposit)
-        assert isinstance(filename, str)
-
-        Ui.debug("parsing " + filename)
-        Ui.push()
-
-        self.jobs = jobs
-        self.variable_deposit = variable_deposit
-        self.configuration_deposit = configuration_deposit
-        self.target_deposit = target_deposit
-        self.filename = filename
-        self.name = self.__get_module_name(filename)
-        self.lines = []
-        self.targets = []
-        self.base_dir = os.path.dirname(filename)
-
-        tokenizer = Tokenizer(filename)
-        self.tokens = tokenizer.tokens
-
-        self.__parse()
-
-        self.variable_deposit.add(
-            self.name,
-            "$__path",
-            Token.make_literal(os.path.dirname(self.filename)))
-
-        self.variable_deposit.add_empty(
-            self.name,
-            "$__null")
-
-        Ui.pop()
-
-    def __get_module_name(self, filename):
-        base = os.path.basename(filename)
-        (root, ext) = os.path.splitext(base)
-        return root
-
-    def __add_target(self, target):
-        Ui.debug("adding target: " + str(target))
-        self.targets.append(target)
-        self.target_deposit.add_target(target)
-
-    def __parse_set_or_append(self, it, append):
-        token = it.next()
-        if token.is_a(Token.VARIABLE):
-            variable_name = token.content
-        else:
-            Ui.parse_error(token)
-
-        second_add = False
-        while True:
-            token = it.next()
-            if token.is_a(Token.LITERAL) or token.is_a(Token.VARIABLE):
-                if append or second_add:
-                    self.variable_deposit.append(self.name, variable_name, token)
-                else:
-                    self.variable_deposit.add(self.name, variable_name, token)
-                    second_add = True
-
-            elif token.is_a(Token.NEWLINE):
-                break
-            else:
-                Ui.parse_error(token)
-
-    # (something1 something2)
-    def __parse_list(self, it):
-        ret = []
-        token = it.next()
-        if token.is_a(Token.OPEN_PARENTHESIS):
-
-            while True:
-                token = it.next()
-                if token.is_a(Token.LITERAL):
-                    ret.append(token)
-                elif token.is_a(Token.VARIABLE):
-                    ret.append(token)
-                elif token.is_a(Token.CLOSE_PARENTHESIS):
-                    break
-                else:
-                    Ui.parse_error(token)
-        else:
-            Ui.parse_error(token)
-
-        return ret
-
-    # ($var1:$var2 something4:$var1)
-    def __parse_colon_list(self, it):
-        ret = []
-        token = it.next()
-        if token.is_a(Token.OPEN_PARENTHESIS):
-
-            while True:
-                token = it.next()
-
-                first = None
-                second = None
-
-                if token.is_a(Token.LITERAL) or token.is_a(Token.VARIABLE):
-                    first = token
-                    token = it.next()
-                    if token.is_a(Token.COLON):
-                        token = it.next()
-                        if token.is_a(Token.VARIABLE):
-                            second = token
-                            ret.append((first, second))
-                        else:
-                            Ui.parse_error(token, msg="expected variable")
-                    else:
-                        Ui.parse_error(token, msg="expected colon")
-                elif token.is_a(Token.CLOSE_PARENTHESIS):
-                    break
-                else:
-                    Ui.parse_error(token)
-        else:
-            Ui.parse_error(token)
-
-        Ui.debug("colon list: " + str(ret))
-        return ret
-
-    def __try_parse_target_common_parameters(self, common_parameters, token, it):
-        if token.content == "depends_on":
-            common_parameters.depends_on = self.__parse_list(it)
-            return True
-        elif token.content == "run_before":
-            common_parameters.run_before = self.__parse_list(it)
-            return True
-        elif token.content == "run_after":
-            common_parameters.run_after = self.__parse_list(it)
-            return True
-        elif token.content == "resources":
-            common_parameters.resources = self.__parse_list(it)
-            return True
-        elif token.content == "visible_in":
-            common_parameters.visible_in = self.__parse_list(it)
-            return True
-
-        return False
-
-    def __try_parse_cxx_parameters(self, cxx_parameters, token, it):
-        if token.content == "sources":
-            cxx_parameters.sources = self.__parse_list(it)
-            return True
-        elif token.content == "include_dirs":
-            cxx_parameters.include_dirs = self.__parse_list(it)
-            return True
-        elif token.content == "compiler_flags":
-            cxx_parameters.compiler_flags = self.__parse_list(it)
-            return True
-
-        return False
-
-    def __parse_application_target(self, target_name, it):
-        link_with = []
-        library_dirs = []
-
-        common_parameters = CommonTargetParameters(
-            self.jobs,
-            self.variable_deposit,
-            os.path.dirname(self.filename),
-            self.name,
-            target_name)
-
-        cxx_parameters = CxxParameters()
-
-        while True:
-            token = it.next()
-            if token.is_a(Token.LITERAL):
-                if self.__try_parse_target_common_parameters(common_parameters, token, it): pass
-                elif self.__try_parse_cxx_parameters(cxx_parameters, token, it): pass
-                elif token.content == "link_with": link_with = self.__parse_list(it)
-                elif token.content == "library_dirs": library_dirs = self.__parse_list(it)
-                else: Ui.parse_error(token)
-            elif token.is_a(Token.NEWLINE):
-                break
-            else:
-                Ui.parse_error(token)
-
-        target = Application(common_parameters, cxx_parameters, link_with, library_dirs)
-        self.__add_target(target)
-
-    def __parse_static_library(self, target_name, it):
-        common_parameters = CommonTargetParameters(
-            self.jobs,
-            self.variable_deposit,
-            os.path.dirname(self.filename),
-            self.name,
-            target_name)
-
-        cxx_parameters = CxxParameters()
-
-        while True:
-            token = it.next()
-            if token.is_a(Token.LITERAL):
-                if self.__try_parse_target_common_parameters(common_parameters, token, it): pass
-                elif self.__try_parse_cxx_parameters(cxx_parameters, token, it): pass
-                else: Ui.parse_error(token)
-            elif token.is_a(Token.NEWLINE):
-                break
-            else:
-                Ui.parse_error(token)
-
-        target = StaticLibrary(common_parameters, cxx_parameters)
-        self.__add_target(target)
-
-    def __parse_phony(self, target_name, it):
-        common_parameters = CommonTargetParameters(
-            self.jobs,
-            self.variable_deposit,
-            os.path.dirname(self.filename),
-            self.name,
-            target_name)
-
-        cxx_parameters = CxxParameters()
-
-        while True:
-            token = it.next()
-            if token.is_a(Token.LITERAL):
-                if self.__try_parse_target_common_parameters(common_parameters, token, it): pass
-                elif token.content == "artefacts": common_parameters.artefacts = self.__parse_list(it)
-                elif token.content == "prerequisites": common_parameters.prerequisites = self.__parse_list(it)
-                else: Ui.parse_error(token)
-
-            elif token.is_a(Token.NEWLINE):
-                break
-            else:
-                Ui.parse_error(token)
-
-        target = Phony(common_parameters)
-        self.__add_target(target)
-
-    def __parse_target(self, it):
-        token = it.next()
-        if token.is_a(Token.LITERAL):
-            target_type = token.content
-
-            token = it.next()
-            if token.is_a(Token.LITERAL):
-                target_name = token.content
-            else:
-                Ui.parse_error(token)
-        else:
-            Ui.parse_error(token)
-
-        if target_type == "application":       self.__parse_application_target(target_name, it)
-        elif target_type == "static_library":  self.__parse_static_library(target_name, it)
-        elif target_type == "phony":           self.__parse_phony(target_name, it)
-        else: Ui.parse_error(token, msg="unknown target type: " + target_type)
-
-    def __parse_configuration(self, it):
-        configuration = Configuration()
-
-        # name
-        token = it.next()
-        if token.is_a(Token.LITERAL):
-            configuration.name = token.content
-        else:
-            Ui.parse_error(token)
-
-        while True:
-            token = it.next()
-            if token.is_a(Token.LITERAL):
-                if token.content == "compiler": configuration.compiler = self.__parse_list(it)
-                elif token.content == "archiver": configuration.archiver = self.__parse_list(it)
-                elif token.content == "application_suffix": configuration.application_suffix = self.__parse_list(it)
-                elif token.content == "compiler_flags": configuration.compiler_flags = self.__parse_list(it)
-                elif token.content == "linker_flags": configuration.linker_flags = self.__parse_list(it)
-                elif token.content == "export": configuration.export = self.__parse_colon_list(it)
-                else: Ui.parse_error(token)
-
-            elif token.is_a(Token.NEWLINE):
-                break
-            else:
-                Ui.parse_error(token)
-
-        Ui.debug("configuration parsed:" + str(configuration))
-        self.configuration_deposit.add_configuration(configuration)
-
-    def __parse_directive(self, it):
-        while True:
-            token = it.next()
-
-            if token.is_a(Token.LITERAL):
-                if token.content == "set" or token.content == "append": self.__parse_set_or_append(it, token.content == "append")
-                elif token.content == "target":                    self.__parse_target(it)
-                elif token.content == "configuration":             self.__parse_configuration(it)
-                else: Ui.parse_error(token, msg="expected directive")
-
-            elif token.is_a(Token.NEWLINE):
-                continue
-            else:
-                return False
-
-    def __parse(self):
-        it = iter(self.tokens)
-
-        try:
-            if not self.__parse_directive(it):
-                Ui.parse_error(msg="unknown :(")
-        except StopIteration:
-            Ui.debug("eof")
-
-class FileReader:
-    def __init__(self, filename):
-        self.line_number = 1
-
-        f = open(filename, "r")
-        self.position = 0
-        self.buf = f.read()
-        f.close()
-
-    def value(self):
-        if self.eof():
-            Ui.debug("Read out of range: " + str(self.position), "TOKENIZER")
-            raise Exception("eof")
-
-        Ui.debug("read: " + str(self.buf[self.position]), "TOKENIZER")
-        return str(self.buf[self.position])
-
-    def rewind(self, value = 1):
-        if value > 0:
-            for i in xrange(value):
-                self.position += 1
-                if not self.eof() and self.buf[self.position] == '\n':
-                    self.line_number += 1
-        elif value < 0:
-            for i in xrange(-value):
-                self.position -= 1
-                if not self.eof() and self.buf[self.position] == '\n':
-                    self.line_number -= 1
-        else:
-            raise Exception("rewind by 0")
-
-    def seek(self, value):
-        self.position = value
-
-    def tell(self):
-        return self.position
-
-    def eof(self):
-        return self.position >= len(self.buf) or self.position < 0
-
-class Token:
-    OPEN_PARENTHESIS = 1
-    CLOSE_PARENTHESIS = 2
-    LITERAL = 3
-    VARIABLE = 4
-    NEWLINE = 5
-    MULTILINE_LITERAL = 6
-    COLON = 7
-
-    @staticmethod
-    def make_literal(content):
-        return Token(Token.LITERAL, content)
-
-    def __init__(self, token_type, content, filename = None, line = None, col = None):
-        self.token_type = token_type
-        self.content = content
-
-        self.filename = filename
-        self.line = line
-        self.col = col
-
-    def __repr__(self):
-        if self.is_a(Token.LITERAL):
-            return "literal: " + self.content
-        elif self.is_a(Token.VARIABLE):
-            return "variable: " + self.content
-        else:
-            return self.content
-
-    def location_str(self):
-        return str(self.filename) + ":" + str(self.line) + ":" + str(self.col)
-
-    def is_a(self, token_type):
-        return self.token_type == token_type
-
-class Tokenizer:
-    def __init__(self, filename):
-        self.filename = filename
-        buf = FileReader(filename)
-        self.tokens = []
-        self.__tokenize(buf)
-        Ui.debug("tokens: " + str(self.tokens))
-
-    def __is_valid_identifier_char(self, char):
-        return char.isalnum() or char in './$_-=+'
-
-    def __try_add_variable_or_literal(self, token_type, data, line):
-        if len(data) > 0:
-            self.__add_token(token_type, data, line)
-        return ""
-
-    def __add_token(self, token_type, content, line = None):
-        token = Token(token_type, content, self.filename, line)
-        self.tokens.append(token)
-
-    def __try_to_read_token(self, buf, what):
-        old_position = buf.tell()
-        what_position = 0
-
-        while not buf.eof() and what_position < len(what):
-            what_char = what[what_position]
-            char = buf.value()
-
-            if what_char != char:
-                break
-            else:
-                if what_position == len(what) - 1:
-                    buf.rewind()
-                    return True
-
-            buf.rewind()
-            what_position += 1
-
-        buf.seek(old_position)
-        return False
-
-    def __try_tokenize_multiline_literal(self, buf):
-        pos = buf.tell()
-        data = ''
-
-        if self.__try_to_read_token(buf, '"""'):
-            Ui.debug("reading multine", "TOKENIZER")
-            while True:
-                if buf.eof():
-                    raise Exception("parse error")
-
-                char = buf.value()
-
-                if self.__try_to_read_token(buf, '"""'):
-                    self.__add_token(Token.MULTILINE_LITERAL, data, buf.line_number)
-                    return True
-                else:
-                    data = data + char
-
-                buf.rewind()
-        else:
-            Ui.debug("no multine", "TOKENIZER")
-            buf.seek(pos)
-
-        return False
-
-    def __try_tokenize_comment(self, buf):
-        if buf.eof():
-            return False
-
-        if buf.value() == '#':
-            while not buf.eof() and buf.value() != '\n':
-                buf.rewind()
-            return True
-        return False
-
-    def __try_tokenize_slash_newline(self, buf):
-        if buf.eof():
-            return False
-
-        pos = buf.tell()
-
-        char = buf.value()
-        if char == "\\":
-            buf.rewind()
-            char = buf.value()
-            if char == "\n":
-                buf.rewind()
-                return True
-        buf.seek(pos)
-
-        return False
-
-    def __try_tokenize_simple_chars(self, buf):
-        if buf.eof():
-            return False
-
-        char = buf.value()
-
-        if char == '\n':
-            self.__add_token(Token.NEWLINE, "<new-line>", buf.line_number)
-            buf.rewind()
-            return True
-        elif char == '(':
-            self.__add_token(Token.OPEN_PARENTHESIS, "(", buf.line_number)
-            buf.rewind()
-            return True
-        elif char == ')':
-            self.__add_token(Token.CLOSE_PARENTHESIS, ")", buf.line_number)
-            buf.rewind()
-            return True
-        elif char == ':':
-            self.__add_token(Token.COLON, ":", buf.line_number)
-            buf.rewind()
-            return True
-
-        return False
-
-    def __try_tokenize_variable_or_literal(self, buf):
-        if buf.eof() or not self.__is_valid_identifier_char(buf.value()):
-            return False
-
-        if buf.value() == '$':  token_type = Token.VARIABLE
-        else:                   token_type = Token.LITERAL
-
-        data = ''
-        while not buf.eof():
-            c = buf.value()
-            if self.__is_valid_identifier_char(c):
-                data = data + c
-                buf.rewind()
-            else:
-                break
-
-        self.__try_add_variable_or_literal(token_type, data, buf.line_number)
-
-        return True
-
-    def __try_tokenize_quoted_literal(self, buf):
-        pos = buf.tell()
-        data = ''
-
-        if self.__try_to_read_token(buf, '"'):
-           while True:
-                if buf.eof():
-                    raise Exception("parse error")
-
-                if self.__try_to_read_token(buf, '"'):
-                    self.__add_token(Token.LITERAL, data, buf.line_number)
-                    return True
-                else:
-                    char = buf.value()
-                    data = data + char
-
-                buf.rewind()
-        else:
-            buf.seek(pos)
-
-        return False
-
-    def __try_tokenize_whitespace(self, buf):
-        ret = False
-        while not buf.eof() and buf.value() == ' ':
-            ret = True
-            buf.rewind()
-
-        return ret
-
-    def __tokenize(self, buf):
-        while not buf.eof():
-            ret = (
-                self.__try_tokenize_comment(buf) or
-                self.__try_tokenize_slash_newline(buf) or
-                self.__try_tokenize_simple_chars(buf) or
-                self.__try_tokenize_quoted_literal(buf) or
-                self.__try_tokenize_variable_or_literal(buf) or
-                self.__try_tokenize_whitespace(buf) or
-                self.__try_tokenize_multiline_literal(buf)
-            )
-
-            if not ret:
-                Ui.parse_error(msg="unexpected character: " + str(buf.value()))
-
-            if buf.eof():
-                break
-
-class SourceTree:
-    def __init__(self):
-        self.files = self.__find_pake_files()
-
-    def __find_pake_files(self, path = os.getcwd()):
-        ret = []
-        for (dirpath, dirnames, filenames) in os.walk(path):
-            for f in filenames:
-                if not dirpath.startswith(FsUtils.BUILD_ROOT):
-                    filename = dirpath + "/" + f
-                    (base, ext) = os.path.splitext(filename)
-                    if ext == ".pake":
-                        ret.append(filename)
-        return ret
-
-
-class SourceTreeParser:
-    def __init__(self, jobs, source_tree, variable_deposit, configuration_deposit, target_deposit):
-        self.jobs = jobs
-        self.variable_deposit = variable_deposit
-        self.configuration_deposit = configuration_deposit
-        self.target_deposit = target_deposit
-        self.modules = []
-
-        for filename in source_tree.files:
-            module = Module(
-                self.jobs,
-                self.variable_deposit,
-                self.configuration_deposit,
-                self.target_deposit,
-                filename)
-
-            self.modules.append(module)
-
-        configuration = self.configuration_deposit.get_selected_configuration()
-        self.variable_deposit.export_special_variables(configuration)
-
+import os, sys, optparse, getpass, re, binascii
+if sys.hexversion<0x204000f: raise ImportError("Waffle requires Python >= 2.4")
+try:
+	from hashlib import md5
+except:
+	from md5 import md5 # for python < 2.5
+
+if 'PSYCOWAF' in os.environ:
+	try:import psyco;psyco.full()
+	except:pass
+
+VERSION="0.1"
+REVISION="6377b018e61adefaabfb0fc7f14eeeb1"
+INSTALL=''
+cwd = os.getcwd()
+join = os.path.join
+HOME = os.path.expanduser('~')
+
+WAF='waffle' #: the default name of the executable
+WAFFLE='waffle' #: the default name of the dir with the sources (prepended with s when unpacked)
+WAFFLE_MAKER='waffle_maker.py'
+
+def parse_cmdline_args():
+	"""@return: opts, args; opts are parsed"""
+	# parse commandline arguments.
+	parser = optparse.OptionParser()
+	parser.add_option("-o", "--filename", 
+			  help="Set the output filename", default="waffle.py", metavar="OUTPUT_FILE")
+	parser.add_option("-p", "--package", action="append", dest="packages",
+		  help="Package folder to include (can be used multiple times)", metavar="PACKAGE_FOLDER")
+	parser.add_option("-m", "--module", action="append", dest="modules", 
+			  help="Python module to include (can be used multiple times)", metavar="module_to_include.py")
+	parser.add_option("-s", "--script", 
+			  help="Execute this script", default="run.py", metavar="script_to_run.py")
+	parser.add_option("--unpack-only", action="store_true", 
+			  help="only unpack the tar.bz2 data, but don't execute anything.", default=False)
+	opts, args = parser.parse_args()
+	if opts.modules is None:
+		opts.modules = []
+	if opts.packages is None:
+		opts.packages = []
+			      
+	return opts, args
+
+def b(x):
+	return x
+
+if sys.hexversion>0x300000f:
+	WAF='waffle3'
+	def b(x):
+		return x.encode()
+
+def err(m):
+	print(('\033[91mError: %s\033[0m' % m))
+	sys.exit(1)
+
+def get_waffle_data():
+	f = open(sys.argv[0],'r')
+	c = "corrupted waf (%d)"
+	while True:
+		line = f.readline()
+		if not line: err("no data")
+		if line.startswith('#==>'):
+			txt = f.readline()
+			if not txt: err("wrong data: data-line missing")
+			if not f.readline().startswith('#<=='): err("wrong data: closing line missing")
+			return txt
+
+def unpack_wafdir(txt, zip_type="bz2"):
+	"""@param txt: The compressed data"""
+	if not txt: err(c % 3)
+	if sys.hexversion>0x300000f:
+		txt = binascii.a2b_base64(eval("b'" + txt[1:-1] + r"\n'"))
+	else: 
+		txt = binascii.a2b_base64(txt[1:])
+
+	# select the target folder
+	import shutil, tarfile
+
+	s = '.%s-%s-%s'
+	if sys.platform == 'win32': s = s[1:]
+
+	## Firstoff we we select some possible folders, to be tested one after the other (with the appropriate precautions).
+	## For the sake of readability we first note the different options here.
+	#: The home folder as the best option (if the user has a writeable home)
+	dirhome = join(HOME, s % (WAF, VERSION, REVISION))
+	# the scripts dir
+	name = sys.argv[0]
+	base = os.path.dirname(os.path.abspath(name))
+	#: As second option use the folder where the script resides (if writeable by us - and not yet taken, which could be, if another user started the script). 
+	dirbase = join(base, s % (WAF, VERSION, REVISION), getpass.getuser())
+	#: tmp as last resort
+	dirtmp = join("/tmp", getpass.getuser(), "%s-%s-%s" % (WAF, VERSION, REVISION))
+
+	def prepare_dir(d):
+		"""create the needed folder"""
+		os.makedirs(join(d, WAFFLE))
+
+	def check_base(d):
+		"""Check the dir in which the script resides.
+
+		Only use the dir, if it belongs to us. If we can’t trust the scripts dir, we’re fragged anyway (someone could just tamper directly with the script itself - or rather: could compromise anything we run)."""
+		prepare_dir(d)
+		return d
+
+	def check_tmp(d):
+		"""Check the tmp dir - always remove the dir before startup.
+
+		This kills the caching advantage, but is necessary for security reasons (else someone could create a compromised dir in tmp and chmod it to us)."""
+		# last resort: tmp
+		if os.path.exists(d):
+			try: shutil.rmtree(d)
+			except OSError: err("Can't remove the previously existing version in /tmp - executing would endanger your system")
+			try: 
+				prepare_dir(d)
+				return d
+			except OSError: err("Cannot unpack waf lib into %s\nMove waf into a writeable directory" % dir)
+
+	## Now check them. 
+	# first check: home
+	try:
+		d = dirhome
+		prepare_dir(d)
+	except OSError:
+		# second check: base
+		if base.startswith(HOME) or sys.platform == 'win32':
+			try:
+				d = check_base(dirbase)
+			except OSError:
+				d = check_tmp(dirtmp)
+		else: d = check_tmp(dirtmp)
+
+	## Now unpack the tar.bz2 stream into the chosen dir. 
+	os.chdir(d)
+	if zip_type == 'bz2': 
+		tmp = 't.tbz2'
+	elif zip_type == 'gz':
+		tmp = 't.gz'
+	t = open(tmp,'wb')
+	t.write(txt)
+	t.close()
+
+	try:
+		t = tarfile.open(tmp)
+	# watch out for python versions without bzip2
+	except:
+		try: 
+			os.system('bunzip2 t.bz2')
+			t = tarfile.open('t')
+		except:
+			# if it doesn’t work, go back and remove the garbage we created.
+			try: 
+				os.unlink(tmp)
+			except OSError: pass
+			os.chdir(cwd)
+			try: shutil.rmtree(d)
+			except OSError: pass
+			err("Waf cannot be unpacked, check that bzip2 support is present")
+
+	for x in t:
+		t.extract(x)
+	t.close()
+	os.unlink(tmp)
+
+
+	#if sys.hexversion>0x300000f:
+		#sys.path = [join(d, WAFFLE)] + sys.path
+		#import py3kfixes
+		#py3kfixes.fixdir(d)
+
+	os.chdir(cwd)
+	return join(d, WAFFLE)
+
+
+def make_waffle(base_script="waffle_maker.py", packages=[], modules=[], folder=WAFFLE, executable="run.py", target="waffle.py", zip_type="bz2"):
+	"""Create a waf-like waffle from the base_script (make_waffle.py), the folder and a python executable (appended to the end of the waf-light part)."""
+	print("-> preparing waffle")
+	mw = 'tmp-waf-'+VERSION
+
+	import tarfile, re, shutil
+
+	if zip_type not in ['bz2', 'gz']:
+		zip_type = 'bz2'
+
+	# copy all modules and packages into the build folder
+	if not os.path.isdir(folder):
+		os.makedirs(folder)
+	
+	for i in modules + packages:
+		if i.endswith(os.path.sep): 
+			i = i[:-1]
+		if os.path.isdir(i) and not os.path.isdir(join(folder, i.split(os.path.sep)[-1])):
+			shutil.copytree(i, join(folder, i.split(os.path.sep)[-1]))
+		elif os.path.isfile(i): 
+			shutil.copy(i, folder)
+
+	#open a file as tar.[extension] for writing
+	tar = tarfile.open('%s.tar.%s' % (mw, zip_type), "w:%s" % zip_type)
+	tarFiles=[]
+
+	def all_files_in(folder): 
+		"""Get all paths of files inside the folder."""
+		filepaths = []
+		walked = [i for i in os.walk(folder)]
+		for base, dirs, files in walked:
+		    filepaths.extend([os.path.join(base, f) for f in files])
+		return filepaths
+		
+	files = [f for f in all_files_in(folder) if not f.endswith(".pyc") and not f.endswith(".pyo") and not "/." in f]
+
+	for x in files:
+		tar.add(x)
+	tar.close()
+
+	# first get the basic script which sets up the path
+	f = open(base_script, 'r')
+	code1 = f.read()
+	f.close()
+	# make sure it doesn't do anything.
+	code1.replace("__name__ == '__main__':", "__name__ == '__main__' and False:")
+	# then append the code from the executable 
+	if executable is not None:
+		f = open(executable, 'r')
+		code1 += f.read()
+		f.close()
+
+	# now store the revision unique number in waf
+	#compute_revision()
+	#reg = re.compile('^REVISION=(.*)', re.M)
+	#code1 = reg.sub(r'REVISION="%s"' % REVISION, code1)
+
+	prefix = ''
+	#if Build.bld:
+	#	prefix = Build.bld.env['PREFIX'] or ''
+
+	reg = re.compile('^INSTALL=(.*)', re.M)
+	code1 = reg.sub(r'INSTALL=%r' % prefix, code1)
+	#change the tarfile extension in the waf script
+	reg = re.compile('bz2', re.M)
+	code1 = reg.sub(zip_type, code1)
+
+	f = open('%s.tar.%s' % (mw, zip_type), 'rb')
+	cnt = f.read()
+	f.close()
+
+	# the REVISION value is the md5 sum of the binary blob (facilitate audits)
+	m = md5()
+	m.update(cnt)
+	REVISION = m.hexdigest()
+	reg = re.compile('^REVISION=(.*)', re.M)
+	code1 = reg.sub(r'REVISION="%s"' % REVISION, code1)
+	f = open(target, 'w')
+	f.write(code1)
+	f.write('#==>\n')
+	data = str(binascii.b2a_base64(cnt))
+	if sys.hexversion>0x300000f:
+		data = data[2:-3] + '\n'
+	f.write("#"+data)
+	f.write('#<==\n')
+	f.close()
+
+	# on windows we want a bat file for starting.
+	if sys.platform == 'win32':
+		f = open(target + '.bat', 'wb')
+		f.write('@python -x %~dp0'+target+' %* & exit /b\n')
+		f.close()
+
+	# Now make the script executable
+	if sys.platform != 'win32':
+		# octal prefix changed in 3.x from 0xxx to 0oxxx. 
+		if sys.hexversion>0x300000f:
+			os.chmod(target, eval("0o755"))
+		else:
+			os.chmod(target, eval("0755"))
+
+	# and get rid of the temporary files
+	os.unlink('%s.tar.%s' % (mw, zip_type))
+	shutil.rmtree(WAFFLE)
+	
+
+def test(d):
+	try: 
+	      os.stat(d)
+	      return os.path.abspath(d)
+	except OSError: pass
+
+def find_lib():
+	"""Find the folder with the modules and packages.
+
+	@return: path to to folder."""
+	name = sys.argv[0]
+	base = os.path.dirname(os.path.abspath(name))
+
+	#devs use $WAFDIR
+	w=test(os.environ.get('WAFDIR', ''))
+	if w: return w
+
+	#waffle_maker.py is executed in place.
+	if name.endswith(WAFFLE_MAKER):
+		w = test(join(base, WAFFLE))
+		# if we don’t yet have a waffle dir, just create it.
+		if not w:
+			os.makedirs(join(base, WAFFLE))
+			w = test(join(base, WAFFLE))
+		if w: return w
+		err("waffle.py requires " + WAFFLE + " -> export WAFDIR=/folder")
+
+	d = "/lib/%s-%s-%s/" % (WAF, VERSION, REVISION)
+	for i in [INSTALL,'/usr','/usr/local','/opt']:
+		w = test(i+d)
+		if w: return w
+
+	# first check if we can use HOME/s,
+	# if not, check for s (allowed?)
+	# then for /tmp/s (delete it, if it already exists,
+	# else it could be used to smuggle in malicious code)
+	# and finally give up. 
+	
+	#waf-local
+	s = '.%s-%s-%s'
+	if sys.platform == 'win32': s = s[1:]
+	# in home
+	d = join(HOME, s % (WAF, VERSION, REVISION), WAFFLE)
+	w = test(d)
+	if w: return w
+
+	# in base
+	if base.startswith(HOME):
+		d = join(base, s % (WAF, VERSION, REVISION), WAFFLE)
+		w = test(d)
+		if w: return w
+	# if we get here, we didn't find it.
+	return None
+
+
+wafdir = find_lib()
+if wafdir is None: # no existing found
+	txt = get_waffle_data() # from this file
+	if txt is None and __name__ == "__main__": # no waffle data in file
+		opts, args = parse_cmdline_args()
+		make_waffle(packages=opts.packages, modules=opts.modules, executable=opts.script)
+	else: 
+		wafdir = unpack_wafdir(txt)
+	
+elif sys.argv[0].endswith(WAFFLE_MAKER) and __name__ == "__main__": # the build script called
+	opts, args = parse_cmdline_args()
+	if opts.filename.endswith(WAFFLE_MAKER):
+		err("Creating a script whose name ends with " + WAFFLE_MAKER + " would confuse the build script. If you really want to name your script *" + WAFFLE_MAKER + " you need to adapt the WAFFLE_MAKER constant in " + WAFFLE_MAKER + " and rename " + WAFFLE_MAKER + " to that name.")
+	make_waffle(packages=opts.packages, modules=opts.modules, executable=opts.script, target=opts.filename)
+	# since we’re running the waffle_maker, we can stop here. 
+	exit(0)
+
+if wafdir is not None: 
+	sys.path = [wafdir] + [join(wafdir, d) for d in os.listdir(wafdir)] + sys.path
+
+
+## If called with --unpack-only, no further code is executed.
+if "--unpack-only" in sys.argv:
+	print(sys.argv[0], "unpacked to", wafdir)
+	exit(0)
+
+### Waffle Finished ###
+
+#!/usr/bin/env python
+
+import fsutils
+import ui
+import targets
+import variables
+import configurations
+import parser
+
+def parse_source_tree():
+    for filename in fsutils.pake_files:
+        parser.parse(filename)
+
+    configuration = configurations.get_selected_configuration()
+    variables.export_special_variables(configuration)
 
 def main():
-    parser = argparse.ArgumentParser(description='Painless buildsystem.')
-    parser.add_argument('target', metavar='target', nargs="*", help='targets to be built')
-    parser.add_argument('-a', '--all',  action="store_true", help='build all targets')
-    parser.add_argument('-c', action='store', dest='configuration', default="__default", nargs="?", help='configuration to be used')
-    parser.add_argument('-j', action='store', dest='jobs', default="1", nargs="?", help='parallel jobs to be used')
-    args = parser.parse_args()
-    Ui.debug(str(args))
+    import command_line
 
-    source_tree = SourceTree()
-    variable_deposit = VariableDeposit()
-    configuration_deposit = ConfigurationDeposit(args.configuration)
-    target_deposit = TargetDeposit(variable_deposit, configuration_deposit, source_tree)
-    parser = SourceTreeParser(int(args.jobs), source_tree, variable_deposit, configuration_deposit, target_deposit)
+    parse_source_tree()
 
-    Ui.bigstep("configuration", str(configuration_deposit.get_selected_configuration()))
+    configuration = configurations.get_selected_configuration()
+    if configuration.name != "__default":
+        ui.bigstep("configuration", str(configurations.get_selected_configuration()))
 
-    if len(args.target) > 0:
-        for target in args.target:
-            target_deposit.build(target)
-    elif args.all:
-        target_deposit.build_all()
+    if command_line.args.target:
+        for target in command_line.args.target:
+            targets.build(target)
+    elif command_line.args.all:
+        targets.build_all()
     else:
-        Ui.info(Ui.BOLD + "targets found in this source tree:" + Ui.RESET)
-        Ui.info(str(target_deposit))
+        ui.info("no target selected\n")
+
+        ui.info(ui.BOLD + "targets:" + ui.RESET)
+        for target in targets.targets.values():
+            ui.info("  " + str(target))
+
+        ui.info(ui.BOLD + "\nconfigurations:" + ui.RESET)
+        for configuration in configurations.configurations:
+            ui.info("  " + str(configuration))
+
+        ui.info("\nsee --help for more\n")
 
 if __name__ == '__main__':
     main()
 
+#==>
+#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
+#<==
