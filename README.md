@@ -26,3 +26,11 @@ mingw-w64-dev
 zip
 g++-multilib
 ```
+
+## External libraries
+This software uses following 3rd party libraries:
+
+ * [MyGUI](http://mygui.info/) is released under MIT license
+ * Jura font by Daniel Johnson on [SIL Open Font License](http://scripts.sil.org/cms/scripts/page.php?item_id=OFL_web)
+ * [OGRE](http://www.ogre3d.org) is made available under the MIT License
+ * [boost](http://www.boost.org)
