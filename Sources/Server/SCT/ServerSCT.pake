@@ -42,5 +42,7 @@ append $sct_database_prerequisites "${__path}/SctDataBase.sql"
 
 set $sct_database "${__build}/SctDataBase.sqlite3"
 
-target phony SctDataBase run_before("rm -f ${sct_database}; cat ${sct_database_prerequisites} | sqlite3 ${sct_database}")
+target phony SctDataBase artefacts($sct_database) \
+                         prerequisites($sct_database_prerequisites) \
+                         run_before("rm -f ${sct_database}; cat ${sct_database_prerequisites} | sqlite3 ${sct_database}")
 
