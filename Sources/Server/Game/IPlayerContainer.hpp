@@ -22,13 +22,11 @@ public:
     // TODO: this is not threadsafe and will be removed
     virtual Common::Game::IPlayer & getBy(Network::IConnection & connection) = 0;
     virtual Network::IConnection & getConnectionById(int) = 0;
+    virtual std::vector<std::shared_ptr<Common::Game::Player> > getAll(Common::Game::PlayerState state) = 0;
+    virtual std::vector<Network::IConnection *> getAllConnections(Common::Game::PlayerState state) = 0;
 
     virtual void invokeOnPlayer(int, std::function<void(Common::Game::IPlayer &, Network::IConnection &)>) = 0;
     virtual void invokeOnAllPlayers(std::function<void(Common::Game::IPlayer &, Network::IConnection &)>) = 0;
-
-    // TODO: threadsafe
-    virtual std::vector<std::shared_ptr<Common::Game::Player> > getAll(Common::Game::PlayerState state) = 0;
-    virtual std::vector<Network::IConnection *> getAllConnections(Common::Game::PlayerState state) = 0;
 
     virtual PlayerSummary getPlayerSummary(int id) = 0;
 
