@@ -401,9 +401,6 @@ if (OGRE_BUILD_XSIEXPORTER)
   add_subdirectory(Tools/XSIExport)
 endif ()
 
-# Install documentation
-add_subdirectory(Docs)
-
 # Install media files
 if (OGRE_INSTALL_SAMPLES OR OGRE_INSTALL_SAMPLES_SOURCE)
   add_subdirectory(Samples/Media)
