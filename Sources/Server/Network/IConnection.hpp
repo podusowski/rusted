@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Messages/Messages.hpp>
+#include "Common/Messages/Messages.hpp"
 #include <Network/IConnectionListener.hpp>
 
 namespace Server

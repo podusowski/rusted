@@ -8,6 +8,7 @@ append $include_dirs ..
 append $include_dirs ../External
 append $include_dirs $Common.__path
 append $include_dirs $boost.__path
+append $include_dirs $__build
 
 append $dependencies Cake Common
 

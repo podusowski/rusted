@@ -14,15 +14,16 @@ append $sources Math/Bezier3.cpp
 append $sources Math/Matrix3.cpp
 append $sources Math/KinematicParticle.cpp
 
-append $include_dirs .
-append $include_dirs ..
-append $include_dirs ../External
+append $include_dirs $__path
+append $include_dirs "${__path}/.."
+append $include_dirs "${__path}/../External"
 append $include_dirs $boost.__path
 append $include_dirs $hashlibpp.__path
+append $include_dirs $__build
 
 target static_library Common sources($sources) include_dirs($include_dirs) depends_on(CommonMessagesHeader)
 
-set $messages_header Messages/Messages.hpp
+set $messages_header "${__build}/Common/Messages/Messages.hpp"
 set $messages_xml Messages/Messages.xml
 set $protoc "${Cake.__path}/Networking/Protocol/protoc.py"
 set $protoc_command "${protoc} --output ${messages_header} ${messages_xml} --namespace Common::Messages"

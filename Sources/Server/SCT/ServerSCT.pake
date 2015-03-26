@@ -21,6 +21,7 @@ append $include_dirs "${boost.__path}"
 append $include_dirs "${SOCI.soci_src}/core"
 append $include_dirs "${Common.__path}"
 append $include_dirs "${Common.__path}/.."
+append $include_dirs $Common.include_dirs
 
 append $dependencies gtest
 append $dependencies SctDataBase
