@@ -2,6 +2,7 @@ append $sources main.cpp
 
 append $libraries Common
 append $libraries Cake
+append $libraries pthread
 
 append $include_dirs .
 append $include_dirs ..

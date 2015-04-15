@@ -29,6 +29,10 @@ public:
 
 private:
     MutexHandle m_mutex;
+
+#ifndef _WIN32
+    pthread_mutexattr_t m_mutexAttr;
+#endif
 };
 
 }

@@ -9,7 +9,12 @@ Mutex::Mutex()
 #ifdef _WIN32
     InitializeCriticalSection(&m_mutex);
 #else
-    int e = pthread_mutex_init(&m_mutex, 0);
+    int e = 0;
+
+    e |= pthread_mutexattr_init(&m_mutexAttr);
+    e |= pthread_mutexattr_settype(&m_mutexAttr, PTHREAD_MUTEX_RECURSIVE);
+    e |= pthread_mutex_init(&m_mutex, &m_mutexAttr);
+
     if (e)
     {
         throw std::runtime_error("error while initializing mutex");
