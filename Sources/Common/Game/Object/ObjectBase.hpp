@@ -62,13 +62,12 @@ private:
     CargoHoldSignal m_cargoHoldSignal;
 };
 
-}
-}
-}
-
 inline std::ostream & operator<<(std::ostream & os, Common::Game::Object::ObjectBase & object)
 {
     os << CAKE_DEPENDENCY_INJECTION_TYPENAME(object) << " " << object.getPosition();
     return os;
 }
 
+}
+}
+}

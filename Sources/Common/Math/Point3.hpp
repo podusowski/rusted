@@ -148,12 +148,11 @@ public:
     }
 };
 
-}
-}
-
 inline std::ostream & operator<<(std::ostream & os, const Common::Math::Point3 & p)
 {
     os << "(" << p.getX() << ", " << p.getY() << ", " << p.getZ() << ")";
     return os;
 }
 
+}
+}

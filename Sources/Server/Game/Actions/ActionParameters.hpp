@@ -42,10 +42,6 @@ struct ActionParameters
     Common::Game::Object::ObjectBase::Id selectedObjectId;
 };
 
-}
-}
-}
-
 inline std::ostream & operator << (std::ostream & os, const Server::Game::Actions::ActionParameters & actionParameters)
 {
     return os << "action:" << actionParameters.actionId << "/" << actionParameters.actionParameter
@@ -53,3 +49,6 @@ inline std::ostream & operator << (std::ostream & os, const Server::Game::Action
               << ", selectedObject:" << actionParameters.selectedObjectId;
 }
 
+}
+}
+}

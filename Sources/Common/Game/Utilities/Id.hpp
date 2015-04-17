@@ -89,10 +89,6 @@ private:
     bool m_valid;
 };
 
-}
-}
-}
-
 template<class T> std::ostream & operator << (std::ostream & os, const Common::Game::Utilities::Id<T> id)
 {
     if (id.valid())
@@ -111,3 +107,6 @@ template<class T> std::ostream & operator << (std::ostream & os, const Common::G
     return os << id.get();
 }
 
+}
+}
+}

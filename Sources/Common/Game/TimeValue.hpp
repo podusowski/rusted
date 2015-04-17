@@ -28,10 +28,10 @@ private:
     unsigned m_miliseconds;
 };
 
-}
-}
-
 inline std::ostream & operator<<(std::ostream & os, const Common::Game::TimeValue & val)
 {
     return os << val.getSeconds() << "." << val.getMiliseconds() << "s";
+}
+
+}
 }

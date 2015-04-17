@@ -49,12 +49,11 @@ public:
     virtual ~IFlightTrajectory() {}
 };
 
-}
-}
-}
-
 inline std::ostream & operator << (std::ostream & os, Common::Game::Object::IFlightTrajectory::Description & description)
 {
     return os << "(startTime:" << description.startTime << ", initialSpeed:" << description.initialSpeed << ")";
 }
 
+}
+}
+}
