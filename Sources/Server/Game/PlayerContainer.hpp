@@ -27,10 +27,10 @@ public:
     void add(Network::IConnection &);
     void remove(Network::IConnection &);
 
-    Common::Game::Player & getBy(Network::IConnection & connection);
     Network::IConnection & getConnectionById(int);
 
     void invokeOnPlayer(int, std::function<void(Common::Game::IPlayer &, Network::IConnection &)>);
+    void invokeOnPlayer(Network::IConnection &, std::function<void(Common::Game::IPlayer &)>) override;
     void invokeOnAllPlayers(std::function<void(Common::Game::IPlayer &, Network::IConnection &)>);
 
     std::vector<std::shared_ptr<Common::Game::Player> > getAll(Common::Game::PlayerState state);

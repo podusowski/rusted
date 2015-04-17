@@ -52,82 +52,85 @@ void EntityService::handle(const Common::Messages::GetObjectInfo & getObjectInfo
 
 void EntityService::handle(const Common::Messages::SelectObject & selectObject, Network::IConnection & connection)
 {
-    auto & player = m_playerContainer.getBy(connection);
-    auto & object = m_universe.getById<Common::Game::Object::ObjectBase>(selectObject.id);
+    m_playerContainer.invokeOnPlayer(connection, [&] (Common::Game::IPlayer & player)
+    {
+        auto & object = m_universe.getById<Common::Game::Object::ObjectBase>(selectObject.id);
 
-    LOG_DEBUG << "Player " << player.getId() << " is selecting " << object;
+        LOG_DEBUG << "Player " << player.getId() << " is selecting " << object;
 
-    player.selectObject(object);
+        player.selectObject(object);
+    });
 }
 
 void EntityService::handle(const Common::Messages::FocusObject & focusObject, Network::IConnection & connection)
 {
-    auto & player = m_playerContainer.getBy(connection);
-    auto & object = m_universe.getById<Common::Game::Object::ObjectBase>(focusObject.id);
+    m_playerContainer.invokeOnPlayer(connection, [&] (Common::Game::IPlayer & player)
+    {
+        auto & object = m_universe.getById<Common::Game::Object::ObjectBase>(focusObject.id);
 
-    LOG_DEBUG << "Player " << player.getId() << " is focusing " << object;
+        LOG_DEBUG << "Player " << player.getId() << " is focusing " << object;
 
-    player.focusObject(object);
+        player.focusObject(object);
+    });
 }
 
 void EntityService::handle(const Common::Messages::FetchAvailableActions &, Network::IConnection & connection)
 {
-    // TODO: thread safety
-    auto & player = m_playerContainer.getBy(connection);
-
-    auto & object = dynamic_cast<Common::Game::Object::Ship&>(player.getFocusedObject());
-    auto & shipClass = m_shipClassContainer->getById(object.getClass());
-    auto actions = shipClass.getAvailableActions();
-
-    Common::Game::Object::ObjectBase::StrictId focusedObjectId = player.getFocusedObjectId().get();
-    Common::Game::Object::ObjectBase::Id selectedObjectId = player.getSelectedObjectId();
-
-    Common::Messages::AvailableActions availableActions;
-    LOG_DEBUG << "Filling available actions for ship:" << object.getId() << " (class:" << shipClass.getId() << ")";
-    for (auto a: actions)
+    m_playerContainer.invokeOnPlayer(connection, [&] (Common::Game::IPlayer & player)
     {
-        Common::Game::IPlayer::Id playerId(player.getId());
-        Game::Actions::ActionParameters actionParameters(playerId, a.type, a.parameter, focusedObjectId, selectedObjectId);
+        // TODO: thread safety
+        auto & object = dynamic_cast<Common::Game::Object::Ship&>(player.getFocusedObject());
+        auto & shipClass = m_shipClassContainer->getById(object.getClass());
+        auto actions = shipClass.getAvailableActions();
 
-        const auto action = m_actionFactory.create(connection, player, actionParameters);
+        Common::Game::Object::ObjectBase::StrictId focusedObjectId = player.getFocusedObjectId().get();
+        Common::Game::Object::ObjectBase::Id selectedObjectId = player.getSelectedObjectId();
 
-        LOG_DEBUG << "  name:" << action->getName()
-                  << ", description: " << action->getDescription()
-                  << ", type:" << a.type
-                  << ", parameter:" << a.parameter;
+        Common::Messages::AvailableActions availableActions;
+        LOG_DEBUG << "Filling available actions for ship:" << object.getId() << " (class:" << shipClass.getId() << ")";
+        for (auto a: actions)
+        {
+            Common::Game::IPlayer::Id playerId(player.getId());
+            Game::Actions::ActionParameters actionParameters(playerId, a.type, a.parameter, focusedObjectId, selectedObjectId);
 
-        Common::Messages::AvailableAction availableAction;
-        availableAction.id = a.type;
-        availableAction.name = action->getName();
-        availableAction.parameter = a.parameter;
-        availableAction.description = action->getDescription();
+            const auto action = m_actionFactory.create(connection, player, actionParameters);
 
-        availableActions.actions.push_back(availableAction);
-    }
-    connection.send(availableActions);
+            LOG_DEBUG << "  name:" << action->getName()
+                      << ", description: " << action->getDescription()
+                      << ", type:" << a.type
+                      << ", parameter:" << a.parameter;
+
+            Common::Messages::AvailableAction availableAction;
+            availableAction.id = a.type;
+            availableAction.name = action->getName();
+            availableAction.parameter = a.parameter;
+            availableAction.description = action->getDescription();
+
+            availableActions.actions.push_back(availableAction);
+        }
+        connection.send(availableActions);
+    });
 }
 
 void EntityService::handle(const Common::Messages::ExecuteAction & executeAction, Network::IConnection & connection)
 {
-    auto & player = m_playerContainer.getBy(connection);
-
-    LOG_DEBUG << "Player " << player.getId() << " is executing action id:" 
-              << executeAction.id << ", parameter:" << executeAction.parameter;
-
-    Common::Game::Object::ObjectBase::StrictId focusedObjectId = player.getFocusedObjectId().get();
-    Common::Game::Object::ObjectBase::Id selectedObjectId = player.getSelectedObjectId();
-
-    try
+    m_playerContainer.invokeOnPlayer(connection, [&] (Common::Game::IPlayer & player)
     {
-        Common::Game::IPlayer::Id playerId(player.getId());
-        Game::Actions::ActionParameters actionParameters(playerId, executeAction.id, executeAction.parameter, focusedObjectId, selectedObjectId);
+        Common::Game::Object::ObjectBase::StrictId focusedObjectId = player.getFocusedObjectId().get();
+        Common::Game::Object::ObjectBase::Id selectedObjectId = player.getSelectedObjectId();
 
-        m_actionPerformer.perform(connection, player, actionParameters, executeAction.loop);
-    }
-    catch (const std::exception & ex)
-    {
-        LOG_DEBUG << "Can't execute action, reason: " << ex.what();
-    }
+        try
+        {
+            Common::Game::IPlayer::Id playerId(player.getId());
+            Game::Actions::ActionParameters actionParameters(playerId, executeAction.id, executeAction.parameter, focusedObjectId, selectedObjectId);
+
+            m_actionPerformer.perform(connection, player, actionParameters, executeAction.loop);
+        }
+        catch (const std::exception & ex)
+        {
+            LOG_DEBUG << "Can't execute action, reason: " << ex.what();
+        }
+    });
 }
 
 void EntityService::handle(const Common::Messages::GetPlayerName & getPlayerName, Network::IConnection & connection)

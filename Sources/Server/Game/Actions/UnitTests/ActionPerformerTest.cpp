@@ -205,6 +205,9 @@ TEST_F(ActionPerformerTest, ActionExecuteWithLoop)
 
     ON_CALL(playerContainer, getConnectionById(PLAYER_ID)).WillByDefault(ReturnRef(connection));
 
+    EXPECT_CALL(playerContainer, invokeOnPlayer(PLAYER_ID, _)).WillRepeatedly(InvokeArgument<1>(std::ref(player), std::ref(connection)));
+    EXPECT_CALL(playerContainer, invokeOnPlayer(Ref(connection), _)).WillRepeatedly(InvokeArgument<1>(std::ref(player)));
+
     auto & actionMock = dynamic_cast<Server::Game::Actions::ActionMock&>(*action1);
     EXPECT_CALL(actionMock, start()).Times(2).WillRepeatedly(Return(Common::Game::TimeValue(2, 0)));
     EXPECT_CALL(actionMock, finish()).Times(1).WillOnce(Return(Common::Game::TimeValue(3, 0)));

@@ -201,21 +201,23 @@ void ActionPerformer::actionCooldownExpired(unsigned playerId, unsigned objectId
         {
             LOG_DEBUG << "Loop is active, restarting action";
 
-            auto & player = m_playerContainer.getBy(connection);
-            Common::Game::IPlayer::Id playerId(player.getId());
+            m_playerContainer.invokeOnPlayer(connection, [&](Common::Game::IPlayer & player)
+            {
+                Common::Game::IPlayer::Id playerId(player.getId());
 
-            ActionParameters actionParameters(
-                playerId,
-                ongoingOrCoolingAction.actionParameters.actionId,
-                ongoingOrCoolingAction.actionParameters.actionParameter,
-                ongoingOrCoolingAction.actionParameters.focusedObjectId,
-                ongoingOrCoolingAction.actionParameters.selectedObjectId);
+                ActionParameters actionParameters(
+                    playerId,
+                    ongoingOrCoolingAction.actionParameters.actionId,
+                    ongoingOrCoolingAction.actionParameters.actionParameter,
+                    ongoingOrCoolingAction.actionParameters.focusedObjectId,
+                    ongoingOrCoolingAction.actionParameters.selectedObjectId);
 
-            perform(
-                connection,
-                m_playerContainer.getBy(connection),
-                actionParameters,
-                true);
+                perform(
+                    connection,
+                    player,
+                    actionParameters,
+                    true);
+            });
         }
     }
     else

@@ -22,6 +22,7 @@ public:
     MOCK_METHOD1(getBy, Common::Game::IPlayer & (Network::IConnection & connection));
     MOCK_METHOD1(getConnectionById, Network::IConnection & (int));
     MOCK_METHOD2(invokeOnPlayer, void(int, std::function<void(Common::Game::IPlayer &, Network::IConnection &)>));
+    MOCK_METHOD2(invokeOnPlayer, void(Network::IConnection &, std::function<void(Common::Game::IPlayer &)>));
     MOCK_METHOD1(invokeOnAllPlayers, void(std::function<void(Common::Game::IPlayer &, Network::IConnection &)>));
     MOCK_METHOD1(getAll, std::vector<std::shared_ptr<Common::Game::Player> > (Common::Game::PlayerState state));
     MOCK_METHOD1(getAllConnections, std::vector<Network::IConnection *> (Common::Game::PlayerState state));

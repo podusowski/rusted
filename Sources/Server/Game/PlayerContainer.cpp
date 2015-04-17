@@ -65,16 +65,9 @@ void PlayerContainer::remove(Network::IConnection & connection)
     }
 }
 
-Common::Game::Player & PlayerContainer::getBy(Network::IConnection & connection)
-{
-    // TODO: can't impl thread safety by this impl
-    Cake::Threading::ScopedLock lock(m_mutex);
-    return *m_connectionMap.at(&connection);
-}
-
 Server::Network::IConnection & PlayerContainer::getConnectionById(int playerId)
 {
-    // TODO: optimize this
+    // TODO: remove this
     Cake::Threading::ScopedLock lock(m_mutex);
     for (auto & i: m_connectionMap)
     {
@@ -89,6 +82,7 @@ Server::Network::IConnection & PlayerContainer::getConnectionById(int playerId)
 void PlayerContainer::invokeOnPlayer(int id, std::function<void(Common::Game::IPlayer &, Network::IConnection &)> function)
 {
     Cake::Threading::ScopedLock lock(m_mutex);
+
     for (auto & i: m_connectionMap)
     {
         if (i.second->getId() == id)
@@ -97,12 +91,28 @@ void PlayerContainer::invokeOnPlayer(int id, std::function<void(Common::Game::IP
             return;
         }
     }
+
     throw std::out_of_range("player doesn't exist");
+}
+
+void PlayerContainer::invokeOnPlayer(Network::IConnection & connection, std::function<void(Common::Game::IPlayer &)> function)
+{
+    Cake::Threading::ScopedLock lock(m_mutex);
+
+    auto it = m_connectionMap.find(&connection);
+
+    if (it == m_connectionMap.end())
+    {
+        throw std::out_of_range("player doesn't exist");
+    }
+
+    function(*it->second);
 }
 
 void PlayerContainer::invokeOnAllPlayers(std::function<void(Common::Game::IPlayer &, Network::IConnection &)> function)
 {
     Cake::Threading::ScopedLock lock(m_mutex);
+
     for (auto & i: m_connectionMap)
     {
         function(*i.second, *i.first);
@@ -119,7 +129,7 @@ std::vector<std::shared_ptr<Common::Game::Player> > PlayerContainer::getAll(Comm
     {
         if (it->second->getState() == state)
         {
-            ret.push_back(it->second); 
+            ret.push_back(it->second);
         }
     }
 
@@ -136,7 +146,7 @@ std::vector<Server::Network::IConnection *> PlayerContainer::getAllConnections(C
     {
         if (it->second->getState() == state)
         {
-            ret.push_back(it->first); 
+            ret.push_back(it->first);
         }
     }
 
