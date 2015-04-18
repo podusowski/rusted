@@ -11,7 +11,7 @@ namespace Cake
 namespace Networking
 {
 
-class ServerSocketPool
+class [[deprecated]] ServerSocketPool
 {
 public:
     typedef std::pair<std::shared_ptr<Socket>, std::shared_ptr<ServerSocket>> AcceptReturnType;
