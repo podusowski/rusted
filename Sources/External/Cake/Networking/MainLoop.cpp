@@ -29,7 +29,7 @@ void MainLoop::run()
             wait();
         }
     }
-    catch (std::exception ex)
+    catch (std::exception & ex)
     {
         LOG_WARN << "Main loop has ended, reason: " << ex.what();
     }
@@ -48,7 +48,7 @@ void MainLoop::wait()
         auto native = server->getNativeHandle();
         FD_SET(native, &sockets);
 
-        highestNative = std::max(highestNative, native);
+        highestNative = std::max(native, highestNative);
     }
 
     int num = select(highestNative + 1, &sockets, nullptr, nullptr, nullptr);
@@ -59,7 +59,6 @@ void MainLoop::wait()
     }
     else if (num > 0)
     {
-        // got some new socket!
         for (auto server: m_servers)
         {
             auto native = server->getNativeHandle();
@@ -69,8 +68,10 @@ void MainLoop::wait()
             }
         }
     }
-
-    throw std::runtime_error("huh?");
+    else
+    {
+        throw std::runtime_error("huh?");
+    }
 }
 
 }

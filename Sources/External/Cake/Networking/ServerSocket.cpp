@@ -44,7 +44,7 @@ auto ServerSocket::createTcpServer(unsigned port,
     listen(sockFd);
 
     // can't use make_shared due to private constructor
-    return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
+    return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd, clientConnected));
 }
 
 auto ServerSocket::createUnixServer(const std::string & path,
@@ -72,7 +72,7 @@ auto ServerSocket::createUnixServer(const std::string & path,
     listen(sockFd);
 
     // can't use make_shared due to private constructor
-    return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
+    return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd, clientConnected));
 #endif
 }
 

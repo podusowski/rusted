@@ -3,7 +3,7 @@
 
 #include "Cake/Diagnostics/Logger.hpp"
 #include "Cake/Networking/ServerSocket.hpp"
-#include "Cake/Networking/ServerSocketPool.hpp"
+#include "Cake/Networking/MainLoop.hpp"
 
 #include "Server/Network/ServerController.hpp"
 
@@ -26,48 +26,39 @@ int ServerController::start()
     int tcpPort = m_cfg->getValue<int>("network.port");
     std::string administrationSocketPath = m_cfg->getValue<std::string>("network.administration_socket_path");
 
-    Cake::Networking::ServerSocketPool serverPool;
-
     LOG_INFO << "Setting up player socket on TCP:" << tcpPort;
-    auto server = Cake::Networking::ServerSocket::createTcpServer(tcpPort);
-    serverPool.add(server);
+
+    using namespace Cake::Networking;
+
+    auto server = Cake::Networking::ServerSocket::createTcpServer(tcpPort, [this](std::shared_ptr<Socket> socket)
+    {
+        LOG_DEBUG << "New client connection established";
+
+        std::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket, m_serviceDeployment));
+
+        m_connections.push_back(connectionContext);
+        m_playerContainer.add(connectionContext->getConnection());
+        m_serviceDeployment.deployNewConnection(connectionContext->getConnection());
+        connectionContext->getThread().start();
+    });
 
     LOG_INFO << "Setting up administrative socket on UNIX:" << administrationSocketPath;
-    auto administrationServer = Cake::Networking::ServerSocket::createUnixServer(administrationSocketPath);
-    serverPool.add(administrationServer);
 
-    LOG_INFO << "Server is up and running";
+    auto administrationServer = Cake::Networking::ServerSocket::createUnixServer(administrationSocketPath, [this](std::shared_ptr<Socket> socket)
+    {
+        LOG_INFO << "New administration connection established";
+
+        std::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket, m_serviceDeployment));
+
+        m_administrationConnections.push_back(connectionContext);
+        m_serviceDeployment.deployAdministrationConnection(connectionContext->getConnection());
+        connectionContext->getThread().start();
+    });
 
     try
     {
-        while (true)
-        {
-            gc();
-
-            auto socket = serverPool.accept();
-
-            if (socket.second == server)
-            {
-                LOG_DEBUG << "New client connection established";
-
-                std::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket.first, m_serviceDeployment));
-
-                m_connections.push_back(connectionContext);
-                m_playerContainer.add(connectionContext->getConnection());
-                m_serviceDeployment.deployNewConnection(connectionContext->getConnection());
-                connectionContext->getThread().start();
-            }
-            else
-            {
-                LOG_INFO << "New administration connection established";
-
-                std::shared_ptr<ConnectionContext> connectionContext(new ConnectionContext(socket.first, m_serviceDeployment));
-
-                m_administrationConnections.push_back(connectionContext);
-                m_serviceDeployment.deployAdministrationConnection(connectionContext->getConnection());
-                connectionContext->getThread().start();
-            }
-        }
+        MainLoop loop({server, administrationServer});
+        loop.run();
     }
     catch (std::exception & ex)
     {
