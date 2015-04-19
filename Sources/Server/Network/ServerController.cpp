@@ -10,8 +10,6 @@
 using namespace Server::Network;
 
 ServerController::ServerController() :
-    m_lastConnectionId(1),
-    m_playerContainer(),
     m_serviceDeployment(*m_cfg, m_playerContainer)
 {
     struct sigaction sigact;
@@ -30,7 +28,7 @@ int ServerController::start()
 
     using namespace Cake::Networking;
 
-    auto server = Cake::Networking::ServerSocket::createTcpServer(tcpPort, [this](std::shared_ptr<Socket> socket)
+    auto server = ServerSocket::createTcpServer(tcpPort, [this](std::shared_ptr<Socket> socket)
     {
         LOG_DEBUG << "New client connection established";
 
@@ -44,7 +42,7 @@ int ServerController::start()
 
     LOG_INFO << "Setting up administrative socket on UNIX:" << administrationSocketPath;
 
-    auto administrationServer = Cake::Networking::ServerSocket::createUnixServer(administrationSocketPath, [this](std::shared_ptr<Socket> socket)
+    auto administrationServer = ServerSocket::createUnixServer(administrationSocketPath, [this](std::shared_ptr<Socket> socket)
     {
         LOG_INFO << "New administration connection established";
 
