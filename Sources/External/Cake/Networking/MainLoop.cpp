@@ -20,13 +20,13 @@ MainLoop::MainLoop(Servers servers) : m_servers(servers)
     LOG_INFO << "Entering main loop with with " << m_servers.size() << " server(s)";
 }
 
-void MainLoop::run(SocketConnected socketConnected)
+void MainLoop::run()
 {
     try
     {
         while (true)
         {
-            wait(socketConnected);
+            wait();
         }
     }
     catch (std::exception ex)
@@ -35,7 +35,7 @@ void MainLoop::run(SocketConnected socketConnected)
     }
 }
 
-void MainLoop::wait(SocketConnected socketConnected)
+void MainLoop::wait()
 {
     fd_set sockets;
 
@@ -65,7 +65,7 @@ void MainLoop::wait(SocketConnected socketConnected)
             auto native = server->getNativeHandle();
             if (FD_ISSET(native, &sockets))
             {
-                socketConnected(*server, server->accept());
+                server->act();
             }
         }
     }

@@ -12,17 +12,24 @@ namespace Networking
 class ServerSocket
 {
 public:
-    static std::shared_ptr<ServerSocket> createTcpServer(unsigned port);
-    static std::shared_ptr<ServerSocket> createUnixServer(const std::string & path);
+    using ClientConnected = std::function<void(std::shared_ptr<Socket>)>;
 
-    std::shared_ptr<Socket> accept();
+    static auto createTcpServer(unsigned port,
+                                ClientConnected = ClientConnected{}) -> std::shared_ptr<ServerSocket>;
+
+    static auto createUnixServer(const std::string & path,
+                                 ClientConnected = ClientConnected{}) -> std::shared_ptr<ServerSocket>;
+
+    auto accept() -> std::shared_ptr<Socket>;
+    void act();
     int getNativeHandle() const;
 
 private:
-    ServerSocket(int sockFd);
+    ServerSocket(int sockFd, ClientConnected = ClientConnected{});
     static int createDescriptor(int family);
     static void listen(int descriptor);
     int m_sockFd;
+    ClientConnected m_clientConnected;
 };
 
 }

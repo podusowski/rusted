@@ -14,14 +14,12 @@ class MainLoop
 {
 public:
     using Servers = std::vector<std::shared_ptr<ServerSocket>>;
-    using SocketConnected = std::function<void(ServerSocket &, std::shared_ptr<Socket>)>;
 
     explicit MainLoop(Servers servers);
-
-    void run(SocketConnected);
+    void run();
 
 private:
-    void wait(SocketConnected);
+    void wait();
 
     Servers m_servers;
 };

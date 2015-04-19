@@ -19,12 +19,14 @@
 
 using namespace Cake::Networking;
 
-ServerSocket::ServerSocket(int sockFd) :
-    m_sockFd(sockFd)
+ServerSocket::ServerSocket(int sockFd, ClientConnected clientConnected) :
+    m_sockFd(sockFd),
+    m_clientConnected(clientConnected)
 {
 }
 
-std::shared_ptr<ServerSocket> ServerSocket::createTcpServer(unsigned port)
+auto ServerSocket::createTcpServer(unsigned port,
+                                   ClientConnected clientConnected) -> std::shared_ptr<ServerSocket>
 {
     int sockFd = createDescriptor(PF_INET);
 
@@ -45,7 +47,8 @@ std::shared_ptr<ServerSocket> ServerSocket::createTcpServer(unsigned port)
     return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd));
 }
 
-std::shared_ptr<ServerSocket> ServerSocket::createUnixServer(const std::string & path)
+auto ServerSocket::createUnixServer(const std::string & path,
+                                    ClientConnected clientConnected) -> std::shared_ptr<ServerSocket>
 {
 #ifdef _WIN32
     throw std::runtime_error("WIN32 doesn't support UNIX sockets");
@@ -73,7 +76,7 @@ std::shared_ptr<ServerSocket> ServerSocket::createUnixServer(const std::string &
 #endif
 }
 
-std::shared_ptr<Socket> ServerSocket::accept()
+auto ServerSocket::accept() -> std::shared_ptr<Socket>
 {
     int sockFd = ::accept(m_sockFd, NULL, NULL);
 
@@ -83,6 +86,16 @@ std::shared_ptr<Socket> ServerSocket::accept()
     }
 
     return std::shared_ptr<Socket>(new Socket(sockFd));
+}
+
+void ServerSocket::act()
+{
+    auto socket = accept();
+
+    if (m_clientConnected)
+    {
+        m_clientConnected(socket);
+    }
 }
 
 int ServerSocket::getNativeHandle() const
