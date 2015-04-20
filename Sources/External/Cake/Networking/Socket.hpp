@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ISelectable.hpp"
+#include "Bytes.hpp"
 
 #include <vector>
 #include <map>
@@ -26,7 +27,7 @@ public:
     static std::shared_ptr<Socket> connectToTcpSocket(const std::string & address, int port);
 
     void send(const void *, size_t);
-    void receive(void *, size_t);
+    auto receive(size_t) -> Bytes;
 
     void asyncReceive(size_t, DataReceived);
 

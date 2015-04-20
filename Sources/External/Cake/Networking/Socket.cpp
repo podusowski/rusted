@@ -1,4 +1,5 @@
 #include <stdexcept>
+#include <iterator>
 
 #ifdef _WIN32
     #include <winsock2.h>
@@ -87,13 +88,14 @@ void Socket::send(const void * buf, size_t size)
     }
 }
 
-void Socket::receive(void * buf, size_t size)
+auto Socket::receive(size_t size) -> Bytes
 {
-    char * charBuf = static_cast<char *>(buf);
+    Bytes bytes(size);
+    ptrdiff_t position = 0;
 
-    while (size)
+    while (size > 0)
     {
-        int ret = ::recv(m_sockFd, charBuf, size, 0);
+        int ret = ::recv(m_sockFd, std::next(bytes.chars(), position), size, 0);
 
         if (ret == 0)
         {
@@ -104,9 +106,11 @@ void Socket::receive(void * buf, size_t size)
             THROW(std::runtime_error) << "recv returned error: " << Detail::Error::lastError();
         }
 
-        charBuf += ret;
+        position += ret;
         size -= ret;
     }
+
+    return bytes;
 }
 
 void Socket::asyncReceive(size_t expecting, DataReceived dataReceived)
@@ -123,7 +127,8 @@ void Socket::asyncReceive(size_t expecting, DataReceived dataReceived)
 
 Socket & Socket::operator>>(unsigned & value)
 {
-    receive(&value, sizeof(value));
+    auto bytes = receive(sizeof(value));
+    value = bytes.as<unsigned>();
     return *this;
 }
 
@@ -138,8 +143,7 @@ Socket & Socket::operator>>(std::string & str)
     // TODO: we can operate on the string directly
     str.clear();
 
-    size_t size;
-    receive(&size, sizeof(size));
+    size_t size = receive(sizeof(size_t)).as<size_t>();
 
     if (size > 0)
     {
@@ -148,10 +152,7 @@ Socket & Socket::operator>>(std::string & str)
             throw std::runtime_error("size of string exceeded 1MB, can't receive");
         }
 
-        std::vector<char> buf(size + 1);
-        buf.back() = 0;
-        receive(&buf[0], size);
-        str = &buf[0];
+        str = receive(size).chars();
     }
 
     return *this;
@@ -174,8 +175,7 @@ Socket & Socket::operator>>(StringMap & map)
 {
     map.clear();
 
-    size_t size;
-    receive(&size, sizeof(size));
+    size_t size = receive(sizeof(size_t)).as<size_t>();
 
     for (size_t i = 0; i < size; i++)
     {
