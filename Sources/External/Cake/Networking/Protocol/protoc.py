@@ -5,7 +5,7 @@ import sys
 import argparse
 from xml.dom import minidom
 
-def convertToCppType(xmlType):
+def as_cpp_type(xmlType):
     if xmlType == "boolean":
         return "bool"
     elif xmlType == "string":
@@ -22,7 +22,7 @@ class Param:
     def __init__(self, xml_node):
         self.name = xml_node.getAttribute("name")
         self.type = xml_node.getAttribute("type")
-        self.cpp_type = convertToCppType(xml_node.getAttribute("type")) 
+        self.cpp_type = as_cpp_type(xml_node.getAttribute("type")) 
 
 class List:
     def __init__(self, xml_node):
