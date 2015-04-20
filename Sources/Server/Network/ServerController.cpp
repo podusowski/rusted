@@ -2,7 +2,7 @@
 #include <signal.h>
 
 #include "Cake/Diagnostics/Logger.hpp"
-#include "Cake/Networking/ServerSocket.hpp"
+#include "Cake/Networking/Acceptor.hpp"
 #include "Cake/Networking/MainLoop.hpp"
 
 #include "Server/Network/ServerController.hpp"
@@ -28,7 +28,7 @@ int ServerController::start()
 
     using namespace Cake::Networking;
 
-    auto server = ServerSocket::createTcpServer(tcpPort, [this](std::shared_ptr<Socket> socket)
+    auto server = Acceptor::createTcpServer(tcpPort, [this](std::shared_ptr<Socket> socket)
     {
         LOG_DEBUG << "New client connection established";
 
@@ -42,7 +42,7 @@ int ServerController::start()
 
     LOG_INFO << "Setting up administrative socket on UNIX:" << administrationSocketPath;
 
-    auto administrationServer = ServerSocket::createUnixServer(administrationSocketPath, [this](std::shared_ptr<Socket> socket)
+    auto administrationServer = Acceptor::createUnixServer(administrationSocketPath, [this](std::shared_ptr<Socket> socket)
     {
         LOG_INFO << "New administration connection established";
 

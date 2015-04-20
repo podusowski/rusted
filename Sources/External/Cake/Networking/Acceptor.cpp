@@ -15,18 +15,18 @@
 
 #include "Utils/BuildString.hpp"
 #include "Detail/Error.hpp"
-#include "ServerSocket.hpp"
+#include "Acceptor.hpp"
 
 using namespace Cake::Networking;
 
-ServerSocket::ServerSocket(int sockFd, ClientConnected clientConnected) :
+Acceptor::Acceptor(int sockFd, ClientConnected clientConnected) :
     m_sockFd(sockFd),
     m_clientConnected(clientConnected)
 {
 }
 
-auto ServerSocket::createTcpServer(unsigned port,
-                                   ClientConnected clientConnected) -> std::shared_ptr<ServerSocket>
+auto Acceptor::createTcpServer(unsigned port,
+                                   ClientConnected clientConnected) -> std::shared_ptr<Acceptor>
 {
     int sockFd = createDescriptor(PF_INET);
 
@@ -44,11 +44,11 @@ auto ServerSocket::createTcpServer(unsigned port,
     listen(sockFd);
 
     // can't use make_shared due to private constructor
-    return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd, clientConnected));
+    return std::shared_ptr<Acceptor>(new Acceptor(sockFd, clientConnected));
 }
 
-auto ServerSocket::createUnixServer(const std::string & path,
-                                    ClientConnected clientConnected) -> std::shared_ptr<ServerSocket>
+auto Acceptor::createUnixServer(const std::string & path,
+                                    ClientConnected clientConnected) -> std::shared_ptr<Acceptor>
 {
 #ifdef _WIN32
     throw std::runtime_error("WIN32 doesn't support UNIX sockets");
@@ -72,11 +72,11 @@ auto ServerSocket::createUnixServer(const std::string & path,
     listen(sockFd);
 
     // can't use make_shared due to private constructor
-    return std::shared_ptr<ServerSocket>(new ServerSocket(sockFd, clientConnected));
+    return std::shared_ptr<Acceptor>(new Acceptor(sockFd, clientConnected));
 #endif
 }
 
-auto ServerSocket::accept() -> std::shared_ptr<Socket>
+auto Acceptor::accept() -> std::shared_ptr<Socket>
 {
     int sockFd = ::accept(m_sockFd, NULL, NULL);
 
@@ -88,7 +88,7 @@ auto ServerSocket::accept() -> std::shared_ptr<Socket>
     return std::shared_ptr<Socket>(new Socket(sockFd));
 }
 
-void ServerSocket::act()
+void Acceptor::act()
 {
     auto socket = accept();
 
@@ -98,12 +98,12 @@ void ServerSocket::act()
     }
 }
 
-int ServerSocket::getNativeHandle() const
+int Acceptor::getNativeHandle() const
 {
     return m_sockFd;
 }
 
-int ServerSocket::createDescriptor(int family)
+int Acceptor::createDescriptor(int family)
 {
     int descriptor = socket(family, SOCK_STREAM, 0);
 
@@ -115,7 +115,7 @@ int ServerSocket::createDescriptor(int family)
     return descriptor;
 }
 
-void ServerSocket::listen(int descriptor)
+void Acceptor::listen(int descriptor)
 {
     int ret = ::listen(descriptor, 5);
 
