@@ -1,5 +1,6 @@
 #pragma once
 
+#include <cstddef>
 #include <vector>
 
 namespace Cake
@@ -12,6 +13,12 @@ class Bytes
 public:
     explicit Bytes(size_t size) : m_data(size)
     {
+    }
+
+    Bytes(const void * source, size_t size) : m_data(size)
+    {
+        const char * sourceChars = reinterpret_cast<const char*>(source);
+        std::copy(sourceChars, sourceChars + size, chars());
     }
 
     Bytes(const Bytes &) = default;
@@ -47,6 +54,12 @@ public:
     auto as() const -> T
     {
         return *reinterpret_cast<const T*>(chars());
+    }
+
+    template<class T>
+    static auto from(const T & from) -> Bytes
+    {
+        return Bytes(&from, sizeof(from));
     }
 
 private:

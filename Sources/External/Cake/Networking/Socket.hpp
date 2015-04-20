@@ -26,7 +26,7 @@ public:
     static std::shared_ptr<Socket> connectToUnixSocket(const std::string & path);
     static std::shared_ptr<Socket> connectToTcpSocket(const std::string & address, int port);
 
-    void send(const void *, size_t);
+    void send(const Bytes &);
     auto receive(size_t) -> Bytes;
 
     void asyncReceive(size_t, DataReceived);

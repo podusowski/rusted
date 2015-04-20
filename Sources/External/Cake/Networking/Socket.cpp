@@ -74,12 +74,12 @@ std::shared_ptr<Socket> Socket::connectToTcpSocket(const std::string & address, 
     return std::shared_ptr<Socket>(new Socket(sockFd.release()));
 }
 
-void Socket::send(const void * buf, size_t size)
+void Socket::send(const Bytes & bytes)
 {
 #ifdef _WIN32
-    int ret = ::send(m_sockFd, (const char *)buf, size, 0);
+    int ret = ::send(m_sockFd, bytes.chars(), bytes.size(), 0);
 #else
-    int ret = ::send(m_sockFd, buf, size, MSG_NOSIGNAL);
+    int ret = ::send(m_sockFd, bytes.chars(), bytes.size(), MSG_NOSIGNAL);
 #endif
 
     if (ret == -1)
@@ -134,7 +134,7 @@ Socket & Socket::operator>>(unsigned & value)
 
 Socket & Socket::operator<<(unsigned value)
 {
-    send(&value, sizeof(value));
+    send(Bytes::from(value));
     return *this;
 }
 
@@ -161,11 +161,11 @@ Socket & Socket::operator>>(std::string & str)
 Socket & Socket::operator<<(const std::string & str)
 {
     size_t size = str.length();
-    send(&size, sizeof(size));
+    send(Bytes::from(size));
 
     if (size > 0)
     {
-        send(str.c_str(), size);
+        send(Bytes(str.c_str(), size));
     }
 
     return *this;
@@ -191,7 +191,7 @@ Socket & Socket::operator>>(StringMap & map)
 Socket & Socket::operator<<(const StringMap & map)
 {
     size_t size = map.size();
-    send(&size, sizeof(size));
+    send(Bytes::from(size));
 
     if (size > 0)
     {
