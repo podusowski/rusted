@@ -1,13 +1,14 @@
 #pragma once
 
 #include "Socket.hpp"
+#include "ISelectable.hpp"
 
-namespace Cake 
+namespace Cake
 {
 namespace Networking
 {
 
-class Acceptor
+class Acceptor : public ISelectable
 {
 public:
     using ClientConnected = std::function<void(std::shared_ptr<Socket>)>;
@@ -19,8 +20,10 @@ public:
                                  ClientConnected = ClientConnected{}) -> std::shared_ptr<Acceptor>;
 
     auto accept() -> std::shared_ptr<Socket>;
-    void act();
-    int getNativeHandle() const;
+
+    // ISelectable
+    void act() override;
+    auto nativeHandle() -> int const override;
 
 private:
     Acceptor(int sockFd, ClientConnected = ClientConnected{});

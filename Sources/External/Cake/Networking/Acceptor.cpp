@@ -26,7 +26,7 @@ Acceptor::Acceptor(int sockFd, ClientConnected clientConnected) :
 }
 
 auto Acceptor::createTcpServer(unsigned port,
-                                   ClientConnected clientConnected) -> std::shared_ptr<Acceptor>
+                               ClientConnected clientConnected) -> std::shared_ptr<Acceptor>
 {
     int sockFd = createDescriptor(PF_INET);
 
@@ -48,7 +48,7 @@ auto Acceptor::createTcpServer(unsigned port,
 }
 
 auto Acceptor::createUnixServer(const std::string & path,
-                                    ClientConnected clientConnected) -> std::shared_ptr<Acceptor>
+                                ClientConnected clientConnected) -> std::shared_ptr<Acceptor>
 {
 #ifdef _WIN32
     throw std::runtime_error("WIN32 doesn't support UNIX sockets");
@@ -98,7 +98,7 @@ void Acceptor::act()
     }
 }
 
-int Acceptor::getNativeHandle() const
+auto Acceptor::nativeHandle() -> int const
 {
     return m_sockFd;
 }

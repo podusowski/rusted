@@ -1,6 +1,5 @@
 #pragma once
 
-#include "Socket.hpp"
 #include "Acceptor.hpp"
 
 #include <vector>
@@ -14,15 +13,15 @@ namespace Networking
 class MainLoop
 {
 public:
-    using Servers = std::vector<std::shared_ptr<Acceptor>>;
+    using Selectables = std::vector<std::shared_ptr<ISelectable>>;
 
-    explicit MainLoop(Servers servers);
+    explicit MainLoop(Selectables servers);
     void run();
 
 private:
     void wait();
 
-    Servers m_servers;
+    Selectables m_servers;
 };
 
 }
