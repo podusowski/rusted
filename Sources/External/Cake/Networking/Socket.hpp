@@ -1,5 +1,8 @@
 #pragma once
 
+#include "ISelectable.hpp"
+
+#include <vector>
 #include <map>
 #include <string>
 #include <memory>
@@ -10,9 +13,10 @@ namespace Cake
 namespace Networking
 {
 
-class Socket : public boost::noncopyable
+class Socket : public boost::noncopyable, public ISelectable
 {
 public:
+    using DataReceived = std::function<void(void*)>;
     typedef std::map<std::string, std::string> StringMap;
 
     Socket(int sockFd);
@@ -24,6 +28,9 @@ public:
     void send(const void *, size_t);
     void receive(void *, size_t);
 
+    void asyncReceive(size_t, DataReceived);
+
+    // TODO: those should be moved somewhere outside this class
     Socket & operator>>(unsigned &);
     Socket & operator<<(unsigned);
 
@@ -33,8 +40,17 @@ public:
     Socket & operator>>(StringMap &);
     Socket & operator<<(const StringMap &);
 
+    void act();
+    auto nativeHandle() -> int const override;
+
 private:
     int m_sockFd;
+
+    using Buffer = std::vector<char>;
+
+    Buffer m_buffer;
+    size_t m_expecting = 0;
+    DataReceived m_dataReceived;
 };
 
 }

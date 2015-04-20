@@ -109,6 +109,18 @@ void Socket::receive(void * buf, size_t size)
     }
 }
 
+void Socket::asyncReceive(size_t expecting, DataReceived dataReceived)
+{
+    if (m_expecting > 0)
+    {
+        throw std::runtime_error("socket is already awating for data");
+    }
+
+    m_expecting = expecting;
+    m_buffer.resize(m_expecting);
+    m_dataReceived = dataReceived;
+}
+
 Socket & Socket::operator>>(unsigned & value)
 {
     receive(&value, sizeof(value));
@@ -192,3 +204,36 @@ Socket & Socket::operator<<(const StringMap & map)
     return *this;
 }
 
+void Socket::act()
+{
+    assert(m_expecting <= m_buffer.size());
+
+    if (m_expecting > 0)
+    {
+        char * buffer = &m_buffer[m_buffer.size() - m_expecting];
+        int ret = ::recv(m_sockFd, buffer, m_expecting, 0);
+
+        if (ret == 0)
+        {
+            throw std::runtime_error("connection closed by remote during recv");
+        }
+        else if (ret == -1)
+        {
+            THROW(std::runtime_error) << "recv returned error: " << Detail::Error::lastError();
+        }
+        else
+        {
+            m_expecting -= ret;
+        }
+
+        if (m_expecting == 0)
+        {
+            m_dataReceived(&m_buffer[0]);
+        }
+    }
+}
+
+auto Socket::nativeHandle() -> int const
+{
+    return m_sockFd;
+}
