@@ -13,6 +13,8 @@ namespace Networking
 class Bytes
 {
 public:
+    using Byte = std::uint8_t;
+
     Bytes()
     {
     }
@@ -23,18 +25,13 @@ public:
 
     Bytes(const void * source, size_t size) : m_data(size)
     {
-        const char * sourceChars = reinterpret_cast<const char*>(source);
+        const auto * sourceChars = reinterpret_cast<const Byte *>(source);
         std::copy(sourceChars, sourceChars + size, chars());
     }
 
     Bytes(const Bytes &) = default;
     Bytes(Bytes &&) = default;
     Bytes & operator = (const Bytes &) = default;
-
-    auto operator * () -> void *
-    {
-        return &m_data[0];
-    }
 
     void extend(const Bytes & other)
     {
@@ -44,14 +41,24 @@ public:
         std::copy(other.chars(), other.chars() + other.size(), chars() + oldSize);
     }
 
-    auto chars() -> char *
+    auto raw() -> Byte *
     {
         return &m_data[0];
     }
 
-    auto chars() const -> const char *
+    auto raw() const -> const Byte *
     {
         return &m_data[0];
+    }
+
+    auto chars() -> char *
+    {
+        return reinterpret_cast<char *>(&m_data[0]);
+    }
+
+    auto chars() const -> const char *
+    {
+        return reinterpret_cast<const char *>(&m_data[0]);
     }
 
     auto fromTo(size_t from, size_t to) const -> Bytes
@@ -88,7 +95,7 @@ public:
     }
 
 private:
-    std::vector<char> m_data;
+    std::vector<Byte> m_data;
 };
 
 } // namespace Networking

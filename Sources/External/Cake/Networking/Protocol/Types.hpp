@@ -1,5 +1,6 @@
 #pragma once
 
+#include <arpa/inet.h>
 #include <stdexcept>
 #include <vector>
 
@@ -15,8 +16,8 @@ namespace Protocol
 class Integer
 {
 public:
-    using UnderlayingType = int;
-    static const size_t size = sizeof(UnderlayingType);
+    using UnderlayingType = unsigned;
+    enum size_e { size = sizeof(UnderlayingType) };
 
     Integer()
     {
@@ -49,14 +50,14 @@ public:
 
     auto encode() -> Bytes
     {
-        return Bytes::from(m_value);
+        return Bytes::from(htonl(m_value));
     }
 
     auto decode(const Bytes & bytes) -> size_t
     {
         if (bytes.size() == size)
         {
-            m_value = bytes.as<UnderlayingType>();
+            m_value = ntohl(bytes.as<UnderlayingType>());
             return 0;
         }
         else if (bytes.size() == 0)
