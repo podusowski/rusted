@@ -4,6 +4,8 @@
 #include <cstdint>
 #include <cassert>
 #include <vector>
+#include <ostream>
+#include <iomanip>
 
 namespace Cake
 {
@@ -97,6 +99,26 @@ public:
 private:
     std::vector<Byte> m_data;
 };
+
+inline std::ostream & operator << (std::ostream & os, const Bytes & bytes)
+{
+    os << "bytes(hex): ";
+
+    if (bytes.size() > 0)
+    {
+        const auto * raw = bytes.raw();
+        for (size_t i = 0; i < bytes.size(); i++)
+        {
+            os << std::hex << std::setw(2) << std::setfill('0') << static_cast<int>(raw[i]) << " ";
+        }
+    }
+    else
+    {
+        os << "empty";
+    }
+
+    return os;
+}
 
 } // namespace Networking
 } // namespace Cake
