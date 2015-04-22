@@ -1,12 +1,12 @@
 #include <gtest/gtest.h>
 
 #include "Diagnostics/Logger.hpp"
-#include "Networking/Protocol/Types.hpp"
+#include "Networking/Protocol/Primitives.hpp"
 
 using namespace Cake::Networking;
 using namespace Cake::Networking::Protocol;
 
-TEST(TypesTest, IntegerIsCodedToNetworkBytes)
+TEST(PrimitivesTest, IntegerIsCodedToNetworkBytes)
 {
     auto integer = Integer{0xBAADFACE};
     EXPECT_EQ(4, Integer::size);
@@ -22,7 +22,7 @@ TEST(TypesTest, IntegerIsCodedToNetworkBytes)
     EXPECT_EQ(0xCE, raw[3]);
 }
 
-TEST(TypesTest, IntegerIsDecodedFromNetworkBytes)
+TEST(PrimitivesTest, IntegerIsDecodedFromNetworkBytes)
 {
     auto bytes = Bytes{4};
     auto * raw = bytes.raw();
@@ -52,14 +52,14 @@ void expectCodedIntegerEqualTo(const Bytes bytes, const std::uint32_t expected)
 
 } // namespace
 
-TEST(TypesTest, IntegerCodedAndEncoded)
+TEST(PrimitivesTest, IntegerCodedAndEncoded)
 {
     auto bytes = Integer{1234}.encode();
 
     expectCodedIntegerEqualTo(bytes, 1234);
 }
 
-TEST(TypesTest, EncodeSequenceOfIntegers)
+TEST(PrimitivesTest, EncodeSequenceOfIntegers)
 {
     Sequence<Integer> seq1{Integer{10},
                            Integer{20}};
@@ -70,7 +70,7 @@ TEST(TypesTest, EncodeSequenceOfIntegers)
     expectCodedIntegerEqualTo(bytes.fromTo(Integer::size * 2, Integer::size * 3), 20);
 }
 
-TEST(TypesTest, DecodeSequenceOfIntegers)
+TEST(PrimitivesTest, DecodeSequenceOfIntegers)
 {
     Sequence<Integer> seq;
 
