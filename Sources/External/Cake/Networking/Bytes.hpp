@@ -102,10 +102,10 @@ private:
 
 inline std::ostream & operator << (std::ostream & os, const Bytes & bytes)
 {
-    os << "bytes(hex): ";
-
     if (bytes.size() > 0)
     {
+        os << bytes.size() << " bytes: ";
+
         const auto * raw = bytes.raw();
         for (size_t i = 0; i < bytes.size(); i++)
         {

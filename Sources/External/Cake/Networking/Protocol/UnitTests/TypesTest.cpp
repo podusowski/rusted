@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 
+#include "Diagnostics/Logger.hpp"
 #include "Networking/Protocol/Types.hpp"
 
 using namespace Cake::Networking;
@@ -37,34 +38,39 @@ TEST(TypesTest, IntegerIsDecodedFromNetworkBytes)
     EXPECT_EQ(0x12345678, *integer);
 }
 
-TEST(TypesTest, IntegerCodedAndEncoded)
+namespace
 {
-    Integer integer1(1234);
-    auto bytes = integer1.encode();
 
-    Integer integer2;
-    integer2.decode(bytes);
+void expectCodedIntegerEqualTo(const Bytes bytes, const std::uint32_t expected)
+{
+    LOG_DEBUG << bytes;
 
-    EXPECT_EQ(1234, *integer2);
+    Integer integer;
+    integer.decode(bytes);
+    EXPECT_EQ(expected, *integer);
 }
 
-TEST(TypesTest, SequenceOfIntegersCodedAndEncoded)
+} // namespace
+
+TEST(TypesTest, IntegerCodedAndEncoded)
+{
+    auto bytes = Integer{1234}.encode();
+
+    expectCodedIntegerEqualTo(bytes, 1234);
+}
+
+TEST(TypesTest, EncodeSequenceOfIntegers)
 {
     Sequence<Integer> seq1{Integer{10},
                            Integer{20}};
     auto bytes = seq1.encode();
 
-    Integer size;
-    size.decode(bytes);
-    EXPECT_EQ(2, *size);
-
-    Integer item1;
-    item1.decode(bytes.fromTo(Integer::size, Integer::size * 2));
-//    EXPECT_EQ(10, *item1);
-//TODO
+    expectCodedIntegerEqualTo(bytes.fromTo(Integer::size * 0, Integer::size * 1), 2);
+    expectCodedIntegerEqualTo(bytes.fromTo(Integer::size * 1, Integer::size * 2), 10);
+    expectCodedIntegerEqualTo(bytes.fromTo(Integer::size * 2, Integer::size * 3), 20);
 }
 
-TEST(TypesTest, EncodeSequenceOfIntegers)
+TEST(TypesTest, DecodeSequenceOfIntegers)
 {
     Sequence<Integer> seq;
 

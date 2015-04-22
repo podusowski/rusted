@@ -48,7 +48,7 @@ public:
         return **this != *other;
     }
 
-    auto encode() -> Bytes
+    auto encode() const -> Bytes
     {
         return Bytes::from(htonl(m_value));
     }
@@ -66,7 +66,9 @@ public:
         }
         else
         {
-            throw std::runtime_error("");
+            std::stringstream ss;
+            ss << "exactly 4 bytes are required while got: " << bytes;
+            throw std::runtime_error(ss.str());
         }
     }
 
@@ -103,9 +105,19 @@ public:
         return m_value != other.m_value;
     }
 
-    auto encode() -> Bytes
+    auto encode() const -> Bytes
     {
-        return Integer(m_value.size()).encode();
+        Bytes bytes = Integer(m_value.size()).encode();
+
+        if (!empty())
+        {
+            for (const auto & i : *this)
+            {
+                bytes.extend(i.encode());
+            }
+        }
+
+        return bytes;
     }
 
     auto decode(const Bytes & bytes) -> size_t
