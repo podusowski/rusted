@@ -31,7 +31,7 @@ TEST(TypesTest, SequenceOfIntegersCodedAndEncoded)
     EXPECT_EQ(2, *size);
 
     Integer item1;
-    item1.decode(bytes.some(Integer::size, Integer::size * 2));
+    item1.decode(bytes.fromTo(Integer::size, Integer::size * 2));
 //    EXPECT_EQ(10, *item1);
 //TODO
 }

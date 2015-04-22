@@ -40,6 +40,8 @@ public:
     {
         auto oldSize = m_data.size();
         m_data.resize(size() + other.size());
+
+        std::copy(other.chars(), other.chars() + other.size(), chars() + oldSize);
     }
 
     auto chars() -> char *
@@ -52,7 +54,7 @@ public:
         return &m_data[0];
     }
 
-    auto some(size_t from, size_t to) const -> Bytes
+    auto fromTo(size_t from, size_t to) const -> Bytes
     {
         assert(from < to);
 
@@ -83,11 +85,6 @@ public:
     static auto from(const T & from) -> Bytes
     {
         return Bytes(&from, sizeof(from));
-    }
-
-    static auto asNetworkEndianess(std::uint8_t from) -> Bytes
-    {
-        return Bytes{&from, sizeof(from)};
     }
 
 private:

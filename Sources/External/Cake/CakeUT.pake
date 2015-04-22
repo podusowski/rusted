@@ -1,6 +1,7 @@
 append $sources DependencyInjection/UnitTests/DependencyInjectionTest.cpp
 append $sources Serialization/UnitTests/TmsTest.cpp
 append $sources Serialization/UnitTests/FcTest.cpp
+append $sources Networking/UnitTests/BytesTests.cpp
 append $sources Networking/Protocol/UnitTests/ProtocolTest.cpp
 append $sources Networking/Protocol/UnitTests/TypesTest.cpp
 append $sources Utils/UnitTests/StringListTest.cpp
