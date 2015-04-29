@@ -13,7 +13,59 @@ namespace Networking
 namespace Protocol
 {
 
-class Integer
+class ICodable
+{
+public:
+    virtual auto encode() const -> Bytes = 0;
+    virtual auto decode(const Bytes & bytes) -> size_t = 0;
+
+    virtual ~ICodable() {}
+};
+
+class Boolean : public ICodable
+{
+public:
+    enum size_e { size = 1 };
+
+    Boolean(bool value = false) : m_value(value)
+    {
+    }
+
+    bool operator * () const
+    {
+        return m_value;
+    }
+
+    auto encode() const -> Bytes override
+    {
+        std::uint8_t byte = m_value ? 1 : 0;
+        return Bytes::from(byte);
+    }
+
+    auto decode(const Bytes & bytes) -> size_t override
+    {
+        if (bytes.size() == size)
+        {
+            m_value = bytes.as<std::uint8_t>() == 1 ? true : false;
+            return 0;
+        }
+        else if (bytes.size() == 0)
+        {
+            return size;
+        }
+        else
+        {
+            std::stringstream ss;
+            ss << "exactly 1 byte is required while got: " << bytes;
+            throw std::runtime_error(ss.str());
+        }
+    }
+
+private:
+    bool m_value;
+};
+
+class Integer : public ICodable
 {
 public:
     using UnderlayingType = unsigned;
@@ -48,12 +100,12 @@ public:
         return **this != *other;
     }
 
-    auto encode() const -> Bytes
+    auto encode() const -> Bytes override
     {
         return Bytes::from(htonl(m_value));
     }
 
-    auto decode(const Bytes & bytes) -> size_t
+    auto decode(const Bytes & bytes) -> size_t override
     {
         if (bytes.size() == size)
         {
@@ -82,7 +134,7 @@ inline std::ostream & operator << (std::ostream & os, const Integer & value)
 }
 
 template<class T>
-class Sequence
+class Sequence : public ICodable
 {
 public:
     using UnderlayingContainer = std::vector<T>;
@@ -105,7 +157,7 @@ public:
         return m_value != other.m_value;
     }
 
-    auto encode() const -> Bytes
+    auto encode() const -> Bytes override
     {
         Bytes bytes = Integer(m_value.size()).encode();
 
@@ -120,7 +172,7 @@ public:
         return bytes;
     }
 
-    auto decode(const Bytes & bytes) -> size_t
+    auto decode(const Bytes & bytes) -> size_t override
     {
         T dummyItem;
         const auto expectedSizeByItem = dummyItem.decode(Bytes{});

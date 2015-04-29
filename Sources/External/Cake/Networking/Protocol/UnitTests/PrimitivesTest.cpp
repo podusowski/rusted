@@ -6,6 +6,32 @@
 using namespace Cake::Networking;
 using namespace Cake::Networking::Protocol;
 
+TEST(PrimitivesTest, EncodeBoolean)
+{
+    Boolean boolean{true};
+    EXPECT_EQ(1, Boolean::size);
+
+    auto bytes = boolean.encode();
+
+    ASSERT_EQ(Boolean::size, bytes.size());
+
+    const auto * raw = bytes.raw();
+    EXPECT_EQ(0x01, raw[0]);
+}
+
+TEST(PrimitivesTest, BooleanIsDecoded)
+{
+    auto bytes = Bytes{1};
+    auto * raw = bytes.raw();
+    raw[0] = 0x1;
+
+    Boolean boolean {false};
+    const auto bytesLeft = boolean.decode(bytes);
+
+    EXPECT_EQ(0, bytesLeft);
+    EXPECT_TRUE(*boolean);
+}
+
 TEST(PrimitivesTest, IntegerIsCodedToNetworkBytes)
 {
     auto integer = Integer{0xBAADFACE};
