@@ -18,13 +18,12 @@ class Socket : public boost::noncopyable, public ISelectable
 {
 public:
     using DataReceived = std::function<void(void*)>;
-    typedef std::map<std::string, std::string> StringMap;
 
     Socket(int sockFd);
     ~Socket();
 
-    static std::shared_ptr<Socket> connectToUnixSocket(const std::string & path);
-    static std::shared_ptr<Socket> connectToTcpSocket(const std::string & address, int port);
+    static auto connectToUnixSocket(const std::string & path) -> std::shared_ptr<Socket>;
+    static auto connectToTcpSocket(const std::string & address, int port) -> std::shared_ptr<Socket>;
 
     void send(const Bytes &);
     auto receive(size_t) -> Bytes;
@@ -38,10 +37,11 @@ public:
     Socket & operator>>(std::string &);
     Socket & operator<<(const std::string &);
 
+    typedef std::map<std::string, std::string> StringMap;
     Socket & operator>>(StringMap &);
     Socket & operator<<(const StringMap &);
 
-    void act();
+    void act() override;
     auto nativeHandle() -> int const override;
 
 private:
@@ -56,4 +56,3 @@ private:
 
 }
 }
-
