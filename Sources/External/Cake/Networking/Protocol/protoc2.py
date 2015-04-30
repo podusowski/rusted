@@ -191,7 +191,7 @@ class CppEnum:
         self.values.append("    " + name + " = " + str(value))
 
     def code(self):
-        s = "enum " + self.name + "\n{\n"
+        s = "enum class " + self.name + "\n{\n"
         s += ",\n".join(self.values)
         s += "\n};"
 
@@ -301,6 +301,7 @@ class Generator:
             "Cake/Networking/Protocol/BinaryCoder.hpp",
             "Cake/Networking/Protocol/BinaryDecoder.hpp",
             "Cake/Networking/Protocol/FcDecoder.hpp"
+            "Cake/Networking/Protocol/Primitives.hpp"
         ])
 
     def __generate_id_enum(self):
@@ -316,9 +317,7 @@ class Generator:
             cpp_enum.add_value(message.id, number)
             number += 1
 
-        id_namespace = CppNamespace(["Id"])
-        id_namespace.add_element(cpp_enum)
-        self.cpp_namespace.add_element(id_namespace)
+        self.cpp_namespace.add_element(cpp_enum)
 
     def __generate_message_base_class(self):
         abstract_message = CppStruct("AbstractMessage", ["ISerializable"])

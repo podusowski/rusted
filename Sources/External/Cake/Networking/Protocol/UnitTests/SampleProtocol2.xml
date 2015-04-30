@@ -1,0 +1,27 @@
+<messages>
+
+<message id="NoParameterMessage" />
+
+<struct id="SimpleStruct">
+    <param type="int32" name="integer" />
+</struct>
+
+<message id="SimpleMessage">
+    <param type="int32" name="integer" />
+</message>
+
+<struct id="ComplexStruct">
+    <list type="SimpleStruct" name="list" />
+    <param type="string" name="string" />
+</struct>
+
+<message id="SimpleParameters">
+    <param type="int32" name="integer" />
+    <param type="string" name="string" />
+    <param type="real" name="real" />
+    <list type="SimpleStruct" name="list" />
+    <list type="ComplexStruct" name="complexList" />
+</message>
+
+</messages>
+
