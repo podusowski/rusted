@@ -377,7 +377,7 @@ class MessageGenerator:
         cpp_struct.add_element(self.__generate_encode_method())
 
         cpp_struct.add_element(self.__generate_decoder_state())
-        cpp_struct.add_element(self.__generate_unserialize_method())
+        cpp_struct.add_element(self.__generate_decode_method())
         cpp_struct.add_element(self.__generate_unserialize_from_string_method())
         cpp_struct.add_element(self.__generate_to_string_method())
 
@@ -419,25 +419,23 @@ class MessageGenerator:
 
         return state_type
 
-    def __generate_unserialize_method(self):
-        s = "Cake::Networking::Protocol::BinaryDecoder decoder(buffer);\n"
+    def __generate_decode_method(self):
+        s = "switch (m_decoderState)\n{\n"
 
-        if len(self.message.params) > 0 or len(self.message.lists) > 0:
-            s += "decoder"
+        members = self.message.params + self.message.lists
+        for member in members:
+            s += "case DecoderState::{}:\n".format(member.name)
+            s += "    break;\n"
 
-            for param in self.message.params:
-                s += " >> " + param.name
-
-            for param in self.message.lists:
-                s += " >> " + param.name
-
-            s += ";"
+        s += "};\n"
+        s += "return 0;"
 
         return CppFunction(
-            return_type = "void",
-            name = "unserialize",
-            arguments = ["Cake::Networking::Protocol::IReadBuffer & buffer"],
-            body = s
+            return_type = "std::size_t",
+            name = "decode",
+            arguments = ["const Cake::Networking::Bytes & bytes"],
+            body = s,
+            override = True
         )
 
     def __generate_unserialize_from_string_method(self):

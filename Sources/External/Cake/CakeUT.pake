@@ -29,7 +29,7 @@ set $sample_protocol2_hpp "${generated_dir}/SampleProtocol2.hpp"
 set $sample_protocol_xml Networking/Protocol/UnitTests/SampleProtocol.xml
 set $sample_protocol2_xml Networking/Protocol/UnitTests/SampleProtocol2.xml
 set $protoc_command "mkdir -p ${generated_dir} && ${protoc} --output ${sample_protocol_hpp} ${sample_protocol_xml} --namespace Cake::Networking::Protocol"
-set $protoc_command2 "mkdir -p ${generated_dir} && ${protoc2} --output ${sample_protocol2_hpp} ${sample_protocol2_xml} --namespace Cake::Networking::Protocol"
+set $protoc_command2 "mkdir -p ${generated_dir} && ${protoc2} --output ${sample_protocol2_hpp} ${sample_protocol2_xml} --namespace Cake::Networking::Protocol::New"
 
 target phony SampleProtocolHeader \
     run_before("
