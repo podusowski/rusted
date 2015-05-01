@@ -7,13 +7,13 @@ from xml.dom import minidom
 
 def as_cpp_type(xmlType):
     if xmlType == "boolean":
-        return "bool"
+        return "Boolean"
     elif xmlType == "string":
-        return "std::string"
+        return "String"
     elif xmlType == "int32":
-        return "int"
+        return "Integer"
     elif xmlType == "real":
-        return "float";
+        return "Real";
     else:
         print "unknown param type: " + xmlType
         sys.exit(1)
@@ -91,7 +91,7 @@ class CppVariableDeclaration:
         return self.s
 
 class CppFunction:
-    def __init__(self, return_type, name, arguments, body, const = False, inline = False):
+    def __init__(self, return_type, name, arguments, body, const=False, inline=False, override=False):
         self.s = ""
 
         if inline:
@@ -101,6 +101,9 @@ class CppFunction:
 
         if const:
             self.s += " const"
+
+        if override:
+            self.s += " override"
 
         self.s += "\n"
         self.s += "{\n"
@@ -274,9 +277,6 @@ class Generator:
     def generate(self):
         self.__generate_includes()
         self.__generate_id_enum()
-        self.__generate_serializable_interface()
-        self.__generate_message_base_class()
-        self.__generate_structures()
         self.__generate_messages()
         self.__generate_message_factory()
         self.__generate_handler_caller()
@@ -319,43 +319,10 @@ class Generator:
 
         self.cpp_namespace.add_element(cpp_enum)
 
-    def __generate_message_base_class(self):
-        abstract_message = CppStruct("AbstractMessage", ["ISerializable"])
-        abstract_message.add_element(CppPureVirtualFunction("Id::Messages", "getId", [], True))
-        self.cpp_namespace.add_element(abstract_message)
-
-    def __generate_serializable_interface(self):
-        serializable_interface = CppStruct("ISerializable")
-
-        serializable_interface.add_element(
-            CppPureVirtualFunction("void", "serialize", ["Cake::Networking::Protocol::IWriteBuffer &"], True)
-        )
-
-        serializable_interface.add_element(
-            CppPureVirtualFunction("void", "unserialize", ["Cake::Networking::Protocol::IReadBuffer &"], False)
-        )
-
-        serializable_interface.add_element(
-            CppPureVirtualFunction("void", "unserialize", ["const Cake::Serialization::Fc &"], False)
-        )
-
-        serializable_interface.add_element(
-            CppPureVirtualFunction("std::string", "toString", [], True)
-        )
-
-        self.cpp_namespace.add_element(serializable_interface)
-
-    def __generate_structures(self):
-        print("generating structures")
-        for struct in self.structs:
-            cpp_struct = MessageGenerator(struct, False)
-            code = cpp_struct.generate()
-            self.cpp_namespace.add_element(CppCustomCode(code))
-
     def __generate_messages(self):
         print("generating message structures")
-        for message in self.messages:
-            cpp_struct = MessageGenerator(message, True)
+        for integer_identifier, struct in enumerate(self.structs):
+            cpp_struct = MessageGenerator(message, integer_identifier)
             code = cpp_struct.generate()
             self.cpp_namespace.add_element(CppCustomCode(code))
 
@@ -384,36 +351,27 @@ class Generator:
         self.cpp_namespace.add_element(f)
 
 class MessageGenerator:
-    def __init__(self, message, is_message):
+    def __init__(self, message, integer_identifier):
         self.message = message
-        self.is_message = is_message
+        self.integer_identifier = integer_identifier
 
     def generate(self):
-        inherits = []
-        if self.is_message:
-            print("\tmessage " + self.message.id)
-            inherits = ["AbstractMessage"]
-        else:
-            print("\tstructure " + self.message.id)
-            inherits = ["ISerializable"]
+        print("\tmessage " + self.message.id)
 
         cpp_struct = CppStruct(
             name = self.message.id,
-            inherits = inherits,
+            inherits = ["ICodable", "IComplex"],
             virtual_destructor = False,
             default_constructor = True
         )
 
         cpp_struct.add_element(self.__generate_params())
-        cpp_struct.add_element(self.__generate_lists())
+        cpp_struct.add_element(self.__generate_sequences())
         cpp_struct.add_element(self.__generate_specialized_constructor())
         cpp_struct.add_element(self.__generate_eq_operator())
         cpp_struct.add_element(self.__generate_ne_operator())
-
-        if self.is_message:
-            cpp_struct.add_element(self.__generate_getid_method())
-
-        cpp_struct.add_element(self.__generate_serialize_method())
+        cpp_struct.add_element(self.__generate_getid_method())
+        cpp_struct.add_element(self.__generate_encode_method())
 
         cpp_struct.add_element(self.__generate_unserialize_method())
         cpp_struct.add_element(self.__generate_unserialize_from_string_method())
@@ -423,36 +381,29 @@ class MessageGenerator:
 
     def __generate_getid_method(self):
         return CppFunction(
-            return_type = "Id::Messages",
-            name = "getId",
+            return_type = "int",
+            name = "id",
             arguments = [],
-            body = "return Id::" + self.message.id + ";",
+            body = "return " + str(self.integer_identifier) + ";",
             const = True
         )
 
-    def __generate_serialize_method(self):
-        s = "Cake::Networking::Protocol::BinaryCoder coder(buffer);\n"
+    def __generate_encode_method(self):
+        s = "Cake::Networking::Bytes bytes;\n"
 
-        if len(self.message.params) > 0 or len(self.message.lists) > 0 or self.is_message:
-            s += "coder"
+        members = self.message.params + self.message.lists
+        for param in members:
+            s += "bytes.extend({}.encode());\n".format(param.name)
 
-            if self.is_message:
-                s += " << getId()"
-
-            for param in self.message.params:
-                s += " << " + param.name
-
-            for param in self.message.lists:
-                s += " << " + param.name
-
-            s += ";"
+        s += "return bytes;"
 
         return CppFunction(
-            return_type = "void",
-            name = "serialize",
-            arguments = ["Cake::Networking::Protocol::IWriteBuffer & buffer"],
+            return_type = "Cake::Networking::Bytes",
+            name = "encode",
+            arguments = [],
             const = True,
-            body = s
+            body = s,
+            override = True
         )
 
     def __generate_unserialize_method(self):
@@ -506,12 +457,12 @@ class MessageGenerator:
 
         return ret
 
-    def __generate_lists(self):
+    def __generate_sequences(self):
         ret = CppContainer()
 
         for param in self.message.lists:
             print("\t\t" + param.name + ": list of " + param.type)
-            cpp_type = "std::vector<" + param.type + ">"
+            cpp_type = "Sequence<" + param.type + ">"
             ret.add_element(CppVariableDeclaration(cpp_type, param.name))
 
         return ret

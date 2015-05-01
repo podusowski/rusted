@@ -22,6 +22,14 @@ public:
     virtual ~ICodable() {}
 };
 
+class IComplex
+{
+public:
+    virtual auto id() -> int const = 0;
+
+    virtual ~IComplex() {}
+};
+
 class Boolean : public ICodable
 {
 public:
