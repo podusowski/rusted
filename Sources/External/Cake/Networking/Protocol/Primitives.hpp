@@ -141,6 +141,66 @@ inline std::ostream & operator << (std::ostream & os, const Integer & value)
     return os << *value;
 }
 
+class String : public ICodable
+{
+public:
+    String()
+    {
+    }
+
+    String(std::string value) : m_value(value)
+    {
+    }
+
+    String & operator = (std::string value)
+    {
+        m_value = value;
+        return *this;
+    }
+
+    std::string operator * () const
+    {
+        return m_value;
+    }
+
+    bool operator == (String other) const
+    {
+        return **this == *other;
+    }
+
+    bool operator != (String other) const
+    {
+        return **this != *other;
+    }
+
+    auto encode() const -> Bytes override
+    {
+        Bytes bytes = Integer(m_value.size()).encode();
+        bytes.extend(Bytes{&m_value[0], m_value.size()});
+        return bytes;
+    }
+
+    auto decode(const Bytes & bytes) -> size_t override
+    {
+        if (m_sizeToDecode == 0)
+        {
+            Integer size;
+            size.decode(bytes);
+            m_sizeToDecode = *size;
+            return m_sizeToDecode;
+        }
+        else
+        {
+            m_value = std::string(bytes.chars(), bytes.size());
+        }
+        return 0;
+    }
+
+private:
+    std::size_t m_sizeToDecode = 0;
+    std::string m_value = {};
+};
+
 template<class T>
 class Sequence : public ICodable
 {

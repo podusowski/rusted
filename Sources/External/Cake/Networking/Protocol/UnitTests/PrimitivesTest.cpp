@@ -85,6 +85,44 @@ TEST(PrimitivesTest, IntegerCodedAndEncoded)
     expectCodedIntegerEqualTo(bytes, 1234);
 }
 
+TEST(PrimitivesTest, StringIsEncoded)
+{
+    const auto string = String{"abc"};
+    const auto bytes = string.encode();
+
+    ASSERT_EQ(Integer::size + 3, bytes.size());
+
+    // size of the string
+    expectCodedIntegerEqualTo(bytes.fromTo(Integer::size * 0, Integer::size * 1), 3);
+
+    // the string itself
+    const auto bytesContainingActualString = bytes.fromTo(Integer::size, bytes.size());
+    const auto * raw = bytesContainingActualString.raw();
+    EXPECT_EQ('a', raw[0]);
+    EXPECT_EQ('b', raw[1]);
+    EXPECT_EQ('c', raw[2]);
+}
+
+TEST(PrimitivesTest, StringIsDecoded)
+{
+    String string;
+
+    // size of the string
+    auto codedSize = Integer{3}.encode();
+    size_t sizeLeft = string.decode(codedSize);
+    EXPECT_EQ(3, sizeLeft);
+
+    auto bytes = Bytes{3};
+    auto * raw = bytes.raw();
+    raw[0] = 'a';
+    raw[1] = 'b';
+    raw[2] = 'c';
+
+    sizeLeft = string.decode(bytes);
+    EXPECT_EQ(0, sizeLeft);
+    EXPECT_EQ("abc", *string);
+}
+
 TEST(PrimitivesTest, EncodeSequenceOfIntegers)
 {
     Sequence<Integer> seq1{Integer{10},

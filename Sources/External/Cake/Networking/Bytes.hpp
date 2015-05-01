@@ -34,6 +34,7 @@ public:
     Bytes(const Bytes &) = default;
     Bytes(Bytes &&) = default;
     Bytes & operator = (const Bytes &) = default;
+    Bytes & operator = (Bytes &&) = default;
 
     void extend(const Bytes & other)
     {
@@ -66,6 +67,7 @@ public:
     auto fromTo(size_t from, size_t to) const -> Bytes
     {
         assert(from < to);
+        assert(to <= size());
 
         Bytes bytes{to - from};
 
