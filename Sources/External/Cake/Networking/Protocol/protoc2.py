@@ -186,17 +186,24 @@ class CppStruct(CppContainer):
         return s
 
 class CppEnum:
-    def __init__(self, name):
+    def __init__(self, name, instance_name=False):
         self.name = name
+        self.instance_name = instance_name
         self.values = []
 
-    def add_value(self, name, value):
-        self.values.append("    " + name + " = " + str(value))
+    def add_value(self, name, value=None):
+        if value:
+            self.values.append("    " + name + " = " + str(value))
+        else:
+            self.values.append("    " + name)
 
     def code(self):
         s = "enum class " + self.name + "\n{\n"
         s += ",\n".join(self.values)
-        s += "\n};"
+        s += "\n};\n"
+
+        if self.instance_name:
+            s += "\n" + self.name + " " + self.instance_name + ";\n"
 
         return s
 
@@ -296,11 +303,7 @@ class Generator:
         ])
 
         self.cpp_file.add_local_includes([
-            "Cake/Networking/Protocol/IWriteBuffer.hpp",
-            "Cake/Networking/Protocol/IReadBuffer.hpp",
-            "Cake/Networking/Protocol/BinaryCoder.hpp",
-            "Cake/Networking/Protocol/BinaryDecoder.hpp",
-            "Cake/Networking/Protocol/FcDecoder.hpp"
+            "Cake/Networking/Protocol/FcDecoder.hpp",
             "Cake/Networking/Protocol/Primitives.hpp"
         ])
 
@@ -373,6 +376,7 @@ class MessageGenerator:
         cpp_struct.add_element(self.__generate_getid_method())
         cpp_struct.add_element(self.__generate_encode_method())
 
+        cpp_struct.add_element(self.__generate_decoder_state())
         cpp_struct.add_element(self.__generate_unserialize_method())
         cpp_struct.add_element(self.__generate_unserialize_from_string_method())
         cpp_struct.add_element(self.__generate_to_string_method())
@@ -405,6 +409,15 @@ class MessageGenerator:
             body = s,
             override = True
         )
+
+    def __generate_decoder_state(self):
+        state_type = CppEnum("DecoderState", "m_decoderState")
+
+        members = self.message.params + self.message.lists
+        for member in members:
+            state_type.add_value(member.name)
+
+        return state_type
 
     def __generate_unserialize_method(self):
         s = "Cake::Networking::Protocol::BinaryDecoder decoder(buffer);\n"
