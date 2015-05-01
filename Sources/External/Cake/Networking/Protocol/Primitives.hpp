@@ -141,6 +141,36 @@ inline std::ostream & operator << (std::ostream & os, const Integer & value)
     return os << *value;
 }
 
+class Real : public ICodable
+{
+public:
+    Real()
+    {
+    }
+
+    Real(float value) : m_data(value * 100)
+    {
+    }
+
+    auto operator * () -> float const
+    {
+        return *m_data / 100.0;
+    }
+
+    auto encode() const -> Bytes override
+    {
+        return m_data.encode();
+    }
+
+    auto decode(const Bytes & bytes) -> std::size_t override
+    {
+        return m_data.decode(bytes);
+    }
+
+private:
+    Integer m_data;
+};
+
 class String : public ICodable
 {
 public:

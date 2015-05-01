@@ -78,11 +78,22 @@ void expectCodedIntegerEqualTo(const Bytes bytes, const std::uint32_t expected)
 
 } // namespace
 
-TEST(PrimitivesTest, IntegerCodedAndEncoded)
+TEST(PrimitivesTest, IntegerEncodedAndDecoded)
 {
     auto bytes = Integer{1234}.encode();
 
     expectCodedIntegerEqualTo(bytes, 1234);
+}
+
+TEST(PrimitivesTest, RealIsEncodedAndDecoded)
+{
+    auto real = Real{1.5};
+    auto bytes = real.encode();
+
+    auto decoded = Real{};
+    decoded.decode(bytes);
+
+    EXPECT_NEAR(*real, *decoded, 0.01);
 }
 
 TEST(PrimitivesTest, StringIsEncoded)
