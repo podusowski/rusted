@@ -133,7 +133,7 @@ class CppPureVirtualFunction:
         return self.s
 
 class CppConstructor:
-    def __init__(self, name, arguments = [], initialization_list = []):
+    def __init__(self, name, arguments = [], initialization_list = [], body=""):
         self.s = "explicit " + name + "(" + ", ".join(arguments) + ")"
 
         if len(initialization_list) > 0:
@@ -147,6 +147,7 @@ class CppConstructor:
 
         self.s += "\n"
         self.s += "{\n"
+        self.s += body + "\n"
         self.s += "}\n"
 
     def code(self):
@@ -269,12 +270,11 @@ class CppFile:
 # cpp generator end
 
 class Generator:
-    def __init__(self, structs, messages, output_file, namespace):
+    def __init__(self, structs, output_file, namespace):
         self.cpp_file = CppFile()
         self.cpp_namespace = CppNamespace(namespace.split("::"))
 
         self.output_file = output_file
-        self.messages = messages
         self.structs = structs
         self.namespace = namespace.split("::")
 
@@ -309,35 +309,37 @@ class Generator:
 
     def __generate_id_enum(self):
         print("generating Id enum")
-        cpp_enum = CppEnum("Messages")
+        cpp_enum = CppEnum("Id")
         cpp_enum.add_value("InvalidMessage", 0)
 
         print("\tInvalidMessage = 0")
 
         number = 100
-        for message in self.messages:
-            print("\t" + message.id + " = " + str(number))
-            cpp_enum.add_value(message.id, number)
+        for struct in self.structs:
+            print("\t" + struct.id + " = " + str(number))
+            cpp_enum.add_value(struct.id, number)
             number += 1
 
         self.cpp_namespace.add_element(cpp_enum)
 
     def __generate_messages(self):
         print("generating message structures")
+        print(str(self.structs))
+
         for integer_identifier, struct in enumerate(self.structs):
-            cpp_struct = MessageGenerator(message, integer_identifier)
+            cpp_struct = MessageGenerator(struct, integer_identifier)
             code = cpp_struct.generate()
             self.cpp_namespace.add_element(CppCustomCode(code))
 
     def __generate_message_factory(self):
         print("generating message factory")
-        message_factory = MessageFactoryGenerator(self.messages)
+        message_factory = MessageFactoryGenerator(self.structs)
         code = message_factory.generate()
         self.cpp_namespace.add_element(CppCustomCode(code))
 
     def __generate_handler_caller(self):
         print("generating handler caller")
-        handler_caller = HandlerCallerGenerator(self.messages)
+        handler_caller = HandlerCallerGenerator(self.structs)
 
         for i in range(2):
             code = handler_caller.generate(i)
@@ -359,18 +361,18 @@ class MessageGenerator:
         self.integer_identifier = integer_identifier
 
     def generate(self):
-        print("\tmessage " + self.message.id)
+        print("\t" + self.message.id)
 
         cpp_struct = CppStruct(
             name = self.message.id,
-            inherits = ["ICodable", "IComplex"],
+            inherits = ["ICodable", "ICodableStructure"],
             virtual_destructor = False,
             default_constructor = True
         )
 
         cpp_struct.add_element(self.__generate_params())
         cpp_struct.add_element(self.__generate_sequences())
-        cpp_struct.add_element(self.__generate_specialized_constructor())
+        cpp_struct.add_element(self.__generate_from_string_constructor())
         cpp_struct.add_element(self.__generate_eq_operator())
         cpp_struct.add_element(self.__generate_ne_operator())
         cpp_struct.add_element(self.__generate_getid_method())
@@ -378,7 +380,7 @@ class MessageGenerator:
 
         cpp_struct.add_element(self.__generate_decoder_state())
         cpp_struct.add_element(self.__generate_decode_method())
-        cpp_struct.add_element(self.__generate_unserialize_from_string_method())
+        #cpp_struct.add_element(self.__generate_unserialize_from_string_method())
         cpp_struct.add_element(self.__generate_to_string_method())
 
         return cpp_struct.code()
@@ -389,7 +391,8 @@ class MessageGenerator:
             name = "id",
             arguments = [],
             body = "return " + str(self.integer_identifier) + ";",
-            const = True
+            const = True,
+            override = True
         )
 
     def __generate_encode_method(self):
@@ -478,25 +481,25 @@ class MessageGenerator:
 
         return ret
 
-    def __generate_specialized_constructor(self):
-        ret = CppCustomCode("")
+    def __generate_from_string_constructor(self):
+        body = "    const auto parameters = Cake::Serialization::Fc{fcString}.getParameters();\n"
 
         if len(self.message.params) > 0 or len(self.message.lists) > 0:
-            arguments = []
-            initialization_list = []
+
+            index = 0
             for param in self.message.params:
-                arguments.append("const " + param.cpp_type + " & _" + param.name)
-                initialization_list.append(("_" + param.name, param.name))
+                body += "    {} = {}(parameters.at({}));\n".format(param.name, param.cpp_type, index)
+                index += 1
 
             for param in self.message.lists:
-                arguments.append("const std::vector<" + param.type + "> & _" + param.name)
-                initialization_list.append(("_" + param.name, param.name))
+                body += "    {} = Sequence<{}>(parameters.at({}));\n".format(param.name, param.type, index)
+                index += 1
 
-            ret = CppConstructor(
-                name = self.message.id,
-                arguments = arguments,
-                initialization_list = initialization_list
-            )
+        ret = CppConstructor(
+            name = self.message.id,
+            arguments = ["std::string fcString"],
+            body = body
+        )
 
         return ret
 
@@ -580,42 +583,31 @@ class MessageFactoryGenerator:
 
     def __generate_create_from_buffer_method(self):
         s = ""
-        s = s + "\tstatic std::shared_ptr<AbstractMessage> create("
-        s = s + "Cake::Networking::Protocol::IReadBuffer & buffer)\n"
-        s = s + "\t{\n"
-        s = s + "\t\tCake::Networking::Protocol::BinaryDecoder decoder(buffer);\n"
-        s = s + "\t\tint id = Id::InvalidMessage;\n"
-        s = s + "\t\tdecoder >> id;\n"
-        s = s + "\t\tstd::shared_ptr<AbstractMessage> ret;\n"
-        s = s + "\n"
-        s = s + "\t\tswitch(id)\n"
-        s = s + "\t\t{\n"
+        s = s + "    static std::shared_ptr<ICodableStructure> create(int id)\n"
+        s = s + "    {\n"
+        s = s + "        switch(id)\n"
+        s = s + "        {\n"
 
         for message in self.messages:
             s = s + self.__generate_message_case(message)
 
-        s = s + "\t\tdefault:\n"
-        s = s + "\t\t\tthrow std::runtime_error(\"unknown message id\");\n"
-        s = s + "\t\t} // switch\n"
-        s = s + "\n"
-        s = s + "\t\tret->unserialize(buffer);\n"
-        s = s + "\n"
-        s = s + "\t\treturn ret;\n"
-        s = s + "\t} // create\n"
+        s = s + "        default:\n"
+        s = s + "            throw std::runtime_error(\"unknown message id\");\n"
+        s = s + "        } // switch\n"
+        s = s + "    } // create\n"
         s = s + "\n"
         return s
 
     def __generate_message_case(self, message):
         s = ""
-        s = s + "\t\tcase Id::" + message.id + ":\n"
-        s = s + "\t\t\tret.reset(new " + message.id + "());\n"
-        s = s + "\t\t\tbreak;\n"
-        s = s + "\n"
+        s = s + "        case static_cast<int>(Id::" + message.id + "):\n"
+        s = s + "            return std::make_shared<" + message.id + ">();\n"
+        s = s + "            break;\n"
         return s
 
     def __generate_create_from_string_method(self):
         s = (""
-             "    static std::shared_ptr<AbstractMessage> create(const std::string & s)\n"
+             "    static std::shared_ptr<ICodableStructure> create(const std::string & s)\n"
              "    {\n"
              "        std::shared_ptr<AbstractMessage> ret;\n"
              "        Cake::Serialization::Fc fc(s);\n")
@@ -717,12 +709,11 @@ for struct_xml_node in messages.childNodes[0].getElementsByTagName("struct"):
     struct = Struct(struct_xml_node)
     structs.append(struct)
 
-msgs = []
 for message_xml_node in messages.childNodes[0].getElementsByTagName("message"):
-    message = Struct(message_xml_node) 
-    msgs.append(message)
+    message = Struct(message_xml_node)
+    structs.append(message)
 
-hpp = Generator(structs, msgs, options.output, options.namespace)
+hpp = Generator(structs, options.output, options.namespace)
 hpp.generate()
 
 

@@ -22,12 +22,12 @@ public:
     virtual ~ICodable() {}
 };
 
-class IComplex
+class ICodableStructure : public ICodable
 {
 public:
-    virtual auto id() -> int const = 0;
+    virtual auto id() const -> int = 0;
 
-    virtual ~IComplex() {}
+    virtual ~ICodableStructure() {}
 };
 
 class Boolean : public ICodable
@@ -152,9 +152,14 @@ public:
     {
     }
 
-    auto operator * () -> float const
+    auto operator * () const -> float
     {
         return *m_data / 100.0;
+    }
+
+    auto operator == (const Real & other) const -> bool
+    {
+        return **this == *other;
     }
 
     auto encode() const -> Bytes override
@@ -170,6 +175,11 @@ public:
 private:
     Integer m_data;
 };
+
+inline std::ostream & operator << (std::ostream & os, const Real & value)
+{
+    return os << *value;
+}
 
 class String : public ICodable
 {
@@ -230,6 +240,11 @@ private:
     std::size_t m_sizeToDecode = 0;
     std::string m_value = {};
 };
+
+inline std::ostream & operator << (std::ostream & os, const String & value)
+{
+    return os << *value;
+}
 
 template<class T>
 class Sequence : public ICodable
