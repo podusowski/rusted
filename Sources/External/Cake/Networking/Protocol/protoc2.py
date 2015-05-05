@@ -607,24 +607,19 @@ class MessageFactoryGenerator:
 
     def __generate_create_from_string_method(self):
         s = (""
-             "    static std::shared_ptr<ICodableStructure> create(const std::string & s)\n"
+             "    static std::shared_ptr<ICodableStructure> create(std::string fcString)\n"
              "    {\n"
              "        std::shared_ptr<AbstractMessage> ret;\n"
-             "        Cake::Serialization::Fc fc(s);\n")
+             "        Cake::Serialization::Fc fc(fcString);\n")
 
         for message in self.messages:
             s = s + ("        if (fc.getName() == \"" + message.id + "\")\n"
                      "        {\n"
-                     "            ret.reset(new " + message.id + "());\n"
+                     "            return std::make_shared<" + message.id + ">(fcString);\n"
                      "        }\n")
 
-        s = s + ("   if (!ret)\n"
-                 "   {\n"
-                 "       throw std::runtime_error(\"no such message\");\n"
-                 "   }\n"
-                 "   ret->unserialize(fc);\n"
-                 "   return ret;\n"
-                 "}\n")
+        s += "    }\n"
+
         return s
 
 class HandlerCallerGenerator:
@@ -658,20 +653,20 @@ class HandlerCallerGenerator:
         s = s + "\t{\n"
         s = s + "\t}\n"
         s = s + "\n"
-        s = s + "\tvoid call(AbstractMessage & message"
+        s = s + "\tvoid call(ICodableStructure & message"
 
         for i in range(parameter_count):
             s = s + ", T" + str(i) + " p" + str(i)
 
         s = s + ")\n"
         s = s + "\t{\n"
-        s = s + "\t\tswitch(message.getId())\n"
+        s = s + "\t\tswitch(message.id())\n"
         s = s + "\t\t{\n"
         return s
 
     def __generate_message_case(self, parameter_count, message):
         s = ""
-        s = s + "\t\tcase Id::" + message.id + ":\n"
+        s = s + "\t\tcase static_cast<int>(Id::" + message.id + "):\n"
         s = s + "\t\t\tm_handler.handle(static_cast<const " + message.id + "&>(message)"
 
         for i in range(parameter_count):

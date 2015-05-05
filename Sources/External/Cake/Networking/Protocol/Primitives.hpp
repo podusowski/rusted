@@ -39,6 +39,12 @@ public:
     {
     }
 
+    explicit Boolean(std::string s)
+    {
+        std::stringstream ss(s);
+        ss >> m_value;
+    }
+
     bool operator * () const
     {
         return m_value;
@@ -85,6 +91,12 @@ public:
 
     Integer(UnderlayingType value) : m_value(value)
     {
+    }
+
+    explicit Integer(std::string s)
+    {
+        std::stringstream ss(s);
+        ss >> m_value;
     }
 
     Integer & operator = (UnderlayingType value)
@@ -150,6 +162,14 @@ public:
 
     Real(float value) : m_data(value * 100)
     {
+    }
+
+    explicit Real(std::string s)
+    {
+        std::stringstream ss(s);
+        float f;
+        ss >> f;
+        *this = f;
     }
 
     auto operator * () const -> float
@@ -257,6 +277,10 @@ public:
     }
 
     Sequence(std::initializer_list<T> value) : m_value(value)
+    {
+    }
+
+    Sequence(std::string s)
     {
     }
 
