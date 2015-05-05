@@ -1,10 +1,11 @@
 #pragma once
 
+#include "Networking/Bytes.hpp"
+
 #include <arpa/inet.h>
 #include <stdexcept>
 #include <vector>
-
-#include "Networking/Bytes.hpp"
+#include <string>
 
 namespace Cake
 {
@@ -18,6 +19,7 @@ class ICodable
 public:
     virtual auto encode() const -> Bytes = 0;
     virtual auto decode(const Bytes & bytes) -> size_t = 0;
+    virtual auto str() const -> std::string = 0;
 
     virtual ~ICodable() {}
 };
@@ -73,6 +75,13 @@ public:
             ss << "exactly 1 byte is required while got: " << bytes;
             throw std::runtime_error(ss.str());
         }
+    }
+
+    auto str() const -> std::string override
+    {
+        std::stringstream ss;
+        ss << std::boolalpha << m_value;
+        return ss.str();
     }
 
 private:
@@ -144,6 +153,13 @@ public:
         }
     }
 
+    auto str() const -> std::string override
+    {
+        std::stringstream ss;
+        ss << std::boolalpha << m_value;
+        return ss.str();
+    }
+
 private:
     UnderlayingType m_value = {};
 };
@@ -190,6 +206,13 @@ public:
     auto decode(const Bytes & bytes) -> std::size_t override
     {
         return m_data.decode(bytes);
+    }
+
+    auto str() const -> std::string override
+    {
+        std::stringstream ss;
+        ss << std::boolalpha << m_data;
+        return ss.str();
     }
 
 private:
@@ -254,6 +277,13 @@ public:
             m_value = std::string(bytes.chars(), bytes.size());
         }
         return 0;
+    }
+
+    auto str() const -> std::string override
+    {
+        std::stringstream ss;
+        ss << std::boolalpha << m_value;
+        return ss.str();
     }
 
 private:
@@ -344,6 +374,22 @@ public:
         }
     }
 
+    auto str() const -> std::string override
+    {
+        std::stringstream ss;
+
+        if (empty())
+        {
+            ss << "(empty)";
+        }
+        else for (const auto & item : *this)
+        {
+            ss << item.str() << " ";
+        }
+
+        return ss.str();
+    }
+
     auto begin() -> typename UnderlayingContainer::iterator
     {
         return m_value.begin();
@@ -374,19 +420,9 @@ private:
     UnderlayingContainer m_value;
 };
 
-template<class T>
-inline std::ostream & operator << (std::ostream & os, const Sequence<T> & value)
+inline auto operator << (std::ostream & os, const ICodable & value) -> std::ostream &
 {
-    if (value.empty())
-    {
-        os << "(empty)";
-    }
-    else for (const auto & item : value)
-    {
-        os << item << " ";
-    }
-
-    return os;
+    return os << value.str();
 }
 
 } // namespace Protocol

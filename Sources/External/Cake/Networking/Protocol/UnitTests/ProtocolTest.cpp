@@ -14,6 +14,7 @@ using namespace Cake::Networking::Protocol;
 
 TEST(ProtocolTest, Constructing)
 {
+    using namespace Old;
     SimpleParameters params1;
     SimpleParameters params2(1, "", 1.0, {}, {});
 
@@ -23,23 +24,46 @@ TEST(ProtocolTest, Constructing)
 
 TEST(ProtocolTest, Comparison)
 {
-    SimpleParameters params1(1, "", 1.0, {}, {});
-    SimpleParameters params2(2, "", 1.0, {}, {});
-    SimpleParameters params3(1, "a", 1.0, {}, {});
-    SimpleParameters params4(1, "", 2.0, {}, {});
+    {
+        using namespace Old;
 
-    SimpleStruct simpleStruct1(1);
-    SimpleParameters params5(1, "", 1.0, {simpleStruct1}, {});
+        SimpleParameters params1(1, "", 1.0, {}, {});
+        SimpleParameters params2(2, "", 1.0, {}, {});
+        SimpleParameters params3(1, "a", 1.0, {}, {});
+        SimpleParameters params4(1, "", 2.0, {}, {});
 
-    EXPECT_EQ(params1, params1);
-    EXPECT_NE(params1, params2);
-    EXPECT_NE(params1, params3);
-    EXPECT_NE(params1, params4);
-    EXPECT_NE(params1, params5);
+        SimpleStruct simpleStruct1(1);
+        SimpleParameters params5(1, "", 1.0, {simpleStruct1}, {});
+
+        EXPECT_EQ(params1, params1);
+        EXPECT_NE(params1, params2);
+        EXPECT_NE(params1, params3);
+        EXPECT_NE(params1, params4);
+        EXPECT_NE(params1, params5);
+    }
+
+    {
+        using namespace New;
+
+        SimpleParameters params;
+        params.integer = 1;
+        params.string = "hello";
+        params.real = 1.2;
+
+        const SimpleParameters copy = params;
+        const SimpleParameters empty;
+
+        LOG_DEBUG << params;
+
+        EXPECT_EQ(params, copy);
+        EXPECT_NE(params, empty);
+        EXPECT_NE(copy, empty);
+    }
 }
 
 TEST(ProtocolTest, SimpleParameters)
 {
+    using namespace Old;
     SimpleParameters m1;
     m1.integer = 1;
     m1.string = "string";
@@ -84,12 +108,13 @@ TEST(ProtocolTest, SimpleParameters)
 class SampleServiceMock
 {
 public:
-    MOCK_METHOD1(handle, void(const SimpleParameters &));
-    MOCK_METHOD1(handle, void(const AbstractMessage &));
+    MOCK_METHOD1(handle, void(const Old::SimpleParameters &));
+    MOCK_METHOD1(handle, void(const Old::AbstractMessage &));
 };
 
 TEST(ProtocolTest, HandlerCaller)
 {
+    using namespace Old;
     SimpleParameters m1;
     m1.integer = 0;
     m1.real = 1.0;
@@ -111,6 +136,7 @@ TEST(ProtocolTest, HandlerCaller)
 
 TEST(ProtocolTest, FcDecoder)
 {
+    using namespace Old;
     auto msg = MessageFactory::create("SimpleMessage(1)");
     auto simple = std::dynamic_pointer_cast<SimpleMessage>(msg);
 
@@ -120,6 +146,7 @@ TEST(ProtocolTest, FcDecoder)
 
 TEST(ProtocolTest, Fc_NoParameterMessage)
 {
+    using namespace Old;
     auto msg = MessageFactory::create("NoParameterMessage()\n");
     auto simple = std::dynamic_pointer_cast<NoParameterMessage>(msg);
 
@@ -128,6 +155,7 @@ TEST(ProtocolTest, Fc_NoParameterMessage)
 
 TEST(ProtocolTest, Fc_UnknownMessage)
 {
+    using namespace Old;
     EXPECT_ANY_THROW(MessageFactory::create("Garbage()"));
 }
 

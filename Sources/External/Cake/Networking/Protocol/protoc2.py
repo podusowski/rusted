@@ -287,7 +287,6 @@ class Generator:
         self.__generate_messages()
         self.__generate_message_factory()
         self.__generate_handler_caller()
-        self.__generate_stream_operator_for_messages()
 
         self.cpp_file.add_element(self.cpp_namespace)
         self.cpp_file.write(self.output_file)
@@ -345,16 +344,6 @@ class Generator:
             code = handler_caller.generate(i)
             self.cpp_namespace.add_element(CppCustomCode(code))
 
-    def __generate_stream_operator_for_messages(self):
-        f = CppFunction(
-            inline = True,
-            return_type = "std::ostream &",
-            name = "operator <<",
-            arguments = ["std::ostream & stream", "const AbstractMessage & message"],
-            body = "return stream << message.toString();")
-
-        self.cpp_namespace.add_element(f)
-
 class MessageGenerator:
     def __init__(self, message, integer_identifier):
         self.message = message
@@ -365,7 +354,7 @@ class MessageGenerator:
 
         cpp_struct = CppStruct(
             name = self.message.id,
-            inherits = ["ICodable", "ICodableStructure"],
+            inherits = ["ICodableStructure"],
             virtual_destructor = False,
             default_constructor = True
         )
@@ -547,7 +536,7 @@ class MessageGenerator:
             s += 'ss << "' + p.name + ':( ";\n'
             s += 'for (const auto & e : ' + p.name + ')\n'
             s += '{\n'
-            s += '    ss << e.toString() << " ";\n'
+            s += '    ss << e.str() << " ";\n'
             s += '}\n'
             s += 'ss << ") ";\n'
 
@@ -557,10 +546,11 @@ class MessageGenerator:
 
         return CppFunction(
             return_type = "std::string",
-            name = "toString",
+            name = "str",
             arguments = [],
             const = True,
-            body = s
+            body = s,
+            override = True
         )
 
 class MessageFactoryGenerator:
@@ -609,7 +599,7 @@ class MessageFactoryGenerator:
         s = (""
              "    static std::shared_ptr<ICodableStructure> create(std::string fcString)\n"
              "    {\n"
-             "        std::shared_ptr<AbstractMessage> ret;\n"
+             "        std::shared_ptr<ICodableStructure> ret;\n"
              "        Cake::Serialization::Fc fc(fcString);\n")
 
         for message in self.messages:
