@@ -6,6 +6,7 @@
 #include <stdexcept>
 #include <vector>
 #include <string>
+#include <memory>
 
 namespace Cake
 {
@@ -324,6 +325,11 @@ public:
         return m_value != other.m_value;
     }
 
+    auto operator [] (size_t index) -> T &
+    {
+        return m_value.at(index);
+    }
+
     auto encode() const -> Bytes override
     {
         Bytes bytes = Integer(m_value.size()).encode();
@@ -413,6 +419,11 @@ public:
     auto empty() const -> bool
     {
         return m_value.empty();
+    }
+
+    auto size() const -> bool
+    {
+        return m_value.size();
     }
 
 private:
