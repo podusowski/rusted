@@ -372,7 +372,11 @@ class MessageGenerator:
         #cpp_struct.add_element(self.__generate_unserialize_from_string_method())
         cpp_struct.add_element(self.__generate_to_string_method())
 
-        return cpp_struct.code()
+        cpp_container = CppContainer()
+        cpp_container.add_element(cpp_struct)
+        cpp_container.add_element(self.__generate_stream_output_operator())
+
+        return cpp_container.code()
 
     def __generate_getid_method(self):
         return CppFunction(
@@ -412,15 +416,20 @@ class MessageGenerator:
         return state_type
 
     def __generate_decode_method(self):
-        s = "switch (m_decoderState)\n{\n"
+        s = ("switch (m_decoderState)\n"
+             "{\n")
 
         members = self.message.params + self.message.lists
 
         if members:
             for i, member in enumerate(members[:-1]):
                 s += ("case DecoderState::{name}:\n"
-                      "    m_decoderState = DecoderState::{next_state};\n"
-                      "    return {name}.decode(bytes);\n").format(name=member.name,
+                      "{{\n"
+                      "    auto sizeLeft = {name}.decode(bytes);\n"
+                      "    if (sizeLeft == 0)\n"
+                      "        m_decoderState = DecoderState::{next_state};\n"
+                      "    return sizeLeft;\n"
+                      "}}\n").format(name=member.name,
                                                                    next_state=members[i+1].name)
 
             s += ("case DecoderState::{name}:\n"
@@ -558,6 +567,15 @@ class MessageGenerator:
             const = True,
             body = s,
             override = True
+        )
+
+    def __generate_stream_output_operator(self):
+        return CppFunction(
+            return_type = "std::ostream &",
+            name = "operator << ",
+            arguments = ["std::ostream & os", "const {} & structure".format(self.message.id)],
+            body = "return os << structure.str();",
+            inline = True
         )
 
 class MessageFactoryGenerator:
