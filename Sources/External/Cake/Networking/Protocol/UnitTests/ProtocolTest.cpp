@@ -61,48 +61,106 @@ TEST(ProtocolTest, Comparison)
     }
 }
 
+namespace
+{
+
+auto fullEncode(const ICodableStructure & structure) -> Cake::Networking::Bytes
+{
+    Integer id = structure.id();
+    auto ret = id.encode();
+    ret.extend(structure.encode());
+    return ret;
+}
+
+auto fullDecode(const Cake::Networking::Bytes & bytes) -> std::unique_ptr<ICodableStructure>
+{
+    const auto header = bytes.fromTo(0, 4);
+    auto structure = New::decode(header);
+
+    auto rest = bytes.fromTo(5, bytes.size());
+    auto neededSize = structure->decode(Cake::Networking::Bytes{});
+    while (neededSize > 0)
+    {
+        auto splice = rest.fromTo(0, neededSize);
+        rest = rest.fromTo(neededSize + 1, rest.size());
+        neededSize = structure->decode(rest);
+    }
+
+    return structure;
+}
+
+} // namespace
+
 TEST(ProtocolTest, SimpleParametersGetsEncodedAndDecoded)
 {
-    using namespace Old;
-    SimpleParameters m1;
-    m1.integer = 1;
-    m1.string = "string";
-    m1.real = 1.1234;
+    {
+        using namespace Old;
+        SimpleParameters m1;
+        m1.integer = 1;
+        m1.string = "string";
+        m1.real = 1.1234;
 
-    SimpleStruct s1;
-    s1.integer = 2;
-    m1.list.push_back(s1);
+        SimpleStruct s1;
+        s1.integer = 2;
+        m1.list.push_back(s1);
 
-    SimpleStruct s2;
-    s2.integer = 3;
+        SimpleStruct s2;
+        s2.integer = 3;
 
-    ComplexStruct c1;
-    c1.list.push_back(s2);
-    c1.string = "string";
-    m1.complexList.push_back(c1);
+        ComplexStruct c1;
+        c1.list.push_back(s2);
+        c1.string = "string";
+        m1.complexList.push_back(c1);
 
-    std::vector<char> raw;
-    CharVectorWriteBuffer writeBuffer(raw);
-    m1.serialize(writeBuffer);
+        std::vector<char> raw;
+        CharVectorWriteBuffer writeBuffer(raw);
+        m1.serialize(writeBuffer);
 
-    CharVectorReadBuffer readBuffer(raw);
-    std::shared_ptr<AbstractMessage> abstract = MessageFactory::create(readBuffer);
+        CharVectorReadBuffer readBuffer(raw);
+        std::shared_ptr<AbstractMessage> abstract = MessageFactory::create(readBuffer);
 
-    auto & m2 = dynamic_cast<SimpleParameters&>(*abstract);
+        auto & m2 = dynamic_cast<SimpleParameters&>(*abstract);
 
-    LOG_INFO << m2;
+        LOG_INFO << m2;
 
-    EXPECT_EQ(m1.integer, m2.integer);
-    EXPECT_EQ(m1.string, m2.string);
-    EXPECT_FLOAT_EQ(m1.real, m2.real);
+        EXPECT_EQ(m1.integer, m2.integer);
+        EXPECT_EQ(m1.string, m2.string);
+        EXPECT_FLOAT_EQ(m1.real, m2.real);
 
-    ASSERT_EQ(1u, m2.list.size());
-    EXPECT_EQ(s1.integer, m2.list[0].integer);
+        ASSERT_EQ(1u, m2.list.size());
+        EXPECT_EQ(s1.integer, m2.list[0].integer);
 
-    ASSERT_EQ(1u, m2.complexList.size());
-    ASSERT_EQ(1u, m2.complexList[0].list.size());
-    EXPECT_EQ(s2.integer, m2.complexList[0].list[0].integer);
-    EXPECT_EQ("string", m2.complexList[0].string);
+        ASSERT_EQ(1u, m2.complexList.size());
+        ASSERT_EQ(1u, m2.complexList[0].list.size());
+        EXPECT_EQ(s2.integer, m2.complexList[0].list[0].integer);
+        EXPECT_EQ("string", m2.complexList[0].string);
+    }
+
+    {
+        using namespace New;
+        SimpleParameters m1;
+        m1.integer = 1;
+        m1.string = "string";
+        m1.real = 1.1234;
+
+        SimpleStruct s1;
+        s1.integer = 2;
+        m1.list = {s1};
+
+        SimpleStruct s2;
+        s2.integer = 3;
+
+        ComplexStruct c1;
+        c1.list = {s2};
+        c1.string = "string";
+        m1.complexList = {c1};
+
+        auto bytes = fullEncode(m1);
+        auto decoded = fullDecode(bytes);
+        auto & m2 = dynamic_cast<SimpleParameters&>(*decoded);
+
+        //EXPECT_EQ(m1, m2);
+    }
 }
 
 class SampleServiceMock

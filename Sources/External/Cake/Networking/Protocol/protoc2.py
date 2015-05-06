@@ -379,7 +379,7 @@ class MessageGenerator:
             return_type = "int",
             name = "id",
             arguments = [],
-            body = "return " + str(self.integer_identifier) + ";",
+            body = "return static_cast<int>(Id::" + str(self.message.id) + ");",
             const = True,
             override = True
         )
@@ -415,9 +415,16 @@ class MessageGenerator:
         s = "switch (m_decoderState)\n{\n"
 
         members = self.message.params + self.message.lists
-        for member in members:
-            s += "case DecoderState::{}:\n".format(member.name)
-            s += "    break;\n"
+
+        if members:
+            for i, member in enumerate(members[:-1]):
+                s += ("case DecoderState::{name}:\n"
+                      "    m_decoderState = DecoderState::{next_state};\n"
+                      "    return {name}.decode(bytes);\n").format(name=member.name,
+                                                                   next_state=members[i+1].name)
+
+            s += ("case DecoderState::{name}:\n"
+                  "    return {name}.decode(bytes);\n").format(name=members[-1].name)
 
         s += "};\n"
         s += "return 0;"
@@ -509,7 +516,7 @@ class MessageGenerator:
 
         return CppFunction(
             return_type = "bool",
-            name = "operator ==",
+            name = "operator == ",
             arguments = ["const " + self.message.id + " & other"],
             const = True,
             body = body
@@ -518,7 +525,7 @@ class MessageGenerator:
     def __generate_ne_operator(self):
         return CppFunction(
             return_type = "bool",
-            name = "operator !=",
+            name = "operator != ",
             arguments = ["const " + self.message.id + " & other"],
             const = True,
             body = "return !(*this == other);"
@@ -558,40 +565,37 @@ class MessageFactoryGenerator:
         self.messages = messages
 
     def generate(self):
-        cpp_struct = CppStruct(
-            name = "MessageFactory",
-            virtual_destructor = False
+        s = self.__generate_encode_method_body()
+
+        cpp_funtion = CppFunction(
+            return_type = "std::unique_ptr<ICodableStructure>",
+            name = "decode",
+            arguments = ["const Cake::Networking::Bytes & bytes"],
+            body = s
         )
 
-        s = ""
-        s = s + self.__generate_create_from_buffer_method()
-        s = s + self.__generate_create_from_string_method()
+        return cpp_funtion.code()
 
-        cpp_struct.add_element(CppCustomCode(s))
-
-        return cpp_struct.code()
-
-    def __generate_create_from_buffer_method(self):
-        s = ""
-        s = s + "    static std::shared_ptr<ICodableStructure> create(int id)\n"
-        s = s + "    {\n"
-        s = s + "        switch(id)\n"
-        s = s + "        {\n"
+    def __generate_encode_method_body(self):
+        s = ("Integer id;\n"
+             "id.decode(bytes);\n"
+             "\n"
+             "switch(*id)\n"
+             "{\n")
 
         for message in self.messages:
             s = s + self.__generate_message_case(message)
 
-        s = s + "        default:\n"
-        s = s + "            throw std::runtime_error(\"unknown message id\");\n"
-        s = s + "        } // switch\n"
-        s = s + "    } // create\n"
-        s = s + "\n"
+        s += ("default:\n"
+              "    throw std::runtime_error(\"unknown structure id: \" + id.str());\n"
+              "}\n")
+
         return s
 
     def __generate_message_case(self, message):
         s = ""
         s = s + "        case static_cast<int>(Id::" + message.id + "):\n"
-        s = s + "            return std::make_shared<" + message.id + ">();\n"
+        s = s + "            return std::make_unique<" + message.id + ">();\n"
         s = s + "            break;\n"
         return s
 
