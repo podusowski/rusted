@@ -273,9 +273,15 @@ public:
             m_sizeToDecode = *size;
             return m_sizeToDecode;
         }
-        else
+        else if (m_sizeToDecode == bytes.size())
         {
             m_value = std::string(bytes.chars(), bytes.size());
+        }
+        else
+        {
+            std::stringstream ss;
+            ss << "got: " << bytes;
+            throw std::runtime_error(ss.str());
         }
         return 0;
     }
@@ -360,10 +366,10 @@ public:
         }
         else
         {
-            m_itemsToDecode--;
             T item;
             auto sizeLeft = item.decode(bytes);
             m_value.push_back(item);
+            m_itemsToDecode--;
 
             if (sizeLeft > 0)
             {
