@@ -61,7 +61,7 @@ TEST(ProtocolTest, Comparison)
     }
 }
 
-TEST(ProtocolTest, SimpleParameters)
+TEST(ProtocolTest, SimpleParametersGetsEncodedAndDecoded)
 {
     using namespace Old;
     SimpleParameters m1;
