@@ -118,9 +118,13 @@ TEST(PrimitivesTest, StringIsDecoded)
 {
     String string;
 
+    // initial size
+    size_t sizeLeft = string.decode(Bytes{});
+    EXPECT_EQ(Integer::size, sizeLeft);
+
     // size of the string
     auto codedSize = Integer{3}.encode();
-    size_t sizeLeft = string.decode(codedSize);
+    sizeLeft = string.decode(codedSize);
     EXPECT_EQ(3, sizeLeft);
 
     auto bytes = Bytes{3};

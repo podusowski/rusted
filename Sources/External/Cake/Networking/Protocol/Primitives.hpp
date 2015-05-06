@@ -269,9 +269,16 @@ public:
         if (m_sizeToDecode == 0)
         {
             Integer size;
-            size.decode(bytes);
-            m_sizeToDecode = *size;
-            return m_sizeToDecode;
+            auto sizeLeft = size.decode(bytes);
+            if (sizeLeft == 0)
+            {
+                m_sizeToDecode = *size;
+                return m_sizeToDecode;
+            }
+            else
+            {
+                return sizeLeft;
+            }
         }
         else if (m_sizeToDecode == bytes.size())
         {
