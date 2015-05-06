@@ -153,9 +153,13 @@ TEST(PrimitivesTest, DecodeSequenceOfIntegers)
 {
     Sequence<Integer> seq;
 
+    // initial required size
+    size_t sizeLeft = seq.decode(Bytes{});
+    EXPECT_EQ(Integer::size, sizeLeft);
+
     // size of the container gets decoded
     auto codedSize = Integer{2}.encode();
-    size_t sizeLeft = seq.decode(codedSize);
+    sizeLeft = seq.decode(codedSize);
     EXPECT_EQ(4, sizeLeft);
 
     // 1th element
