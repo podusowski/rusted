@@ -1,6 +1,6 @@
 append $generic_compiler_flags -Wall
 append $generic_compiler_flags -pedantic
-append $generic_compiler_flags -std=c++0x
+append $generic_compiler_flags -std=c++14
 
 append $debug_compiler_flags -O0 -g
 
