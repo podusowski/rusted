@@ -369,7 +369,6 @@ class MessageGenerator:
 
         cpp_struct.add_element(self.__generate_decoder_state())
         cpp_struct.add_element(self.__generate_decode_method())
-        #cpp_struct.add_element(self.__generate_unserialize_from_string_method())
         cpp_struct.add_element(self.__generate_to_string_method())
 
         cpp_container = CppContainer()
@@ -407,7 +406,7 @@ class MessageGenerator:
         )
 
     def __generate_decoder_state(self):
-        state_type = CppEnum("DecoderState", "m_decoderState")
+        state_type = CppEnum("DecoderState", "m_decoderState = DecoderState{}")
 
         members = self.message.params + self.message.lists
         for member in members:
@@ -427,10 +426,13 @@ class MessageGenerator:
                       "{{\n"
                       "    auto sizeLeft = {name}.decode(bytes);\n"
                       "    if (sizeLeft == 0)\n"
-                      "        m_decoderState = DecoderState::{next_state};\n"
+                      "    {{\n"
+                      "        m_decoderState = DecoderState::{next_member};\n"
+                      "        return {next_member}.decode(Cake::Networking::Bytes{{}});\n"
+                      "    }}\n"
                       "    return sizeLeft;\n"
                       "}}\n").format(name=member.name,
-                                                                   next_state=members[i+1].name)
+                                     next_member=members[i+1].name)
 
             s += ("case DecoderState::{name}:\n"
                   "    return {name}.decode(bytes);\n").format(name=members[-1].name)

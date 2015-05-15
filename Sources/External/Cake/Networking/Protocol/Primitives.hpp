@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Networking/Bytes.hpp"
+#include "Utils/BuildString.hpp"
 
 #include <arpa/inet.h>
 #include <stdexcept>
@@ -14,6 +15,18 @@ namespace Networking
 {
 namespace Protocol
 {
+
+template<class Type>
+class BadLength : public std::runtime_error
+{
+public:
+    BadLength(size_t required, const Bytes & bytes)
+        : std::runtime_error{Cake::Utils::makeString(
+              required, " bytes are required by ", Utils::typeName<Type>(),
+              " while got ", bytes)}
+    {
+    }
+};
 
 class ICodable
 {
@@ -72,9 +85,7 @@ public:
         }
         else
         {
-            std::stringstream ss;
-            ss << "exactly 1 byte is required while got: " << bytes;
-            throw std::runtime_error(ss.str());
+            throw BadLength<Boolean>{1, bytes};
         }
     }
 
@@ -148,9 +159,7 @@ public:
         }
         else
         {
-            std::stringstream ss;
-            ss << "exactly 4 bytes are required while got: " << bytes;
-            throw std::runtime_error(ss.str());
+            throw BadLength<Integer>{4, bytes};
         }
     }
 

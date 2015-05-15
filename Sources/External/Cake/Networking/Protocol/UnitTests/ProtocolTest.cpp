@@ -77,13 +77,16 @@ auto fullDecode(const Cake::Networking::Bytes & bytes) -> std::unique_ptr<ICodab
     const auto header = bytes.fromTo(0, 4);
     auto structure = New::decode(header);
 
-    auto rest = bytes.fromTo(5, bytes.size());
+    LOG_DEBUG << "Decoding " << structure->str();
+
+    auto rest = bytes.fromTo(4, bytes.size());
     auto neededSize = structure->decode(Cake::Networking::Bytes{});
     while (neededSize > 0)
     {
+        LOG_DEBUG << "Still need " << neededSize;
         auto splice = rest.fromTo(0, neededSize);
-        rest = rest.fromTo(neededSize + 1, rest.size());
-        neededSize = structure->decode(rest);
+        rest = rest.fromTo(neededSize, rest.size());
+        neededSize = structure->decode(splice);
     }
 
     return structure;
@@ -159,7 +162,7 @@ TEST(ProtocolTest, SimpleParametersGetsEncodedAndDecoded)
         auto decoded = fullDecode(bytes);
         auto & m2 = dynamic_cast<SimpleParameters&>(*decoded);
 
-        //EXPECT_EQ(m1, m2);
+        EXPECT_EQ(m1, m2);
     }
 }
 
