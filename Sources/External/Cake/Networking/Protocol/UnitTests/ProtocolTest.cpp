@@ -66,6 +66,8 @@ namespace
 
 auto fullEncode(const ICodableStructure & structure) -> Cake::Networking::Bytes
 {
+    LOG_DEBUG << "Encoding " << structure.str();
+
     Integer id = structure.id();
     auto ret = id.encode();
     ret.extend(structure.encode());
@@ -77,16 +79,18 @@ auto fullDecode(const Cake::Networking::Bytes & bytes) -> std::unique_ptr<ICodab
     const auto header = bytes.fromTo(0, 4);
     auto structure = New::decode(header);
 
-    LOG_DEBUG << "Decoding " << structure->str();
-
     auto rest = bytes.fromTo(4, bytes.size());
     auto neededSize = structure->decode(Cake::Networking::Bytes{});
+
+    LOG_DEBUG << structure->str() << " needs " << neededSize;
+
     while (neededSize > 0)
     {
-        LOG_DEBUG << "Still need " << neededSize;
         auto splice = rest.fromTo(0, neededSize);
         rest = rest.fromTo(neededSize, rest.size());
         neededSize = structure->decode(splice);
+
+        LOG_DEBUG << "Still need " << neededSize;
     }
 
     return structure;
