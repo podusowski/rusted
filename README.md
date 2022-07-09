@@ -16,6 +16,7 @@ Rusted is build by [pake](https://github.com/podusowski/pake) build system. To c
 
 to build all targets for the `__default` configuration which is pretty much linux debug.
 
+Note: `pake` replacement with `cmake` is in progress.
 ## Testing
 
 `./run_tests.py` runs everything which is an automated test.
