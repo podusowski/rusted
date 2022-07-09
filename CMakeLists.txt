@@ -1,0 +1,4 @@
+cmake_minimum_required(VERSION 3.18)
+project(rusted)
+add_subdirectory(Sources/External/Cake)
+add_subdirectory(Sources/External/boost)
