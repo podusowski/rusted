@@ -9,6 +9,7 @@
 #include <memory>
 #include <functional>
 #include <boost/utility.hpp>
+#include <functional>
 
 namespace Cake
 {

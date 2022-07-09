@@ -36,7 +36,4 @@ add_library(Cake STATIC
     Utils/StringList.cpp
 )
 
-target_include_directories(Cake PRIVATE ..)
-target_include_directories(Cake PRIVATE .)
-
-target_link_libraries(Cake boost)
+target_include_directories(cake SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..) #FIXME
