@@ -18,8 +18,8 @@ Messages/Messages.hpp #generated
 )
 
 add_library(common ${SRC})
-target_include_directories(common SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..) #FIXME
-target_link_libraries(common PUBLIC cake)
+target_include_directories(common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..) #FIXME
+target_link_libraries(common PUBLIC Cake)
 target_link_libraries(common PRIVATE hashlibpp)
 
 # FIXME: generate that outside of src dir, possibly using protobuf compiler directly?

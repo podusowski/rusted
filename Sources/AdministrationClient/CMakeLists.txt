@@ -1,2 +1,2 @@
 add_executable(administration_client main.cpp)
-target_link_libraries(administration_client PRIVATE cake common)
+target_link_libraries(administration_client PRIVATE Cake common)
