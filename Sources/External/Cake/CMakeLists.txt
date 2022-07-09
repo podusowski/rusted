@@ -1,4 +1,4 @@
-add_library(Cake 
+add_library(Cake
     Configuration/Configuration.cpp
 
     Diagnostics/Logger.cpp
@@ -36,4 +36,4 @@ add_library(Cake
     Utils/StringList.cpp
 )
 
-target_include_directories(Cake PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..) #FIXME
+target_include_directories(Cake PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..) # FIXME
