@@ -1,4 +1,4 @@
-add_library(pake STATIC
+add_library(Cake STATIC
     Configuration/Configuration.cpp
 
     Diagnostics/Logger.cpp
@@ -35,3 +35,8 @@ add_library(pake STATIC
 
     Utils/StringList.cpp
 )
+
+target_include_directories(Cake PRIVATE ..)
+target_include_directories(Cake PRIVATE .)
+
+target_link_libraries(Cake boost)
