@@ -7,6 +7,7 @@
 #include <map>
 #include <string>
 #include <memory>
+#include <functional>
 #include <boost/utility.hpp>
 
 namespace Cake
