@@ -37,3 +37,4 @@ add_library(Cake
 )
 
 target_include_directories(Cake PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..) # FIXME
+target_link_libraries(Cake PUBLIC boost)
