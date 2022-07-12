@@ -1,4 +1,4 @@
-add_library(Cake STATIC
+add_library(Cake
     Configuration/Configuration.cpp
 
     Diagnostics/Logger.cpp
@@ -36,7 +36,6 @@ add_library(Cake STATIC
     Utils/StringList.cpp
 )
 
-target_include_directories(Cake PRIVATE ..)
-target_include_directories(Cake PRIVATE .)
-
-target_link_libraries(Cake boost)
+target_include_directories(Cake PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..) # FIXME
+find_package(Threads REQUIRED)
+target_link_libraries(Cake PUBLIC boost Threads::Threads)
