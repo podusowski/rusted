@@ -1,6 +1,6 @@
 # Rusted, a MMO space game
 
-<img src="http://rusted.pl/rusted/screenshot.png" />
+<img src="Sources/Web/Page/screenshot.png" />
 
 ## Brief
 Rusted is a MMO space game where player is focusing on buinding its own fleet.
