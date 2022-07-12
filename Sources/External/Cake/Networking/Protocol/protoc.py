@@ -1,4 +1,4 @@
-#! /usr/bin/env python2
+#! /usr/bin/env python
 
 import os
 import sys
@@ -15,7 +15,7 @@ def as_cpp_type(xmlType):
     elif xmlType == "real":
         return "float";
     else:
-        print "unknown param type: " + xmlType
+        print("unknown param type: " + xmlType)
         sys.exit(1)
 
 class Param:
