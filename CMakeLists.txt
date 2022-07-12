@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 
 project(rusted LANGUAGES CXX)
 
+# OGRE's dependencies won't compile when enabled globally. To be fixed later.
 # set(CMAKE_CXX_STANDARD 17)
 
 # set(CMAKE_CXX_FLAGS "-Wall -Wextra -Werror")
