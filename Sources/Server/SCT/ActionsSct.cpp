@@ -17,7 +17,7 @@ using namespace Common::Messages;
 
 TEST(ActionsSct, FetchAvailableActions)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password");
@@ -58,7 +58,7 @@ TEST(ActionsSct, FetchAvailableActions)
 
 TEST(ActionsSct, AttackObject)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password");
@@ -117,7 +117,7 @@ TEST(ActionsSct, AttackObject)
 
 TEST(ActionsSct, BuildShip)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -170,7 +170,7 @@ TEST(ActionsSct, BuildShip)
 
 TEST(ActionsSct, Gather)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -221,7 +221,7 @@ TEST(ActionsSct, Gather)
 
 TEST(ActionsSct, Transfer)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -260,7 +260,7 @@ TEST(ActionsSct, Transfer)
 
 TEST(ActionsSct, ExecuteActionInLoop)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 

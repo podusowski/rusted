@@ -36,6 +36,6 @@ add_library(Cake
     Utils/StringList.cpp
 )
 
-target_include_directories(Cake PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..) # FIXME
+target_include_directories(Cake SYSTEM PUBLIC ${CMAKE_CURRENT_SOURCE_DIR} ${CMAKE_CURRENT_SOURCE_DIR}/..) # FIXME
 find_package(Threads REQUIRED)
 target_link_libraries(Cake PUBLIC boost Threads::Threads)

@@ -15,12 +15,13 @@
 #include "Cake/Utils/BuildString.hpp"
 
 #include "Component.hpp"
+#include "Configuration.hpp"
 
 using namespace ::SCT;
 
 static int s_port = 2000;
 
-Component::Component(const std::string & sqliteUrl)
+Component::Component(const std::string & sqliteUrl,  const std::string& server_path): server_path{server_path}
 {
     m_port = s_port ++;
 
@@ -31,7 +32,7 @@ Component::Component(const std::string & sqliteUrl)
     }
 
     m_sqliteUrl = copySqliteDb(sqliteUrl);
-    m_administrationSocketPath = BUILD_STRING << "/var/tmp/rusted_sct_" << m_port;
+    m_administrationSocketPath = BUILD_STRING << "/tmp/rusted_sct_" << m_port;
 
     std::string sociUrl = "sqlite3://" + m_sqliteUrl;
     setConfigValue("--database.url", sociUrl);
@@ -77,8 +78,6 @@ std::shared_ptr<soci::session> Component::createSociSession()
 
 void Component::start()
 {
-    const std::string filename = "./Server";
-
     // start the component
     m_pid = ::fork();
     if (!m_pid)
@@ -87,7 +86,7 @@ void Component::start()
         setConfigValue("--network.administration_socket_path", m_administrationSocketPath);
 
         char ** argv = new char*[m_cmdLineOptions.size() * 2 + 2];
-        argv[0] = const_cast<char *>(filename.c_str());
+        argv[0] = const_cast<char *>(server_path.c_str());
         argv[m_cmdLineOptions.size() * 2 + 1] = 0;
 
         int i = 1;
@@ -100,12 +99,12 @@ void Component::start()
             i++;
         }
 
-        ::execv(filename.c_str(), argv);
+        ::execv(server_path.c_str(), argv);
         LOG_ERR << "execv returned with error, errno: " << errno;
     }
     else
     {
-        LOG_INFO << "Running \"" << filename << "\", pid: " << m_pid;
+        LOG_INFO << "Running \"" << server_path << "\", pid: " << m_pid;
     }
 
     // usefull for valgrind
@@ -140,3 +139,11 @@ void Component::removeDb()
     std::remove(m_sqliteUrl.c_str());
 }
 
+namespace SCT{
+Component make_default_component()
+{
+    using namespace SCT::Configuration;
+    return Component(get_database_path(), get_sut_path());
+
+}
+}
