@@ -5,7 +5,6 @@
 #include "Core/Component.hpp"
 #include "Core/Connection.hpp"
 #include "Core/Configuration.hpp"
-#include "Preconditions.hpp"
 #include "UserFunctions.hpp"
 
 using namespace Common::Messages;
