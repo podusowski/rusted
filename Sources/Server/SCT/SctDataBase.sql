@@ -2,7 +2,6 @@ INSERT INTO users VALUES(1, "user1", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8")
 INSERT INTO users VALUES(2, "user2", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8");
 INSERT INTO users VALUES(3, "user3", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8");
 
-
 /*                         id   type        class  model             x     y     z      owner integrity carbon helium */
 INSERT INTO objects VALUES(1,   "Ship",     1,     NULL,             1,    1,    1,     1,    100,      10,    10);
 INSERT INTO objects VALUES(2,   "Ship",     2,     NULL,             1,    1,    1,     2,    100,      11,     6);
