@@ -4,7 +4,7 @@
 
 #include "Core/Component.hpp"
 #include "Core/Connection.hpp"
-#include "Preconditions.hpp"
+#include "Core/Configuration.hpp"
 #include "UserFunctions.hpp"
 
 using namespace Common::Messages;
@@ -23,7 +23,7 @@ public:
     {
         for (int i = 0; i < 50; i++)
         {
-            std::shared_ptr<SCT::Connection> connection1 = authorizeUser(m_component, m_user, m_password); 
+            std::shared_ptr<SCT::Connection> connection1 = authorizeUser(m_component, m_user, m_password);
 
             Common::Messages::FocusObject focusObject;
             focusObject.id = 1;
@@ -38,41 +38,41 @@ public:
             selectObject.id = 2;
             connection1->send(selectObject);
         }
+        }
+
+    private:
+        SCT::Component & m_component;
+        std::string m_user;
+        std::string m_password;
+    };
+
+    TEST(SmokeSct, Smoke)
+    {
+        auto component = SCT::make_default_component();
+        component.start();
+
+        SmokeSctRunnable runnable1(component, "user1", "password");
+        Cake::Threading::Thread thread1(runnable1);
+
+        SmokeSctRunnable runnable2(component, "user2", "password");
+        Cake::Threading::Thread thread2(runnable2);
+
+        thread1.start();
+        thread2.start();
+
+        thread1.join();
+        thread2.join();
     }
 
-private:
-    SCT::Component & m_component; 
-    std::string m_user;
-    std::string m_password;
-};
-
-TEST(SmokeSct, Smoke)
-{
-    SCT::Component component;
-    component.start();
-
-    SmokeSctRunnable runnable1(component, "user1", "password");
-    Cake::Threading::Thread thread1(runnable1);
-
-    SmokeSctRunnable runnable2(component, "user2", "password");
-    Cake::Threading::Thread thread2(runnable2);
-
-    thread1.start();
-    thread2.start();
-
-    thread1.join();
-    thread2.join();
-}
-
-TEST(SmokeSct, BigDataBase)
-{
-    SCT::Component component("BigDataBase.sqlite3");
-    component.start();
-
-    std::shared_ptr<SCT::Connection> connection1;
-
-    for (int i = 0; i < 30; i++)
+    TEST(SmokeSct, BigDataBase)
     {
+        SCT::Component component(SCT::Configuration::get_big_database_path(), SCT::Configuration::get_sut_path());
+        component.start();
+
+        std::shared_ptr<SCT::Connection> connection1;
+
+        for (int i = 0; i < 30; i++)
+        {
         try
         {
             Cake::Threading::Thread::wait(1, 0);
@@ -80,17 +80,17 @@ TEST(SmokeSct, BigDataBase)
             break;
         }
         catch(...) { }
-    }
+        }
 
-    if (!connection1)
-    {
+        if (!connection1)
+        {
         throw std::runtime_error("can't connect");
+        }
+
+        Common::Messages::GetVisibleObjects getVisibleObjects;
+        connection1->send(getVisibleObjects);
+
+        auto visibleObjects = connection1->receive<Common::Messages::VisibleObjects>();
+        EXPECT_EQ(10000u, visibleObjects->objects.size());
     }
-
-    Common::Messages::GetVisibleObjects getVisibleObjects;
-    connection1->send(getVisibleObjects);
-
-    auto visibleObjects = connection1->receive<Common::Messages::VisibleObjects>();
-    EXPECT_EQ(10000u, visibleObjects->objects.size());
-}
 

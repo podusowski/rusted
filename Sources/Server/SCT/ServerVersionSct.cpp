@@ -9,7 +9,7 @@ TEST(ServerVersionSct, testServerVersion)
 {
     using namespace Common::Messages;
 
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection = component.createConnection();
@@ -24,7 +24,7 @@ TEST(ServerVersionSct, FewConnections)
 {
     using namespace Common::Messages;
 
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     for (int i = 0; i < 5; i++)

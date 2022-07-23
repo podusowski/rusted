@@ -2,14 +2,13 @@
 
 #include "Core/Component.hpp"
 #include "Core/Connection.hpp"
-#include "Preconditions.hpp"
 #include "UserFunctions.hpp"
 
 TEST(UserSct, Authorize)
 {
     using namespace ::Common::Messages;
 
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection = component.createConnection();
@@ -26,7 +25,7 @@ TEST(UserSct, Authorize)
 
 TEST(UserSct, InvalidPassword)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection = component.createConnection();
@@ -42,7 +41,7 @@ TEST(UserSct, InvalidPassword)
 
 TEST(UserSct, TwoUsersEntitiesStatusReq)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 

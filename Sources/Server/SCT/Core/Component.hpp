@@ -14,7 +14,7 @@ namespace SCT
 class Component
 {
 public:
-    Component(const std::string & sqliteUrl = "SctDataBase.sqlite3");
+    Component(const std::string & sqliteUrl, const std::string& server_path);
     ~Component();
 
     void setConfigValue(const std::string & name, const std::string & value);
@@ -27,6 +27,7 @@ private:
     std::string copySqliteDb(const std::string & db);
     void removeDb();
 
+    const std::string server_path;
     pid_t m_pid;
     int m_port;
     std::map<std::string, std::string> m_cmdLineOptions;
@@ -34,5 +35,6 @@ private:
     std::string m_administrationSocketPath;
 };
 
+Component make_default_component();
 }
 

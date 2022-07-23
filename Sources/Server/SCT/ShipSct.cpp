@@ -4,7 +4,6 @@
 
 #include "Core/Component.hpp"
 #include "Core/Connection.hpp"
-#include "Preconditions.hpp"
 #include "UserFunctions.hpp"
 
 using namespace Common::Messages;
@@ -17,7 +16,7 @@ public:
 
 TEST_F(ShipSct, ChangeShipCourse)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     auto connection = authorizeUser(component, "user1", "password");
@@ -61,7 +60,7 @@ TEST_F(ShipSct, ChangeShipCourse)
 
 TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -88,7 +87,7 @@ TEST_F(ShipSct, ChangeShipCourseAnotherPlayerIsNotified)
 
 TEST_F(ShipSct, ChangeShipCourseAnotherPlayerWasConnectedEarlier)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     {

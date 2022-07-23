@@ -28,3 +28,12 @@ add_executable(
 
 target_link_libraries(server PRIVATE common Cake pthread soci_core hashlibpp)
 target_include_directories(server PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+add_subdirectory(SCT)
+
+add_test(NAME server_tests COMMAND SCT/server_sct)
+set_property(TEST server_tests PROPERTY ENVIRONMENT
+    RUSTED_SCT_BIG_DATABASE_PATH=${SERVER_SCT_BIG_DATABASE}
+    RUSTED_SCT_DATABASE_PATH=${SERVER_SCT_DATABASE}
+    RUSTED_SCT_SERVER_PATH=$<TARGET_FILE:server>
+)

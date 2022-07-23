@@ -2,7 +2,6 @@
 
 #include "Core/Component.hpp"
 #include "Core/Connection.hpp"
-#include "Preconditions.hpp"
 #include "UserFunctions.hpp"
 
 using namespace Common::Messages;
@@ -11,7 +10,7 @@ using namespace Common::Messages;
 
 TEST(ObjectsSct, FetchVisibleObjects)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -28,7 +27,7 @@ TEST(ObjectsSct, FetchVisibleObjects)
 
 TEST(ObjectsSct, GetObjectInfo_Ship)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -51,7 +50,7 @@ TEST(ObjectsSct, GetObjectInfo_Ship)
 
 TEST(ObjectsSct, GetObjectInfo_Asteroid)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password"); 
@@ -75,7 +74,7 @@ TEST(ObjectsSct, GetObjectInfo_Asteroid)
 
 TEST(ObjectsSct, DataBaseUpdatedWithNewObjects)
 {
-    SCT::Component component;
+    auto component = SCT::make_default_component();
     component.start();
 
     std::shared_ptr<SCT::Connection> connection1 = authorizeUser(component, "user1", "password");

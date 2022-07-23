@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
 
 import sys
 import argparse
@@ -14,7 +14,7 @@ f.write(
     'INSERT INTO users VALUES(1, "user1", "5baa61e4c9b93f3f0682250b6cf8331b7ee68fd8");\n'
 )
 
-for i in xrange(10000):
+for i in range(10000):
     #                               id              type        class  model             x     y     z      owner integrity carbon helium
     f.write(
         'INSERT INTO objects VALUES('+ str(i+1) +', "Ship",     1,     NULL,             1,    1,    1,     1,    100,      10,    10);\n'
